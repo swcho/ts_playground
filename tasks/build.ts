@@ -1,6 +1,6 @@
 
 import {IGrunt} from 'grunt';
 
-export default (grunt: IGrunt) => {
+module.exports = (grunt: IGrunt) => {
 
 }

@@ -1,10 +1,9 @@
 
 import { IGrunt } from 'grunt';
-import * as build from './tasks/build';
 
-export default (grunt: IGrunt) => {
+module.exports = (grunt: IGrunt) => {
 
-    build.default(grunt);
+    require('./tasks/build')(grunt);
 
     grunt.initConfig({
 
