@@ -1,0 +1,24 @@
+{
+  "name": "ts_boilerplate",
+  "version": "1.0.0",
+  "description": "TypeScript Boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "test": "test command"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "keywords": [
+    "TypeScript",
+    "boilerplate"
+  ],
+  "author": "Sungwoo",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  }
+}
