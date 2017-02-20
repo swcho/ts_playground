@@ -1,9 +1,0 @@
-{
-  "dependencies": {},
-  "globalDevDependencies": {
-    "grunt": "registry:dt/grunt#0.4.0+20170118033846"
-  },
-  "globalDependencies": {
-    "node": "registry:env/node#6.0.0+20170213133316"
-  }
-}
