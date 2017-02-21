@@ -1,5 +1,6 @@
-var path = require("path");
-var webpack = require("webpack");
+import * as webpack from 'webpack';
+import * as path from 'path';
+
 const BASE_SRC = './src'
 module.exports = {
     cache: true,
@@ -77,7 +78,16 @@ module.exports = {
             // jquery-ui doesn't contain a index file
             // bind module to the complete module
             "jquery-ui-1.10.3$": "jquery-ui-1.10.3/ui/jquery-ui.js",
+        },
+    },
+    resolveLoader: {
+        alias: {
+            'config-loader': path.join(__dirname, "./loaders/config-loader")
         }
+        // fallback: [
+        //     path.resolve(__dirname, 'loaders'),
+        //     path.join(process.cwd(), 'node_modules')
+        // ]
     },
     plugins: [
         new webpack.ProvidePlugin({
