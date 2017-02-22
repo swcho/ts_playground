@@ -84,7 +84,8 @@ module.exports = {
     },
     resolveLoader: {
         alias: {
-            'config-loader': path.join(__dirname, "./loaders/config-loader")
+            'config-loader': path.join(__dirname, "./loaders/config-loader"),
+            'htmlout-loader': path.join(__dirname, "./loaders/htmlout-loader")
         }
         // fallback: [
         //     path.resolve(__dirname, 'loaders'),

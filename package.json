@@ -18,8 +18,10 @@
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
+    "@types/cheerio": "^0.17.31",
     "@types/grunt": "^0.4.21",
     "@types/webpack": "^2.2.6",
+    "cheerio": "^0.22.0",
     "css-loader": "^0.26.1",
     "eval": "^0.1.2",
     "file-loader": "^0.10.0",
