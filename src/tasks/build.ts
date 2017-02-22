@@ -53,5 +53,5 @@ module.exports = (grunt: IGrunt) => {
 		}
     });
 
-    grunt.registerTask('default', ['webpack']);
+    grunt.registerTask('default', ['webpack:build']);
 }

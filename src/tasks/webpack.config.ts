@@ -1,7 +1,9 @@
 import * as webpack from 'webpack';
 import * as path from 'path';
+import {ConfigPlugin} from './plugins/config-plugin';
 
 const BASE_SRC = './src'
+
 module.exports = {
     cache: true,
     entry: {
@@ -96,6 +98,7 @@ module.exports = {
             // This is required by many jquery plugins
             jQuery: "jquery",
             $: "jquery"
-        })
+        }),
+        new ConfigPlugin()
     ]
 };
