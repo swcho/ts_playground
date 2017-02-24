@@ -1,4 +1,6 @@
 
-module.exports = {
-    test: 'test'
-}
+const config: Config = {
+    level: 'prd'
+};
+
+export = config;

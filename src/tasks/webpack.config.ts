@@ -2,16 +2,17 @@ import * as webpack from 'webpack';
 import * as path from 'path';
 import {ConfigPlugin} from './plugins/config-plugin';
 
-const BASE_SRC = './src'
+const BASE_SRC = path.resolve(__dirname + '/../../src');
+const BASE_CLIENT = `${BASE_SRC}/client`;
 
 module.exports = {
     cache: true,
     entry: {
-        main: BASE_SRC + "/client/apps/main/app.ts",
+        main: `${BASE_CLIENT}/apps/main/app.ts`,
     },
     output: {
-        path: path.join(__dirname, "dist"),
-        publicPath: "dist/",
+        path: path.join(__dirname, "../client/assets"),
+        publicPath: "assets/",
         filename: "[name].js",
         chunkFilename: "[chunkhash].js"
     },
@@ -101,5 +102,9 @@ module.exports = {
             $: "jquery"
         }),
         new ConfigPlugin()
-    ]
+    ],
+    context: path.join(BASE_CLIENT + '/apps'),
+    node: {
+        __filename: true
+    }
 };
