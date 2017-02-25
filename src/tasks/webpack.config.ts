@@ -1,14 +1,17 @@
 import * as webpack from 'webpack';
 import * as path from 'path';
-import {ConfigPlugin} from './plugins/config-plugin';
+import {ClientPlugin} from './plugins/client-plugin';
 
 const BASE_SRC = path.resolve(__dirname + '/../../src');
-const BASE_CLIENT = `${BASE_SRC}/client`;
+const BASE_SRC_CLIENT = `${BASE_SRC}/client`;
+
+const BASE_OUT = path.resolve(__dirname + '/../../out');
+const BASE_OUT_CLIENT = `${BASE_OUT}/client`;
 
 module.exports = {
     cache: true,
     entry: {
-        main: `${BASE_CLIENT}/apps/main/app.ts`,
+        main: `${BASE_SRC_CLIENT}/apps/main/app.ts`,
     },
     output: {
         path: path.join(__dirname, "../client/assets"),
@@ -101,9 +104,9 @@ module.exports = {
             jQuery: "jquery",
             $: "jquery"
         }),
-        new ConfigPlugin()
+        new ClientPlugin(BASE_SRC_CLIENT, BASE_OUT_CLIENT)
     ],
-    context: path.join(BASE_CLIENT + '/apps'),
+    context: path.join(BASE_SRC_CLIENT + '/apps'),
     node: {
         __filename: true
     }

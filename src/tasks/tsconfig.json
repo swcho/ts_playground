@@ -5,9 +5,10 @@
         "moduleResolution": "node",
         "noImplicitAny": false,
         "sourceMap": true,
-        "outDir": "../../out/tasks"
+        "outDir": "../../out"
     },
     "include": [
-        "./**/*"
+        "./**/*",
+        "../common/config.ts"
     ]
 }
