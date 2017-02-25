@@ -8,8 +8,14 @@ import * as webpack from 'webpack';
 
 const log = debug('plugin/config');
 
-function out_html(path, content, config: Config, assets: string) {
-    fs.outputFileSync(path, content);
+function out_html(outputOption: webpack.Output, path, content, config: Config, assets: string) {
+    const $ = cheerio.load(content);
+    Object.keys(assets)
+        .filter(assetName => /\.map$/.test(assetName))
+        .forEach(assetName => {
+            $('head').append(`<script type="text/javascript" src="${outputOption.publicPath}${assetName}"/>`)
+        });
+    fs.outputFileSync(path, $.html());
 }
 
 export class ClientPlugin {
@@ -41,10 +47,9 @@ export class ClientPlugin {
 
             const config: Config = compilation.__config__;
 
-            // TODO: Output With Context
             if (config && compilation.__html__) {
                 log('compilation with html');
-                out_html(htmlPath, compilation.__html__, config, compilation.assets);
+                out_html(compilation.outputOptions, htmlPath, compilation.__html__, config, compilation.assets);
             }
 
             callback();

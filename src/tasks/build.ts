@@ -11,6 +11,9 @@ module.exports = (grunt: IGrunt) => {
 
     const webpackConfig = require("./webpack.config");
 
+    // TODO: Server
+    // TODO: Serve with server
+
     grunt.initConfig({
         webpack: {
             options: webpackConfig,
