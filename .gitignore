@@ -2,3 +2,5 @@ node_modules/
 dist/
 out/
 npm-debug.log
+.tscache/
+.baseDir.ts

@@ -1,3 +1,3 @@
 module.exports = function(grunt) {
-    require('./out/tasks/build')(grunt);
+    require('./out/tasks')(grunt);
 };

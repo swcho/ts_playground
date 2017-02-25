@@ -10,8 +10,17 @@
             "name": "grunt",
             "program": "${env.GRUNT}",
             "args": [
-                "--gruntfile",
-                "${workspaceRoot}/Gruntfile.js"
+            ],
+            "cwd": "${workspaceRoot}",
+            "outFiles": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "grunt run_server",
+            "program": "${env.GRUNT}",
+            "args": [
+                "run_server"
             ],
             "cwd": "${workspaceRoot}",
             "outFiles": []
