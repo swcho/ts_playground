@@ -6,6 +6,7 @@ module.exports = (grunt: IGrunt) => {
         const {
             path
         } = this.data;
+        process.env['CLIENT_ROOT'] = 'out/client';
         require(path + '/app.js');
     });
 }

@@ -56,5 +56,6 @@ module.exports = (grunt: IGrunt) => {
         }
     });
 
-    grunt.registerTask('default', ['webpack:build-dev']);
+    grunt.registerTask('serve', ['ts:server', 'run_server:default']);
+    grunt.registerTask('default', ['webpack:build-dev', 'ts:server']);
 }
