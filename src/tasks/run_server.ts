@@ -7,6 +7,7 @@ module.exports = (grunt: IGrunt) => {
             path
         } = this.data;
         process.env['CLIENT_ROOT'] = 'out/client';
+        process.env['USE_BROWSER_SYNC'] = 'true';
         require(path + '/app.js');
     });
 }

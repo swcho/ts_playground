@@ -40,6 +40,8 @@ export class ClientPlugin {
 
             assert(compilation.entries.length === 1, 'multiple entries?');
 
+            // TODO: Generate On Watch Event
+
             const contextCompiler = this.context;
             const contextCompilation = compilation.entries[0].context;
             const pathname = contextCompilation.replace(contextCompiler, '');

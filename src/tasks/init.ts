@@ -7,6 +7,7 @@ module.exports = (grunt: IGrunt) => {
 
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-ts');
+    grunt.loadNpmTasks('grunt-spawn-process');
 
     const PATH_OUT = path.join(__dirname, '../../out');
     const PATH_OUT_SERVER = path.join(PATH_OUT, 'server');
@@ -28,8 +29,9 @@ module.exports = (grunt: IGrunt) => {
                     new webpack.optimize.UglifyJsPlugin()
                 )
             },
-            "build-dev": {
+            "watch": {
                 devtool: "sourcemap",
+                watch: true
             }
         },
         "webpack-dev-server": {
@@ -53,9 +55,23 @@ module.exports = (grunt: IGrunt) => {
             default: {
                 path: PATH_OUT_SERVER
             }
+        },
+        spawnProcess: {
+            server: {
+                spawnOptions: {
+                    cwd: path.join(__dirname, '../../out/server'),
+                    env: {
+                        'USE_BROWSER_SYNC': 'true'
+                    },
+                },
+                cmd: 'node',
+                args: ['app.js']
+            }
         }
     });
 
-    grunt.registerTask('serve', ['ts:server', 'run_server:default']);
+    console.log('server path: ', path.join(__dirname, '../../out/server'));
+
+    grunt.registerTask('serve', ['ts:server', 'spawnProcess:server', 'webpack:watch']);
     grunt.registerTask('default', ['webpack:build-dev', 'ts:server']);
 }
