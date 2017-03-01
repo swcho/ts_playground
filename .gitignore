@@ -1,6 +1,6 @@
 node_modules/
 dist/
 out/
-npm-debug.log
+npm-debug.log*
 .tscache/
 .baseDir.ts

@@ -13,5 +13,5 @@ module.exports = function(this: webpack.loader.LoaderContext, source) {
     // var foo = loaderUtils.getLoaderConfig(this, 'foo');
     // debug('isBaz', foo.bar === 'baz');
     // debug('isQoo', foo.qux === 'qoo');
-    return '';
+    return source;
 }
