@@ -14,7 +14,7 @@ function out_html(outputOption: webpack.Output, path, html, config: Config, asse
     Object.keys(assets)
         .filter(assetName => !/\.map$/.test(assetName))
         .forEach(assetName => {
-            $('head').append(`<script type="text/javascript" src="/${outputOption.publicPath}${assetName}"/>`)
+            $('body').append(`<script type="text/javascript" src="/${outputOption.publicPath}${assetName}"/>`)
         });
     fs.outputFileSync(path, $.html());
 }

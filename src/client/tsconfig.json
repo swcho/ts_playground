@@ -5,7 +5,8 @@
         "moduleResolution": "node",
         "noImplicitAny": false,
         "sourceMap": true,
-        "outDir": "../../out/client"
+        "outDir": "../../out/client",
+        "jsx": "react"
     },
     "include": [
         "./**/*",
