@@ -7,7 +7,8 @@ const debug = require('debug')('loader/config');
 module.exports = function(this: webpack.loader.LoaderContext, source) {
     // console.log('config-loader', source);
     const config = _eval(source);
-    this._compilation.__config__ = config;
+    this._module.__config__ = config;
+    this._module.issuer.__config__ = config;
     // do foo
     // debug('start', source.length);
     // var foo = loaderUtils.getLoaderConfig(this, 'foo');

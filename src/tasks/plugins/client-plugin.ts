@@ -6,7 +6,7 @@ import * as cheerio from 'cheerio';
 
 import * as webpack from 'webpack';
 
-const log = debug('plugin/config');
+// const log = debug('plugin/config');
 
 function out_html(outputOption: webpack.Output, path, html, config: Config, assets: string) {
     console.log('out_html', config, html);
@@ -19,21 +19,21 @@ function out_html(outputOption: webpack.Output, path, html, config: Config, asse
     fs.outputFileSync(path, $.html());
 }
 
-interface CompilationInfo {
+interface EntryInfo {
     context: string;
     config: Config;
     html: string;
 }
 
-interface CompilationInfoMap {
-    [context: string]: CompilationInfo;
+interface EntryInfoMap {
+    [context: string]: EntryInfo;
 }
 
 export class ClientPlugin {
 
     private src: string;
     private out: string;
-    private compilationInfoMap: CompilationInfoMap = {};
+    private entryInfoMap: EntryInfoMap = {};
 
     constructor(src: string, out: string) {
         this.src = src;
@@ -48,31 +48,32 @@ export class ClientPlugin {
         //     }
         // });
         const out = this.out;
-        const compilationInfoMap = this.compilationInfoMap;
+        const entryInfoMap = this.entryInfoMap;
         compiler.plugin('emit', function(compilation, callback) {
 
-            assert(compilation.entries.length === 1, 'multiple entries?');
+            // assert(compilation.entries.length === 1, 'multiple entries?');
 
             const contextCompiler = this.context;
-            const contextCompilation = compilation.entries[0].context;
-            console.log('\nDBG: emit', contextCompilation);
-            const pathname = contextCompilation.replace(contextCompiler, '');
-            const htmlPath = `${out}${pathname}/index.html`;
+            compilation.entries.forEach((entry) => {
+                const contextCompilation = entry.context;
+                console.log('\nDBG: emit', contextCompilation);
+                const pathname = contextCompilation.replace(contextCompiler, '');
+                const htmlPath = `${out}${pathname}/index.html`;
 
-            const compilationInfo = compilationInfoMap[contextCompilation];
-            const config: Config = compilation.__config__ || compilationInfo && compilationInfo.config;
-            const html: string = compilation.__html__ || compilationInfo && compilationInfo.html;
+                const entryInfo = entryInfoMap[contextCompilation];
+                const config: Config = entry.__config__ || entryInfo && entryInfo.config;
+                const html: string = entry.__html__ || entryInfo && entryInfo.html;
 
-            if (config && html) {
-                console.log('\nDBG: compilation with html');
-                compilationInfoMap[contextCompilation] = {
-                    context: contextCompilation,
-                    config,
-                    html
-                };
-                out_html(compilation.outputOptions, htmlPath, html, config, compilation.assets);
-            }
-
+                if (config && html) {
+                    console.log('\nDBG: compilation with html');
+                    entryInfoMap[contextCompilation] = {
+                        context: contextCompilation,
+                        config,
+                        html
+                    };
+                    out_html(compilation.outputOptions, htmlPath, html, config, compilation.assets);
+                }
+            });
             callback();
         });
 

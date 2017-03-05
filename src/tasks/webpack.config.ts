@@ -12,6 +12,7 @@ module.exports = {
     cache: true,
     entry: {
         main: `${BASE_SRC_CLIENT}/apps/main/app.ts`,
+        react: `${BASE_SRC_CLIENT}/apps/react/app.ts`,
     },
     output: {
         path: path.join(__dirname, "../client/assets"),

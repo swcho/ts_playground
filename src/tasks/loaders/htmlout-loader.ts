@@ -4,6 +4,8 @@ import * as _eval from 'eval';
 
 module.exports = function(this: webpack.loader.LoaderContext, source) {
     // console.log('html-loader', source);
-    this._compilation.__html__ = _eval(source);
+    const html = _eval(source);
+    this._module.__html__ = html;
+    this._module.issuer.__html__ = html;
     return source;
 }
