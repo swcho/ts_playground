@@ -1,19 +1,48 @@
-import * as webpack from 'webpack';
+
 import * as path from 'path';
+
+import * as webpack from 'webpack';
+import * as glob from 'glob';
+
 import {ClientPlugin} from './plugins/client-plugin';
 
 const BASE_SRC = path.resolve(__dirname + '/../../src');
 const BASE_SRC_CLIENT = `${BASE_SRC}/client`;
+const BASE_SRC_APPS = `${BASE_SRC_CLIENT}/apps`;
 
 const BASE_OUT = path.resolve(__dirname + '/../../out');
 const BASE_OUT_CLIENT = `${BASE_OUT}/client`;
 
+const CONFIG_FILE_NAME = '.config.ts';
+const APP_FILE_NAME = 'app.*';
+
+const configList = glob.sync(`${BASE_SRC_APPS}/**/${CONFIG_FILE_NAME}`);
+
+interface EntryInfo {
+    pathname: string;
+    entryFilePath: string;
+    chunkName: string;
+}
+const entryInfoList = configList.map<EntryInfo>(configPath => {
+    const dir = configPath.replace(`/${CONFIG_FILE_NAME}`, '');
+    const pathname = dir.replace(BASE_SRC_APPS, '');
+    const entryFilePath = glob.sync(`${dir}/${APP_FILE_NAME}`)[0];
+    const chunkName = pathname.replace('/', '_');
+    return {
+        pathname,
+        entryFilePath,
+        chunkName
+    };
+});
+
+const entries = entryInfoList.reduce((ret, info) => {
+    ret[info.chunkName] = info.entryFilePath;
+    return ret;
+}, {})
+
 module.exports = {
     cache: true,
-    entry: {
-        main: `${BASE_SRC_CLIENT}/apps/main/app.ts`,
-        react: `${BASE_SRC_CLIENT}/apps/react/app.tsx`,
-    },
+    entry: entries,
     output: {
         path: path.join(__dirname, "../client/assets"),
         publicPath: "assets/",
@@ -24,12 +53,18 @@ module.exports = {
         loaders: [
             {
                 test: /\.html$/,
-                loader: 'html-loader',
-                query: {
-                    minimize: true
-                }
+                loader: 'html-loader'
             },
 
+            // require to write markdown
+            {
+                test: /\.md$/,
+                use: [{
+                    loader: 'html-loader'
+                }, {
+                    loader: 'markdown-loader'
+                }]
+            },
             // required to write "require('./style.css')"
             {
                 test: /\.css$/,
