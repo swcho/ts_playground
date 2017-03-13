@@ -8,10 +8,11 @@ import * as webpack from 'webpack';
 
 // const log = debug('plugin/config');
 
-function out_html(outputOption: webpack.Output, path, html, config: Config, assets: string) {
+function out_html(outputOption: webpack.Output, path, html, config: Config, assets: string[]) {
     console.log('out_html', config, html);
     const $ = cheerio.load(html);
-    Object.keys(assets)
+    console.log('out_html', assets);
+    assets
         .filter(assetName => !/\.map$/.test(assetName))
         .forEach(assetName => {
             $('body').append(`<script type="text/javascript" src="/${outputOption.publicPath}${assetName}"/>`)
@@ -71,7 +72,8 @@ export class ClientPlugin {
                         config,
                         html
                     };
-                    out_html(compilation.outputOptions, htmlPath, html, config, compilation.assets);
+                    const files = entry.chunks.map((chunk) => chunk.files[0]);
+                    out_html(compilation.outputOptions, htmlPath, html, config, files); //compilation.assets);
                 }
             });
             callback();

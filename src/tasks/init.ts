@@ -64,7 +64,7 @@ module.exports = (grunt: IGrunt) => {
                         'USE_BROWSER_SYNC': 'true'
                     },
                 },
-                cmd: 'node',
+                cmd: process.env['NODE'],
                 args: ['app.js']
             }
         }
