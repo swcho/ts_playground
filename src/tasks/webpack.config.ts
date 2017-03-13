@@ -70,6 +70,10 @@ module.exports = {
                 test: /\.css$/,
                 loader: "style-loader!css-loader"
             },
+            {
+                test: /\.less$/,
+                loader: "style-loader!css-loader!less-loader"
+            },
 
             // required for bootstrap icons
             {
@@ -116,17 +120,17 @@ module.exports = {
         ]
     },
     resolve: {
-        alias: {
-            // Bind version of jquery
-            jquery: "jquery-2.0.3",
+        // alias: {
+        //     // Bind version of jquery
+        //     jquery: "jquery-2.0.3",
 
-            // Bind version of jquery-ui
-            "jquery-ui": "jquery-ui-1.10.3",
+        //     // Bind version of jquery-ui
+        //     "jquery-ui": "jquery-ui-1.10.3",
 
-            // jquery-ui doesn't contain a index file
-            // bind module to the complete module
-            "jquery-ui-1.10.3$": "jquery-ui-1.10.3/ui/jquery-ui.js",
-        },
+        //     // jquery-ui doesn't contain a index file
+        //     // bind module to the complete module
+        //     "jquery-ui-1.10.3$": "jquery-ui-1.10.3/ui/jquery-ui.js",
+        // },
     },
     resolveLoader: {
         alias: {
@@ -139,13 +143,13 @@ module.exports = {
         // ]
     },
     plugins: [
-        new webpack.ProvidePlugin({
-            // Automtically detect jQuery and $ as free var in modules
-            // and inject the jquery library
-            // This is required by many jquery plugins
-            jQuery: "jquery",
-            $: "jquery"
-        }),
+        // new webpack.ProvidePlugin({
+        //     // Automtically detect jQuery and $ as free var in modules
+        //     // and inject the jquery library
+        //     // This is required by many jquery plugins
+        //     jQuery: "jquery",
+        //     $: "jquery"
+        // }),
         new ClientPlugin(BASE_SRC_CLIENT, BASE_OUT_CLIENT)
     ],
     context: path.join(BASE_SRC_CLIENT + '/apps'),
