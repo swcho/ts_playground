@@ -29,6 +29,7 @@
     "@types/fs-extra": "0.0.37",
     "@types/glob": "^5.0.30",
     "@types/grunt": "^0.4.21",
+    "@types/pixi.js": "^4.4.0",
     "@types/react-dom": "^0.14.23",
     "@types/webpack": "^2.2.6",
     "browser-sync": "^2.18.8",
