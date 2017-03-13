@@ -89,6 +89,12 @@ module.exports = {
                 loader: "file-loader?prefix=font/"
             },
 
+            // images
+            {
+                test: /\.png$/,
+                loader: "file-loader?prefix=imgs/"
+            },
+
             // required for react jsx
             {
                 test: /\.js$/,
