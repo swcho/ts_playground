@@ -64,7 +64,7 @@ module.exports = (grunt: IGrunt) => {
             client: {
                 expand: true,
                 cwd: PATH_OUT,
-                src: 'client/*',
+                src: 'client/**',
                 dest: PATH_DIST
             }
         },
