@@ -27,7 +27,8 @@ const entryInfoList = configList.map<EntryInfo>(configPath => {
     const dir = configPath.replace(`/${CONFIG_FILE_NAME}`, '');
     const pathname = dir.replace(BASE_SRC_APPS, '');
     const entryFilePath = glob.sync(`${dir}/${APP_FILE_NAME}`)[0];
-    const chunkName = pathname.replace('/', '_');
+    // const chunkName = pathname.replace('/', '_');
+    const chunkName = pathname.replace('/', '');
     return {
         pathname,
         entryFilePath,
