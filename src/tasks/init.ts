@@ -27,6 +27,9 @@ module.exports = (grunt: IGrunt) => {
         webpack: {
             options: webpackConfig,
             build: {
+                output: {
+                    publicPath: "//swcho.github.io/ts_boilerplate/dist/client/assets/",
+                },
                 plugins: webpackConfig.plugins.concat(
                     new webpack.DefinePlugin({
                         "process.env": {
@@ -39,6 +42,9 @@ module.exports = (grunt: IGrunt) => {
                 )
             },
             watch: {
+                output: {
+                    publicPath: "//localhost:3000/assets/",
+                },
                 devtool: "sourcemap",
                 watch: true
             }

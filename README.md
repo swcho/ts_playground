@@ -15,8 +15,6 @@ $ npm install && npm run build_tasks
 $ grunt serve
 ```
 
-TODO: React Support
-
 TODO: AngularJS Support
 
 TODO: vue.js Support

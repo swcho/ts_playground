@@ -14,11 +14,11 @@ function out_html(outputOption: webpack.Output, aPath, html, config: Config, ass
     // console.log('out_html', config, html);
     const $ = cheerio.load(html);
     // console.log('out_html', assets);
-    const relativeAssetPath = path.relative(path.dirname(aPath), outputOption.path);
+    // const relativeAssetPath = path.relative(path.dirname(aPath), outputOption.path);
     assets
         .filter(assetName => !/\.map$/.test(assetName))
         .forEach(assetName => {
-            $('body').append(`<script type="text/javascript" src="${relativeAssetPath}/${assetName}"/>`)
+            $('body').append(`<script type="text/javascript" src="${outputOption.publicPath}${assetName}"/>`)
         });
     fs.outputFileSync(aPath, $.html());
 }

@@ -17,10 +17,10 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "grunt serve",
+            "name": "grunt dist",
             "program": "${env.GRUNT}",
             "args": [
-                "serve"
+                "dist"
             ],
             "cwd": "${workspaceRoot}",
             "outFiles": []
