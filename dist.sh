@@ -3,7 +3,7 @@
 set -e
 
 DIST_BRANCH='gh-pages'
-DIST_OUT='out/client'
+DIST_OUT='dist/client'
 
 GIT_REPO_ROOT=$(git rev-parse --show-toplevel)
 if [ "$GIT_REPO_ROOT" != "$PWD" ]; then

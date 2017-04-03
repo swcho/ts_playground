@@ -47,7 +47,7 @@ const webpackConfig: webpack.Configuration = {
         path: path.join(__dirname, "../client/assets"),
         publicPath: "assets/",
         filename: "[name].[chunkhash].js",
-        chunkFilename: "[chunkhash].js"
+        chunkFilename: "[chunkhash].js",
     },
     module: {
         loaders: [

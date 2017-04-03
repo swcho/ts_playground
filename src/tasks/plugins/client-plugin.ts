@@ -1,4 +1,6 @@
 
+import * as path from 'path';
+
 import * as assert from 'assert';
 import * as debug from 'debug';
 import * as fs from 'fs-extra';
@@ -8,16 +10,17 @@ import * as webpack from 'webpack';
 
 // const log = debug('plugin/config');
 
-function out_html(outputOption: webpack.Output, path, html, config: Config, assets: string[]) {
+function out_html(outputOption: webpack.Output, aPath, html, config: Config, assets: string[]) {
     // console.log('out_html', config, html);
     const $ = cheerio.load(html);
     // console.log('out_html', assets);
+    const relativeAssetPath = path.relative(path.dirname(aPath), outputOption.path);
     assets
         .filter(assetName => !/\.map$/.test(assetName))
         .forEach(assetName => {
-            $('body').append(`<script type="text/javascript" src="/${outputOption.publicPath}${assetName}"/>`)
+            $('body').append(`<script type="text/javascript" src="${relativeAssetPath}/${assetName}"/>`)
         });
-    fs.outputFileSync(path, $.html());
+    fs.outputFileSync(aPath, $.html());
 }
 
 interface EntryInfo {

@@ -6,6 +6,7 @@ import * as webpack from 'webpack';
 module.exports = (grunt: IGrunt) => {
 
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-spawn-process');
@@ -13,6 +14,8 @@ module.exports = (grunt: IGrunt) => {
     const PATH_OUT = path.join(__dirname, '../../out');
     const PATH_OUT_CLIENT = path.join(PATH_OUT, 'client');
     const PATH_OUT_SERVER = path.join(PATH_OUT, 'server');
+
+    const PATH_DIST = path.join(__dirname, '../../dist');
 
     const webpackConfig = require("./webpack.config");
 
@@ -57,6 +60,14 @@ module.exports = (grunt: IGrunt) => {
                 tsconfig: 'src/server/tsconfig.json'
             }
         },
+        copy: {
+            client: {
+                expand: true,
+                cwd: PATH_OUT,
+                src: 'client/*',
+                dest: PATH_DIST
+            }
+        },
         run_server: {
             default: {
                 path: PATH_OUT_SERVER
@@ -77,6 +88,7 @@ module.exports = (grunt: IGrunt) => {
     });
 
     grunt.registerTask('serve', ['clean', 'ts:server', 'spawnProcess:server', 'webpack:watch']);
-    grunt.registerTask('dist', ['clean:client', 'webpack:build', 'ts:server']);
-    grunt.registerTask('default', ['clean:client', 'webpack:build', 'ts:server']);
+    grunt.registerTask('build', ['clean:client', 'webpack:build', 'ts:server']);
+    grunt.registerTask('dist', ['build', 'copy:client']);
+    grunt.registerTask('default', ['build']);
 }
