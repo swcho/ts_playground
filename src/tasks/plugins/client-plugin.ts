@@ -9,9 +9,9 @@ import * as webpack from 'webpack';
 // const log = debug('plugin/config');
 
 function out_html(outputOption: webpack.Output, path, html, config: Config, assets: string[]) {
-    console.log('out_html', config, html);
+    // console.log('out_html', config, html);
     const $ = cheerio.load(html);
-    console.log('out_html', assets);
+    // console.log('out_html', assets);
     assets
         .filter(assetName => !/\.map$/.test(assetName))
         .forEach(assetName => {
@@ -57,7 +57,7 @@ export class ClientPlugin {
             const contextCompiler = this.context;
             compilation.entries.forEach((entry) => {
                 const contextCompilation = entry.context;
-                console.log('\nDBG: emit', contextCompilation);
+                // console.log('\nDBG: emit', contextCompilation);
                 const pathname = contextCompilation.replace(contextCompiler, '');
                 const htmlPath = `${out}${pathname}/index.html`;
 
@@ -66,7 +66,7 @@ export class ClientPlugin {
                 const html: string = entry.__html__ || entryInfo && entryInfo.html;
 
                 if (config && html) {
-                    console.log('\nDBG: compilation with html');
+                    // console.log('\nDBG: compilation with html');
                     entryInfoMap[contextCompilation] = {
                         context: contextCompilation,
                         config,
@@ -80,7 +80,7 @@ export class ClientPlugin {
         });
 
         compiler.plugin('done', () => {
-            console.log('\nDBG: ConfigPlugin DONE')
+            // console.log('\nDBG: ConfigPlugin DONE')
         });
     }
 

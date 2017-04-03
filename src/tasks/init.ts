@@ -5,16 +5,22 @@ import * as webpack from 'webpack';
 
 module.exports = (grunt: IGrunt) => {
 
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-spawn-process');
 
     const PATH_OUT = path.join(__dirname, '../../out');
+    const PATH_OUT_CLIENT = path.join(PATH_OUT, 'client');
     const PATH_OUT_SERVER = path.join(PATH_OUT, 'server');
 
     const webpackConfig = require("./webpack.config");
 
     grunt.initConfig({
+        clean: {
+            client: PATH_OUT_CLIENT,
+            server: PATH_OUT_SERVER,
+        },
         webpack: {
             options: webpackConfig,
             build: {
@@ -29,7 +35,7 @@ module.exports = (grunt: IGrunt) => {
                     new webpack.optimize.UglifyJsPlugin()
                 )
             },
-            "watch": {
+            watch: {
                 devtool: "sourcemap",
                 watch: true
             }
@@ -70,8 +76,7 @@ module.exports = (grunt: IGrunt) => {
         }
     });
 
-    console.log('server path: ', path.join(__dirname, '../../out/server'));
-
-    grunt.registerTask('serve', ['ts:server', 'spawnProcess:server', 'webpack:watch']);
-    grunt.registerTask('default', ['webpack:build-dev', 'ts:server']);
+    grunt.registerTask('serve', ['clean', 'ts:server', 'spawnProcess:server', 'webpack:watch']);
+    grunt.registerTask('dist', ['clean:client', 'webpack:build', 'ts:server']);
+    grunt.registerTask('default', ['clean:client', 'webpack:build', 'ts:server']);
 }

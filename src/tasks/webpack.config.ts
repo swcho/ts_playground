@@ -38,9 +38,9 @@ const entryInfoList = configList.map<EntryInfo>(configPath => {
 const entries = entryInfoList.reduce((ret, info) => {
     ret[info.chunkName] = info.entryFilePath;
     return ret;
-}, {})
+}, {});
 
-module.exports = {
+const webpackConfig: webpack.Configuration = {
     cache: true,
     entry: entries,
     output: {
@@ -157,3 +157,5 @@ module.exports = {
         __filename: true
     }
 };
+
+module.exports = webpackConfig;
