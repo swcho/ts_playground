@@ -1,5 +1,5 @@
 
-require('config-loader!./.config.ts');
-require('htmlout-loader!./en.md');
+import 'config-loader!./.config.ts';
+import 'htmlout-loader!./en.md';
 console.log(__filename);
 console.log('hi')

@@ -9,7 +9,9 @@ const USE_BROWSER_SYNC = process.env['USE_BROWSER_SYNC'];
 if (USE_BROWSER_SYNC) {
     const bs = browserSync.create();
     bs.init({
-        server: CLIENT_ROOT,
+        server: {
+            baseDir: CLIENT_ROOT,
+        },
         files: CLIENT_ROOT + '/**/*',
         open: false
     });

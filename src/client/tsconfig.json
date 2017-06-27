@@ -2,14 +2,21 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "moduleResolution": "node",
         "noImplicitAny": false,
         "sourceMap": true,
         "outDir": "../../out/client",
-        "jsx": "react"
+        "jsx": "react",
+        "skipLibCheck": true,
+        "types": [
+        ]
     },
     "include": [
         "./**/*",
         "../common/config.ts"
+    ],
+    "exclude": [
+        "../../node_modules",
+        "../server",
+        "../tasks"
     ]
 }

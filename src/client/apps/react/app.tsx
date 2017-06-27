@@ -2,8 +2,8 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
-require('config-loader!./.config.ts');
-require('htmlout-loader!./en.html');
+import 'config-loader!./.config.ts';
+import 'htmlout-loader!./en.html';
 console.log(__filename);
 
 class Component extends React.Component<{}, {}> {

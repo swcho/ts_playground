@@ -1,9 +1,9 @@
 
 import * as $ from 'jquery';
-require('jquery.transit');
-require('config-loader!./.config.ts');
-require('htmlout-loader!./en.html');
-require('./css3d.less');
+import 'config-loader!./.config.ts';
+import 'htmlout-loader!./en.html';
+import 'jquery.transit';
+import './css3d.less';
 
 const width = 200;
 const height = 200;

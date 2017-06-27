@@ -1,8 +1,9 @@
 
+import 'config-loader!./.config.ts';
+import 'htmlout-loader!./en.html';
+
 import * as PIXI from 'pixi.js';
 
-require('config-loader!./.config.ts');
-require('htmlout-loader!./en.html');
 const imgBunny = require('./bunny.png');
 
 const width = 400;
