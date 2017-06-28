@@ -109,17 +109,17 @@ const webpackConfig: webpack.Configuration = {
                 test: /\.png$/,
                 loader: "file-loader?prefix=imgs/"
             },
-
             // required for react jsx
-            {
-                test: /\.js$/,
-                // loader: "jsx-loader"
-                enforce: 'pre',
-            },
-            {
-                test: /\.jsx$/,
-                loader: "jsx-loader?insertPragma=React.DOM"
-            },
+            // {
+            //     test: /\.js$/,
+            //     loader: "jsx-loader",
+            //     enforce: 'pre',
+            // },
+            // {
+            //     test: /\.jsx?$/,
+            //     loader: "babel-loader",
+            //     enforce: "pre"
+            // },
 
             // required for TypeScript
             {
