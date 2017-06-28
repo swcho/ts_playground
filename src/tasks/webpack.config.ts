@@ -51,7 +51,7 @@ const webpackConfig: webpack.Configuration = {
         chunkFilename: "[chunkhash].js",
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.html$/,
                 loader: 'html-loader'
@@ -74,6 +74,16 @@ const webpackConfig: webpack.Configuration = {
             {
                 test: /\.less$/,
                 loader: "style-loader!css-loader!less-loader"
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }]
             },
 
             // required for bootstrap icons
@@ -103,7 +113,8 @@ const webpackConfig: webpack.Configuration = {
             // required for react jsx
             {
                 test: /\.js$/,
-                loader: "jsx-loader"
+                // loader: "jsx-loader"
+                enforce: 'pre',
             },
             {
                 test: /\.jsx$/,
@@ -151,7 +162,10 @@ const webpackConfig: webpack.Configuration = {
         //     jQuery: "jquery",
         //     $: "jquery"
         // }),
-        new ClientPlugin(BASE_SRC_CLIENT, BASE_OUT_CLIENT)
+        new ClientPlugin(BASE_SRC_CLIENT, BASE_OUT_CLIENT),
+        new webpack.ProvidePlugin({
+            'THREE': 'three'
+        }),
     ],
     context: path.join(BASE_SRC_CLIENT + '/apps'),
     node: {
