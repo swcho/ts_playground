@@ -8,7 +8,11 @@
     "build_tasks": "npm run clean && tsc --pretty -p src/tasks",
     "watch_tasks": "npm run build_tasks -- --watch",
     "build": "npm run build_tasks && grunt dist",
-    "test": "test command"
+    "test": "test command",
+    "serve": "npm run webpack-dev-server -- --config out/tasks/webpack.config.dev.js --hot --contentBase out/client",
+    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "build_server": "tsc -p src/server",
+    "server": "npm run build_server && node out/server/app.js"
   },
   "repository": {
     "type": "git",
@@ -21,9 +25,7 @@
   "author": "Sungwoo",
   "license": "ISC",
   "dependencies": {
-    "@types/three": "^0.84.14",
-    "express": "^4.14.1",
-    "three": "0.85.2"
+    "express": "^4.14.1"
   },
   "devDependencies": {
     "@types/browser-sync": "0.0.34",
@@ -36,6 +38,7 @@
     "@types/jquery.transit": "^0.9.28",
     "@types/pixi.js": "^4.4.0",
     "@types/react-dom": "^0.14.23",
+    "@types/three": "^0.84.15",
     "@types/webpack": "^2.2.6",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
@@ -64,10 +67,13 @@
     "react-dom": "^15.4.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
+    "three": "^0.86.0",
     "ts-loader": "^2.2.0",
+    "ts-node": "^3.1.0",
     "typescript": "^2.4.1",
     "url-loader": "^0.5.7",
     "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0"
+    "webpack-dev-server": "^2.5.0",
+    "webpack-merge": "^4.1.0"
   }
 }

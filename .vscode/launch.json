@@ -28,6 +28,30 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "webpack",
+            "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
+            "args": [
+                "--config",
+                "out/tasks/webpack.config.dev.js"
+            ],
+            "cwd": "${workspaceRoot}",
+            "outFiles": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "webpack-dev-server",
+            "program": "${workspaceRoot}/node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+            "args": [
+                "--config",
+                "out/tasks/webpack.config.dev.js"
+            ],
+            "cwd": "${workspaceRoot}",
+            "outFiles": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceRoot}/index.js",
             "cwd": "${workspaceRoot}",

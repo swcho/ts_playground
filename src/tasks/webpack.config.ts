@@ -69,21 +69,42 @@ const webpackConfig: webpack.Configuration = {
             // required to write "require('./style.css')"
             {
                 test: /\.css$/,
-                loader: "style-loader!css-loader"
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                ]
             },
             {
                 test: /\.less$/,
-                loader: "style-loader!css-loader!less-loader"
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'less-loader'
+                    },
+                ]
             },
             {
                 test: /\.scss$/,
-                use: [{
+                use: [
+                    {
                     loader: "style-loader" // creates style nodes from JS strings
-                }, {
-                    loader: "css-loader" // translates CSS into CommonJS
-                }, {
-                    loader: "sass-loader" // compiles Sass to CSS
-                }]
+                    },
+                    {
+                        loader: "css-loader" // translates CSS into CommonJS
+                    },
+                    {
+                        loader: "sass-loader" // compiles Sass to CSS
+                    }
+                ]
             },
 
             // required for bootstrap icons

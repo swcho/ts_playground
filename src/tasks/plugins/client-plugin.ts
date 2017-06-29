@@ -62,11 +62,15 @@ export class ClientPlugin {
                 const contextCompilation = entry.context;
                 // console.log('\nDBG: emit', contextCompilation);
                 const pathname = contextCompilation.replace(contextCompiler, '');
-                const htmlPath = `${out}${pathname}/index.html`;
+                const htmlPath = `${out}/${entry.name || pathname}/index.html`;
 
                 const entryInfo = entryInfoMap[contextCompilation];
-                const config: Config = entry.__config__ || entryInfo && entryInfo.config;
-                const html: string = entry.__html__ || entryInfo && entryInfo.html;
+                const config: Config = entry.__config__
+                    || entry.dependencies.reduce((ret, dependency) => ret || dependency.module && dependency.module.__config__, undefined)
+                    || entryInfo && entryInfo.config;
+                const html: string = entry.__html__
+                    || entry.dependencies.reduce((ret, dependency) => ret || dependency.module && dependency.module.__html__, undefined)
+                    || entryInfo && entryInfo.html;
 
                 if (config && html) {
                     // console.log('\nDBG: compilation with html');
