@@ -11,6 +11,10 @@ module.exports = (grunt: IGrunt) => {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-spawn-process');
 
+    const contentBase = path.resolve(__dirname, "../../out/client/css3d");
+
+    console.log('contentBase', contentBase);
+
     const PATH_OUT = path.join(__dirname, '../../out');
     const PATH_OUT_CLIENT = path.join(PATH_OUT, 'client');
     const PATH_OUT_SERVER = path.join(PATH_OUT, 'server');
@@ -51,13 +55,34 @@ module.exports = (grunt: IGrunt) => {
         "webpack-dev-server": {
             options: {
                 webpack: webpackConfig,
-                publicPath: "/" + webpackConfig.output.publicPath
             },
             start: {
-                keepAlive: true,
                 webpack: {
-                    devtool: "eval",
-                }
+                    output: {
+                        publicPath: '/',
+                        filename: "[name].js",
+
+                        // publicPath: "//localhost:3000/assets/",
+                    },
+                    // devtool: "sourcemap",
+                    devtool: "inline-source-map", // for Chrome saving file
+                    plugins: [
+                        new webpack.NamedModulesPlugin(),
+                        new webpack.HotModuleReplacementPlugin(),
+                    ],
+                    devServer: {
+                        hot: true,
+                        // inline: true,
+                        contentBase,
+                        publicPath: '/assets/',
+                        // filename: 'bundle.js',
+                        // historyApiFallback: true,
+                        // proxy: {
+                        //     "**": "http://localhost:3000"
+                        // },
+                        port: 3000,
+                    },
+                },
             }
         },
         ts: {
@@ -92,7 +117,8 @@ module.exports = (grunt: IGrunt) => {
         }
     });
 
-    grunt.registerTask('serve', ['clean', 'ts:server', 'spawnProcess:server', 'webpack:watch']);
+    // grunt.registerTask('serve', ['clean', 'ts:server', 'spawnProcess:server', 'webpack:watch']);
+    grunt.registerTask('serve', ['clean', 'ts:server', 'webpack-dev-server']);
     grunt.registerTask('build', ['clean:client', 'webpack:build', 'ts:server']);
     grunt.registerTask('dist', ['build', 'copy:client']);
     grunt.registerTask('default', ['build']);

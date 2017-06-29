@@ -45,7 +45,7 @@ const webpackConfig: webpack.Configuration = {
     cache: true,
     entry: entries,
     output: {
-        path: path.join(__dirname, "../client/assets"),
+        path: path.resolve(__dirname, "../client/assets"),
         publicPath: "/assets/",
         filename: "[name].[chunkhash].js",
         chunkFilename: "[chunkhash].js",
