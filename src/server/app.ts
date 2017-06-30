@@ -1,8 +1,10 @@
 
+import * as path from 'path';
+
 import * as express from 'express';
 import * as browserSync from 'browser-sync';
 
-const CLIENT_ROOT = process.env['CLIENT_ROOT'] || '../client';
+const CLIENT_ROOT = process.env['CLIENT_ROOT'] || path.resolve(__dirname, '../client');
 const PORT = process.env['PORT'] || '3000';
 const USE_BROWSER_SYNC = process.env['USE_BROWSER_SYNC'];
 

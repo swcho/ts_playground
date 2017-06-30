@@ -4,21 +4,32 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import * as webpackMerge from 'webpack-merge';
 
-import * as common from './webpack.config';
+// import * as common from './webpack.config';
+const common = require('./webpack.config')
+
+// const entry = {...common.entry, }
 
 const webpackConfig: webpack.Configuration = webpackMerge(
     common,
     {
+        // entry : {
+        //     client: [
+        //         'react-hot-loader/patch',
+        //         'webpack-hot-middleware/client',
+        //     ]
+        // },
         output: {
-            filename: "[name].js",
+            filename: "[name].[hash].js",
+            chunkFilename: "[name].[hash].js",
         },
         plugins: [
             new webpack.HotModuleReplacementPlugin(),
+            // new webpack.NoEmitOnErrorsPlugin(),
         ],
-        // devServer: {
-        //     hot: true,
-        //     contentBase: "out/client",
-        // }
+        devServer: {
+            hot: true,
+            contentBase: "out/client",
+        }
     }
 );
 
