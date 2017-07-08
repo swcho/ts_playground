@@ -25,7 +25,8 @@
   "author": "Sungwoo",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "p5": "^0.5.11"
   },
   "devDependencies": {
     "@types/browser-sync": "0.0.34",
