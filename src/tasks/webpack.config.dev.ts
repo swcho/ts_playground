@@ -29,7 +29,8 @@ const webpackConfig: webpack.Configuration = webpackMerge(
         devServer: {
             hot: true,
             contentBase: "out/client",
-        }
+        },
+        devtool: 'inline-source-map'
     }
 );
 
