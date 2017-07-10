@@ -5,11 +5,11 @@
         "moduleResolution": "node",
         "noImplicitAny": false,
         "sourceMap": true,
-        "outDir": "../../out"
+        "outDir": "../../out/tasks"
     },
     "include": [
         "./**/*",
-        "../common/config.ts"
+        "../common/**/*"
     ],
     "exclude": [
         "node_modules"

@@ -147,23 +147,29 @@ const webpackConfig: webpack.Configuration = {
                 test: /\.tsx?$/,
                 loader: "ts-loader",
                 options: {
-                    configFileName: BASE_SRC + '/client/tsconfig.json'
+                    configFileName: path.join(BASE_SRC_CLIENT, 'tsconfig.json')
                 }
             },
         ]
     },
     resolve: {
-        // alias: {
-        //     // Bind version of jquery
-        //     jquery: "jquery-2.0.3",
+        modules: [
+            path.resolve(__dirname, '../../node_modules'),
+        ],
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.jsx'],
+        alias: {
+            '$lib': path.join(BASE_SRC_CLIENT, 'lib'),
+            // Bind version of jquery
+            // jquery: "jquery-2.0.3",
 
-        //     // Bind version of jquery-ui
-        //     "jquery-ui": "jquery-ui-1.10.3",
+            // Bind version of jquery-ui
+            // "jquery-ui": "jquery-ui-1.10.3",
 
-        //     // jquery-ui doesn't contain a index file
-        //     // bind module to the complete module
-        //     "jquery-ui-1.10.3$": "jquery-ui-1.10.3/ui/jquery-ui.js",
-        // },
+            // jquery-ui doesn't contain a index file
+            // bind module to the complete module
+            // "jquery-ui-1.10.3$": "jquery-ui-1.10.3/ui/jquery-ui.js",
+        },
     },
     resolveLoader: {
         alias: {

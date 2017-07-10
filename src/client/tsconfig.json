@@ -2,17 +2,22 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
+        "moduleResolution": "node",
         "noImplicitAny": false,
         "sourceMap": true,
         "outDir": "../../out/client",
         "jsx": "react",
         "skipLibCheck": true,
         "types": [
-        ]
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "$lib/*": ["lib/*"]
+        }
     },
     "include": [
         "./**/*",
-        "../common/config.ts"
+        "../common/**/*"
     ],
     "exclude": [
         "../../node_modules",
