@@ -4,9 +4,20 @@ import 'htmlout-loader!./en.html';
 
 import * as THREE from 'three';
 import 'three/examples/js/controls/FlyControls';
+import 'three/examples/js/effects/AsciiEffect';
 import Stats = require('stats.js');
+import dat = require('dat-gui');
 
 import {parseQuery} from '$lib/utils';
+
+var controls = new function() {
+    this.rotationSpeed = 0.02;
+    this.bouncingSpeed = 0.03;
+}
+
+var gui = new dat.GUI();
+gui.add(controls, 'rotationSpeed',0,0.5);
+gui.add(controls, 'bouncingSpeed',0,0.5);
 
 var stats = new Stats();
 function initStats(elParent) {
@@ -36,6 +47,11 @@ declare module "three" {
 
     class FlyControls extends THREE.EventDispatcher {
         constructor(camera: THREE.Camera);
+    }
+
+    class AsciiEffect extends THREE.EffectComposer  {
+        constructor(renderer: THREE.Renderer);
+        domElement;
     }
 
 }
@@ -140,21 +156,28 @@ flyControls.rollSpeed = Math.PI / 24;
 flyControls.autoForward = true;
 flyControls.dragToLook = false;
 
+// Effect
+var effect = new THREE.AsciiEffect( renderer );
+effect.setSize( window.innerWidth, window.innerHeight );
+elOutput.appendChild(effect.domElement)
+
 // renderer.render(scene, camera);
 let step = 0;
 function render() {
     stats.update();
     requestAnimationFrame(render);
 
-    cube.rotation.x += 0.02;
-    cube.rotation.y += 0.02;
-    cube.rotation.z += 0.02;
+    cube.rotation.x += controls.rotationSpeed;
+    cube.rotation.y += controls.rotationSpeed;
+    cube.rotation.z += controls.rotationSpeed;
 
-    step+=0.04;
-    sphere.position.x = 20+( 10*(Math.cos(step)));
-    sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
+    step += controls.bouncingSpeed;
+    sphere.position.x = 20 + (10 * (Math.cos(step)));
+    // sphere.position.y = 2  + (15 * Math.abs(Math.sin(step)));
+    sphere.position.y = 2  + (15 * Math.sin(step));
 
-    renderer.render(scene, camera)
+    renderer.render(scene, camera);
+    (effect as any).render(scene, camera);
 }
 
 render();
