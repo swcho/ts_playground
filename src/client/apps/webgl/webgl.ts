@@ -1,4 +1,21 @@
 
+export interface Object {
+    vertices: number[];
+    indices: number[];
+    diffuse?: number[];
+    wireframe?: boolean;
+    colors?: number[];
+}
+
+interface GLObject {
+    vbo: WebGLBuffer;
+    ibo: WebGLBuffer;
+    iboLen: number;
+    nbo?: WebGLBuffer;
+    cbo?: WebGLBuffer;
+    wireframe?: boolean;
+}
+
 interface DrawParam {
     indexSupplied: boolean;
     length: number;
@@ -45,11 +62,20 @@ export class WebGL {
         this.fragmentShader = this.createShader(this.context.FRAGMENT_SHADER, source);
     }
 
-    setProgram(vertextSource: string, fragmentSource: string) {
+    setProgram<T>(vertextSource: string, fragmentSource: string) {
+        const gl = this.context;
         this.setVertexShader(vertextSource);
         this.setFragmentShader(fragmentSource);
-        this.context.linkProgram(this.program);
-        this.context.useProgram(this.program);
+        gl.linkProgram(this.program);
+        gl.useProgram(this.program);
+    }
+
+    private attrs: { [name: string]: number } = {};
+    setAttributes(attrs: string[]) {
+        const gl = this.context;
+        for (const attr of attrs) {
+            this.attrs[attr] = gl.getAttribLocation(this.program, attr);
+        }
     }
 
     private drawParam: DrawParam;
@@ -75,10 +101,83 @@ export class WebGL {
         this.setVertexAttribute(name, object[0], object[1]);
     }
 
+    private glObjects: GLObject[] = [];
+    addObject(object: Object) {
+        const gl = this.context;
+        const vbo = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(object.vertices), gl.STATIC_DRAW);
+
+        const ibo  = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(object.indices), gl.STATIC_DRAW);
+
+        const glObject: GLObject = {
+            vbo,
+            ibo,
+            iboLen: object.indices.length,
+            wireframe: object.wireframe,
+        }
+
+        if (object.colors) {
+            const cbo = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, cbo);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(object.colors), gl.STATIC_DRAW);
+            glObject.cbo = cbo;
+        }
+
+        this.glObjects.push(glObject);
+    }
+
+    drawObjects(attrName: {
+        vbo: string;
+        nbo?: string;
+        cbo?: string;
+    }) {
+        const gl = this.context;
+        const attrs = this.attrs;
+        const attrVbo = attrs[attrName.vbo];
+        const attrNbo = attrs[attrName.nbo];
+        const attrCbo = attrs[attrName.cbo];
+
+        for (const obj of this.glObjects) {
+            // gl.enableVertexAttribArray(attrs[attrName.vbo]);
+            // attrName.nbo && gl.disableVertexAttribArray(attrs[attrName.nbo]);
+            // attrName.cbo && gl.disableVertexAttribArray(attrs[attrName.cbo]);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, obj.vbo);
+            gl.vertexAttribPointer(attrVbo, 3, gl.FLOAT, false, 0, 0);
+            gl.enableVertexAttribArray(attrVbo);
+
+            if (attrNbo) {
+                if (!obj.wireframe && obj.nbo) {
+                    gl.bindBuffer(gl.ARRAY_BUFFER, obj.nbo);
+                    gl.vertexAttribPointer(attrNbo, 3, gl.FLOAT, false, 0, 0);
+                    gl.enableVertexAttribArray(attrNbo);
+                } else {
+                    gl.disableVertexAttribArray(attrNbo);
+                }
+            }
+
+            if (attrCbo) {
+                if (obj.cbo) {
+                    gl.bindBuffer(gl.ARRAY_BUFFER, obj.cbo);
+                    gl.vertexAttribPointer(attrCbo, 4, gl.FLOAT, false, 0, 0);
+                    gl.enableVertexAttribArray(attrCbo);
+                } else {
+                    gl.disableVertexAttribArray(attrCbo);
+                }
+            }
+
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibo);
+            gl.drawElements(obj.wireframe ? gl.LINES : gl.TRIANGLES, obj.iboLen, gl.UNSIGNED_SHORT, 0);
+        }
+    }
+
     setUniformValue(name: string, value) {
         const loc = this.context.getUniformLocation(this.program, name);
         const len = value['length'];
-        console.log('setUniformValue', name, len);
+        // console.log('setUniformValue', name, len);
         if (typeof len === 'undefined') {
             this.context.uniform1f(loc, value);
         } else {
@@ -94,13 +193,25 @@ export class WebGL {
         Object.keys(obj).forEach(key => this.setUniformValue(key, obj[key]));
     }
 
-    draw() {
+    drawLine() {
         const {
             indexSupplied,
             length
         } = this.drawParam;
         if (indexSupplied) {
-            this.context.drawElements(this.context.LINES, length, this.context.UNSIGNED_SHORT, 0);
+            this.context.drawElements(this.context.LINE_LOOP, length, this.context.UNSIGNED_SHORT, 0);
+        } else {
+            this.context.drawArrays(this.context.TRIANGLES, 0, length);
+        }
+    }
+
+    drawArea() {
+        const {
+            indexSupplied,
+            length
+        } = this.drawParam;
+        if (indexSupplied) {
+            this.context.drawElements(this.context.TRIANGLES, length, this.context.UNSIGNED_SHORT, 0);
         } else {
             this.context.drawArrays(this.context.TRIANGLES, 0, length);
         }
