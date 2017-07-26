@@ -29,17 +29,17 @@ webgl.setAttributeMap({
 });
 
 webgl.addObject(objects.createFloor(60, 1));
-// webgl.addObject(objects.createAxis(20));
+webgl.addObject(objects.createAxis(20));
 // webgl.addObject(objects.SPHERE);
 webgl.addObject(objects.CONE6);
 
 const uMVMatrix = mat4.create();
 mat4.identity(uMVMatrix);
-mat4.translate(uMVMatrix, uMVMatrix, [0.0, 0.0, -10.0])
+mat4.translate(uMVMatrix, uMVMatrix, [0.0, -2.0, -50.0])
 
 const uPMatrix = mat4.create(); // The projection matrix
 mat4.identity(uPMatrix);
-mat4.perspective(uPMatrix, 45, clientWidth / clientHeight, 0.1, 10000.0);
+mat4.perspective(uPMatrix, 45, clientWidth / clientHeight, 0.1, 1000.0);
 
 const uNMatrix = mat4.create();
 mat4.invert(uNMatrix, uMVMatrix);

@@ -170,11 +170,6 @@ export class WebGL {
         const attrCbo = this.attributeMap.cbo;
 
         for (const glObject of this.glObjects) {
-            if (glObject.object.diffuse) {
-                // TODO: Fix to be configurable
-                this.setUniformValue('uMaterialDiffuse', glObject.object.diffuse);
-            }
-
             gl.bindBuffer(gl.ARRAY_BUFFER, glObject.vbo);
             gl.vertexAttribPointer(attrVbo, 3, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(attrVbo);
@@ -197,6 +192,18 @@ export class WebGL {
                 } else {
                     gl.disableVertexAttribArray(attrCbo);
                 }
+
+                // TODO: Find a way to be configurable
+                this.setUniformValue('uPerVertexColor', true);
+            } else {
+                this.setUniformValue('uPerVertexColor', false);
+            }
+
+            this.setUniformValue('uWireframe', !!glObject.object.wireframe);
+
+            if (glObject.object.diffuse) {
+                // TODO: Fix to be configurable
+                this.setUniformValue('uMaterialDiffuse', glObject.object.diffuse);
             }
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, glObject.ibo);
