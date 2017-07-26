@@ -1,4 +1,6 @@
 
+import {calculateNormals} from './utils';
+
 export interface Object {
     vertices: number[];
     indices: number[];
@@ -8,6 +10,7 @@ export interface Object {
 }
 
 interface GLObject {
+    object: Object;
     vbo: WebGLBuffer;
     ibo: WebGLBuffer;
     iboLen: number;
@@ -19,6 +22,16 @@ interface GLObject {
 interface DrawParam {
     indexSupplied: boolean;
     length: number;
+}
+
+interface AttributeMap {
+    vbo: number;
+    nbo?: number;
+    cbo?: number;
+}
+
+type AttributeNameMap = {
+    [P in keyof AttributeMap]: string;
 }
 
 export class WebGL {
@@ -41,10 +54,16 @@ export class WebGL {
     }
 
     private createShader(type: number, source: string) {
-        const shader = this.context.createShader(type);
-        this.context.shaderSource(shader, source);
-        this.context.compileShader(shader);
-        this.context.attachShader(this.program, shader);
+        const gl = this.context;
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        const compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+        if (!compiled) {
+            const compileLog = gl.getShaderInfoLog(shader);
+            console.error('shader log', compileLog);
+        }
+        gl.attachShader(this.program, shader);
         return shader;
     }
 
@@ -64,18 +83,26 @@ export class WebGL {
 
     setProgram<T>(vertextSource: string, fragmentSource: string) {
         const gl = this.context;
+        const program = this.program;
         this.setVertexShader(vertextSource);
         this.setFragmentShader(fragmentSource);
-        gl.linkProgram(this.program);
-        gl.useProgram(this.program);
+        gl.linkProgram(program);
+        gl.useProgram(program);
     }
 
-    private attrs: { [name: string]: number } = {};
-    setAttributes(attrs: string[]) {
+    private attributeMap: AttributeMap;
+    setAttributeMap(attrNameMap: AttributeNameMap) {
         const gl = this.context;
-        for (const attr of attrs) {
-            this.attrs[attr] = gl.getAttribLocation(this.program, attr);
-        }
+        const prog = this.program;
+        const attributeMap: AttributeMap = {} as any;
+        Object.keys(attrNameMap).forEach(type => {
+            const attrName = attrNameMap[type];
+            attributeMap[type] = gl.getAttribLocation(prog, attrName);
+            if (attributeMap[type] === -1) {
+                console.error(`attribute "${attrName}" not found for ${type}`)
+            }
+        });
+        this.attributeMap = attributeMap;
     }
 
     private drawParam: DrawParam;
@@ -104,20 +131,27 @@ export class WebGL {
     private glObjects: GLObject[] = [];
     addObject(object: Object) {
         const gl = this.context;
+
         const vbo = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(object.vertices), gl.STATIC_DRAW);
+
+        const nbo = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, nbo);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(calculateNormals(object.vertices, object.indices)), gl.STATIC_DRAW);
 
         const ibo  = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(object.indices), gl.STATIC_DRAW);
 
         const glObject: GLObject = {
+            object,
             vbo,
+            nbo,
             ibo,
             iboLen: object.indices.length,
             wireframe: object.wireframe,
-        }
+        };
 
         if (object.colors) {
             const cbo = gl.createBuffer();
@@ -129,29 +163,25 @@ export class WebGL {
         this.glObjects.push(glObject);
     }
 
-    drawObjects(attrName: {
-        vbo: string;
-        nbo?: string;
-        cbo?: string;
-    }) {
+    drawObjects(wireframe?: boolean) {
         const gl = this.context;
-        const attrs = this.attrs;
-        const attrVbo = attrs[attrName.vbo];
-        const attrNbo = attrs[attrName.nbo];
-        const attrCbo = attrs[attrName.cbo];
+        const attrVbo = this.attributeMap.vbo;
+        const attrNbo = this.attributeMap.nbo;
+        const attrCbo = this.attributeMap.cbo;
 
-        for (const obj of this.glObjects) {
-            // gl.enableVertexAttribArray(attrs[attrName.vbo]);
-            // attrName.nbo && gl.disableVertexAttribArray(attrs[attrName.nbo]);
-            // attrName.cbo && gl.disableVertexAttribArray(attrs[attrName.cbo]);
+        for (const glObject of this.glObjects) {
+            if (glObject.object.diffuse) {
+                // TODO: Fix to be configurable
+                this.setUniformValue('uMaterialDiffuse', glObject.object.diffuse);
+            }
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, obj.vbo);
+            gl.bindBuffer(gl.ARRAY_BUFFER, glObject.vbo);
             gl.vertexAttribPointer(attrVbo, 3, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(attrVbo);
 
-            if (attrNbo) {
-                if (!obj.wireframe && obj.nbo) {
-                    gl.bindBuffer(gl.ARRAY_BUFFER, obj.nbo);
+            if (attrNbo !== -1) {
+                if (!glObject.wireframe && glObject.nbo) {
+                    gl.bindBuffer(gl.ARRAY_BUFFER, glObject.nbo);
                     gl.vertexAttribPointer(attrNbo, 3, gl.FLOAT, false, 0, 0);
                     gl.enableVertexAttribArray(attrNbo);
                 } else {
@@ -159,9 +189,9 @@ export class WebGL {
                 }
             }
 
-            if (attrCbo) {
-                if (obj.cbo) {
-                    gl.bindBuffer(gl.ARRAY_BUFFER, obj.cbo);
+            if (attrCbo !== -1) {
+                if (glObject.cbo) {
+                    gl.bindBuffer(gl.ARRAY_BUFFER, glObject.cbo);
                     gl.vertexAttribPointer(attrCbo, 4, gl.FLOAT, false, 0, 0);
                     gl.enableVertexAttribArray(attrCbo);
                 } else {
@@ -169,22 +199,32 @@ export class WebGL {
                 }
             }
 
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, obj.ibo);
-            gl.drawElements(obj.wireframe ? gl.LINES : gl.TRIANGLES, obj.iboLen, gl.UNSIGNED_SHORT, 0);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, glObject.ibo);
+            gl.drawElements(wireframe || glObject.wireframe ? gl.LINES : gl.TRIANGLES, glObject.iboLen, gl.UNSIGNED_SHORT, 0);
         }
     }
 
     setUniformValue(name: string, value) {
-        const loc = this.context.getUniformLocation(this.program, name);
+        const gl = this.context;
+        const loc = gl.getUniformLocation(this.program, name);
         const len = value['length'];
-        // console.log('setUniformValue', name, len);
+        if (!loc) {
+            console.error(`uniform ${name} not found`);
+            return;
+        }
         if (typeof len === 'undefined') {
-            this.context.uniform1f(loc, value);
+            gl.uniform1f(loc, value);
         } else {
             if (len === 2) {
-                this.context.uniform2fv(loc, value);
+                gl.uniform2fv(loc, value);
+            } else if (len === 3) {
+                gl.uniform3fv(loc, value);
+            } else if (len === 4) {
+                gl.uniform4fv(loc, value);
             } else if (len === 16) {
-                this.context.uniformMatrix4fv(loc, false, value);
+                gl.uniformMatrix4fv(loc, false, value);
+            } else {
+                console.error(`coundn't configure uniform ${name} with len ${len}`);
             }
         }
     }

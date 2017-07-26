@@ -12,7 +12,6 @@ console.log('WebGL Trials')
 
 // ref: https://codepen.io/cantelope/pen/zzmORP
 
-
 const elCanvas = document.getElementById('canvas-element-id') as HTMLCanvasElement;
 const {
     clientWidth,
@@ -20,35 +19,51 @@ const {
 } = elCanvas;
 
 const webgl = new WebGL(elCanvas);
-webgl.setProgram(require('./mvp.vert'), require('./macgann.frag'));
+webgl.setProgram(require('./phong.vert'), require('./vFinalColor.frag'));
+
 // webgl.setObject('pos', objects.HALF_SQUARE);
-webgl.setAttributes([
-    'pos',
-]);
+webgl.setAttributeMap({
+    vbo: 'aVertexPosition',
+    nbo: 'aVertexNormal',
+    cbo: 'aVertexColor',
+});
 
 webgl.addObject(objects.createFloor(60, 1));
-webgl.addObject(objects.createAxis(20));
+// webgl.addObject(objects.createAxis(20));
+// webgl.addObject(objects.SPHERE);
+webgl.addObject(objects.CONE6);
 
-const mModelView = mat4.create();
-mat4.identity(mModelView);
-mat4.translate(mModelView, mModelView, [2.0, 2.0, -5.0])
-const mPerspective = mat4.create(); // The projection matrix
-mat4.identity(mPerspective);
-mat4.perspective(mPerspective, 45, clientWidth / clientHeight, 0.1, 10000.0);
+const uMVMatrix = mat4.create();
+mat4.identity(uMVMatrix);
+mat4.translate(uMVMatrix, uMVMatrix, [0.0, 0.0, -10.0])
+
+const uPMatrix = mat4.create(); // The projection matrix
+mat4.identity(uPMatrix);
+mat4.perspective(uPMatrix, 45, clientWidth / clientHeight, 0.1, 10000.0);
+
+const uNMatrix = mat4.create();
+mat4.invert(uNMatrix, uMVMatrix);
+mat4.transpose(uNMatrix, uNMatrix);
+
+const uLightPosition = [0, 120, 120];
+const uLightAmbient = [0.20, 0.20, 0.20, 1.0];
+const uLightDiffuse = [1.0, 1.0, 1.0, 1.0];
+
 webgl.run({
-    time: 0,
-    mouse: [200.0, 100.0],
-    mModelView,
-    mPerspective,
+    uMVMatrix,
+    uPMatrix,
+    uNMatrix,
+    uLightPosition,
+    uLightAmbient,
+    uLightDiffuse,
 }, (state) => {
-    state.time += 1;
     webgl.setUniformValues(state);
     // webgl.drawArea();
-    webgl.drawObjects({
-        vbo: 'pos'
-    })
+    webgl.drawObjects();
 }, false);
 
 // draw half rect
 // apply color
 // change frag
+
+// ch5_SimpleAnimation.html
