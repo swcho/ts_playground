@@ -1,6 +1,8 @@
 
 import {mat4, vec3, vec4} from 'gl-matrix';
 import {calculateNormals} from './utils';
+import {Camera, CameraType} from './camera';
+import {CameraInteractor} from './camerainteractor';
 
 export interface Object {
     vertices: number[];
@@ -44,6 +46,8 @@ export class WebGL {
     private program: WebGLProgram;
     private vertexShader: WebGLShader;
     private fragmentShader: WebGLShader;
+    private camera: Camera;
+    private cameraInteractor: CameraInteractor;
 
     constructor(private elCanvas?: HTMLCanvasElement) {
         elCanvas = elCanvas || document.createElement('canvas');
@@ -56,8 +60,10 @@ export class WebGL {
         this.program = this.context.createProgram();
         this.onKeyDown = this.onKeyDown.bind(this);
         // elCanvas.addEventListener('keydown', this.onKeyDown);
-        window.addEventListener('keydown', this.onKeyDown);
+        // window.addEventListener('keydown', this.onKeyDown);
         // window.onkeydown = this.onKeyDown;
+        this.camera = new Camera(CameraType.TRACKING);
+        this.cameraInteractor = new CameraInteractor(this.camera, elCanvas);
     }
 
     private y= 0;
@@ -112,7 +118,7 @@ export class WebGL {
         this.fragmentShader = this.createShader(this.context.FRAGMENT_SHADER, source);
     }
 
-    setProgram<T>(vertextSource: string, fragmentSource: string) {
+    setProgram(vertextSource: string, fragmentSource: string) {
         const gl = this.context;
         const program = this.program;
         this.setVertexShader(vertextSource);
@@ -267,53 +273,56 @@ export class WebGL {
         }
     }
 
-    private cMatrix: mat4;
     initCamera(mvMat: mat4) {
-        this.cMatrix = mat4.create();
-        mat4.identity(this.cMatrix);
-        mat4.invert(this.cMatrix, mvMat);
+        this.camera.setFromMVMatrix(mvMat);
     }
 
     updateMVMatrix(mvMat: mat4) {
-        const pos: vec3 = vec3.create();
+
+        this.camera.getViewTransform();
+        mat4.copy(mvMat, this.camera.getViewTransform());
+        return;
+
+
+        // const pos: vec3 = vec3.create();
+        // // if (this.x !== 0) {
+        // //     pos[0] -= this.x;
+        // //     this.x = 0;
+        // // }
+        // // if (this.y !== 0) {
+        // //     pos[1] -= this.y;
+        // //     this.y = 0;
+        // // }
+
         // if (this.x !== 0) {
-        //     pos[0] -= this.x;
+        //     pos[2] += this.x;
         //     this.x = 0;
         // }
         // if (this.y !== 0) {
-        //     pos[1] -= this.y;
+        //     pos[0] += this.y;
         //     this.y = 0;
         // }
+        // mat4.translate(mvMat, mvMat, pos);
 
-        if (this.x !== 0) {
-            pos[2] += this.x;
-            this.x = 0;
-        }
-        if (this.y !== 0) {
-            pos[0] += this.y;
-            this.y = 0;
-        }
-        mat4.translate(mvMat, mvMat, pos);
+        // if (this.azimuth !== 0) {
+        //     // Tracking camera
+        //     mat4.rotateY(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.azimuth);
+        //     mat4.invert(mvMat, this.cMatrix);
 
-        if (this.azimuth !== 0) {
-            // Tracking camera
-            mat4.rotateY(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.azimuth);
-            mat4.invert(mvMat, this.cMatrix);
+        //     // Orbiting camera
+        //     // mat4.rotateY(mvMat, mvMat, ROTATION_UNIT * this.azimuth);
+        //     this.azimuth = 0;
+        // }
 
-            // Orbiting camera
-            // mat4.rotateY(mvMat, mvMat, ROTATION_UNIT * this.azimuth);
-            this.azimuth = 0;
-        }
+        // if (this.elevation !== 0) {
+        //     // Tracking camera
+        //     mat4.rotateX(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.elevation);
+        //     mat4.invert(mvMat, this.cMatrix);
 
-        if (this.elevation !== 0) {
-            // Tracking camera
-            mat4.rotateX(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.elevation);
-            mat4.invert(mvMat, this.cMatrix);
-
-            // Orbiting camera
-            // mat4.rotateX(mvMat, mvMat, ROTATION_UNIT * this.elevation);
-            this.elevation = 0;
-        }
+        //     // Orbiting camera
+        //     // mat4.rotateX(mvMat, mvMat, ROTATION_UNIT * this.elevation);
+        //     this.elevation = 0;
+        // }
     }
 
     setUniformValues(obj) {
