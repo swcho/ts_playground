@@ -1,8 +1,10 @@
 
+import {mat4, vec3, vec4} from 'gl-matrix';
 import {calculateNormals} from './utils';
 
 export interface Object {
     vertices: number[];
+    normals?: number[];
     indices: number[];
     diffuse?: number[];
     wireframe?: boolean;
@@ -34,6 +36,8 @@ type AttributeNameMap = {
     [P in keyof AttributeMap]: string;
 }
 
+const ROTATION_UNIT = Math.PI/80;
+
 export class WebGL {
 
     private context: WebGLRenderingContext;
@@ -50,7 +54,34 @@ export class WebGL {
         } = this.elCanvas;
         this.context.viewport(0, 0, clientWidth, clientHeight);
         this.program = this.context.createProgram();
+        this.onKeyDown = this.onKeyDown.bind(this);
+        // elCanvas.addEventListener('keydown', this.onKeyDown);
+        window.addEventListener('keydown', this.onKeyDown);
+        // window.onkeydown = this.onKeyDown;
+    }
 
+    private y= 0;
+    private x= 0;
+    private elevation = 0;
+    private azimuth = 0;
+    private onKeyDown(e: KeyboardEvent) {
+        console.log(e.code);
+        let handlers = {
+            KeyA: () => this.y += 1,
+            KeyD: () => this.y -= 1,
+            KeyW: () => this.x += 1,
+            KeyS: () => this.x -= 1,
+            ArrowUp: () => this.elevation += 1,
+            ArrowDown: () => this.elevation -= 1,
+            ArrowRight: () => this.azimuth += 1,
+            ArrowLeft: () => this.azimuth -= 1,
+        };
+        const handler = handlers[e.code];
+        if (handler) {
+            handler();
+            e.stopPropagation();
+            e.preventDefault();
+        }
     }
 
     private createShader(type: number, source: string) {
@@ -233,6 +264,55 @@ export class WebGL {
             } else {
                 console.error(`coundn't configure uniform ${name} with len ${len}`);
             }
+        }
+    }
+
+    private cMatrix: mat4;
+    initCamera(mvMat: mat4) {
+        this.cMatrix = mat4.create();
+        mat4.identity(this.cMatrix);
+        mat4.invert(this.cMatrix, mvMat);
+    }
+
+    updateMVMatrix(mvMat: mat4) {
+        const pos: vec3 = vec3.create();
+        // if (this.x !== 0) {
+        //     pos[0] -= this.x;
+        //     this.x = 0;
+        // }
+        // if (this.y !== 0) {
+        //     pos[1] -= this.y;
+        //     this.y = 0;
+        // }
+
+        if (this.x !== 0) {
+            pos[2] += this.x;
+            this.x = 0;
+        }
+        if (this.y !== 0) {
+            pos[0] += this.y;
+            this.y = 0;
+        }
+        mat4.translate(mvMat, mvMat, pos);
+
+        if (this.azimuth !== 0) {
+            // Tracking camera
+            mat4.rotateY(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.azimuth);
+            mat4.invert(mvMat, this.cMatrix);
+
+            // Orbiting camera
+            // mat4.rotateY(mvMat, mvMat, ROTATION_UNIT * this.azimuth);
+            this.azimuth = 0;
+        }
+
+        if (this.elevation !== 0) {
+            // Tracking camera
+            mat4.rotateX(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.elevation);
+            mat4.invert(mvMat, this.cMatrix);
+
+            // Orbiting camera
+            // mat4.rotateX(mvMat, mvMat, ROTATION_UNIT * this.elevation);
+            this.elevation = 0;
         }
     }
 

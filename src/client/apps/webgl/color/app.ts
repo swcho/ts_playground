@@ -30,12 +30,12 @@ webgl.setAttributeMap({
 
 webgl.addObject(objects.createFloor(60, 1));
 webgl.addObject(objects.createAxis(20));
-// webgl.addObject(objects.SPHERE);
 webgl.addObject(objects.CONE6);
 
 const uMVMatrix = mat4.create();
 mat4.identity(uMVMatrix);
 mat4.translate(uMVMatrix, uMVMatrix, [0.0, -2.0, -50.0])
+webgl.initCamera(uMVMatrix);
 
 const uPMatrix = mat4.create(); // The projection matrix
 mat4.identity(uPMatrix);
@@ -57,10 +57,11 @@ webgl.run({
     uLightAmbient,
     uLightDiffuse,
 }, (state) => {
+    webgl.updateMVMatrix(state.uMVMatrix);
     webgl.setUniformValues(state);
     // webgl.drawArea();
     webgl.drawObjects();
-}, false);
+}, true);
 
 // draw half rect
 // apply color
