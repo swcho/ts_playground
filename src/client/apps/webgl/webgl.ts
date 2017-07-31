@@ -58,36 +58,8 @@ export class WebGL {
         } = this.elCanvas;
         this.context.viewport(0, 0, clientWidth, clientHeight);
         this.program = this.context.createProgram();
-        this.onKeyDown = this.onKeyDown.bind(this);
-        // elCanvas.addEventListener('keydown', this.onKeyDown);
-        // window.addEventListener('keydown', this.onKeyDown);
-        // window.onkeydown = this.onKeyDown;
         this.camera = new Camera(CameraType.TRACKING);
         this.cameraInteractor = new CameraInteractor(this.camera, elCanvas);
-    }
-
-    private y= 0;
-    private x= 0;
-    private elevation = 0;
-    private azimuth = 0;
-    private onKeyDown(e: KeyboardEvent) {
-        console.log(e.code);
-        let handlers = {
-            KeyA: () => this.y += 1,
-            KeyD: () => this.y -= 1,
-            KeyW: () => this.x += 1,
-            KeyS: () => this.x -= 1,
-            ArrowUp: () => this.elevation += 1,
-            ArrowDown: () => this.elevation -= 1,
-            ArrowRight: () => this.azimuth += 1,
-            ArrowLeft: () => this.azimuth -= 1,
-        };
-        const handler = handlers[e.code];
-        if (handler) {
-            handler();
-            e.stopPropagation();
-            e.preventDefault();
-        }
     }
 
     private createShader(type: number, source: string) {
