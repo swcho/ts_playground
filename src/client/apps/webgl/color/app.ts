@@ -4,8 +4,10 @@ import 'htmlout-loader!./en.html';
 
 import {mat4} from 'gl-matrix';
 
-import {WebGL} from '../webgl';
+import {WebGL, Object, CameraType} from '../webgl';
 import * as objects from '../objects';
+
+const sphere = require('../sphere.json');
 
 console.log(__filename);
 console.log('WebGL Trials')
@@ -18,7 +20,7 @@ const {
     clientHeight,
 } = elCanvas;
 
-const webgl = new WebGL(elCanvas);
+const webgl = new WebGL(elCanvas, CameraType.ORBIT);
 webgl.setProgram(require('./phong.vert'), require('./vFinalColor.frag'));
 
 // webgl.setObject('pos', objects.HALF_SQUARE);
@@ -31,6 +33,7 @@ webgl.setAttributeMap({
 webgl.addObject(objects.createFloor(60, 1));
 webgl.addObject(objects.createAxis(20));
 webgl.addObject(objects.CONE6);
+webgl.addObject(sphere as Object);
 
 const uMVMatrix = mat4.create();
 mat4.identity(uMVMatrix);

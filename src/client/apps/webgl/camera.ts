@@ -65,6 +65,10 @@ export class Camera {
         this.update();
     }
 
+    getPosition() {
+        return this.position;
+    }
+
     changeAzimuth(azimuth: number) {
         this.azimuth += azimuth;
         if (this.azimuth > 360 || this.azimuth < -360) {

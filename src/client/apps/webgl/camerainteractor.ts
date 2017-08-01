@@ -13,8 +13,9 @@ export class CameraInteractor {
     private button: number;
     private ctrl: boolean;
     private alt: boolean;
-
     private key: number;
+    private dloc = 0;
+    private dstep = 0;
 
     constructor(private camera: Camera, private elCanvas: HTMLCanvasElement) {
         this.elCanvas.onmousedown = (ev) => this.onMouseDown(ev);
@@ -26,7 +27,8 @@ export class CameraInteractor {
 
     private translate(value: number) {
         const dv = 2 * MOTION_FACTOR * value / this.elCanvas.height;
-        this.camera.dolly(Math.pow(1.1, dv));
+        // this.camera.dolly(Math.pow(1.1, dv) * (value > 0 ? 1 : -1));
+        this.camera.dolly(dv);
     }
 
     private rotate(dx: number, dy: number) {
@@ -45,6 +47,8 @@ export class CameraInteractor {
         this.x = ev.clientX;
         this.y = ev.clientY;
         this.button = ev.button;
+        const position = this.camera.getPosition();
+        this.dstep = Math.max(position[0], position[1], position[2]) / 100;
     }
 
     private onMouseUp(ev: MouseEvent) {
@@ -65,8 +69,9 @@ export class CameraInteractor {
         const dy = this.y - this.lastY;
 
         if (this.button === 0) {
-            if (this.ctrl) {
-                this.translate(dy);
+            if (this.alt) {
+                // this.translate(dy);
+                this.dolly(dy);
             } else {
                 this.rotate(dx, dy);
             }
@@ -102,5 +107,11 @@ export class CameraInteractor {
         if (ev.keyCode === 17) {
             this.ctrl = false;
         }
+    }
+
+    private dolly(value: number) {
+        this.dloc += (0 < value ? this.dstep : -this.dstep);
+        console.log('dolly', this.dloc);
+        this.camera.dolly(this.dloc);
     }
 }

@@ -4,6 +4,11 @@ import {calculateNormals} from './utils';
 import {Camera, CameraType} from './camera';
 import {CameraInteractor} from './camerainteractor';
 
+export {
+    CameraType,
+    Camera,
+};
+
 export interface Object {
     vertices: number[];
     normals?: number[];
@@ -49,7 +54,9 @@ export class WebGL {
     private camera: Camera;
     private cameraInteractor: CameraInteractor;
 
-    constructor(private elCanvas?: HTMLCanvasElement) {
+    constructor(
+            private elCanvas: HTMLCanvasElement,
+            cameraType: CameraType = CameraType.TRACKING) {
         elCanvas = elCanvas || document.createElement('canvas');
         this.context = elCanvas.getContext('webgl');
         const {
@@ -58,7 +65,7 @@ export class WebGL {
         } = this.elCanvas;
         this.context.viewport(0, 0, clientWidth, clientHeight);
         this.program = this.context.createProgram();
-        this.camera = new Camera(CameraType.TRACKING);
+        this.camera = new Camera(cameraType);
         this.cameraInteractor = new CameraInteractor(this.camera, elCanvas);
     }
 
