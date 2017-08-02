@@ -1,6 +1,12 @@
 
 import {calculateNormals} from './utils';
 
+export interface Position {
+    x: number;
+    y: number;
+    z: number;
+}
+
 export interface Object {
     vertices: number[];
     normals?: number[];
@@ -8,6 +14,7 @@ export interface Object {
     diffuse?: number[];
     wireframe?: boolean;
     colors?: number[];
+    position?: Position;
 }
 
 export interface GLObject {

@@ -156,9 +156,21 @@ export class WebGL {
         const attrNbo = this.attributeMap.nbo;
         const attrCbo = this.attributeMap.cbo;
 
-        this.sceneTransform.updateUniforms();
-
         for (const glObject of this.scene.getGlObjects()) {
+
+            if (glObject.object.position) {
+                const {
+                    x,
+                    y,
+                    z,
+                } = glObject.object.position;
+                const pos = vec3.create();
+                vec3.set(pos, x, y, z);
+                this.sceneTransform.updateUniforms(pos);
+            } else {
+                this.sceneTransform.updateUniforms();
+            }
+
             gl.bindBuffer(gl.ARRAY_BUFFER, glObject.vbo);
             gl.vertexAttribPointer(attrVbo, 3, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(attrVbo);

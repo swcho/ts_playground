@@ -28,6 +28,7 @@
     "dat-gui": "^0.5.0",
     "express": "^4.14.1",
     "gl-matrix": "^2.3.2",
+    "gsap": "^1.20.2",
     "p5": "^0.5.11",
     "stats.js": "^0.17.0"
   },
@@ -39,6 +40,7 @@
     "@types/gl-matrix": "^2.2.34",
     "@types/glob": "^5.0.30",
     "@types/grunt": "^0.4.21",
+    "@types/gsap": "^1.19.1",
     "@types/jquery": "^3.2.5",
     "@types/jquery.transit": "^0.9.28",
     "@types/pixi.js": "^4.4.0",

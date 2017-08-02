@@ -1,5 +1,5 @@
 
-import {mat4} from 'gl-matrix';
+import {mat4, vec3} from 'gl-matrix';
 import {Camera} from './camera';
 
 export interface UniformMap {
@@ -64,8 +64,11 @@ export class SceneTransform {
         }
     }
 
-    updateUniforms() {
+    updateUniforms(pos?: vec3) {
         this.update();
+        if (pos) {
+            mat4.translate(this.mvMatrix, this.mvMatrix, pos);
+        }
         const gl = this.context;
         const {
             mvMatrix,
@@ -79,16 +82,5 @@ export class SceneTransform {
         if (cMatrix) {
             gl.uniformMatrix4fv(cMatrix, false, this.cMatrix);
         }
-    }
-
-    push() {
-        const mvMatrix = mat4.create();
-        mat4.copy(mvMatrix, this.mvMatrix);
-        this.stack.push(mvMatrix);
-    }
-
-    pop() {
-        if (this.stack.length === 0) return;
-        this.mvMatrix = this.stack.pop();
     }
 }
