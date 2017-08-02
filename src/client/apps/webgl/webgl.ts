@@ -1,32 +1,15 @@
 
 import {mat4, vec3, vec4} from 'gl-matrix';
-import {calculateNormals} from './utils';
 import {Camera, CameraType} from './camera';
 import {CameraInteractor} from './camerainteractor';
+import {Scene, Object, GLObject} from './scene';
+import {SceneTransform} from './scenetransform';
 
 export {
     CameraType,
     Camera,
+    Object,
 };
-
-export interface Object {
-    vertices: number[];
-    normals?: number[];
-    indices: number[];
-    diffuse?: number[];
-    wireframe?: boolean;
-    colors?: number[];
-}
-
-interface GLObject {
-    object: Object;
-    vbo: WebGLBuffer;
-    ibo: WebGLBuffer;
-    iboLen: number;
-    nbo?: WebGLBuffer;
-    cbo?: WebGLBuffer;
-    wireframe?: boolean;
-}
 
 interface DrawParam {
     indexSupplied: boolean;
@@ -53,6 +36,8 @@ export class WebGL {
     private fragmentShader: WebGLShader;
     private camera: Camera;
     private cameraInteractor: CameraInteractor;
+    private scene: Scene;
+    private sceneTransform: SceneTransform;
 
     constructor(
             private elCanvas: HTMLCanvasElement,
@@ -67,6 +52,8 @@ export class WebGL {
         this.program = this.context.createProgram();
         this.camera = new Camera(cameraType);
         this.cameraInteractor = new CameraInteractor(this.camera, elCanvas);
+        this.scene = new Scene(this.context);
+        this.sceneTransform = new SceneTransform(this.elCanvas, this.context, this.program, this.camera);
     }
 
     private createShader(type: number, source: string) {
@@ -104,6 +91,21 @@ export class WebGL {
         this.setFragmentShader(fragmentSource);
         gl.linkProgram(program);
         gl.useProgram(program);
+    }
+
+    setDefaultProgram(cameraPosition: vec3) {
+        this.camera.setPosition(cameraPosition);
+        this.setProgram(require('./default.vert'), require('./default.frag'));
+        this.setAttributeMap({
+            vbo: 'aVertexPosition',
+            nbo: 'aVertexNormal',
+            cbo: 'aVertexColor',
+        });
+        this.sceneTransform.setUniformMap({
+            mvMatrix: 'uMVMatrix',
+            pMatrix: 'uPMatrix',
+            nMatrix: 'uNMatrix',
+        });
     }
 
     private attributeMap: AttributeMap;
@@ -144,39 +146,8 @@ export class WebGL {
         this.setVertexAttribute(name, object[0], object[1]);
     }
 
-    private glObjects: GLObject[] = [];
     addObject(object: Object) {
-        const gl = this.context;
-
-        const vbo = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(object.vertices), gl.STATIC_DRAW);
-
-        const nbo = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, nbo);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(calculateNormals(object.vertices, object.indices)), gl.STATIC_DRAW);
-
-        const ibo  = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(object.indices), gl.STATIC_DRAW);
-
-        const glObject: GLObject = {
-            object,
-            vbo,
-            nbo,
-            ibo,
-            iboLen: object.indices.length,
-            wireframe: object.wireframe,
-        };
-
-        if (object.colors) {
-            const cbo = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, cbo);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(object.colors), gl.STATIC_DRAW);
-            glObject.cbo = cbo;
-        }
-
-        this.glObjects.push(glObject);
+        this.scene.addObject(object);
     }
 
     drawObjects(wireframe?: boolean) {
@@ -185,7 +156,9 @@ export class WebGL {
         const attrNbo = this.attributeMap.nbo;
         const attrCbo = this.attributeMap.cbo;
 
-        for (const glObject of this.glObjects) {
+        this.sceneTransform.updateUniforms();
+
+        for (const glObject of this.scene.getGlObjects()) {
             gl.bindBuffer(gl.ARRAY_BUFFER, glObject.vbo);
             gl.vertexAttribPointer(attrVbo, 3, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(attrVbo);
@@ -250,58 +223,6 @@ export class WebGL {
                 console.error(`coundn't configure uniform ${name} with len ${len}`);
             }
         }
-    }
-
-    initCamera(mvMat: mat4) {
-        this.camera.setFromMVMatrix(mvMat);
-    }
-
-    updateMVMatrix(mvMat: mat4) {
-
-        this.camera.getViewTransform();
-        mat4.copy(mvMat, this.camera.getViewTransform());
-        return;
-
-
-        // const pos: vec3 = vec3.create();
-        // // if (this.x !== 0) {
-        // //     pos[0] -= this.x;
-        // //     this.x = 0;
-        // // }
-        // // if (this.y !== 0) {
-        // //     pos[1] -= this.y;
-        // //     this.y = 0;
-        // // }
-
-        // if (this.x !== 0) {
-        //     pos[2] += this.x;
-        //     this.x = 0;
-        // }
-        // if (this.y !== 0) {
-        //     pos[0] += this.y;
-        //     this.y = 0;
-        // }
-        // mat4.translate(mvMat, mvMat, pos);
-
-        // if (this.azimuth !== 0) {
-        //     // Tracking camera
-        //     mat4.rotateY(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.azimuth);
-        //     mat4.invert(mvMat, this.cMatrix);
-
-        //     // Orbiting camera
-        //     // mat4.rotateY(mvMat, mvMat, ROTATION_UNIT * this.azimuth);
-        //     this.azimuth = 0;
-        // }
-
-        // if (this.elevation !== 0) {
-        //     // Tracking camera
-        //     mat4.rotateX(this.cMatrix, this.cMatrix, ROTATION_UNIT * this.elevation);
-        //     mat4.invert(mvMat, this.cMatrix);
-
-        //     // Orbiting camera
-        //     // mat4.rotateX(mvMat, mvMat, ROTATION_UNIT * this.elevation);
-        //     this.elevation = 0;
-        // }
     }
 
     setUniformValues(obj) {

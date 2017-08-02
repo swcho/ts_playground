@@ -110,7 +110,7 @@ export class Camera {
         mat4.getTranslation(this.position, this.matrix);
     }
 
-    getViewTransform(): mat4 {
+    getMVTransform(): mat4 {
         const ret = mat4.create();
         mat4.invert(ret, this.matrix);
         return ret;
