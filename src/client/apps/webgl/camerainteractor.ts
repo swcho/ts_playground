@@ -88,10 +88,14 @@ export class CameraInteractor {
             40: () => this.camera.changeElevation(-10), // down
             37: () => this.camera.changeAzimuth(-10), // left
             39: () => this.camera.changeAzimuth(10), // right
-            87: () => this.camera.changeZ(-10), // w
-            83: () => this.camera.changeZ(10), // s
-            65: () => this.camera.changeX(-10), // a
-            68: () => this.camera.changeX(10), // d
+            // 87: () => this.camera.changeZ(-10), // w
+            // 83: () => this.camera.changeZ(10), // s
+            // 65: () => this.camera.changeX(-10), // a
+            // 68: () => this.camera.changeX(10), // d
+            87: () => this.camera.dolly(0.5), // w
+            83: () => this.camera.dolly(-0.5), // s
+            65: () => this.camera.panHorizontal(0.5), // a
+            68: () => this.camera.panHorizontal(-0.5), // d
         };
 
         const handler = handlers[this.key];
@@ -111,7 +115,6 @@ export class CameraInteractor {
 
     private dolly(value: number) {
         this.dloc += (0 < value ? this.dstep : -this.dstep);
-        console.log('dolly', this.dloc);
         this.camera.dolly(this.dloc);
     }
 }

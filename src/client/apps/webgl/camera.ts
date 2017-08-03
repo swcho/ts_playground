@@ -1,5 +1,5 @@
 
-import {mat4, vec3} from 'gl-matrix';
+import {mat4, vec3, vec4} from 'gl-matrix';
 
 export enum CameraType {
     ORBIT,
@@ -11,9 +11,9 @@ const ROTATE_UNIT = Math.PI / 180;
 export class Camera {
 
     private matrix      = mat4.create();
-    private up          = vec3.create();
-    private right       = vec3.create();
-    private normal      = vec3.create();
+    private up          = vec4.create();
+    private right       = vec4.create();
+    private normal      = vec4.create();
     private position    = vec3.create();
     private home        = vec3.create();
     private azimuth     = 0.0;
@@ -32,17 +32,21 @@ export class Camera {
     }
 
     update() {
+        const m = this.matrix;
         if (this.type === CameraType.TRACKING) {
-            mat4.identity(this.matrix);
-            mat4.translate(this.matrix, this.matrix, this.position);
-            mat4.rotateY(this.matrix, this.matrix, this.azimuth * ROTATE_UNIT);
-            mat4.rotateX(this.matrix, this.matrix, this.elevation * ROTATE_UNIT);
+            mat4.identity(m);
+            mat4.translate(m, m, this.position);
+            mat4.rotateY(m, m, this.azimuth * ROTATE_UNIT);
+            mat4.rotateX(m, m, this.elevation * ROTATE_UNIT);
         } else {
-            mat4.identity(this.matrix);
-            mat4.rotateY(this.matrix, this.matrix, this.azimuth * ROTATE_UNIT);
-            mat4.rotateX(this.matrix, this.matrix, this.elevation * ROTATE_UNIT);
-            mat4.translate(this.matrix, this.matrix, this.position);
+            mat4.identity(m);
+            mat4.rotateY(m, m, this.azimuth * ROTATE_UNIT);
+            mat4.rotateX(m, m, this.elevation * ROTATE_UNIT);
+            mat4.translate(m, m, this.position);
         }
+        vec4.transformMat4(this.right,  [1, 0, 0, 0], m);
+        vec4.transformMat4(this.up,     [0, 1, 0, 0], m);
+        vec4.transformMat4(this.normal, [0, 0, 1, 0], m);
     }
 
     changeX(posX: number) {
@@ -121,9 +125,9 @@ export class Camera {
         vec3.copy(position, this.position);
 
         const normal = vec3.create();
-        vec3.normalize(normal, this.normal);
+        vec3.normalize(normal, this.normal as any);
 
-        const steps = aSteps - this.steps;
+        const steps = aSteps; // - this.steps;
 
         const newPosition = vec3.create();
 
@@ -136,7 +140,30 @@ export class Camera {
             newPosition[1] = position[1];
             newPosition[2] = position[2] - steps;
         }
+        this.setPosition(newPosition);
+        this.steps = steps;
+    }
 
+    panHorizontal(aSteps: number) {
+        const position = vec3.create();
+        vec3.copy(position, this.position);
+
+        const normal = vec3.create();
+        vec3.normalize(normal, this.right as any);
+
+        const steps = aSteps; // - this.steps;
+
+        const newPosition = vec3.create();
+
+        if (this.type === CameraType.TRACKING) {
+            newPosition[0] = position[0] - steps * normal[0];
+            newPosition[1] = position[1] - steps * normal[1];
+            newPosition[2] = position[2] - steps * normal[2];
+        } else {
+            newPosition[0] = position[0];
+            newPosition[1] = position[1];
+            newPosition[2] = position[2] - steps;
+        }
         this.setPosition(newPosition);
         this.steps = steps;
     }
