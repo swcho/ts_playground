@@ -91,11 +91,17 @@ export class WebGL {
         this.setFragmentShader(fragmentSource);
         gl.linkProgram(program);
         gl.useProgram(program);
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        gl.clearDepth(1.0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LESS);
     }
 
-    setDefaultProgram(cameraPosition: vec3) {
+    setDefaultProgram(cameraPosition: vec3, azimuth: number, elevation: number) {
         this.camera.setPosition(cameraPosition);
-        this.setProgram(require('./default.vert'), require('./default.frag'));
+        this.camera.setAzimuth(azimuth);
+        this.camera.setElevation(elevation);
+        this.setProgram(require('./goraud_lambertian.vert'), require('./goraud_lambertian.frag'));
         this.setAttributeMap({
             vbo: 'aVertexPosition',
             nbo: 'aVertexNormal',
@@ -155,6 +161,8 @@ export class WebGL {
         const attrVbo = this.attributeMap.vbo;
         const attrNbo = this.attributeMap.nbo;
         const attrCbo = this.attributeMap.cbo;
+        gl.viewport(0, 0, this.elCanvas.clientWidth, this.elCanvas.clientHeight);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         for (const glObject of this.scene.getGlObjects()) {
 
@@ -205,7 +213,12 @@ export class WebGL {
             if (glObject.object.diffuse) {
                 // TODO: Fix to be configurable
                 this.setUniformValue('uMaterialDiffuse', glObject.object.diffuse);
+            } else {
+                this.setUniformValue('uMaterialDiffuse', [1, 1, 1, 1]);
             }
+
+            // this.setUniformValue('uMaterialAmbient', [1, 1, 1, 1]);
+            // this.setUniformValue('uMaterialSpecular', [1, 1, 1, 1]);
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, glObject.ibo);
             gl.drawElements(wireframe || glObject.wireframe ? gl.LINES : gl.TRIANGLES, glObject.iboLen, gl.UNSIGNED_SHORT, 0);
@@ -238,7 +251,9 @@ export class WebGL {
     }
 
     setUniformValues(obj) {
-        Object.keys(obj).forEach(key => this.setUniformValue(key, obj[key]));
+        for (const key of Object.keys(obj)) {
+            this.setUniformValue(key, obj[key]);
+        }
     }
 
     drawLine() {

@@ -8,7 +8,6 @@ import {TweenMax, Bounce} from 'gsap';
 import {WebGL, Object, CameraType} from '../webgl';
 import * as objects from '../objects';
 
-const sphere: Object = require('../sphere.json');
 
 console.log(__filename);
 console.log('WebGL Trials')
@@ -16,13 +15,9 @@ console.log('WebGL Trials')
 // ref: https://codepen.io/cantelope/pen/zzmORP
 
 const elCanvas = document.getElementById('canvas-element-id') as HTMLCanvasElement;
-const webgl = new WebGL(elCanvas, CameraType.TRACKING);
-const home = vec3.create();
-home.set([0.0, 2.0, 50.0])
-webgl.setDefaultProgram(home);
+const webgl = new WebGL(elCanvas, CameraType.ORBIT);
 
 // webgl.setObject('pos', objects.HALF_SQUARE);
-
 webgl.addObject(objects.createFloor(60, 1));
 webgl.addObject(objects.createAxis(20));
 
@@ -40,6 +35,7 @@ TweenMax.to(objCone.position, 1, {
 });
 webgl.addObject(objCone);
 
+const sphere: Object = require('../sphere2.json');
 sphere.position = {
     x: 0,
     y: 0,
@@ -52,9 +48,13 @@ TweenMax.to(sphere.position, 1, {
     repeat: -1,
 });
 webgl.addObject(sphere as Object);
+webgl.addObject(require('../complexcube.json'));
 
-const uLightPosition = [0, 120, 120];
-const uLightAmbient = [0.20, 0.20, 0.20, 1.0];
+const home = vec3.create();
+home.set([0.0, 0.0, 5.0])
+webgl.setDefaultProgram(home, 45, -30);
+const uLightPosition = [-5, 5, 5];
+const uLightAmbient = [1.0, 1.0, 1.0, 1.0];
 const uLightDiffuse = [1.0, 1.0, 1.0, 1.0];
 
 webgl.run({

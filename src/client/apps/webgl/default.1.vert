@@ -14,11 +14,7 @@ uniform vec4 uMaterialDiffuse;
 
 uniform bool uWireframe;
 uniform bool uPerVertexColor;
-uniform bool uUpdateLight;
 
-varying vec3 vNormal;
-varying vec3 vLightRay;
-varying vec3 vEyeVec;
 varying vec4 vFinalColor;
 
 void main(void) {
@@ -30,26 +26,28 @@ void main(void) {
         else {
             vFinalColor = uMaterialDiffuse;
         }
+    } else {
+        // Normal Vector, w = 0 for direction
+        vec3 N = vec3(uNMatrix * vec4(aVertexNormal, 0.0));
+
+        // Light direction
+        vec3 L = normalize(-uLightPosition);
+
+        // If light direction is affected by model-view transform.
+        // L = vec3(uNMatrix * vec4(L, 0.0))
+
+        // Lambert
+        float lambertTerm = dot(N, -L);
+
+        // Other side if direction
+        if (lambertTerm <= 0.0) lambertTerm = 0.01;
+
+        vec4 Ia = uLightAmbient;
+        vec4 Id = uMaterialDiffuse * uLightDiffuse * lambertTerm;
+
+        vFinalColor = Ia + Id;
+        vFinalColor.a = 1.0;
     }
-    // Transformed vertext position
-    vec4 vertex = uMVMatrix * vec4(aVertexPosition, 1.0);
 
-    // Transformed normal position
-    vNormal = vec3(uNMatrix * vec4(aVertexNormal, 1.0));
-
-    // Trasformed light postion
-    vec4 light = vec4(uLightPosition, 1.0);
-
-    if (uUpdateLight) {
-        light = uMVMatrix * vec4(uLightPosition, 1.0);
-    }
-
-    // Light position
-    vLightRay = vertex.xyz - light.xyz;
-
-    // Vector eye
-    vEyeVec = -vec3(vertex.xyz);
-
-    // Final vertex position
     gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 }

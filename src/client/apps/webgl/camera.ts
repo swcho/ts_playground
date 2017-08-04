@@ -15,7 +15,6 @@ export class Camera {
     private right       = vec4.create();
     private normal      = vec4.create();
     private position    = vec3.create();
-    private home        = vec3.create();
     private azimuth     = 0.0;
     private elevation   = 0.0;
     private steps       = 0;
@@ -69,6 +68,14 @@ export class Camera {
         this.update();
     }
 
+    // TODO: Set rotation http://koc.chunjae.co.kr/Dic/dicDetail.do?idx=22616
+    setFocus(focus: vec3) {
+        const direction = vec3.create();
+        vec3.subtract(direction, this.position, focus);
+        vec3.normalize(direction, direction);
+        this.update();
+    }
+
     getPosition() {
         return this.position;
     }
@@ -97,11 +104,8 @@ export class Camera {
         this.changeElevation(elevation - this.elevation);
     }
 
-    goHome(newHome?: vec3) {
-        if (newHome) {
-            this.home = newHome;
-        }
-        this.setPosition(this.home);
+    goHome(pos: vec3) {
+        this.setPosition(pos);
         this.setAzimuth(0);
         this.setElevation(0);
         this.steps = 0;

@@ -24,6 +24,7 @@ export class SceneTransform {
         private context: WebGLRenderingContext,
         private program: WebGLProgram,
         private camera: Camera) {
+        this.init();
     }
 
     private calculateModelView() {
@@ -42,7 +43,7 @@ export class SceneTransform {
         mat4.perspective(this.pMatrix, 45, this.elCanvas.clientWidth / this.elCanvas.clientHeight, 0.1, 1000.0);
     }
 
-    private update() {
+    private init() {
         this.calculateModelView();
         this.calculatePerspective();
         this.calculateNormal();
@@ -65,10 +66,11 @@ export class SceneTransform {
     }
 
     updateUniforms(pos?: vec3) {
-        this.update();
+        this.calculateModelView();
         if (pos) {
             mat4.translate(this.mvMatrix, this.mvMatrix, pos);
         }
+        this.calculateNormal();
         const gl = this.context;
         const {
             mvMatrix,
