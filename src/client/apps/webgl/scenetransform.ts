@@ -29,68 +29,7 @@ export class SceneTransform {
     constructor(
         private elCanvas: HTMLCanvasElement,
         private context: WebGLRenderingContext,
-        private program: WebGLProgram,
         private camera: Camera) {
-        this.init();
-    }
-
-    private calculateModelView() {
-        this.mvMatrix = this.camera.getMVTransform();
-    }
-
-    private calculateNormal() {
-        mat4.identity(this.nMatrix);
-        mat4.copy(this.nMatrix, this.mvMatrix);
-        mat4.invert(this.nMatrix, this.nMatrix);
-        mat4.transpose(this.nMatrix, this.nMatrix);
-    }
-
-    private calculatePerspective() {
-        mat4.identity(this.pMatrix);
-        mat4.perspective(this.pMatrix, 45, this.elCanvas.clientWidth / this.elCanvas.clientHeight, 0.1, 1000.0);
-    }
-
-    private init() {
-        this.calculateModelView();
-        this.calculatePerspective();
-        this.calculateNormal();
-    }
-
-    private uniformLocationMap: UniformLocationMap;
-    setUniformMap(uniformMap: UniformMap) {
-        const gl = this.context;
-        const program = this.program;
-        this.uniformLocationMap = {} as any;
-        for (const key of Object.keys(uniformMap)) {
-            const name = uniformMap[key];
-            const loc = gl.getUniformLocation(program, name);
-            if (!loc) {
-                console.error(`uniform ${name} not found`);
-                return;
-            }
-            this.uniformLocationMap[key] = loc;
-        }
-    }
-
-    updateUniforms(pos?: vec3) {
-        this.calculateModelView();
-        if (pos) {
-            mat4.translate(this.mvMatrix, this.mvMatrix, pos);
-        }
-        this.calculateNormal();
-        const gl = this.context;
-        const {
-            mvMatrix,
-            pMatrix,
-            nMatrix,
-            cMatrix,
-        } = this.uniformLocationMap;
-        gl.uniformMatrix4fv(mvMatrix, false, this.mvMatrix);
-        gl.uniformMatrix4fv(pMatrix, false, this.pMatrix);
-        gl.uniformMatrix4fv(nMatrix, false, this.nMatrix);
-        if (cMatrix) {
-            gl.uniformMatrix4fv(cMatrix, false, this.cMatrix);
-        }
     }
 
     getTransformMat(): Readonly<TransformMat> {
