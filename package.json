@@ -29,6 +29,7 @@
     "express": "^4.14.1",
     "gl-matrix": "^2.3.2",
     "gsap": "^1.20.2",
+    "lodash-es": "^4.17.4",
     "p5": "^0.5.11",
     "stats.js": "^0.17.0"
   },
@@ -43,6 +44,7 @@
     "@types/gsap": "^1.19.1",
     "@types/jquery": "^3.2.5",
     "@types/jquery.transit": "^0.9.28",
+    "@types/lodash-es": "^4.14.5",
     "@types/pixi.js": "^4.4.0",
     "@types/react-dom": "^0.14.23",
     "@types/three": "^0.84.15",
