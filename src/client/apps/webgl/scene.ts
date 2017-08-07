@@ -1,31 +1,6 @@
 
 import {calculateNormals} from './utils';
-
-export interface Position {
-    x: number;
-    y: number;
-    z: number;
-}
-
-export interface Object {
-    vertices: number[];
-    normals?: number[];
-    indices: number[];
-    diffuse?: number[];
-    wireframe?: boolean;
-    colors?: number[];
-    position?: Position;
-}
-
-export interface GLObject {
-    object: Object;
-    vbo: WebGLBuffer;
-    ibo: WebGLBuffer;
-    iboLen: number;
-    nbo?: WebGLBuffer;
-    cbo?: WebGLBuffer;
-    wireframe?: boolean;
-}
+import {Object3D, GLObject} from './def';
 
 export class Scene {
 
@@ -34,7 +9,7 @@ export class Scene {
     constructor(private context: WebGLRenderingContext) {
     }
 
-    addObject(object: Object) {
+    addObject(object: Object3D) {
         const gl = this.context;
 
         const vbo = gl.createBuffer();

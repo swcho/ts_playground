@@ -8,18 +8,13 @@ uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
 
 uniform vec3 uLightPosition;
-uniform vec4 uLightAmbient;
 uniform vec4 uLightDiffuse;
 
 uniform vec4 uMaterialDiffuse;
 
 uniform bool uWireframe;
 uniform bool uPerVertexColor;
-uniform bool uUpdateLight;
 
-varying vec3 vNormal;
-varying vec3 vLightRay;
-varying vec3 vEyeVec;
 varying vec4 vFinalColor;
 
 void main(void) {

@@ -5,7 +5,7 @@ import 'htmlout-loader!./en.html';
 import {mat4, vec3} from 'gl-matrix';
 import {TweenMax, Bounce} from 'gsap';
 
-import {WebGL, Object, CameraType} from '../webgl';
+import {WebGL, Object3D, CameraType, GoraudLambertian} from '../webgl';
 import * as objects from '../objects';
 
 
@@ -16,6 +16,14 @@ console.log('WebGL Trials')
 
 const elCanvas = document.getElementById('canvas-element-id') as HTMLCanvasElement;
 const webgl = new WebGL(elCanvas, CameraType.TRACKING);
+const goroudLambertian = new GoraudLambertian(webgl.getContext());
+webgl.setGlProgram(goroudLambertian);
+goroudLambertian.setUniformValue('uLightPosition', [-5, 5, 5]);
+goroudLambertian.setUniformValue('uLightDiffuse', [1.0, 1.0, 1.0, 1.0]);
+
+const home = vec3.create();
+home.set([0.0, 0.0, 5.0])
+webgl.setCamera(home, 45, -30);
 
 // webgl.setObject('pos', objects.HALF_SQUARE);
 webgl.addObject(objects.createFloor(60, 1));
@@ -50,30 +58,18 @@ webgl.addObject(objects.createAxis(20));
 // webgl.addObject(sphere as Object);
 
 // Cube
-// webgl.addObject(require('../complexcube.json'));
+webgl.addObject(require('../complexcube.json'));
 
 // Balls
-const BALL = require('../ball.json');
-for (let i = 0; i<10; i += 1) {
+// const BALL = require('../ball.json');
+// for (let i = 0; i<10; i += 1) {
 
-}
+// }
 
-const home = vec3.create();
-home.set([0.0, 0.0, 5.0])
-webgl.setDefaultProgram(home, 45, -30);
-const uLightPosition = [-5, 5, 5];
-const uLightAmbient = [1.0, 1.0, 1.0, 1.0];
-const uLightDiffuse = [1.0, 1.0, 1.0, 1.0];
 
 webgl.run({
-    uLightPosition,
-    uLightAmbient,
-    uLightDiffuse,
 }, (state) => {
-    // webgl.updateMVMatrix(state.uMVMatrix);
-    webgl.setUniformValues(state);
-    // webgl.drawArea();
-    webgl.drawObjects(false);
+    webgl.drawProgram();
 }, true);
 
 // draw half rect

@@ -124,6 +124,10 @@ export class Camera {
         return ret;
     }
 
+    getMatrix(): mat4 {
+        return this.matrix;
+    }
+
     dolly(aSteps: number) {
         const position = vec3.create();
         vec3.copy(position, this.position);

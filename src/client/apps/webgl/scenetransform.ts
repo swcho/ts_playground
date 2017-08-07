@@ -1,4 +1,5 @@
 
+import {TransformMat} from './def';
 import {mat4, vec3} from 'gl-matrix';
 import {Camera} from './camera';
 
@@ -18,6 +19,12 @@ export class SceneTransform {
     private pMatrix     = mat4.create();
     private nMatrix     = mat4.create();
     private cMatrix     = mat4.create();
+
+    private transformMat: TransformMat = {
+        mvMatrix: mat4.create(),
+        nMatrix: mat4.create(),
+        pMatrix: mat4.create(),
+    };
 
     constructor(
         private elCanvas: HTMLCanvasElement,
@@ -85,4 +92,18 @@ export class SceneTransform {
             gl.uniformMatrix4fv(cMatrix, false, this.cMatrix);
         }
     }
+
+    getTransformMat(): Readonly<TransformMat> {
+        const {
+            mvMatrix,
+            nMatrix,
+            pMatrix,
+        } = this.transformMat;
+        const cameraMetrix = this.camera.getMatrix();
+        mat4.invert(mvMatrix, cameraMetrix);
+        mat4.transpose(nMatrix, cameraMetrix);
+        mat4.perspective(pMatrix, 45, this.elCanvas.clientWidth / this.elCanvas.clientHeight, 0.1, 1000.0);
+        return this.transformMat;
+    }
+
 }

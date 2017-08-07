@@ -1,14 +1,17 @@
 
 import {mat4, vec3, vec4} from 'gl-matrix';
+import {Object3D, GLObject} from './def';
 import {Camera, CameraType} from './camera';
 import {CameraInteractor} from './camerainteractor';
-import {Scene, Object, GLObject} from './scene';
+import {Scene} from './scene';
 import {SceneTransform} from './scenetransform';
+export * from './program';
+import {GLProgram} from './program';
 
 export {
     CameraType,
     Camera,
-    Object,
+    Object3D,
 };
 
 interface DrawParam {
@@ -56,6 +59,10 @@ export class WebGL {
         this.sceneTransform = new SceneTransform(this.elCanvas, this.context, this.program, this.camera);
     }
 
+    getContext() {
+        return this.context;
+    }
+
     private createShader(type: number, source: string) {
         const gl = this.context;
         const shader = gl.createShader(type);
@@ -89,19 +96,30 @@ export class WebGL {
         const program = this.program;
         this.setVertexShader(vertextSource);
         this.setFragmentShader(fragmentSource);
-        gl.linkProgram(program);
-        gl.useProgram(program);
-        gl.clearColor(1.0, 1.0, 1.0, 1.0);
-        gl.clearDepth(1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LESS);
+    }
+
+    private glProgram: GLProgram<any, any>;
+    setGlProgram(glProgram: GLProgram<any, any>) {
+        const gl = this.context;
+        const prog = glProgram.getProgram();
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+        this.glProgram = glProgram;
+    }
+
+    setCamera(cameraPosition: vec3, azimuth: number, elevation: number) {
+        this.camera.setPosition(cameraPosition);
+        this.camera.setAzimuth(azimuth);
+        this.camera.setElevation(elevation);
     }
 
     setDefaultProgram(cameraPosition: vec3, azimuth: number, elevation: number) {
         this.camera.setPosition(cameraPosition);
         this.camera.setAzimuth(azimuth);
         this.camera.setElevation(elevation);
-        this.setProgram(require('./goraud_lambertian.vert'), require('./goraud_lambertian.frag'));
+        this.setProgram(
+            require('./program/goraud_lambertian/goraud_lambertian.vert'),
+            require('./program/goraud_lambertian/goraud_lambertian.frag'));
         this.setAttributeMap({
             vbo: 'aVertexPosition',
             nbo: 'aVertexNormal',
@@ -152,7 +170,7 @@ export class WebGL {
         this.setVertexAttribute(name, object[0], object[1]);
     }
 
-    addObject(object: Object) {
+    addObject(object: Object3D) {
         this.scene.addObject(object);
     }
 
@@ -167,11 +185,7 @@ export class WebGL {
         for (const glObject of this.scene.getGlObjects()) {
 
             if (glObject.object.position) {
-                const {
-                    x,
-                    y,
-                    z,
-                } = glObject.object.position;
+                const {x, y, z} = glObject.object.position;
                 const pos = vec3.create();
                 vec3.set(pos, x, y, z);
                 this.sceneTransform.updateUniforms(pos);
@@ -277,6 +291,14 @@ export class WebGL {
             this.context.drawElements(this.context.TRIANGLES, length, this.context.UNSIGNED_SHORT, 0);
         } else {
             this.context.drawArrays(this.context.TRIANGLES, 0, length);
+        }
+    }
+
+    drawProgram(wireframe: boolean = false) {
+        const transformMat = this.sceneTransform.getTransformMat();
+        this.glProgram.drawStart(transformMat);
+        for (const glObject of this.scene.getGlObjects()) {
+            this.glProgram.drawObject(transformMat, glObject, wireframe);
         }
     }
 
