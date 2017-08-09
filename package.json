@@ -31,7 +31,8 @@
     "gsap": "^1.20.2",
     "lodash-es": "^4.17.4",
     "p5": "^0.5.11",
-    "stats.js": "^0.17.0"
+    "stats.js": "^0.17.0",
+    "template-string-loader": "^0.0.3"
   },
   "devDependencies": {
     "@types/browser-sync": "0.0.34",

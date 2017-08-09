@@ -1,5 +1,5 @@
 
-import {mat4} from 'gl-matrix';
+import {mat4, vec3, vec4} from 'gl-matrix';
 
 export interface Pos3D {
     x: number;
@@ -32,4 +32,33 @@ export interface TransformMat {
     pMatrix: mat4;
     nMatrix: mat4;
     cMatrix?: mat4;
+}
+
+export interface Light {
+    position: vec3;
+    ambient: vec4;
+    diffuse: vec4;
+    specular: vec4;
+}
+
+export function _vec3(x: number[]): vec3;
+export function _vec3(x: number, y: number, z: number): vec3;
+export function _vec3(x, y?, z?) {
+    return x instanceof Array ? vec3.clone(x) : vec3.fromValues(x, y, z);
+}
+
+export function _vec4(x: number[]): vec4;
+export function _vec4(x: number, y: number, z: number, w: number): vec4;
+export function _vec4(x, y?, z?, w?): vec4 {
+    return x instanceof Array ? vec4.clone(x) : vec4.fromValues(x, y, z, w);
+}
+
+export function _light(light?: Partial<Light>): Light  {
+    return {
+        position:   _vec3(0.0, 0.0, 0.0),
+        ambient:    _vec4(0.0, 0.0, 0.0, 0.0),
+        diffuse:    _vec4(0.0, 0.0, 0.0, 0.0),
+        specular:   _vec4(0.0, 0.0, 0.0, 0.0),
+        ...light,
+    };
 }

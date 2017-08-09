@@ -96,7 +96,7 @@ export abstract class GLProgram<A, U> {
     setUniformValue<K extends keyof U>(name: K, value: U[K]) {
         const gl = this.gl;
         const loc = gl.getUniformLocation(this.program, name);
-        const len = value['length'];
+        let len = value['length'];
         if (!loc) {
             console.error(`uniform ${name} not found`);
             return;
@@ -104,6 +104,17 @@ export abstract class GLProgram<A, U> {
         if (typeof len === 'undefined') {
             gl.uniform1f(loc, value as any);
         } else {
+            if (value[0] && value[0].length) {
+                const innerArrayLen = value[0].length;
+                const floatArrayValue = new Float32Array(len * innerArrayLen);
+                const arrayValue: Array<Float32Array> = value as any;
+                for (let i = 0; i < len; i += 1) {
+                    floatArrayValue.set(arrayValue[i], innerArrayLen * i);
+                }
+                len = value[0].length;
+                value = floatArrayValue as any;
+                // console.log('setUniformValue', name, len, floatArrayValue);
+            }
             if (len === 2) {
                 gl.uniform2fv(loc, value as any);
             } else if (len === 3) {

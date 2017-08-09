@@ -1,36 +1,57 @@
 
 import {vec3, vec4, mat4} from 'gl-matrix';
-import {GLObject, TransformMat} from '../../def'
+import {GLObject, TransformMat, _vec4} from '../../def'
 import {GLProgram} from '../program';
 
-interface LambertainAttributeSpec {
+interface AttributeSpec {
     aVertexPosition: vec3;
     aVertexNormal: vec3;
     aVertexColor: vec4;
 }
 
-interface LambertainUniformSpec {
+interface UniformSpec {
     uMVMatrix: mat4;
     uPMatrix: mat4;
     uNMatrix: mat4;
 
-    uLightPosition: vec3 | number[];
-    uLightDiffuse: vec4 | number[];
+    uLightSource: boolean;
+    uLightAmbient: vec4;
+    uLightPosition: vec3[];
+    uLightDiffuse: vec4[];
+    uCutoff: number;
 
-    uMaterialDiffuse: vec4 | number[];
+    uMaterialDiffuse: vec4;
+    uMaterialAmbient: vec4;
 
     uWireframe: boolean;
+
     uPerVertexColor: boolean;
 }
 
-export class GoraudLambertian extends GLProgram<LambertainAttributeSpec, LambertainUniformSpec> {
+interface ShaderParam {
+    lenLights: number;
+}
 
-    constructor(gl: WebGLRenderingContext) {
-        super(gl, require('./goraud_lambertian.vert'), require('./goraud_lambertian.frag'));
+interface ShaderTemplateFunc<P> {
+    (param: P):string;
+}
+
+type PhongShaderTempalte = ShaderTemplateFunc<ShaderParam>;
+
+const parse = ({lenLights}: ShaderParam, source: string) => eval('`' + source + '`');
+
+export class PhongProgram extends GLProgram<AttributeSpec, UniformSpec> {
+
+    constructor(gl: WebGLRenderingContext, lenLights: number) {
+        super(gl,
+            parse({lenLights}, require('./phong.vert')),
+            parse({lenLights}, require('./phong.frag')));
     }
 
     drawStart(transformMat: Readonly<TransformMat>) {
-        this.setUniformValue('uPMatrix', transformMat.pMatrix);
+        if (transformMat.pMatrix) {
+            this.setUniformValue('uPMatrix', transformMat.pMatrix);
+        }
     }
 
     drawObject(transformMat: Readonly<TransformMat>, glObject: Readonly<GLObject>, wireframe: boolean = false) {
@@ -58,9 +79,8 @@ export class GoraudLambertian extends GLProgram<LambertainAttributeSpec, Lambert
 
         this.setUniformValue('uMVMatrix', mvMatrix);
         this.setUniformValue('uNMatrix', nMatrix);
-        this.setUniformValue('uPerVertexColor', !!glObject.cbo)
         this.setUniformValue('uWireframe', !!glObject.object.wireframe);
-        this.setUniformValue('uMaterialDiffuse', glObject.object.diffuse || [1, 1, 1, 1]);
+        this.setUniformValue('uMaterialDiffuse', _vec4(glObject.object.diffuse || [1, 1, 1, 1]));
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, glObject.ibo);
         gl.drawElements(wireframe || glObject.wireframe ? gl.LINES : gl.TRIANGLES, glObject.iboLen, gl.UNSIGNED_SHORT, 0);

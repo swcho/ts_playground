@@ -5,13 +5,13 @@ import {Camera, CameraType} from './camera';
 import {CameraInteractor} from './camerainteractor';
 import {Scene} from './scene';
 import {SceneTransform} from './scenetransform';
-export * from './program';
 import {GLProgram} from './program';
 
+export * from './def';
+export * from './program';
 export {
     CameraType,
     Camera,
-    Object3D,
 };
 
 interface DrawParam {

@@ -5205,6 +5205,10 @@ tar@^2.0.0, tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
+template-string-loader@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/template-string-loader/-/template-string-loader-0.0.3.tgz#d50c288c1e02ee820da7e988564ec250091c2894"
+
 tfunk@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/tfunk/-/tfunk-3.1.0.tgz#38e4414fc64977d87afdaa72facb6d29f82f7b5b"

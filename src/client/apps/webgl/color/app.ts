@@ -5,7 +5,15 @@ import 'htmlout-loader!./en.html';
 import {mat4, vec3} from 'gl-matrix';
 import {TweenMax, Bounce} from 'gsap';
 
-import {WebGL, Object3D, CameraType, GoraudLambertian} from '../webgl';
+import {
+    WebGL,
+    Object3D,
+    Light,
+    _vec3, _vec4, _light,
+    CameraType,
+    GoraudLambertian,
+    PhongProgram,
+} from '../webgl';
 import * as objects from '../objects';
 
 
@@ -16,18 +24,53 @@ console.log('WebGL Trials')
 
 const elCanvas = document.getElementById('canvas-element-id') as HTMLCanvasElement;
 const webgl = new WebGL(elCanvas, CameraType.TRACKING);
-const goroudLambertian = new GoraudLambertian(webgl.getContext());
-webgl.setGlProgram(goroudLambertian);
-goroudLambertian.setUniformValue('uLightPosition', [-5, 5, 5]);
-goroudLambertian.setUniformValue('uLightDiffuse', [1.0, 1.0, 1.0, 1.0]);
 
-const home = vec3.create();
-home.set([0.0, 0.0, 5.0])
-webgl.setCamera(home, 45, -30);
+function exLambertain() {
+    const goroudLambertian = new GoraudLambertian(webgl.getContext());
+    webgl.setGlProgram(goroudLambertian);
+    goroudLambertian.setUniformValue('uLightPosition', [-5, 5, 5]);
+    goroudLambertian.setUniformValue('uLightDiffuse', [1.0, 1.0, 1.0, 1.0]);
+
+    const home = vec3.create();
+    home.set([0.0, 0.0, 5.0])
+    webgl.setCamera(home, 45, -30);
+
+    webgl.addObject(objects.createFloor(60, 1));
+    webgl.addObject(objects.createAxis(20));
+    webgl.addObject(require('../models/complexcube.json'));
+}
+
+
+function ch06_Wall_Initial() {
+    const lights: Light[] = [
+        _light({
+            position: _vec3(0, 7, 3),
+            diffuse: _vec4(1.0, 0.0, 0.0, 1.0),
+        }),
+        _light({
+            position: _vec3(2.5, 3, 3),
+            diffuse: _vec4(0.0, 1.0, 0.0, 1.0),
+        })
+    ]
+    const program = new PhongProgram(webgl.getContext(), lights.length);
+    webgl.setGlProgram(program);
+    program.setUniformValue('uCutoff', 0.4);
+    program.setUniformValue('uLightPosition', lights.map(l => l.position));
+    program.setUniformValue('uLightDiffuse', lights.map(l => l.diffuse));
+    webgl.setCamera(_vec3(0, 5, 30), 0, -3);
+    webgl.addObject(objects.createFloor(80, 2));
+    webgl.addObject(require('../models/wall.json'));
+    webgl.addObject(require('../models/smallsph.json'));
+}
+
+ch06_Wall_Initial();
+
+webgl.run({
+}, (state) => {
+    webgl.drawProgram();
+}, true);
 
 // webgl.setObject('pos', objects.HALF_SQUARE);
-webgl.addObject(objects.createFloor(60, 1));
-webgl.addObject(objects.createAxis(20));
 
 // const objCone = objects.CONE6;
 // objCone.position = {
@@ -58,7 +101,6 @@ webgl.addObject(objects.createAxis(20));
 // webgl.addObject(sphere as Object);
 
 // Cube
-webgl.addObject(require('../complexcube.json'));
 
 // Balls
 // const BALL = require('../ball.json');
@@ -67,10 +109,6 @@ webgl.addObject(require('../complexcube.json'));
 // }
 
 
-webgl.run({
-}, (state) => {
-    webgl.drawProgram();
-}, true);
 
 // draw half rect
 // apply color
