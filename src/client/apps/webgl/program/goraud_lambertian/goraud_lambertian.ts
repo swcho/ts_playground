@@ -54,7 +54,7 @@ export class GoraudLambertian extends GLProgram<LambertainAttributeSpec, Lambert
 
         // TODO: Move to vertex shader
         mat4.invert(nMatrix, mvMatrix);
-        mat4.transpose(nMatrix, mvMatrix);
+        mat4.transpose(nMatrix, nMatrix);
 
         this.setUniformValue('uMVMatrix', mvMatrix);
         this.setUniformValue('uNMatrix', nMatrix);

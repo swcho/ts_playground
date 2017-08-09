@@ -23,9 +23,9 @@ console.log('WebGL Trials')
 // ref: https://codepen.io/cantelope/pen/zzmORP
 
 const elCanvas = document.getElementById('canvas-element-id') as HTMLCanvasElement;
-const webgl = new WebGL(elCanvas, CameraType.TRACKING);
 
 function exLambertain() {
+    const webgl = new WebGL(elCanvas, CameraType.TRACKING);
     const goroudLambertian = new GoraudLambertian(webgl.getContext());
     webgl.setGlProgram(goroudLambertian);
     goroudLambertian.setUniformValue('uLightPosition', [-5, 5, 5]);
@@ -38,10 +38,14 @@ function exLambertain() {
     webgl.addObject(objects.createFloor(60, 1));
     webgl.addObject(objects.createAxis(20));
     webgl.addObject(require('../models/complexcube.json'));
+    webgl.run({
+    }, (state) => {
+        webgl.drawProgram();
+    }, true);
 }
 
-
 function ch06_Wall_Initial() {
+    const webgl = new WebGL(elCanvas, CameraType.ORBIT);
     const lights: Light[] = [
         _light({
             position: _vec3(0, 7, 3),
@@ -52,23 +56,30 @@ function ch06_Wall_Initial() {
             diffuse: _vec4(0.0, 1.0, 0.0, 1.0),
         })
     ]
-    const program = new PhongProgram(webgl.getContext(), lights.length);
+    const program = new PhongProgram(webgl.getContext(), lights);
     webgl.setGlProgram(program);
     program.setUniformValue('uCutoff', 0.4);
-    program.setUniformValue('uLightPosition', lights.map(l => l.position));
-    program.setUniformValue('uLightDiffuse', lights.map(l => l.diffuse));
     webgl.setCamera(_vec3(0, 5, 30), 0, -3);
     webgl.addObject(objects.createFloor(80, 2));
     webgl.addObject(require('../models/wall.json'));
-    webgl.addObject(require('../models/smallsph.json'));
+    // webgl.addObject({
+    //     ...require('../models/smallsph.json'),
+    //     position: {
+    //         x: 0,
+    //         y: 7,
+    //         z: 3,
+    //     },
+    // });
+    webgl.run({
+    }, (state) => {
+        webgl.drawProgram();
+    }, true);
 }
 
-ch06_Wall_Initial();
+exLambertain();
 
-webgl.run({
-}, (state) => {
-    webgl.drawProgram();
-}, true);
+// ch06_Wall_Initial();
+
 
 // webgl.setObject('pos', objects.HALF_SQUARE);
 

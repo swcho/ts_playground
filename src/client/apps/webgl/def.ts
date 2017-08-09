@@ -12,6 +12,7 @@ export interface Object3D {
     normals?: number[];
     indices: number[];
     diffuse?: number[];
+    ambiant?: number[];
     wireframe?: boolean;
     colors?: number[];
     position?: Pos3D;

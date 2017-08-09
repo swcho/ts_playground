@@ -1,6 +1,6 @@
 
 import {vec3, vec4} from 'gl-matrix';
-import {GLObject, TransformMat} from '../def'
+import {GLObject, TransformMat, Light} from '../def'
 
 type AttributeBuffers<A> = {
     [key in keyof A]: WebGLBuffer
