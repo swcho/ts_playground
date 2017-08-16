@@ -55,7 +55,7 @@ function ch06_Wall_Initial() {
             position: _vec3(2.5, 3, 3),
             diffuse: _vec4(0.0, 1.0, 0.0, 1.0),
         })
-    ]
+    ];
     const program = new PhongProgram(webgl.getContext(), lights);
     webgl.setGlProgram(program);
     program.setUniformValue('uCutoff', 0.4);

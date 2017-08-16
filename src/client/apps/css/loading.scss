@@ -1,0 +1,28 @@
+$colors: #F1725D,
+#38BDAB,
+#9D30A5,
+#B779E2,
+#683893;
+$left: 25px;
+$count: 40px;
+$timing: 600ms infinite ease-in-out;
+$delay: 75ms;
+
+@mixin jelly($num1, $num2) {
+    stroke: nth($colors, $num1);
+    cx: $left + ($count * $num2);
+    stroke-width: 3px;
+    animation: jump $timing;
+    opacity: .7;
+    animation-delay: $delay * $num2;
+}
+
+svg {
+    position: absolute;
+    ellipse {
+        transform-origin: center;
+    }
+    &:nth-of-type(1) ellipse {
+        @include jelly(1, 0);
+    }
+}

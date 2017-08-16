@@ -1,0 +1,13 @@
+
+.rect {
+    width: 200px;
+    height: 200px;
+    border: 1px solid darkgrey;
+    -webkit-transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -o-transition: .3s ease-in-out;
+    &.perspective {
+        background-color: red;
+        transform: perspective( 600px ) rotateY( 45deg ) rotateX( 45deg ) rotateZ(45deg);
+    }
+}

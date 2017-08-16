@@ -61,6 +61,16 @@ const webpackConfig: webpack.Configuration = {
                 loader: 'html-loader'
             },
 
+            // haml
+            {
+                test: /\.pug$/,
+                use: [{
+                    loader: 'html-loader'
+                }, {
+                    loader: 'pug-html-loader'
+                }]
+            },
+
             // require to write markdown
             {
                 test: /\.md$/,
