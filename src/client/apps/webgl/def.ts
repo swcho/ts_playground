@@ -1,5 +1,5 @@
 
-import {mat4, vec3, vec4} from 'gl-matrix';
+import {mat4, vec2, vec3, vec4} from 'gl-matrix';
 
 export interface Pos3D {
     x: number;
@@ -43,6 +43,12 @@ export interface Light {
     ambient: vec4;
     diffuse: vec4;
     specular: vec4;
+}
+
+export function _vec2(x: number[]): vec2;
+export function _vec2(x: number, y: number): vec2;
+export function _vec2(x, y?) {
+    return x instanceof Array ? vec2.clone(x) : vec2.fromValues(x, y);
 }
 
 export function _vec3(x: number[]): vec3;
