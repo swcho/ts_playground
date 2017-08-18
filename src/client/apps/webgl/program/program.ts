@@ -1,6 +1,5 @@
 
-import {vec3, vec4} from 'gl-matrix';
-import {GLObject, TransformMat, Light} from '../def'
+import {GLObject, TransformMat} from '../def';
 
 type AttributeBuffers<A> = {
     [key in keyof A]: WebGLBuffer
@@ -18,6 +17,12 @@ type UniformLocations<U> = {
     [key in keyof U]: number
 };
 
+const DEFAULT_VERTEX_SHADER = `
+void main(void) {
+    gl_Position = vec4(position, 1.0);
+}
+`;
+
 export abstract class GLProgram<A, U> {
 
     protected program: WebGLProgram;
@@ -26,9 +31,8 @@ export abstract class GLProgram<A, U> {
 
     constructor(protected gl: WebGLRenderingContext, vertextSource: string, fragmentSource: string, private attributeSizes: AttributeSize<A>) {
         this.program = gl.createProgram();
-        this.setVertexShader(vertextSource);
+        this.setVertexShader(vertextSource || DEFAULT_VERTEX_SHADER);
         this.setFragmentShader(fragmentSource);
-
         gl.clearColor(1.0, 1.0, 1.0, 1.0);
         gl.clearDepth(1.0);
         gl.enable(gl.DEPTH_TEST);
@@ -91,7 +95,12 @@ export abstract class GLProgram<A, U> {
             if (loc !== -1) {
                 const buffer = buffers[key];
                 if (buffer) {
-                    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                    if (buffer instanceof WebGLBuffer) {
+                        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                    } else {
+                        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+                        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(buffer), gl.STATIC_DRAW);
+                    }
                     gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
                     gl.enableVertexAttribArray(loc);
                 } else {
