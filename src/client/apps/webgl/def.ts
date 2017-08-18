@@ -16,6 +16,7 @@ export interface Object3D {
     wireframe?: boolean;
     colors?: number[];
     position?: Pos3D;
+    texture_coords?: number[];
 }
 
 export interface GLObject {
@@ -25,7 +26,9 @@ export interface GLObject {
     iboLen: number;
     nbo?: WebGLBuffer;
     cbo?: WebGLBuffer;
+    tbo?: WebGLBuffer;
     wireframe?: boolean;
+    texture?: WebGLTexture;
 }
 
 export interface TransformMat {

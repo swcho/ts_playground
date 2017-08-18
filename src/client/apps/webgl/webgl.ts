@@ -74,8 +74,8 @@ export class WebGL {
         this.camera.setElevation(elevation);
     }
 
-    addObject(object: Object3D) {
-        this.scene.addObject(object);
+    addObject(object: Object3D): GLObject {
+        return this.scene.addObject(object);
     }
 
     drawProgram(wireframe: boolean = false) {

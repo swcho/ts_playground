@@ -45,7 +45,11 @@ export class PhongProgram extends GLProgram<AttributeSpec, UniformSpec> {
     constructor(gl: WebGLRenderingContext, private lights: Light[]) {
         super(gl,
             parse({lenLights: lights.length}, require('./phong.vert')),
-            parse({lenLights: lights.length}, require('./phong.frag')));
+            parse({lenLights: lights.length}, require('./phong.frag')), {
+                aVertexPosition: 3,
+                aVertexNormal: 3,
+                aVertexColor: 4,
+            });
     }
 
     drawStart(transformMat: Readonly<TransformMat>) {

@@ -6,6 +6,10 @@ type AttributeBuffers<A> = {
     [key in keyof A]: WebGLBuffer
 };
 
+type AttributeSize<A> = {
+    [key in keyof A]: number
+};
+
 type AttributeLocations<A> = {
     [key in keyof A]: number
 };
@@ -20,7 +24,7 @@ export abstract class GLProgram<A, U> {
     private vertexShader: WebGLShader;
     private fragmentShader: WebGLShader;
 
-    constructor(protected gl: WebGLRenderingContext, vertextSource: string, fragmentSource: string) {
+    constructor(protected gl: WebGLRenderingContext, vertextSource: string, fragmentSource: string, private attributeSizes: AttributeSize<A>) {
         this.program = gl.createProgram();
         this.setVertexShader(vertextSource);
         this.setFragmentShader(fragmentSource);
@@ -29,6 +33,9 @@ export abstract class GLProgram<A, U> {
         gl.clearDepth(1.0);
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LESS);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     }
 
     private createShader(type: number, source: string) {
@@ -76,14 +83,16 @@ export abstract class GLProgram<A, U> {
             }
             this.attributeLocations = locations as any;
         }
+        const sizes = this.attributeSizes;
         const locations = this.attributeLocations;
         for (const key of Object.keys(locations)) {
             const loc = locations[key];
+            const size = sizes[key];
             if (loc !== -1) {
                 const buffer = buffers[key];
                 if (buffer) {
                     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-                    gl.vertexAttribPointer(loc, 3, gl.FLOAT, false, 0, 0);
+                    gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
                     gl.enableVertexAttribArray(loc);
                 } else {
                     gl.disableVertexAttribArray(loc);
@@ -93,7 +102,7 @@ export abstract class GLProgram<A, U> {
     }
 
     private uniformLocations: UniformLocations<U>;
-    setUniformValue<K extends keyof U>(name: K, value: U[K]) {
+    setUniformValue<K extends keyof U>(name: K, value: U[K], integer: boolean = false) {
         const gl = this.gl;
         const loc = gl.getUniformLocation(this.program, name);
         let len = value['length'];
@@ -102,7 +111,11 @@ export abstract class GLProgram<A, U> {
             return;
         }
         if (typeof len === 'undefined') {
-            gl.uniform1f(loc, value as any);
+            if (integer) {
+                gl.uniform1i(loc, value as any);
+            } else {
+                gl.uniform1f(loc, value as any);
+            }
         } else {
             if (value[0] && value[0].length) {
                 const innerArrayLen = value[0].length;

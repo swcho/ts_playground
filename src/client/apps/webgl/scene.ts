@@ -9,7 +9,7 @@ export class Scene {
     constructor(private context: WebGLRenderingContext) {
     }
 
-    addObject(object: Object3D) {
+    addObject(object: Object3D): GLObject {
         const gl = this.context;
 
         const vbo = gl.createBuffer();
@@ -40,7 +40,15 @@ export class Scene {
             glObject.cbo = cbo;
         }
 
+        if (object.texture_coords) {
+            const tbo = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, tbo);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(object.texture_coords), gl.STATIC_DRAW);
+            glObject.tbo = tbo;
+        }
+
         this.glObjects.push(glObject);
+        return glObject;
     }
 
     getGlObjects() {
