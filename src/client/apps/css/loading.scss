@@ -10,7 +10,7 @@ $timing: 600ms infinite ease-in-out;
 $delay: 75ms;
 
 @mixin jelly($num1, $num2) {
-    stroke: nth($colors, $num1);
+    stroke: nth($colors, ($num1 - 1) % length($colors) + 1);
     // cx: $left + ($count * $num2);
     stroke-width: 3px;
     animation: jump $timing;
@@ -33,18 +33,31 @@ svg {
     position: absolute;
     ellipse {
         transform-origin: center;
-        @for $i from 1 through length($colors) {
+        @for $i from 0 through 9 {
             &.jelly  {
-                &:nth-of-type(#{length($colors)}n + #{$i}) {
+                &:nth-of-type(#{$i * 2 + 1}) {
                     @include jelly($i, $i);
                 }
             }
             &.shadow {
-                &:nth-of-type(#{length($colors)}n + #{$i}) {
+                &:nth-of-type(#{$i * 2 + 2}) {
                     @include shadow($i);
                 }
             }
+            @debug $i;
         }
+        // @for $i from 1 through length($colors) {
+        //     &.jelly  {
+        //         &:nth-of-type(#{length($colors)}n + #{$i}) {
+        //             @include jelly($i, $i);
+        //         }
+        //     }
+        //     &.shadow {
+        //         &:nth-of-type(#{length($colors)}n + #{$i}) {
+        //             @include shadow($i);
+        //         }
+        //     }
+        // }
     }
 }
 
