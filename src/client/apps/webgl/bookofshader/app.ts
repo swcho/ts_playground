@@ -68,8 +68,6 @@ class Program extends GLProgram<{
                 1, 1, 0,
             ]
         });
-        const gl = this.gl;
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
         this.setUniformValue('u_time', (new Date().getTime() - this.startTime) / 1000);
         const {
             clientWidth,
@@ -81,13 +79,15 @@ class Program extends GLProgram<{
             clientY,
         } = this.mousePos;
         this.setUniformValue('u_mouse', _vec2(clientX, clientY));
+        const gl = this.gl;
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
 
     drawObject(transformMat: Readonly<TransformMat>, glObject: Readonly<GLObject>, wireframe: boolean) {
     }
 }
 
-function run(fragSource) {
+function run(fragSource, loop = false) {
     const elCanvas = document.getElementById('canvas-element-id') as HTMLCanvasElement;
     const webgl = new WebGL(elCanvas, CameraType.TRACKING);
     const program = new Program(elCanvas, webgl.getContext(), fragSource);
@@ -95,9 +95,13 @@ function run(fragSource) {
     webgl.run({
     }, (state) => {
         webgl.drawProgram();
-    }, true);
+    }, loop);
 }
 
 // run(require('./ch02/hello.frag'));
 // run(require('./ch03/uniforms.frag'));
-run(require('./ch03/gl_FragCoord.frag'));
+// run(require('./ch03/gl_FragCoord.frag'), true);
+// run(require('./ch05/line.frag'), false);
+// run(require('./ch05/exponential.frag'), false);
+// run(require('./ch05/step_smoothstep.frag'), false);
+run(require('./ch05/sine_cosine.frag'), );

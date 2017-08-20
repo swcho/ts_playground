@@ -128,7 +128,7 @@ function ch06_Wall_Initial() {
 
 function ch07_Textured_Cube() {
 
-    const webgl = new WebGL(elCanvas, CameraType.ORBIT);
+    const webgl = new WebGL(elCanvas, CameraType.TRACKING);
     const gl = webgl.getContext();
     const texture = gl.createTexture();
     const image = new Image();
@@ -147,6 +147,7 @@ function ch07_Textured_Cube() {
 
         webgl.addObject(objects.createFloor(60, 1));
         webgl.addObject(objects.createAxis(20));
+        webgl.addObject(require('../models/ball.json'));
         const glObjectCube = webgl.addObject(require('../models/complexcube.json'));
         glObjectCube.texture = texture;
         webgl.run({
