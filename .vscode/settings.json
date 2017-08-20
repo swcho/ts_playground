@@ -7,5 +7,6 @@
         "**/.DS_Store": true
     },
     "typescript.tsdk": "./node_modules/typescript/lib",
-    "todoIgnore":   ["node_modules/**", "out/**"]
+    "todoIgnore":   ["node_modules/**", "out/**"],
+    "tslint.autoFixOnSave": true
 }
