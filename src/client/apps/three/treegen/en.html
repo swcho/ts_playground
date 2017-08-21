@@ -1,0 +1,57 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <div id="controls">
+        <button id="generate" class="btn btn-secondary" onclick="generateTree()">New Tree</button><br><br>
+        <button id="saveOBJ" class="btn btn-secondary" onclick="exportSceneOBJ()">Save as OBJ file</button><br><br>
+        <button id="saveSTL" class="btn btn-secondary" onclick="exportSceneSTL()">Save as STL file</button>
+    </div>
+    </div>
+    <div id="ThreeJS" style="z-index: 0; position: absolute; left:0px; top:30vh; height:70vh"></div>
+
+    <!-- Trigger/Open The Modal -->
+    <button id="myBtn" class="btn btn-primary">🛈 Help</button>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h5>Parameter Descriptions:</h5>
+            <br><br>
+            <ul>
+                <li>Max Slices:<br> controls the maximum number of branch sub-sections that are allowed to be rendered
+                </li><br>
+                <li>Split Chance:<br> controls the probability of a new branch splitting off of a already existing branch
+                </li><br>
+                <li>Angle Mod:<br> modifies how much a branch can change its angle by for each sub-section
+                </li><br>
+                <li>Height Mod:<br> multiplies the height of the branch-subsections, making the tree taller
+                </li><br>
+                <li>Width Mod:<br> multiplies the speed at which branches spread out, making the tree wider
+                </li><br>
+                <li>Starting Size:<br> Changes the radius of the stump of the tree, making the tree wider or slimer around the
+                    base
+                </li><br>
+                <li>Size Decrement:<br> Sets the amount by which the branches get reduced in width for each sub-section
+                </li><br>
+                <li>Branch Variance:<br> Changes the percentage in width that a child branch can be smaller than a parent branch
+                    by. Generally makes trees look more "natural" and random.
+                </li><br>
+                <li>Sections:<br> controls the number of faces that each sub-section of a branch has. Increase to produce more
+                    rounded looking branches
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
