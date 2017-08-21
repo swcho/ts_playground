@@ -1,6 +1,9 @@
 
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
+
+// https://codepen.io/darrylhuffman/pen/OgagYW
+
 console.log(__filename);
 console.log('hi');
 
@@ -73,7 +76,7 @@ class Hair {
         hairs.push(this);
     }
 
-    draw() {
+    draw(pos: Position) {
         const {
             x,
             y,
@@ -86,7 +89,11 @@ class Hair {
         context.translate(
             (this.position.x - HAIR_DISTANCE * 2) * RESOLUTION_SCALE,
             (this.position.y - HAIR_DISTANCE * 2) * RESOLUTION_SCALE);
-        context.rotate(windr * (Math.PI / 2));
+        const dist = Math.pow(x - pos.x, 2) + Math.pow(y - pos.y, 2);
+        const BOUND = 10000;
+        const ratio = (dist > BOUND) ? 0 : BOUND - dist / BOUND;
+        // console.log(dist, ratio);
+        context.rotate(windr * (Math.PI / 2 + ratio / 10000));
         // context.rotate(windr * Math.PI * 2);
         const light = Math.floor(40 * (1 + windr)) + this.shade;
         this.drawShape(light);
@@ -110,15 +117,32 @@ for (let x = 0; x < size.x / HAIR_DISTANCE + exS; x++) {
     }
 }
 
+
+let pos = {
+    x: 0,
+    y: 0,
+};
+window.onmousemove = function(e) {
+    const {
+        clientX,
+        clientY,
+    } = e;
+    pos = {
+        x: clientX,
+        y: clientY,
+    };
+};
+
 function render() {
     let now = new Date().getTime();
     currentTime = (now - startTime) / 10000;
     context.clearRect(0, 0, size.x * RESOLUTION_SCALE, size.y * RESOLUTION_SCALE);
+    context.fillRect(pos.x, pos.y, 2, 2);
 
     updateWind();
     for (let i = 0; i <= hairs.length; i++) {
         if (hairs[i]) {
-            hairs[i].draw();
+            hairs[i].draw(pos);
         }
     }
 
