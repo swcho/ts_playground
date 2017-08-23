@@ -310,8 +310,7 @@ function init() {
     let ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
 
-
-
+    // http://jsfiddle.net/aqnL1mx9/
     // renderer
     const renderer2 = new THREE.WebGLRenderer();
     renderer2.setClearColor(0xf0f0f0, 1);
