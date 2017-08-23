@@ -1,8 +1,8 @@
-h1
+h1 Loading
 .contain
-- const count = 10;
-- const gap = 40;
-svg(height="80" width=(count * gap))
-    - for (var x = 0; x < count; x++)
-        ellipse(class='jelly' cx=(gap / 2 + x * gap) cy="20" fill="#1D0333" rx="10" ry="10")
-        ellipse(class='shadow' cx=(gap / 2 + x * gap) cy="20" fill="#1D0333" rx="10" ry="10")
+    - const count = 10;
+    - const gap = 40;
+    svg(height="80" width=(count * gap))
+        - for (var x = 0; x < count; x++)
+            ellipse(class='jelly' cx=(gap / 2 + x * gap) cy="20" fill="#1D0333" rx="10" ry="10")
+            ellipse(class='shadow' cx=(gap / 2 + x * gap) cy="20" fill="#1D0333" rx="10" ry="10")

@@ -49,10 +49,10 @@ const webpackConfig: webpack.Configuration = {
     cache: true,
     entry: entries,
     output: {
-        path: path.resolve(__dirname, "../client/assets"),
-        publicPath: "/assets/",
-        filename: "[name].[chunkhash].js",
-        chunkFilename: "[chunkhash].js",
+        path: path.resolve(__dirname, '../client/assets'),
+        publicPath: '/assets/',
+        filename: '[name].[chunkhash].js',
+        chunkFilename: '[chunkhash].js',
     },
     module: {
         rules: [
@@ -90,6 +90,9 @@ const webpackConfig: webpack.Configuration = {
                     {
                         loader: 'css-loader'
                     },
+                    {
+                        loader: 'postcss-loader' // translates CSS into CommonJS
+                    },
                 ]
             },
             {
@@ -102,6 +105,9 @@ const webpackConfig: webpack.Configuration = {
                         loader: 'css-loader'
                     },
                     {
+                        loader: 'postcss-loader' // translates CSS into CommonJS
+                    },
+                    {
                         loader: 'less-loader'
                     },
                 ]
@@ -110,13 +116,16 @@ const webpackConfig: webpack.Configuration = {
                 test: /\.scss$/,
                 use: [
                     {
-                        loader: "style-loader" // creates style nodes from JS strings
+                        loader: 'style-loader' // creates style nodes from JS strings
                     },
                     {
-                        loader: "css-loader" // translates CSS into CommonJS
+                        loader: 'css-loader' // translates CSS into CommonJS
                     },
                     {
-                        loader: "sass-loader" // compiles Sass to CSS
+                        loader: 'postcss-loader' // translates CSS into CommonJS
+                    },
+                    {
+                        loader: 'sass-loader' // compiles Sass to CSS
                     },
                 ]
             },
@@ -124,25 +133,25 @@ const webpackConfig: webpack.Configuration = {
             // required for bootstrap icons
             {
                 test: /\.woff$/,
-                loader: "url-loader?prefix=font/&limit=5000&mimetype=application/font-woff"
+                loader: 'url-loader?prefix=font/&limit=5000&mimetype=application/font-woff'
             },
             {
                 test: /\.ttf$/,
-                loader: "file-loader?prefix=font/"
+                loader: 'file-loader?prefix=font/'
             },
             {
                 test: /\.eot$/,
-                loader: "file-loader?prefix=font/"
+                loader: 'file-loader?prefix=font/'
             },
             {
                 test: /\.svg$/,
-                loader: "file-loader?prefix=font/"
+                loader: 'file-loader?prefix=font/'
             },
 
             // images
             {
                 test: /\.png$/,
-                loader: "file-loader?prefix=imgs/"
+                loader: 'file-loader?prefix=imgs/'
             },
             // required for react jsx
             // {
@@ -159,7 +168,7 @@ const webpackConfig: webpack.Configuration = {
             // required for TypeScript
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader",
+                loader: 'ts-loader',
                 options: {
                     configFileName: path.join(BASE_SRC_CLIENT, 'tsconfig.json')
                 }
@@ -201,8 +210,8 @@ const webpackConfig: webpack.Configuration = {
     },
     resolveLoader: {
         alias: {
-            'config-loader': path.join(__dirname, "./loaders/config-loader"),
-            'htmlout-loader': path.join(__dirname, "./loaders/htmlout-loader")
+            'config-loader': path.join(__dirname, './loaders/config-loader'),
+            'htmlout-loader': path.join(__dirname, './loaders/htmlout-loader')
         }
         // fallback: [
         //     path.resolve(__dirname, 'loaders'),
@@ -225,7 +234,7 @@ const webpackConfig: webpack.Configuration = {
     context: path.join(BASE_SRC_CLIENT + '/apps'),
     node: {
         __filename: true
-    }
+    },
 };
 
 module.exports = webpackConfig;

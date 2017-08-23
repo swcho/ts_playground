@@ -4,6 +4,7 @@ declare module 'stats.js' {
     class Stats {
         domElement: HTMLDivElement;
         update();
+        setMode(mode: number);
     }
     namespace Stats {
         export class Panel {

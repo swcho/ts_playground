@@ -1,0 +1,6 @@
+
+h1 Responsive gallery
+div.responsive_gallery
+    ul.grid
+        - for (var x = 0; x < 25; x++)
+            li(class=`pic pic--${x + 1}` style=`--grid-area: pic${x + 1}` data-num=`${x + 1}`) #{`pic${x + 1}`}

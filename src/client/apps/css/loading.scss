@@ -9,6 +9,11 @@ $timing: 600ms infinite ease-in-out;
 // $timing: 600ms forwards ease-in-out;
 $delay: 75ms;
 
+.contain {
+    position: relative;
+    height: 80px;
+}
+
 @mixin jelly($num1, $num2) {
     stroke: nth($colors, ($num1 - 1) % length($colors) + 1);
     // cx: $left + ($count * $num2);
