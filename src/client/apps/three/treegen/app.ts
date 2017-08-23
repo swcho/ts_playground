@@ -10,58 +10,40 @@ import 'three/examples/js/controls/FlyControls';
 import 'three/examples/js/controls/OrbitControls';
 import 'three/examples/js/effects/AsciiEffect';
 import Stats = require('stats.js');
-import dat = require('dat-gui');
+import dat = require('../defext/dat-gui');
 
 import * as THREE from '../three';
 import * as THREEx from '../threex';
 require('./style.css');
 
 let container, scene, camera, renderer, controls, stats;
-let keyboard = new THREEx.KeyboardState();
 let clock = new THREE.Clock();
 
-let slices = 0;
-let maxSlices = 2500;
-let angleMod = 0.05;
-let splitChance = .15;
+const Param = {
+    maxSlices: 2500,
+    splitChance: .15,
 
-let heightMod = 1;
-let widthMod = .2;
-let startingSize = 1;
-let branchVariance = .3;
-
-let sizeMod = 4;
-let sizeDec = .03;
-
-let sections = 10;
-
-let objects = [];
-let gui;
-
-window.onload = function () {
-    gui = new dat.GUI();
-    let controllers = [];
-    controllers.push(gui.add(this, 'maxSlices', 100, 10000));
-    controllers.push(gui.add(this, 'splitChance', 0, 1, .01));
-    controllers.push(gui.add(this, 'angleMod', 0, .2, .01));
-    controllers.push(gui.add(this, 'heightMod', .1, 4, .1));
-    controllers.push(gui.add(this, 'widthMod', .1, 1, .05));
-    controllers.push(gui.add(this, 'startingSize', 0, 10, .01));
-    controllers.push(gui.add(this, 'sizeDec', .01, 1, .01));
-    controllers.push(gui.add(this, 'branchVariance', 0, 1, .01));
-    controllers.push(gui.add(this, 'sections', 3, 30, 1));
-    gui.add(this, 'randomizeVars');
-    gui.add(this, 'resetVars');
-
-    for (let i = 0; i < controllers.length; i++) {
-        controllers[i].onFinishChange(function () {
-            generateTree();
-        });
-    }
+    angleMod: 0.05,
+    heightMod: 1,
+    widthMod: .2,
+    startingSize: 1,
+    sizeDec: .03,
+    branchVariance: .3,
+    sections: 10,
 };
 
+let slices = 0;
+let sizeMod = 4;
+let objects = [];
 
-function RW(x, y, z, size, tickOffset) {
+function RW(param: typeof Param, x, y, z, size, tickOffset) {
+    const {
+        angleMod,
+        heightMod,
+        widthMod,
+        sizeDec,
+        sections,
+    } = param;
     this.x = x;
     this.y = y;
     this.z = z;
@@ -144,8 +126,100 @@ function RW(x, y, z, size, tickOffset) {
     };
 }
 
-init();
-animate();
+function generateTree(param: typeof Param) {
+    const {
+        maxSlices,
+        splitChance,
+        startingSize,
+        branchVariance,
+    } = param;
+    slices = 0;
+
+    for (let i = 0; i < objects.length; i++) {
+        scene.remove(objects[i]);
+    }
+
+    objects = [];
+
+    let rws = [];
+    rws.push(new RW(param, 0, 0, 0, startingSize, 0));
+
+    while (slices < maxSlices && rws.length > 0) {
+        for (let i = rws.length - 1; i > -1; i--) {
+            rws[i].update();
+            if (rws[i].size < 0) {
+                rws.splice(i, 0);
+                continue;
+            }
+            if (slices < maxSlices && Math.random() < splitChance) rws.push(new RW(
+                param,
+                rws[i].x,
+                rws[i].y,
+                rws[i].z,
+                rws[i].size * (Math.random() * branchVariance + (1 - branchVariance)),
+                rws[i].numTicks % 2
+            ));
+        }
+    }
+
+    for (let i = 0; i < rws.length; i++) {
+        rws[i].geom.computeFaceNormals();
+        // var material = new THREE.MeshPhongMaterial({color: 0xffffff});
+        let material = new THREE.MeshNormalMaterial();
+        // material.side = THREE.DoubleSide;
+        material['perPixel'] = true;
+        let object = new THREE.Mesh(rws[i].geom, material);
+        object.name = '' + performance.now();
+        objects.push(object);
+        scene.add(object);
+    }
+}
+
+namespace Utils {
+
+    export function randomizeVars() {
+        for (let i = 0; i < gui.__controllers.length - 2; i++) {
+            let controller = gui.__controllers[i];
+
+            let range = controller.__max - controller.__min;
+            console.log(range);
+            let value = controller.__min + Math.random() * range;
+            if (controller.__step > 1) value = Math.floor(value);
+            controller.setValue(value);
+        }
+        generateTree(Param);
+    }
+
+    export function resetVars() {
+        for (let i = 0; i < gui.__controllers.length; i++) {
+            gui.__controllers[i].setValue(gui.__controllers[i].initialValue);
+        }
+        generateTree(Param);
+    }
+
+}
+
+const gui = new dat.GUI();
+window.onload = function () {
+    let controllers = [];
+    controllers.push(gui.add(Param, 'maxSlices', 100, 10000));
+    controllers.push(gui.add(Param, 'splitChance', 0, 1, .01));
+    controllers.push(gui.add(Param, 'angleMod', 0, .2, .01));
+    controllers.push(gui.add(Param, 'heightMod', .1, 4, .1));
+    controllers.push(gui.add(Param, 'widthMod', .1, 1, .05));
+    controllers.push(gui.add(Param, 'startingSize', 0, 10, .01));
+    controllers.push(gui.add(Param, 'sizeDec', .01, 1, .01));
+    controllers.push(gui.add(Param, 'branchVariance', 0, 1, .01));
+    controllers.push(gui.add(Param, 'sections', 3, 30, 1));
+    gui.add(Utils, 'randomizeVars');
+    gui.add(Utils, 'resetVars');
+
+    for (let i = 0; i < controllers.length; i++) {
+        controllers[i].onFinishChange(function () {
+            generateTree(Param);
+        });
+    }
+};
 
 function init() {
     scene = new THREE.Scene();
@@ -202,7 +276,7 @@ function init() {
 
 
     // generate a tree:
-    generateTree();
+    generateTree(Param);
 }
 
 function clearScene() {
@@ -211,57 +285,10 @@ function clearScene() {
     }
 }
 
-function generateTree() {
-    slices = 0;
-
-    for (let i = 0; i < objects.length; i++) {
-        scene.remove(objects[i]);
-    }
-
-    objects = [];
-
-    let rws = [];
-    rws.push(new RW(0, 0, 0, startingSize, 0));
-
-    while (slices < maxSlices && rws.length > 0) {
-        for (let i = rws.length - 1; i > -1; i--) {
-            rws[i].update();
-            if (rws[i].size < 0) {
-                rws.splice(i, 0);
-                continue;
-            }
-            if (slices < maxSlices && Math.random() < splitChance) rws.push(new RW(
-                rws[i].x,
-                rws[i].y,
-                rws[i].z,
-                rws[i].size * (Math.random() * branchVariance + (1 - branchVariance)),
-                rws[i].numTicks % 2
-            ));
-        }
-    }
-
-    for (let i = 0; i < rws.length; i++) {
-        rws[i].geom.computeFaceNormals();
-        // var material = new THREE.MeshPhongMaterial({color: 0xffffff});
-        let material = new THREE.MeshNormalMaterial();
-        // material.side = THREE.DoubleSide;
-        material['perPixel'] = true;
-        let object = new THREE.Mesh(rws[i].geom, material);
-        object.name = '' + performance.now();
-        objects.push(object);
-        scene.add(object);
-    }
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    render();
-    update();
-}
-
+const keyboard = new THREEx.KeyboardState();
 function update() {
     // delta = change in time since last call (in seconds)
-    let delta = clock.getDelta();
+    // let delta = clock.getDelta();
 
     // functionality provided by THREEx.KeyboardState.js
     if (keyboard.pressed('1'))
@@ -271,26 +298,6 @@ function update() {
 
     controls.update();
     stats.update();
-}
-
-function randomizeVars() {
-    for (let i = 0; i < gui.__controllers.length - 2; i++) {
-        let controller = gui.__controllers[i];
-
-        let range = controller.__max - controller.__min;
-        console.log(range);
-        let value = controller.__min + Math.random() * range;
-        if (controller.__step > 1) value = Math.floor(value);
-        controller.setValue(value);
-    }
-    generateTree();
-}
-
-function resetVars() {
-    for (let i = 0; i < gui.__controllers.length; i++) {
-        gui.__controllers[i].setValue(gui.__controllers[i].initialValue);
-    }
-    generateTree();
 }
 
 function exportSceneOBJ() {
@@ -343,3 +350,12 @@ window.onclick = function (event) {
         modal.style.display = 'none';
     }
 };
+
+function animate() {
+    requestAnimationFrame(animate);
+    render();
+    update();
+}
+
+init();
+animate();

@@ -37,33 +37,6 @@
  *   - use this as event name
 */
 export class KeyboardState {
-    private keyCodes = {};
-    private modifiers = {};
-    private _onKeyDown;
-    private _onKeyUp;
-    constructor() {
-        // to store the current state
-        this.keyCodes = {};
-        this.modifiers = {};
-
-        // create callback to bind/unbind keyboard events
-        const self = this;
-        this._onKeyDown = function (event) { self._onKeyChange(event, true); };
-        this._onKeyUp = function (event) { self._onKeyChange(event, false); };
-
-        // bind keyEvents
-        document.addEventListener('keydown', this._onKeyDown, false);
-        document.addEventListener('keyup', this._onKeyUp, false);
-    }
-
-    /**
-     * To stop listening of the keyboard events
-    */
-    destroy() {
-        // unbind keyEvents
-        document.removeEventListener('keydown', this._onKeyDown, false);
-        document.removeEventListener('keyup', this._onKeyUp, false);
-    }
 
     static MODIFIERS = ['shift', 'ctrl', 'alt', 'meta'];
     static ALIAS = {
@@ -76,6 +49,34 @@ export class KeyboardState {
         'pagedown': 34,
         'tab': 9
     };
+
+    private keyCodes = {};
+    private modifiers = {};
+    private _onKeyDown;
+    private _onKeyUp;
+
+    constructor() {
+        // to store the current state
+        this.keyCodes = {};
+        this.modifiers = {};
+
+        // bind keyEvents
+        document.addEventListener('keydown', (evt) => {
+            this._onKeyChange(evt, true);
+        }, false);
+        document.addEventListener('keyup', (evt) => {
+            this._onKeyChange(evt, false);
+        }, false);
+    }
+
+    /**
+     * To stop listening of the keyboard events
+    */
+    destroy() {
+        // unbind keyEvents
+        document.removeEventListener('keydown', this._onKeyDown, false);
+        document.removeEventListener('keyup', this._onKeyUp, false);
+    }
 
     /**
      * to process the keyboard dom event
