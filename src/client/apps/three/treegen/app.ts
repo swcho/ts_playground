@@ -255,11 +255,10 @@ window.onload = function () {
     }
 };
 
-const stats = new Stats();
 function init() {
     scene = new THREE.Scene();
 
-    // scene.add(new THREE.AxisHelper(10));
+    scene.add(new THREE.AxisHelper(10));
 
     let SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     let VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -295,6 +294,7 @@ function init() {
     ///////////
     // STATS //
     ///////////
+    const stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
     stats.domElement.style.zIndex = '100';
@@ -310,29 +310,70 @@ function init() {
     let ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
 
+
+
+    // renderer
+    const renderer2 = new THREE.WebGLRenderer();
+    renderer2.setClearColor(0xf0f0f0, 1);
+    renderer2.setSize(200, 200);
+    renderer2.domElement.style.position = 'absolute';
+    renderer2.domElement.style.left = '0px';
+    renderer2.domElement.style.bottom = '0px';
+    container.appendChild(renderer2.domElement);
+
+    // scene
+    const scene2 = new THREE.Scene();
+
+    // camera
+    const camera2 = new THREE.PerspectiveCamera(50, 1, 1, 1000);
+    camera2.up = camera.up; // important!
+    scene2.add(camera2);
+
+    // axes
+    const axes2 = new THREE.AxisHelper(100);
+    scene2.add(axes2);
+
     // generate a tree:
     generateTree(Param);
+
+    function render() {
+        camera2.position.copy(camera.position);
+        camera2.position.sub(controls.target); // added by @libe
+        camera2.position.setLength(300);
+        camera2.lookAt(scene2.position);
+
+        renderer.render(scene, camera);
+        renderer2.render(scene2, camera2);
+    }
+
+    const keyboard = new THREEx.KeyboardState();
+    function update() {
+        // delta = change in time since last call (in seconds)
+        // let delta = clock.getDelta();
+
+        // functionality provided by THREEx.KeyboardState.js
+        if (keyboard.pressed('1'))
+            document.getElementById('message').innerHTML = ' Have a nice day! - 1';
+        if (keyboard.pressed('2'))
+            document.getElementById('message').innerHTML = ' Have a nice day! - 2 ';
+
+        controls.update();
+        stats.update();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+        update();
+    }
+
+    animate();
 }
 
 function clearScene() {
     while (scene.children.length > 0) {
         scene.remove(scene.children[0]);
     }
-}
-
-const keyboard = new THREEx.KeyboardState();
-function update() {
-    // delta = change in time since last call (in seconds)
-    // let delta = clock.getDelta();
-
-    // functionality provided by THREEx.KeyboardState.js
-    if (keyboard.pressed('1'))
-        document.getElementById('message').innerHTML = ' Have a nice day! - 1';
-    if (keyboard.pressed('2'))
-        document.getElementById('message').innerHTML = ' Have a nice day! - 2 ';
-
-    controls.update();
-    stats.update();
 }
 
 function exportSceneOBJ() {
@@ -358,10 +399,6 @@ document.body.onmousedown = function () {
 document.body.onmouseup = function () {
     controls.autoRotate = true;
 };
-
-function render() {
-    renderer.render(scene, camera);
-}
 
 // Get the modal
 let modal = document.getElementById('myModal');
@@ -389,11 +426,4 @@ window.onclick = function (event) {
     }
 };
 
-function animate() {
-    requestAnimationFrame(animate);
-    render();
-    update();
-}
-
 init();
-animate();
