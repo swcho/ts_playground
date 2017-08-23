@@ -16,7 +16,11 @@ import * as THREE from '../three';
 import * as THREEx from '../threex';
 require('./style.css');
 
-let container, scene, camera, renderer, controls, stats;
+let container;
+let scene: THREE.Scene;
+let camera: THREE.Camera;
+let renderer: THREE.Renderer;
+let controls: THREE.OrbitControls;
 let clock = new THREE.Clock();
 
 const Param = {
@@ -32,36 +36,53 @@ const Param = {
     sections: 10,
 };
 
-let slices = 0;
 let sizeMod = 4;
-let objects = [];
 
-function RW(param: typeof Param, x, y, z, size, tickOffset) {
-    const {
-        angleMod,
-        heightMod,
-        widthMod,
-        sizeDec,
-        sections,
-    } = param;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.prevX = x;
-    this.prevY = y;
-    this.prevZ = z;
-    this.prevSize = this.size;
-    this.size = size;
+class RW {
 
-    this.numTicks = tickOffset;
-    this.speed = Math.random() * widthMod + .05;
-    this.angle = Math.random() * 2 * Math.PI;
-    this.angleMod = Math.random() * angleMod + .05;
-    this.angleMod *= 2 * Math.PI;
-    this.geom = new THREE.Geometry();
+    private prevX: number;
+    private prevY: number;
+    private prevZ: number;
+    private prevSize: number;
+    private speed: number;
+    private angle: number;
+    private angleMod: number;
+    public geom: THREE.Geometry;
 
-    this.update = function () {
-        slices++;
+    constructor(
+            private param: typeof Param,
+            public x: number,
+            public y: number,
+            public z: number,
+            public size: number,
+            public numTicks: number) {
+        const {
+            angleMod,
+            widthMod,
+        } = param;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.prevX = x;
+        this.prevY = y;
+        this.prevZ = z;
+        this.prevSize = this.size;
+        this.size = size;
+
+        this.speed = Math.random() * widthMod + .05;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.angleMod = Math.random() * angleMod + .05;
+        this.angleMod *= 2 * Math.PI;
+        this.geom = new THREE.Geometry();
+    }
+
+    update() {
+        const {
+            heightMod,
+            sizeDec,
+            sections,
+        } = this.param;
+        // slices++;
 
         this.prevX = this.x;
         this.prevY = this.y;
@@ -123,9 +144,10 @@ function RW(param: typeof Param, x, y, z, size, tickOffset) {
         }
 
         this.numTicks++;
-    };
+    }
 }
 
+let objects: THREE.Mesh[] = [];
 function generateTree(param: typeof Param) {
     const {
         maxSlices,
@@ -133,7 +155,6 @@ function generateTree(param: typeof Param) {
         startingSize,
         branchVariance,
     } = param;
-    slices = 0;
 
     for (let i = 0; i < objects.length; i++) {
         scene.remove(objects[i]);
@@ -141,26 +162,39 @@ function generateTree(param: typeof Param) {
 
     objects = [];
 
-    let rws = [];
+    let rws: RW[] = [];
     rws.push(new RW(param, 0, 0, 0, startingSize, 0));
+    rws[0].update();
 
-    while (slices < maxSlices && rws.length > 0) {
+    let totalCount = 0;
+    let dropCount = 0;
+    let splitCount = 0;
+
+    for (let slices = 0; slices < maxSlices && rws.length > 0; slices += 1) {
         for (let i = rws.length - 1; i > -1; i--) {
+            totalCount++;
             rws[i].update();
             if (rws[i].size < 0) {
                 rws.splice(i, 0);
+                // console.log(rws.length);
+                dropCount++;
                 continue;
             }
-            if (slices < maxSlices && Math.random() < splitChance) rws.push(new RW(
-                param,
-                rws[i].x,
-                rws[i].y,
-                rws[i].z,
-                rws[i].size * (Math.random() * branchVariance + (1 - branchVariance)),
-                rws[i].numTicks % 2
-            ));
+            if (slices < maxSlices && Math.random() < splitChance) {
+                splitCount++;
+                rws.push(new RW(
+                    param,
+                    rws[i].x,
+                    rws[i].y,
+                    rws[i].z,
+                    rws[i].size * (Math.random() * branchVariance + (1 - branchVariance)),
+                    rws[i].numTicks % 2
+                ));
+            }
         }
     }
+
+    console.log('generateTree', rws.length, dropCount, totalCount, splitCount);
 
     for (let i = 0; i < rws.length; i++) {
         rws[i].geom.computeFaceNormals();
@@ -221,8 +255,11 @@ window.onload = function () {
     }
 };
 
+const stats = new Stats();
 function init() {
     scene = new THREE.Scene();
+
+    // scene.add(new THREE.AxisHelper(10));
 
     let SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     let VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -258,10 +295,9 @@ function init() {
     ///////////
     // STATS //
     ///////////
-    stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
-    stats.domElement.style.zIndex = 100;
+    stats.domElement.style.zIndex = '100';
     container.appendChild(stats.domElement);
 
     ///////////
@@ -273,7 +309,6 @@ function init() {
     scene.add(light);
     let ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
-
 
     // generate a tree:
     generateTree(Param);
@@ -313,6 +348,9 @@ function exportSceneSTL() {
     let date = new Date();
     THREE.saveSTL(scene, 'TreeGeneratorSTL_' + date.getTime());
 }
+
+window['exportSceneOBJ'] = exportSceneOBJ;
+window['exportSceneSTL'] = exportSceneSTL;
 
 document.body.onmousedown = function () {
     controls.autoRotate = false;
