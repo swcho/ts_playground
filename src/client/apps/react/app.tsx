@@ -1,7 +1,9 @@
 
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import {Motion, StaggeredMotion, TransitionMotion, spring, TransitionStyle} from 'react-motion';
+import {HashRouter, Route, Link} from 'react-router-dom';
+import {DefaultMotion} from './default';
+import {SimpleMotion} from './simple';
 
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
@@ -16,93 +18,19 @@ class Component extends React.Component<{}, {
 
     constructor(props) {
         super(props);
-        this.state = {
-            items: [
-                {key: 'a', size: 10},
-                {key: 'b', size: 20},
-                {key: 'c', size: 30},
-            ],
-        };
-        console.log(spring(100));
     }
 
     render() {
-        const {
-            items
-        } = this.state;
         return (
-            <div>
-                <Motion
-                    defaultStyle={{x: 0}}
-                    style={{x: spring(100)}}
-                    onRest={() => console.log('onRest')}
-                >
-                    {value => <h1 style={{transform: `translateX(${value.x}px)`}}>React {value.x}</h1>}
-                </Motion>
-                <TransitionMotion
-                    willLeave={(styleThatLeft: TransitionStyle) => ({width: spring(0), height: spring(0)})}
-                    styles={
-                        items.map(item => ({
-                            key: item.key,
-                            style: {
-                                width: item.size,
-                                height: item.size,
-                            }
-                        }))
-                    }
-                >
-                {
-                    interpolatedStyles => (
-                        <div>
-                            {
-                                interpolatedStyles.map(config => {
-                                    return <div key={config.key} style={{...config.style, border: '1px solid'}}/>;
-                                })
-                            }
-                        </div>
-                    )
-                }
-                </TransitionMotion>
-                <StaggeredMotion
-                    defaultStyles={[
-                        {h: 0},
-                        {h: 0},
-                        {h: 0},
-                    ]}
-                    styles={
-                        prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
-                            {/* i === 0
-                                ? console.log(_, i)
-                                : console.log(prevInterpolatedStyles[i - 1].h); */}
-                            return i === 0
-                                ? {h: spring(100)}
-                                : {h: spring(prevInterpolatedStyles[i - 1].h)};
-                        })
-                    }
-                >
-                {
-                    interpolatingStyles =>
-                        <div>
-                            {
-                                interpolatingStyles.map((style, i) => (
-                                    <div key={i} style={{border: '1px solid', height: style.h}}/>
-                                ))
-                            }
-                        </div>
-                }
-                </StaggeredMotion>
-            </div>
+            <HashRouter>
+                <div>
+                    <Link to='/default'>Default</Link>
+                    <Link to='/simple'>Simple</Link>
+                    <Route path='/default' component={DefaultMotion}/>
+                    <Route path='/simple' component={SimpleMotion}/>
+                </div>
+            </HashRouter>
         );
-    }
-
-    componentDidMount() {
-        this.setState({
-            items: [
-                {key: 'a', size: 10},
-                {key: 'b', size: 20},
-                // {key: 'c', size: 30},
-            ],
-        });
     }
 }
 
