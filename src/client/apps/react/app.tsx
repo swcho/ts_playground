@@ -4,6 +4,7 @@ import * as ReactDom from 'react-dom';
 import {HashRouter, Route, Link} from 'react-router-dom';
 import {DefaultMotion} from './default';
 import {SimpleMotion} from './simple';
+import {ChatHeads} from './chatheads';
 
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
@@ -26,8 +27,10 @@ class Component extends React.Component<{}, {
                 <div>
                     <Link to='/default'>Default</Link>
                     <Link to='/simple'>Simple</Link>
+                    <Link to='/chatheads'>Simple</Link>
                     <Route path='/default' component={DefaultMotion}/>
                     <Route path='/simple' component={SimpleMotion}/>
+                    <Route path='/chatheads' component={ChatHeads}/>
                 </div>
             </HashRouter>
         );
