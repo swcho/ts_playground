@@ -12,12 +12,18 @@ const Bar = styled.div`
     height: 50px;
 `;
 
+interface BlockProps {
+    on?: boolean;
+}
+
 const Block = styled.div`
+    left: ${(props: BlockProps) => `${props.on ? 400 : 0}px`};
     position: absolute;
     width: 50px;
     height: 50px;
     border-radius: 4px;
     background-color: rgb(130, 181, 198);
+    transition: ${(props: BlockProps) => typeof props.on === 'undefined' ? '' : 'left .3s ease-out'};
 `;
 
 export class SimpleMotion extends React.Component<{}, {
@@ -50,6 +56,13 @@ export class SimpleMotion extends React.Component<{}, {
                     >
                         {newStyle => <Block style={newStyle}></Block>}
                     </Motion>
+                </Bar>
+                <Bar
+                    onClick={
+                        () => this.setState({on: !on})
+                    }
+                >
+                    <Block on={on}/>
                 </Bar>
             </div>
         );
