@@ -1,0 +1,45 @@
+
+html {
+    display: flex;
+    height: 100%;
+}
+
+body {
+    background: #f05555;
+    padding: 10px;
+    max-width: 40em;
+    margin: auto;
+}
+
+.sibling-fade {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    &:hover > * {
+        opacity: 0.4;
+        transform: scale(0.9);
+    }
+
+    & > * {
+        flex: auto;
+        margin: 0.3em;
+        // flex: 2 2 1;
+        background: white;
+        padding: 1em;
+        text-align: center;
+        color: #f05555;
+        font-size: 1.5em;
+        text-decoration: none;
+
+        transition: opacity .15s linear .1s, transform .15s ease-in-out .1s;
+
+        &:hover {
+            opacity: 1;
+            transform: scale(1);
+            transition-delay: 0s, 0s;
+        }
+    }
+
+
+}
