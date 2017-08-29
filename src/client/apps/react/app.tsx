@@ -8,6 +8,7 @@ import {ChatHeads} from './chatheads';
 import {StyledDraggableBalls} from './draggableballs';
 import {StyledDraggableBalls2} from './draggableballs2';
 import {StyledDraggableBalls3} from './draggableballs3';
+import {StyledTodo} from './todo';
 
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
@@ -34,12 +35,14 @@ class Component extends React.Component<{}, {
                     <Link to='/draggableballs'>DraggableBalls</Link>
                     <Link to='/draggableballs2'>DraggableBalls2</Link>
                     <Link to='/draggableballs3'>DraggableBalls3</Link>
+                    <Link to='/todo'>To do</Link>
                     <Route path='/default' component={DefaultMotion}/>
                     <Route path='/simple' component={SimpleMotion}/>
                     <Route path='/chatheads' component={ChatHeads}/>
                     <Route path='/draggableballs' component={StyledDraggableBalls}/>
                     <Route path='/draggableballs2' component={StyledDraggableBalls2}/>
                     <Route path='/draggableballs3' component={StyledDraggableBalls3}/>
+                    <Route path='/todo' component={StyledTodo}/>
                 </div>
             </HashRouter>
         );
