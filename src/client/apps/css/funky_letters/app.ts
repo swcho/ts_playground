@@ -2,6 +2,9 @@
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 
+// https://codepen.io/tiggr/pen/owJrEa
+
+/// <reference path='def.d.ts'/>
 import './style.scss';
 
 'use strict';
@@ -17,7 +20,7 @@ const util = {
     },
 
     color: {
-        random: (opts = {}) => {
+        random: (opts: Options = {}) => {
             let h, s, l;
 
             h = opts.hue || Math.floor(Math.random() * 360);
@@ -34,6 +37,10 @@ const util = {
  * Make a contenteditable element more controllable
  */
 class FunkyLetters {
+
+    private container: HTMLElement;
+    private options: Options;
+
 	/**
 	 * Constructor
 	 * @param  {Element} el  document element with contenteditable=true or selector
@@ -80,7 +87,7 @@ class FunkyLetters {
 	 * @param  {Object} [opts]   options
 	 * @return {string}        html string
 	 */
-    static makeLetterHtml(letter, opts = {}) {
+    static makeLetterHtml(letter, opts: Options = {}) {
         let style = '',
             className = 'char';
 
@@ -193,7 +200,7 @@ class FunkyLetters {
             this.setFocus(node, node.textContent.length);
         }
 
-        this.container.dataset.changed = true;
+        this.container.dataset.changed = 'true';
         this._cleanEmpty();
     }
 
@@ -203,7 +210,8 @@ class FunkyLetters {
 	 */
     getFocusLetter() {
         const sel = document.getSelection();
-        return sel.anchorNode.closest ? sel.anchorNode.closest('.char') : sel.anchorNode.parentElement.closest('.char');
+        // return sel.anchorNode.closest ? sel.anchorNode.closest('.char') : sel.anchorNode.parentElement.closest('.char');
+        return sel.anchorNode.parentElement.closest('.char');
     }
 
 	/**
@@ -247,6 +255,62 @@ class FunkyLetters {
  * Control animations of an element's children
  */
 class Animator {
+
+    private container: HTMLElement;
+    private _removeClassTimer;
+
+    /**
+     * The available animation effects and their settings
+     * @type {Object}
+     */
+    static effects = {
+        roll: {
+            delays: { shift: 100 }
+        },
+        slide: {
+            delays: { shift: 100 }
+        },
+        swivel: {
+            delays: { shift: 100, random: true }
+        },
+        peel: {
+            delays: { shift: 70 }
+        },
+        wave: {
+            delays: { shift: 30 }
+        },
+        wave2: {
+            delays: { shift: 120 }
+        },
+        hop: {
+            delays: { shift: 140 }
+        },
+        converge: {
+            delays: { shift: false }
+        },
+        fade: {
+            delays: { shift: 80, random: true }
+        },
+        snow: {
+            delays: { shift: 600, random: true }
+        },
+        spiral: {
+            delays: { shift: 100 }
+        },
+        meteorite: {
+            delays: { shift: 50, random: true }
+        },
+        bounce: {
+            delays: { shift: 200, random: true }
+        },
+        float: {
+            delays: { shift: 400, random: true }
+        },
+        bubble: {
+            delays: { shift: { min: 200, max: 500 }, random: true }
+        },
+    };
+
 	/**
 	 * Constructor
 	 * @param  {Element|string} el the container element whose children are being animated
@@ -318,16 +382,17 @@ class Animator {
             }
             els = newEls;
         }
+
         if (opts.reverse) {
             els = els.reverse();
         }
 
-        els.forEach(el => {
+        els.forEach((el: HTMLElement) => {
             curShift += typeof shift === 'object' ? Math.round(Math.random() * (shift.max - shift.min) + shift.min) : shift;
-            el.style.animationDelay = el.querySelector('.letter-inner').style.animationDelay = '';
+            el.style.animationDelay = (el.querySelector('.letter-inner') as HTMLElement).style.animationDelay = '';
             if (shift === false) return;
             el.style.animationDelay = (parseFloat(getComputedStyle(el, null).animationDelay) + curShift / 1000) + 's';
-            el.querySelector('.letter-inner').style.animationDelay = (parseFloat(getComputedStyle(el.querySelector('.letter-inner'), null).animationDelay) + curShift / 1000) + 's';
+            (el.querySelector('.letter-inner') as HTMLElement).style.animationDelay = (parseFloat(getComputedStyle(el.querySelector('.letter-inner'), null).animationDelay) + curShift / 1000) + 's';
         });
     }
 
@@ -350,7 +415,7 @@ class Animator {
                 y -= opts.dy || 0;
             } else {
                 if (opts.random) {
-                    alpha = Math.random * (opts.maxAngle || 360 - opts.minAngle || 0) + opts.minAngle || 0;
+                    alpha = Math.random() * (opts.maxAngle || 360 - opts.minAngle || 0) + opts.minAngle || 0;
                     coords = util.math.polarToDecart(alpha, 100);
                 } else {
                     coords = util.math.polarToDecart(alpha, 100);
@@ -359,62 +424,10 @@ class Animator {
                 x = coords.x;
                 y = coords.y;
             }
-            els[i].style.transform = 'translate(' + x.toFixed(3) + 'vmax,' + y.toFixed(3) + 'vmax)';
+            (els[i] as HTMLElement).style.transform = 'translate(' + x.toFixed(3) + 'vmax,' + y.toFixed(3) + 'vmax)';
         }
     }
 }
-/**
- * The available animation effects and their settings
- * @type {Object}
- */
-Animator.effects = {
-    roll: {
-        delays: { shift: 100 }
-    },
-    slide: {
-        delays: { shift: 100 }
-    },
-    swivel: {
-        delays: { shift: 100, random: true }
-    },
-    peel: {
-        delays: { shift: 70 }
-    },
-    wave: {
-        delays: { shift: 30 }
-    },
-    wave2: {
-        delays: { shift: 120 }
-    },
-    hop: {
-        delays: { shift: 140 }
-    },
-    converge: {
-        delays: { shift: false }
-    },
-    fade: {
-        delays: { shift: 80, random: true }
-    },
-    snow: {
-        delays: { shift: 600, random: true }
-    },
-    spiral: {
-        delays: { shift: 100 }
-    },
-    meteorite: {
-        delays: { shift: 50, random: true }
-    },
-    bounce: {
-        delays: { shift: 200, random: true }
-    },
-    float: {
-        delays: { shift: 400, random: true }
-    },
-    bubble: {
-        delays: { shift: { min: 200, max: 500 }, random: true }
-    },
-};
-
 
 
 
@@ -438,7 +451,7 @@ if (config.completed.changeEffect) {
         document.querySelector('.tip-effect').classList.add('hide');
         config.completed.changeEffect = true;
         localStorage['funkyLetters:config'] = JSON.stringify(config);
-    }, { once: true });
+    }, { once: true } as any);
 }
 
 if (config.completed.type) {
@@ -448,7 +461,7 @@ if (config.completed.type) {
         document.querySelector('.tip-type').classList.add('hide');
         config.completed.type = true;
         localStorage['funkyLetters:config'] = JSON.stringify(config);
-    }, { once: true });
+    }, { once: true } as any);
 }
 
 if (config.completed.comeBack) {
@@ -459,7 +472,7 @@ if (config.completed.comeBack) {
 new FunkyLetters(animationContainer, { colorize: true });
 
 const animator = new Animator(animationContainer);
-animator.animate(document.querySelector('#selectEffect').value);
+animator.animate((document.querySelector('#selectEffect') as HTMLSelectElement).value);
 
 
 // Listen to controls
@@ -467,17 +480,17 @@ document.querySelector('#selectEffect').addEventListener('change', function (e) 
     animator.animate(this.value);
 });
 document.querySelector('.animate').addEventListener('click', function (e) {
-    animator.animate(document.querySelector('#selectEffect').value);
+    animator.animate((document.querySelector('#selectEffect') as HTMLSelectElement).value);
 });
 
 
 // Animate on enter key
-animationContainer.addEventListener('keydown', function (e) {
+animationContainer.addEventListener('keydown', function (e: KeyboardEvent) {
     switch (e.keyCode) {
         case 13:
             e.preventDefault();
-            document.querySelector('.animate').focus();
-            document.querySelector('.animate').click();
+            (document.querySelector('.animate') as HTMLButtonElement).focus();
+            (document.querySelector('.animate') as HTMLButtonElement).click();
             break;
     }
 });
