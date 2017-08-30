@@ -7,160 +7,44 @@ import 'htmlout-loader!./en.html';
 console.log(__filename);
 console.log('hi');
 
+/// <reference path='def.d.ts'/>
 import * as dat from 'dat-gui';
+import {Stem} from './stem';
 
-var canvas, bg, wh, ctx, max_num;
+let canvas: HTMLCanvasElement, bg, wh, ctx: CanvasRenderingContext2D;
 
-
-var ctrl = {
-    a: 10,
-    b: 40,
-    c: 10,
-    d: 20,
-    color: "#FF0000"
-}
+const param: Param = {
+    leaf_thickness: 10,
+    leaf_length: 40,
+    leaf_density: 10,
+    leaf_drawcnt: 20,
+    color: '#FF0000',
+};
 
 const gui = new dat.GUI();
-gui.addColor(ctrl, 'color');
-gui.add(ctrl, 'a', 5, 14).step(1);
-gui.add(ctrl, 'b', 20, 60).step(1);
-gui.add(ctrl, 'c', 3, 20).step(2);
-gui.add(ctrl, 'd', 18, 30).step(1);
+gui.addColor(param, 'color');
+gui.add(param, 'leaf_thickness', 5, 14).step(1);
+gui.add(param, 'leaf_length', 20, 60).step(1);
+gui.add(param, 'leaf_density', 3, 20).step(2);
+gui.add(param, 'leaf_drawcnt', 18, 30).step(1);
+
+let CENTER_CANVAS = false;
 
 
-var CENTER_CANVAS = false
+let stems: Stem[] = [];
+
+/**
+ * 0 ~ 1 float value
+ */
+type Ratio = number;
 
 
-const hue = 100;
-
-function Stem(x?, y?, r?) {
-    stems.push(this)
-    // this.x = x || Math.random() * canvas.width
-    // this.y = y || Math.random() * canvas.height
-    this.x = x || Math.random() * canvas.width;
-    this.y = canvas.height
-
-    this.angle = Math.random()
-    this.angleChange = 0.003 + Math.random() * 0.004
-    this.angleChangeDest = this.angleChange
-    this.velocity = 5
-
-    this.history = []
-    this.leaves = []
-    this.s = 0
-    this.sMax = 5
-    this.maxHistory = 20
-
-    this.decay = false;
-    this.hue = hue
-
-    this.getNewCenter = function () {
-        // pick a new radius
-        let r = Math.round(Math.random() * 70 + 10);
-
-        let phase = this.phase / this.r1c
-    };
-
-    this.update = function () {
-        this.s = (this.s + 1) % ctrl.c;
-
-
-        this.angle += this.angleChange;
-
-        this.hue = hue * 0.01 + this.hue * 0.99;
-        this.angleChange = this.angleChangeDest * 0.0001 + this.angleChange * 0.9999;
-
-        if (Math.random() > 0.96) {
-            this.angleChange = -this.angleChange;
-            this.angleChangeDest = -this.angleChangeDest;
-            // this.angleChangeDest = (Math.random() - 0.5 ) * 0.03;
-        }
-
-        if (Math.random() > 0.95) {
-            this.angleChangeDest = (Math.random() - 0.6) * 0.03;
-        }
-
-        if (this.decay) {
-            this.history.pop();
-            if (this.history.length == 0) {
-                this.kill();
-            }
-            return null;
-        }
-
-        if (this.x < (0 + 30) || this.x > (canvas.width + 30) ||
-            this.y < (0 + 30) || this.y > (canvas.height + 30)) {
-            // start decay
-            this.decay = true;
-
-            // create new
-            new Stem();
-            return;
-        }
-
-        let newx = this.x + Math.cos(this.angle * Math.PI * 2) * this.velocity;
-        let newy = this.y + Math.sin(this.angle * Math.PI * 2) * this.velocity;
-
-        if (this.s == 0) {
-            // add leaf
-            this.leaves.unshift(new Leaf(this.x, this.y, newx, newy, 1));
-            this.leaves.unshift(new Leaf(this.x, this.y, newx, newy, -1));
-        }
-
-        let xy = [
-            this.x = newx,
-            this.y = newy
-        ];
-
-        this.history.unshift(xy);
-
-        if (this.history.length > this.maxHistory) {
-            this.history.pop();
-        }
-
-        if (this.leaves.length > this.maxHistory / ctrl.c * 2) {
-            this.leaves.pop();
-        }
-
-        // update leaves
-        for (let i = this.leaves.length - 1; i >= 0; i--) {
-            this.leaves[i].update();
-        };
-    };
-    this.kill = function () {
-        while (this.leaves.length > 0) {
-            this.leaves.pop();
-        }
-
-        let i = stems.indexOf(this);
-        stems.splice(i, 1);
-    };
-
-    this.draw = function () {
-        this.update();
-
-        if (this.history.length > 1) {
-            ctx.beginPath();
-            // ctx.strokeStyle = `hsla(${this.hue}, 100%, 50%, 0.5)`
-            ctx.strokeStyle = ctrl.color;
-            ctx.lineCap = 'round';
-            ctx.lineWidth = 3;
-            ctx.moveTo(this.history[0][0], this.history[0][1]);
-            ctx.lineTo(this.history[1][0], this.history[1][1]);
-            // for (var i = 1; i < this.history.length; i ++) {
-            //   ctx.lineTo(this.history[i][0], this.history[i][1])
-            // }
-            ctx.stroke();
-        }
-
-        // draw leaves
-        for (let i = this.leaves.length - 1; i >= 0; i--) {
-            this.leaves[i].draw();
-        };
-    };
-
-    // return this;
-}
+/**
+ *
+ * 줄기
+ *
+ * @class Stem
+ */
 
 window.onload = init;
 
@@ -180,9 +64,9 @@ function init() {
 
     resizeCanvas();
 
-    new Stem();
-    new Stem();
-    new Stem();
+    new Stem(canvas, param, stems);
+    new Stem(canvas, param, stems);
+    new Stem(canvas, param, stems);
 
     onUpdate();
 }
@@ -212,9 +96,10 @@ function onUpdate() {
     fill(bg, 0.002 + Math.sin(Math.pow(s / 800, 12) * 3.14) * 0.07);
 
     for (let i = 0; i < stems.length; i++) {
-        stems[i].draw();
+        stems[i].draw(ctx);
     }
 }
+
 // fill entire canvas with a preset color
 function fill(hsl, amt) {
     ctx.beginPath(); // start path
@@ -227,53 +112,3 @@ function fill(hsl, amt) {
     ctx.fill(); // do the drawing
 }
 
-
-function drawCircle(x, y, r, color) {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.fillStyle = color || 'white';
-    ctx.fill();
-    ctx.closePath();
-}
-
-
-let stems = [];
-
-function Leaf(x, y, vx, vy, d) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
-    this.vy = vy;
-    this.d = d;
-    this.angle = Math.atan2(vy - y, vx - x);
-    this.s = 0;
-    this.a = ctrl.a;
-    this.b = ctrl.b;
-    this.sMax = ctrl.d;
-    this.history = [];
-
-    this.update = function () {
-        this.s++;
-        if (this.s < this.sMax) {
-            let r = this.s / this.sMax;
-            this.history.unshift([
-                this.x + r * this.b * Math.cos(this.angle),
-                this.y + r * this.b * Math.sin(this.angle),
-                0.1 + r * this.a
-            ]);
-
-            this.angle += this.d / this.sMax;
-        }
-    };
-
-    this.draw = function () {
-        let h;
-        h = this.history[0];
-        drawCircle(h[0], h[1], h[2], ctrl.color);
-        // for (var i = this.history.length - 1; i >= 0; i--) {
-        //   h = this.history[i]
-        //   drawCircle(h[0], h[1], h[2], 'red')
-        // };
-    };
-
-}
