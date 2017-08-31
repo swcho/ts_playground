@@ -22,6 +22,8 @@ function printSpec(spec: Spec) {
 printSpec(spec);
 SwaggerUI({
     dom_id: '#swaggerContainer',
+    // url: 'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+    // url: 'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-separate/spec/swagger.json',
     // url: this.props.url,
     spec,
     presets: [presets.apis]
