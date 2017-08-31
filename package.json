@@ -37,9 +37,8 @@
     "react-router-dom": "^4.2.2",
     "stats.js": "^0.17.0",
     "styled-components": "^2.1.2",
-    "swagger-ui": "=3.0.11",
-    "template-string-loader": "^0.0.3",
-    "yaml-js": "git+https://github.com/cloud-elements/yaml-js.git"
+    "swagger-ui": "=3.0.21",
+    "template-string-loader": "^0.0.3"
   },
   "devDependencies": {
     "@types/browser-sync": "0.0.34",

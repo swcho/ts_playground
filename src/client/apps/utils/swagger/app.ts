@@ -3,6 +3,8 @@ import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 console.log(__filename);
 
+// https://github.com/swagger-api/swagger-ui/issues/3000
+
 import 'swagger-ui/dist/swagger-ui.css';
 const SwaggerUI = require<any>('swagger-ui');
 const presets = SwaggerUI.presets;
