@@ -399,17 +399,17 @@ body {
     &[data-effect=bubble]>.letter {
         position: relative;
         animation: bubble-letter 1.3s cubic-bezier(0, 0, 0.33, 1) both;
-        // &::after {
-        //     content: "";
-        //     position: absolute;
-        //     left: 50%;
-        //     top: 50%;
-        //     transform: translate(-50%, -50%);
-        //     border: 3px solid;
-        //     border-radius: 999px;
-        //     animation: bubble 2.6s cubic-bezier(0, 0.41, 0.28, 1) both;
-        //     animation-delay: inherit;
-        // }
+        &::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid;
+            border-radius: 999px;
+            animation: bubble 2.6s cubic-bezier(0, 0.41, 0.28, 1) both;
+            animation-delay: inherit;
+        }
         &::before {
             content: "";
             position: absolute;
