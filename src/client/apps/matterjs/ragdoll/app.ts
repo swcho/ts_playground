@@ -142,7 +142,6 @@ Example.ragdoll = function() {
             }
         }
 
-        try {
         for (let i = 0; i < ragdolls.composites.length; i += 1) {
             let ragdoll = ragdolls.composites[i],
                 bounds = Composite.bounds(ragdoll);
@@ -155,7 +154,6 @@ Example.ragdoll = function() {
                 });
             }
         }
-    } catch(e) {}
 
         for (let i = 0; i < obstacles.bodies.length; i += 1) {
             let body = obstacles.bodies[i],
