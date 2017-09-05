@@ -81,3 +81,53 @@ document.querySelector('.dismiss').addEventListener('click', function (e) {
     config.completed.comeBack = true;
     localStorage['funkyLetters:config'] = JSON.stringify(config);
 });
+
+
+// Content editable test
+const elCETest = document.querySelector('.cetest');
+// elCETest.addEventListener('keydown', function(e) {
+//     const sel = document.getSelection();
+//     console.log('keydown', sel);
+// });
+
+const logKeyUp = false;
+
+elCETest.addEventListener('keyup', function(e: KeyboardEvent) {
+    if (logKeyUp) {
+        const sel = document.getSelection();
+        console.log('keyup', sel, e);
+        console.log('  type', sel.type);
+        console.log('  isCollapsed', sel.isCollapsed);
+        console.log('  rangeCount', sel.rangeCount);
+        if (sel.rangeCount) {
+            const range = sel.getRangeAt(0);
+            console.log(range);
+        }
+        if (e.key === 'a') {
+            sel.selectAllChildren(elCETest);
+        }
+    }
+});
+
+['compositionstart', 'compositionupdate', 'compositionend', 'keydown', 'keyup']
+    .forEach(function (event) {
+        elCETest.addEventListener(event, function (ev: any) {
+            // log.textContent += event + ': ' + (ev.data || ev.keyCode) + '\n';
+            console.log(event, ev.data || ev.keyCode);
+        }, true);
+    })
+    ;
+
+// window.addEventListener('selectestart', function(e) {
+//     console.log('selectestart', e);
+// });
+
+// window.addEventListener('selecteend', function(e) {
+//     console.log('selecteend', e);
+// });
+
+// elCETest.addEventListener('mousedown', function(e) {
+//     const sel = document.getSelection();
+//     console.log('mousedown', sel);
+// });
+

@@ -79,8 +79,30 @@ export class FunkyLetters {
     _listenToInput() {
         let me = this;
         // this.container.dataset.text = this.container.textContent;
+        let compositing = false;
+        this.container.addEventListener('compositionstart', function (e) {
+            compositing = true;
+            console.log('compositionstart')
+        });
+
+        this.container.addEventListener('compositionend', function (e) {
+            compositing = false;
+            console.log('compositionend');
+        });
 
         this.container.addEventListener('keydown', function (e) {
+            // debugger;
+        });
+
+        this.container.addEventListener('keydown', function (e) {
+            // debugger;
+
+            if (compositing) {
+                console.log('skip on compositing');
+                return;
+            }
+
+
             let letterEl = me.getFocusLetter();
 
             if (e.key.length === 1 && !e.altKey && !e.ctrlKey) {
@@ -152,6 +174,7 @@ export class FunkyLetters {
             range = document.createRange(),
             node = this.getFocusLetter(),
             isBeforeNode = sel.focusOffset === 0;
+        console.log('insertText', text, node, isBeforeNode);
 
         sel.deleteFromDocument();
         if (!node) {
@@ -176,12 +199,12 @@ export class FunkyLetters {
 	 * Get the character in focus (at caret position)
 	 * @return {Element} the element node in focus
 	 */
-    getFocusLetter() {
-        const sel = document.getSelection();
-        // return sel.anchorNode.closest ? sel.anchorNode.closest('.char') : sel.anchorNode.parentElement.closest('.char');
-        const ret = sel.anchorNode.parentElement.closest('.char');
-        console.log('getFocusLetter', sel, ret);
-        return ret;
+    getFocusLetter(): Element {
+        const sel = document.getSelection() as any;
+        return sel.anchorNode.closest ? sel.anchorNode.closest('.char') : sel.anchorNode.parentElement.closest('.char');
+        // const ret = sel.anchorNode.parentElement.closest('.char');
+        // console.log('getFocusLetter', sel, ret);
+        // return ret;
     }
 
 	/**

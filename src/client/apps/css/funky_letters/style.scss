@@ -15,6 +15,10 @@ body {
     overflow: hidden;
 }
 
+.test {
+    border: 1px solid black;
+}
+
 .anim-wrap {
     position: absolute;
     overflow: hidden;
@@ -24,6 +28,7 @@ body {
 }
 
 .anim-text {
+    border: 1px solid black;
     font: 4em "Baloo Chettan", Helvetica Neueu, HelveticaNeueu, Helvetica, Arial, ;
     white-space: nowrap;
     min-width: 1em;
