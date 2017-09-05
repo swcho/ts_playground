@@ -1,6 +1,14 @@
 
 import util from './utils';
 
+function randomMinMax(min: number, max: number): number {
+    return Math.round(Math.random() * (max - min) + min);
+}
+
+function getCSSValueAsNumber(el: HTMLElement, props: keyof CSSStyleDeclaration) {
+    return parseInt(getComputedStyle(el)[props]);
+}
+
 /**
  * Control animations of an element's children
  */
@@ -83,6 +91,7 @@ export class Animator {
 	 * @param  {string} effect effect name
 	 */
     animate(effect) {
+        console.log('animate', effect);
         const cont = this.container;
         if (cont.classList.contains('anim')) {
             cont.classList.remove('anim');
@@ -119,8 +128,10 @@ export class Animator {
 	 * @param  {Object} [opts.random]  distribute delays randomly: without regard to document order
 	 * @param  {Object} [opts.reverse] distribute delays in reverse document order starting with the last element
 	 */
+
     distributeDelays(opts) {
-        let shift = opts.shift != null ? opts.shift : 100,
+        console.log('distributeDelays', opts);
+        let shift = opts.shift || 100,
             curShift = 0,
             els = Array.from(this.container.children);
 
@@ -138,11 +149,14 @@ export class Animator {
         }
 
         els.forEach((el: HTMLElement) => {
-            curShift += typeof shift === 'object' ? Math.round(Math.random() * (shift.max - shift.min) + shift.min) : shift;
-            el.style.animationDelay = (el.querySelector('.letter-inner') as HTMLElement).style.animationDelay = '';
+            curShift += typeof shift === 'number' ? shift : randomMinMax(shift.min, shift.max);
+            const elInnerLetter = el.querySelector('.letter-inner') as HTMLElement;
+            el.style.animationDelay = elInnerLetter.style.animationDelay = '';
             if (shift === false) return;
-            el.style.animationDelay = (parseFloat(getComputedStyle(el, null).animationDelay) + curShift / 1000) + 's';
-            (el.querySelector('.letter-inner') as HTMLElement).style.animationDelay = (parseFloat(getComputedStyle(el.querySelector('.letter-inner'), null).animationDelay) + curShift / 1000) + 's';
+            const letterAnimationDelay = getCSSValueAsNumber(el, 'animationDelay');
+            el.style.animationDelay = (letterAnimationDelay + curShift / 1000) + 's';
+            const innerAnimationDelay = getCSSValueAsNumber(elInnerLetter, 'animationDelay');
+            elInnerLetter.style.animationDelay = (innerAnimationDelay + curShift / 1000) + 's';
         });
     }
 
@@ -153,6 +167,7 @@ export class Animator {
 	 * @param  {Object} opts options
 	 */
     distributeOffsets(opts) {
+        console.log('distributeOffsets', opts);
         let coords,
             alpha = opts.minAngle || 0,
             x = 100,
