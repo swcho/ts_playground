@@ -88,6 +88,10 @@
   version "4.14.74"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.74.tgz#ac3bd8db988e7f7038e5d22bd76a7ba13f876168"
 
+"@types/matter-js@^0.9.33":
+  version "0.9.33"
+  resolved "https://registry.yarnpkg.com/@types/matter-js/-/matter-js-0.9.33.tgz#ca4dc13014c6e91db1dc772f1bdbc9beb5ab51cb"
+
 "@types/micromatch@*":
   version "2.3.29"
   resolved "https://registry.yarnpkg.com/@types/micromatch/-/micromatch-2.3.29.tgz#6ce0280fe96f500127f0c8c0addf2d3f207e8cec"
@@ -1475,6 +1479,10 @@ dashdash@^1.12.0:
 dat-gui@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/dat-gui/-/dat-gui-0.5.0.tgz#1212da836109747d0ac220bad7b07c17daa03583"
+
+dat.gui@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/dat.gui/-/dat.gui-0.6.1.tgz#7c3d0a2ac2c570dafb61b91203fd7fe3171d6ac7"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -3327,7 +3335,7 @@ jquery.transit@^0.9.12:
   version "0.9.12"
   resolved "https://registry.yarnpkg.com/jquery.transit/-/jquery.transit-0.9.12.tgz#5b487a37741d99d48469d77a0d68001963263c37"
 
-jquery@^3.2.1:
+jquery@>=1.9.1, jquery@^3.1.1, jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -3343,12 +3351,12 @@ js-tokens@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.1.tgz#08e9f132484a2c45a30907e9dc4d5567b7f114d7"
 
-js-yaml@^3.4.3, js-yaml@~3.5.2:
-  version "3.5.5"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.5.5.tgz#0377c38017cabc7322b0d1fbcd25a491641f2fbe"
+js-yaml@^3.4.3, js-yaml@^3.8.1:
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.9.1.tgz#08775cebdfdd359209f0d2acd383c8f86a6904a0"
   dependencies:
-    argparse "^1.0.2"
-    esprima "^2.6.0"
+    argparse "^1.0.7"
+    esprima "^4.0.0"
 
 js-yaml@^3.5.5, js-yaml@~3.7.0:
   version "3.7.0"
@@ -3357,12 +3365,12 @@ js-yaml@^3.5.5, js-yaml@~3.7.0:
     argparse "^1.0.7"
     esprima "^2.6.0"
 
-js-yaml@^3.8.1:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.9.1.tgz#08775cebdfdd359209f0d2acd383c8f86a6904a0"
+js-yaml@~3.5.2:
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.5.5.tgz#0377c38017cabc7322b0d1fbcd25a491641f2fbe"
   dependencies:
-    argparse "^1.0.7"
-    esprima "^4.0.0"
+    argparse "^1.0.2"
+    esprima "^2.6.0"
 
 jsbn@~0.1.0:
   version "0.1.1"
@@ -3445,6 +3453,16 @@ jstransformer@1.0.0:
   dependencies:
     is-promise "^2.0.0"
     promise "^7.0.1"
+
+jstree@^3.3.3:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/jstree/-/jstree-3.3.4.tgz#3d089bb9623bd6f3f25f64c4e4ce547b30d40264"
+  dependencies:
+    jquery ">=1.9.1"
+
+keymaster@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/keymaster/-/keymaster-1.6.2.tgz#e1ae54d0ea9488f9f60b66b668f02e9a1946c6eb"
 
 kind-of@^2.0.1:
   version "2.0.1"
@@ -3774,6 +3792,24 @@ matcher@^0.1.2:
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.17.tgz#de819fdbcd84dccd8fae59c6aeb79615b9d266ac"
+
+matter-js@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/matter-js/-/matter-js-0.12.0.tgz#dcb02d04326c47746c63a3772d1475753d72fe1e"
+
+matter-js@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/matter-js/-/matter-js-0.13.0.tgz#c13025a76288fad813c747498dc445616253b3f5"
+
+matter-tools@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/matter-tools/-/matter-tools-0.11.1.tgz#758eb37f549a65cbc778e66657fd114584ee00c1"
+  dependencies:
+    dat.gui "^0.6.1"
+    jquery "^3.1.1"
+    jstree "^3.3.3"
+    keymaster "^1.6.2"
+    matter-js "^0.12.0"
 
 media-typer@0.3.0:
   version "0.3.0"
