@@ -17,11 +17,11 @@
         "lib": [
             "dom",
             "es2015"
-        ]
-    },
+        ]    },
     "include": [
-        "./**/*",
-        "../common/**/*"
+        "../common/config.d.ts",
+        "./**/.config.ts",
+        "./**/*"
     ],
     "exclude": [
         "../../node_modules",
