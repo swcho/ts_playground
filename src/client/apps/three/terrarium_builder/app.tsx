@@ -2,34 +2,10 @@
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 import './style.scss';
-import * as THREE from 'three';
-import 'three/examples/js/controls/DragControls'
-import 'three/examples/js/controls/TrackballControls'
+import * as THREE from '../three';
+import 'three/examples/js/controls/DragControls';
+import 'three/examples/js/controls/TrackballControls';
 import * as $ from 'jquery';
-
-declare module "three" {
-    
-    class DragControls extends THREE.EventDispatcher {
-        constructor(objs: any[], camera: THREE.Camera, domElement: HTMLCanvasElement);
-    }
-
-    // interface MaterialParameters {
-    // }
-
-    interface MeshToonMaterialParameters extends THREE.MaterialParameters {
-        color?: number;
-        shininess?: number;
-        reflectivity?: number;
-        transparent?: boolean;
-        opacity?: number;
-        roughness?: number;
-    }
-
-    class MeshToonMaterial extends THREE.Material {
-        constructor(param?: MeshToonMaterialParameters)
-    }
-
-}
 
 var scene,
     camera,
@@ -413,21 +389,20 @@ function selectObjects() {
         newSphere.position.set(.025, .35, .05);
         tallFlower.add(newSphere);
 
-        var newSphere = sphere.clone();
+        newSphere = sphere.clone();
         newSphere.scale.set(.65, .65, .65);
         newSphere.position.set(0, .55, .05);
         tallFlower.add(newSphere);
 
-        var newSphere = sphere.clone();
+        newSphere = sphere.clone();
         newSphere.scale.set(.45, .45, .45);
         newSphere.position.set(0, .70, .05);
         tallFlower.add(newSphere);
 
-        var newSphere = sphere.clone();
+        newSphere = sphere.clone();
         newSphere.scale.set(.25, .25, .25);
         newSphere.position.set(0, .80, .05);
         tallFlower.add(newSphere);
-
 
         activeObjects.push(tallFlower);
         scene.add(tallFlower);
@@ -444,7 +419,7 @@ function selectObjects() {
         var material = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0 });
         var smallFlower = new THREE.Mesh(geometry, material);
 
-        //LEAVES
+        // LEAVES
         var leafShape = new THREE.Shape();
         leafShape.quadraticCurveTo(0, 5.5, 10, 5.5);
         leafShape.quadraticCurveTo(0, -5.5, 0, 2);
@@ -599,7 +574,7 @@ function selectObjects() {
 
         let newLeaf = Leaf.clone();
         newLeaf.rotation.set(-1.5, -1, 0);
-        //newLeaf.position.set(.15, 0, .15);
+        // newLeaf.position.set(.15, 0, .15);
         newSucculent.add(newLeaf);
 
         newLeaf = Leaf.clone();
@@ -678,22 +653,22 @@ function selectObjects() {
     let x, y, z;
 
     function manipulateObjs() {
-        //incremental size change
+        // incremental size change
         var inc = .25;
         var zindex = .25;
         var currentObj = [];
         var activeObj;
 
-        //add transparent state to selected objects
+        // add transparent state to selected objects
         document.addEventListener('mousedown', onDocumentMouseDown);
         function onDocumentMouseDown(event) {
             event.preventDefault();
             const mouse = event.mouse;
-            //detect when mouse is over object
+            // detect when mouse is over object
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
-            //listen for clicks on objects or controls
+            // listen for clicks on objects or controls
             const selectObj = raycaster.intersectObjects(activeObjects);
 
             if (selectObj.length > 0) {
@@ -704,7 +679,7 @@ function selectObjects() {
                 activeObj = selectObj[0].object;
                 currentObj.push(activeObj);
 
-                //get parameter of selected mesh
+                // get parameter of selected mesh
                 x = activeObj.scale.x;
                 y = activeObj.scale.y;
                 z = activeObj.scale.z;
@@ -723,7 +698,7 @@ function selectObjects() {
                     }
                 }
             }
-        } //End MouseDown
+        } // End MouseDown
 
         var rotateObj = document.getElementById("rotateBtn");
         rotateObj.addEventListener("click", function () {
@@ -781,10 +756,10 @@ function selectObjects() {
         moveBackward.addEventListener("click", function () {
             activeObj.position.z -= zindex;
         }, false);
-    } //end manipulate objects
+    } // end manipulate objects
     manipulateObjs();
 
-    //set original terrarium
+    // set original terrarium
     function startScene() {
         createCactus();
         createPyramid();
@@ -825,7 +800,7 @@ function selectObjects() {
         activeObjects[12].position.set(-.10, -.5, .55);
         activeObjects[12].scale.set(.25, .25, .25);
     }
-    //Setup Initial Scene
+    // Setup Initial Scene
     startScene();
 }
 
@@ -877,9 +852,8 @@ $('.nav-toggle').click(function (e) {
     $('.menu-container').toggleClass('nav-open');
 });
 
-//toggle button styles
+// toggle button styles
 $('.toggle').click(function () {
     $('.selected').removeClass('selected');
     $(this).addClass('selected');
 });
-

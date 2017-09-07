@@ -1,0 +1,68 @@
+$color-brand--primary: #08f;
+body {
+    background-color: #f8f8f8;
+    color: #222;
+    line-height: 1.6;
+}
+
+:focus {
+    outline: .125rem solid $color-brand--primary;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input {
+    display: block;
+}
+
+canvas {
+    display: block;
+    height: auto !important;
+    max-width: 100%;
+    image-rendering: pixelated;
+}
+
+a {
+    color: darken($color-brand--primary, 10%);
+    &:hover,
+    &:focus {
+        color: darken($color-brand--primary, 20%);
+    }
+    &:active {
+        color: darken($color-brand--primary, 30%);
+    }
+}
+
+.container {
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-control {
+    margin-bottom: 1em;
+}
+
+.content {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.content>* {
+    margin-bottom: 0;
+}
+
+.content> :first-child {
+    margin-top: 0;
+}
+
+.content>*+* {
+    margin-top: 1em;
+}
+
+.footer {
+    font-size: smaller;
+}
