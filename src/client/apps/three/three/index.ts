@@ -26,7 +26,6 @@ declare module 'three' {
     }
 
     class MaterialMissing extends THREE.Material {
-        // uniforms: any;
         uniforms: { [uniform: string]: THREE.IUniform };
     }
 

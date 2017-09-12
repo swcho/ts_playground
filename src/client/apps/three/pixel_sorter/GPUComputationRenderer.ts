@@ -99,32 +99,45 @@
 
 import * as THREE from 'three';
 
-export function GPUComputationRenderer(sizeX, sizeY, renderer) {
+interface Variable {
+    name: string;
+    initialValueTexture: any;
+    material: THREE.Material;
+    dependencies: any;
+    renderTargets: any[];
+    wrapS: any;
+    wrapT: any;
+    minFilter: THREE.TextureFilter;
+    magFilter: THREE.TextureFilter;
+}
 
-    this.variables = [];
+export class GPUComputationRenderer {
 
-    this.currentTextureIndex = 0;
-
-    var scene = new THREE.Scene();
-
-    var camera = new THREE.Camera();
-    camera.position.z = 1;
-
-    var passThruUniforms = {
+    variables: any[] = [];
+    currentTextureIndex: number = 0;
+    passThruUniforms = {
         texture: { value: null }
     };
 
-    var passThruShader = createShaderMaterial(getPassThroughFragmentShader(), passThruUniforms);
+    private scene: THREE.Scene;
+    private camera: THREE.Camera;
+    private mesh: THREE.Mesh;
+    private passThruShader;
 
-    var mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), passThruShader);
-    scene.add(mesh);
+    constructor(private sizeX: number, private sizeY: number, private renderer: THREE.WebGLRenderer) {
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.Camera();
+        this.camera.position.z = 1;
+        this.passThruShader = this.createShaderMaterial(this.getPassThroughFragmentShader(), this.passThruUniforms);
+        this.mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.passThruShader);
+        this.scene.add(this.mesh);
+    }
 
+    addVariable(variableName, computeFragmentShader, initialValueTexture) {
 
-    this.addVariable = function (variableName, computeFragmentShader, initialValueTexture) {
+        const material = this.createShaderMaterial(computeFragmentShader);
 
-        var material = this.createShaderMaterial(computeFragmentShader);
-
-        var variable = {
+        const variable = {
             name: variableName,
             initialValueTexture: initialValueTexture,
             material: material,
@@ -139,53 +152,46 @@ export function GPUComputationRenderer(sizeX, sizeY, renderer) {
         this.variables.push(variable);
 
         return variable;
+    }
 
-    };
-
-    this.setVariableDependencies = function (variable, dependencies) {
-
+    setVariableDependencies(variable, dependencies) {
         variable.dependencies = dependencies;
+    }
 
-    };
+    init() {
 
-    this.init = function () {
-
-        if (!renderer.extensions.get("OES_texture_float")) {
-
-            return "No OES_texture_float support for float textures.";
-
+        if (!this.renderer.extensions.get('OES_texture_float')) {
+            return 'No OES_texture_float support for float textures.';
         }
 
-        if (renderer.capabilities.maxVertexTextures === 0) {
-
-            return "No support for vertex shader textures.";
-
+        if (this.renderer.capabilities.maxVertexTextures === 0) {
+            return 'No support for vertex shader textures.';
         }
 
-        for (var i = 0; i < this.variables.length; i++) {
+        for (let i = 0; i < this.variables.length; i++) {
 
-            var variable = this.variables[i];
+            const variable = this.variables[i];
 
             // Creates rendertargets and initialize them with input texture
-            variable.renderTargets[0] = this.createRenderTarget(sizeX, sizeY, variable.wrapS, variable.wrapT, variable.minFilter, variable.magFilter);
-            variable.renderTargets[1] = this.createRenderTarget(sizeX, sizeY, variable.wrapS, variable.wrapT, variable.minFilter, variable.magFilter);
+            variable.renderTargets[0] = this.createRenderTarget(this.sizeX, this.sizeY, variable.wrapS, variable.wrapT, variable.minFilter, variable.magFilter);
+            variable.renderTargets[1] = this.createRenderTarget(this.sizeX, this.sizeY, variable.wrapS, variable.wrapT, variable.minFilter, variable.magFilter);
             this.renderTexture(variable.initialValueTexture, variable.renderTargets[0]);
             this.renderTexture(variable.initialValueTexture, variable.renderTargets[1]);
 
             // Adds dependencies uniforms to the ShaderMaterial
-            var material = variable.material;
-            var uniforms = material.uniforms;
+            const material = variable.material;
+            const uniforms = material.uniforms;
             if (variable.dependencies !== null) {
 
-                for (var d = 0; d < variable.dependencies.length; d++) {
+                for (let d = 0; d < variable.dependencies.length; d++) {
 
-                    var depVar = variable.dependencies[d];
+                    const depVar = variable.dependencies[d];
 
                     if (depVar.name !== variable.name) {
 
                         // Checks if variable exists
-                        var found = false;
-                        for (var j = 0; j < this.variables.length; j++) {
+                        let found = false;
+                        for (let j = 0; j < this.variables.length; j++) {
 
                             if (depVar.name === this.variables[j].name) {
                                 found = true;
@@ -194,14 +200,14 @@ export function GPUComputationRenderer(sizeX, sizeY, renderer) {
 
                         }
                         if (!found) {
-                            return "Variable dependency not found. Variable=" + variable.name + ", dependency=" + depVar.name;
+                            return 'Variable dependency not found. Variable=' + variable.name + ', dependency=' + depVar.name;
                         }
 
                     }
 
                     uniforms[depVar.name] = { value: null };
 
-                    material.fragmentShader = "\nuniform sampler2D " + depVar.name + ";\n" + material.fragmentShader;
+                    material.fragmentShader = '\nuniform sampler2D ' + depVar.name + ';\n' + material.fragmentShader;
 
                 }
             }
@@ -211,11 +217,11 @@ export function GPUComputationRenderer(sizeX, sizeY, renderer) {
 
         return null;
 
-    };
+    }
 
-    this.compute = function () {
+    compute() {
 
-        var currentTextureIndex = this.currentTextureIndex;
+        let currentTextureIndex = this.currentTextureIndex;
         let nextTextureIndex = this.currentTextureIndex === 0 ? 1 : 0;
 
         for (let i = 0, il = this.variables.length; i < il; i++) {
@@ -242,50 +248,46 @@ export function GPUComputationRenderer(sizeX, sizeY, renderer) {
         }
 
         this.currentTextureIndex = nextTextureIndex;
-    };
+    }
 
-    this.getCurrentRenderTarget = function (variable) {
+    getCurrentRenderTarget(variable) {
 
         return variable.renderTargets[this.currentTextureIndex];
 
-    };
+    }
 
-    this.getAlternateRenderTarget = function (variable) {
+    getAlternateRenderTarget(variable) {
 
         return variable.renderTargets[this.currentTextureIndex === 0 ? 1 : 0];
 
-    };
+    }
 
-    function addResolutionDefine(materialShader) {
+    private addResolutionDefine(materialShader) {
 
-        materialShader.defines.resolution = 'vec2( ' + sizeX.toFixed(1) + ', ' + sizeY.toFixed(1) + " )";
+        materialShader.defines.resolution = 'vec2( ' + this.sizeX.toFixed(1) + ', ' + this.sizeY.toFixed(1) + ' )';
 
     }
-    this.addResolutionDefine = addResolutionDefine;
-
 
     // The following functions can be used to compute things manually
-
-    function createShaderMaterial(computeFragmentShader, uniforms) {
+    private createShaderMaterial(computeFragmentShader, uniforms?) {
 
         uniforms = uniforms || {};
 
         let material = new THREE.ShaderMaterial({
             uniforms: uniforms,
-            vertexShader: getPassThroughVertexShader(),
+            vertexShader: this.getPassThroughVertexShader(),
             fragmentShader: computeFragmentShader
         });
 
-        addResolutionDefine(material);
+        this.addResolutionDefine(material);
 
         return material;
     }
-    this.createShaderMaterial = createShaderMaterial;
 
-    this.createRenderTarget = function (sizeXTexture, sizeYTexture, wrapS, wrapT, minFilter, magFilter) {
+    createRenderTarget(sizeXTexture, sizeYTexture, wrapS, wrapT, minFilter, magFilter) {
 
-        sizeXTexture = sizeXTexture || sizeX;
-        sizeYTexture = sizeYTexture || sizeY;
+        sizeXTexture = sizeXTexture || this.sizeX;
+        sizeYTexture = sizeYTexture || this.sizeY;
 
         wrapS = wrapS || THREE.ClampToEdgeWrapping;
         wrapT = wrapT || THREE.ClampToEdgeWrapping;
@@ -305,47 +307,44 @@ export function GPUComputationRenderer(sizeX, sizeY, renderer) {
 
         return renderTarget;
 
-    };
+    }
 
-    this.createTexture = function (sizeXTexture, sizeYTexture) {
+    createTexture(sizeXTexture, sizeYTexture) {
 
-        sizeXTexture = sizeXTexture || sizeX;
-        sizeYTexture = sizeYTexture || sizeY;
+        sizeXTexture = sizeXTexture || this.sizeX;
+        sizeYTexture = sizeYTexture || this.sizeY;
 
         let a = new Float32Array(sizeXTexture * sizeYTexture * 4);
-        let texture = new THREE.DataTexture(a, sizeX, sizeY, THREE.RGBAFormat, THREE.FloatType);
+        let texture = new THREE.DataTexture(a, this.sizeX, this.sizeY, THREE.RGBAFormat, THREE.FloatType);
         texture.needsUpdate = true;
 
         return texture;
+    }
 
-    };
 
-
-    this.renderTexture = function (input, output) {
+    renderTexture(input, output) {
 
         // Takes a texture, and render out in rendertarget
         // input = Texture
         // output = RenderTarget
 
-        passThruUniforms.texture.value = input;
+        this.passThruUniforms.texture.value = input;
 
-        this.doRenderTarget(passThruShader, output);
+        this.doRenderTarget(this.passThruShader, output);
 
-        passThruUniforms.texture.value = null;
+        this.passThruUniforms.texture.value = null;
 
-    };
+    }
 
-    this.doRenderTarget = function (material, output) {
-
-        mesh.material = material;
-        renderer.render(scene, camera, output);
-        mesh.material = passThruShader;
-
-    };
+    doRenderTarget(material, output) {
+        this.mesh.material = material;
+        this.renderer.render(this.scene, this.camera, output);
+        this.mesh.material = this.passThruShader;
+    }
 
     // Shaders
 
-    function getPassThroughVertexShader() {
+    private getPassThroughVertexShader() {
 
         return 'void main()	{\n' +
             '\n' +
@@ -355,7 +354,7 @@ export function GPUComputationRenderer(sizeX, sizeY, renderer) {
 
     }
 
-    function getPassThroughFragmentShader() {
+    private getPassThroughFragmentShader() {
 
         return 'uniform sampler2D texture;\n' +
             '\n' +

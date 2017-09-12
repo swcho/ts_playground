@@ -2,7 +2,6 @@
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 console.log(__filename);
-console.log('hi');
 
 import './style.scss';
 
@@ -210,7 +209,6 @@ input.addEventListener('change', () => {
 
 const render = () => {
     gpuCompute.compute();
-
 
     const texture = gpuCompute.getCurrentRenderTarget(variableSorted).texture;
     (plane.material as THREE.MaterialMissing).uniforms.uMap.value = texture;

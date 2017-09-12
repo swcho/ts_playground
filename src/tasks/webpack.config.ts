@@ -23,6 +23,7 @@ interface EntryInfo {
     entryFilePath: string;
     chunkName: string;
 }
+
 let entryInfoList = configList.map<EntryInfo>(configPath => {
     const dir = configPath.replace(`/${CONFIG_FILE_NAME}`, '');
     const pathname = dir.replace(BASE_SRC_APPS, '');
