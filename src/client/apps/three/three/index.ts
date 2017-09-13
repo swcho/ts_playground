@@ -25,10 +25,6 @@ declare module 'three' {
         constructor(param?: MeshToonMaterialParameters)
     }
 
-    class MaterialMissing extends THREE.Material {
-        uniforms: { [uniform: string]: THREE.IUniform };
-    }
-
     // interface Material {
     //     uniforms: any;
     // }

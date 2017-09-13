@@ -99,12 +99,12 @@
 
 import * as THREE from 'three';
 
-interface Variable {
+export interface Variable {
     name: string;
-    initialValueTexture: any;
-    material: THREE.Material;
+    initialValueTexture: THREE.DataTexture;
+    material: THREE.ShaderMaterial;
     dependencies: any;
-    renderTargets: any[];
+    renderTargets: THREE.WebGLRenderTarget[];
     wrapS: any;
     wrapT: any;
     minFilter: THREE.TextureFilter;
@@ -113,16 +113,16 @@ interface Variable {
 
 export class GPUComputationRenderer {
 
-    variables: any[] = [];
-    currentTextureIndex: number = 0;
-    passThruUniforms = {
-        texture: { value: null }
-    };
-
     private scene: THREE.Scene;
     private camera: THREE.Camera;
     private mesh: THREE.Mesh;
-    private passThruShader;
+    private passThruShader: THREE.ShaderMaterial;
+
+    private variables: Variable[] = [];
+    private currentTextureIndex: number = 0;
+    private passThruUniforms: { [uniform: string]: THREE.IUniform } = {
+        texture: { value: null }
+    };
 
     constructor(private sizeX: number, private sizeY: number, private renderer: THREE.WebGLRenderer) {
         this.scene = new THREE.Scene();
@@ -133,7 +133,7 @@ export class GPUComputationRenderer {
         this.scene.add(this.mesh);
     }
 
-    addVariable(variableName, computeFragmentShader, initialValueTexture) {
+    addVariable(variableName: string, computeFragmentShader: string, initialValueTexture: THREE.DataTexture): Variable {
 
         const material = this.createShaderMaterial(computeFragmentShader);
 
@@ -262,14 +262,14 @@ export class GPUComputationRenderer {
 
     }
 
-    private addResolutionDefine(materialShader) {
+    addResolutionDefine(materialShader: THREE.ShaderMaterial) {
 
         materialShader.defines.resolution = 'vec2( ' + this.sizeX.toFixed(1) + ', ' + this.sizeY.toFixed(1) + ' )';
 
     }
 
     // The following functions can be used to compute things manually
-    private createShaderMaterial(computeFragmentShader, uniforms?) {
+    createShaderMaterial(computeFragmentShader: string, uniforms?: { [uniform: string]: THREE.IUniform }) {
 
         uniforms = uniforms || {};
 
@@ -309,7 +309,7 @@ export class GPUComputationRenderer {
 
     }
 
-    createTexture(sizeXTexture, sizeYTexture) {
+    createTexture(sizeXTexture?: number, sizeYTexture?: number) {
 
         sizeXTexture = sizeXTexture || this.sizeX;
         sizeYTexture = sizeYTexture || this.sizeY;
@@ -322,7 +322,7 @@ export class GPUComputationRenderer {
     }
 
 
-    renderTexture(input, output) {
+    renderTexture(input: THREE.DataTexture, output: THREE.RenderTarget) {
 
         // Takes a texture, and render out in rendertarget
         // input = Texture
@@ -336,7 +336,7 @@ export class GPUComputationRenderer {
 
     }
 
-    doRenderTarget(material, output) {
+    doRenderTarget(material: THREE.Material, output: THREE.RenderTarget) {
         this.mesh.material = material;
         this.renderer.render(this.scene, this.camera, output);
         this.mesh.material = this.passThruShader;
