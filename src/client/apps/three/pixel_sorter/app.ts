@@ -8,7 +8,7 @@ import './style.scss';
 import * as THREE from '../../three/three';
 import {Variable, GPUComputationRenderer} from './GPUComputationRenderer';
 
-const shaderSortFragment = require<string>('./pixel_sorter.frag');
+const shaderSortFragment = require<string>('./pixel_sorter.y.frag');
 
 const readFile = (file) => {
     const reader = new FileReader();
