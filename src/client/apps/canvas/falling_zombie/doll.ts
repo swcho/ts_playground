@@ -1,6 +1,4 @@
 
-import {CanvasUtil} from './canvas';
-import {PointerUtil} from './pointer';
 import {CObject, Disk, Particle, Aargh} from './objects';
 
 export interface CollideItems<O extends CObject> {
@@ -13,7 +11,7 @@ export class Doll {
     points: Doll.Point[];
     links: Doll.Link[];
     angles: Doll.Angle[];
-    constructor(size, structure) {
+    constructor(size: number, structure) {
         this.s = size;
         this.points = [];
         this.links = [];
@@ -48,13 +46,13 @@ export class Doll {
         }
     }
 
-    anim(canvas: CanvasUtil, pointer: PointerUtil, ctx: CanvasRenderingContext2D) {
+    anim(drawArea: DrawArea, pointer: PointerInfo, ctx: CanvasRenderingContext2D) {
         for (const angle of this.angles) angle.solve();
-        for (const point of this.points) point.anim(canvas, pointer);
-        for (const link of this.links) link.draw(canvas, ctx, pointer);
+        for (const point of this.points) point.anim(drawArea, pointer);
+        for (const link of this.links) link.draw(drawArea, ctx, pointer);
     }
 
-    collide(canvas: CanvasUtil, disks: Disk[], particles: CollideItems<Particle>, aarghs: CollideItems<Aargh>) {
+    collide(drawArea: DrawArea, disks: Disk[], particles: CollideItems<Particle>, aarghs: CollideItems<Aargh>) {
         for (const point of this.points) {
             for (const disk of disks) {
                 const dx = point.x - disk.x;
@@ -81,7 +79,7 @@ export class Doll {
                         q.x = point.x;
                         q.y = point.y;
                         q.vx = 6 * (Math.random() - 0.5);
-                        q.vy = -canvas.vy * 0.5;
+                        q.vy = -drawArea.vy * 0.5;
                         q.a = q.vx > 0 ? Math.random() * 0.4 : -Math.random() * 0.4;
                     }
                 }
@@ -107,10 +105,10 @@ export namespace Doll {
             this.w = 0;
             this.mass = 1;
         }
-        anim(canvas: CanvasUtil, pointer: PointerUtil) {
-            if (pointer.pointDrag && this === pointer.pointDrag) {
-                this.x = this.xb = pointer.x - canvas.x - canvas.width * 0.5;
-                this.y = this.yb = pointer.y - canvas.y - canvas.height * 0.5;
+        anim(drawArea: DrawArea, pointer: PointerInfo) {
+            if (pointer.draggingObj && this === pointer.draggingObj) {
+                this.x = this.xb = pointer.x - drawArea.x - drawArea.width * 0.5;
+                this.y = this.yb = pointer.y - drawArea.y - drawArea.height * 0.5;
             } else {
                 const vx = (this.x - this.xb) * 0.99;
                 const vy = (this.y - this.yb) * 0.99;
@@ -220,14 +218,14 @@ export namespace Doll {
             this.p1.mass++;
         }
 
-        draw(canvas: CanvasUtil, ctx: CanvasRenderingContext2D, pointer: PointerUtil) {
+        draw(drawArea: DrawArea, ctx: CanvasRenderingContext2D, pointer: PointerInfo) {
             if (!this.shape) return;
             const dx = this.p1.x - this.p0.x;
             const dy = this.p1.y - this.p0.y;
             const a = Math.atan2(dy, dx);
-            const d = pointer.pointDrag ? Math.sqrt(dx * dx + dy * dy) : this.length;
-            const tx = this.p0.x + canvas.x + canvas.width * 0.5;
-            const ty = this.p0.y + canvas.y + canvas.height * 0.5;
+            const d = pointer.draggingObj ? Math.sqrt(dx * dx + dy * dy) : this.length;
+            const tx = this.p0.x + drawArea.x + drawArea.width * 0.5;
+            const ty = this.p0.y + drawArea.y + drawArea.height * 0.5;
             ctx.translate(tx, ty);
             ctx.rotate(a);
             ctx.drawImage(

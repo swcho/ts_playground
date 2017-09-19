@@ -46,7 +46,7 @@ for (let i = 0; i < 10; i++) {
 const run = () => {
     requestAnimationFrame(run);
     ctx.drawImage(canvas.background, 0, 0);
-    canvas.scroll(zombie.points[3], !!pointer.pointDrag);
+    canvas.scroll(zombie.points[3], !!pointer.draggingObj);
     for (const disk of disks) disk.anim(canvas, ctx);
     ctx.stroke();
     zombie.collide(canvas, disks, particles, aarghs);

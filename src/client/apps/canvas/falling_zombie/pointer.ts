@@ -3,10 +3,10 @@ import {CanvasUtil} from './canvas';
 import {Doll} from './doll';
 
 // ---- set pointer ----
-export class PointerUtil {
+export class PointerUtil implements PointerInfo {
     x: number;
     y: number;
-    pointDrag: Pos;
+    draggingObj;
     init(canvas: CanvasUtil, doll: Doll) {
         this.x = 0;
         this.y = 0;
@@ -28,14 +28,14 @@ export class PointerUtil {
             if (sd < canvas.width * 0.05 * canvas.width * 0.05) {
                 if (sd < msd) {
                     msd = sd;
-                    this.pointDrag = point;
+                    this.draggingObj = point;
                 }
             }
         }
     }
 
     private up(e) {
-        this.pointDrag = null;
+        this.draggingObj = null;
     }
 
     private move(e) {

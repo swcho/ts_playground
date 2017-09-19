@@ -1,5 +1,5 @@
 
-import {CanvasUtil} from './canvas';
+/// <reference path="def.d.ts"/>
 
 export abstract class CObject {
     x: number;
@@ -10,7 +10,7 @@ export abstract class CObject {
     vx: number;
     vy: number;
     shape: HTMLImageElement | HTMLCanvasElement;
-    abstract anim(canvas: CanvasUtil, ctx: CanvasRenderingContext2D): void;
+    abstract anim(drawArea: DrawArea, ctx: CanvasRenderingContext2D): void;
 }
 
 export class Aargh extends CObject {
@@ -35,12 +35,12 @@ export class Aargh extends CObject {
         this.shape.src = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/222599/${srcimg}.png`;
     }
 
-    anim(canvas: CanvasUtil, ctx: CanvasRenderingContext2D) {
+    anim(drawArea: DrawArea, ctx: CanvasRenderingContext2D) {
         this.x += this.vx;
         this.y += this.vy;
         if (this.loaded) {
-            const tx = this.x + canvas.x + canvas.width * 0.5;
-            const ty = this.y + canvas.y + canvas.height * 0.5;
+            const tx = this.x + drawArea.x + drawArea.width * 0.5;
+            const ty = this.y + drawArea.y + drawArea.height * 0.5;
             ctx.translate(tx, ty);
             ctx.rotate(this.a);
             ctx.drawImage(
@@ -73,7 +73,7 @@ export class Particle extends CObject {
         this.shape = Particle.shape('rgba(255,164,0,1)');
     }
 
-    anim(canvas: CanvasUtil, ctx: CanvasRenderingContext2D) {
+    anim(drawArea: DrawArea, ctx: CanvasRenderingContext2D) {
         if (this.r > 0) {
             this.r *= 0.99;
             this.x += this.vx;
@@ -81,8 +81,8 @@ export class Particle extends CObject {
             this.vy += 0.1;
             ctx.drawImage(
                 this.shape,
-                this.x - this.r + canvas.x + canvas.width * 0.5,
-                this.y - this.r + canvas.y + canvas.height * 0.5,
+                this.x - this.r + drawArea.x + drawArea.width * 0.5,
+                this.y - this.r + drawArea.y + drawArea.height * 0.5,
                 2 * this.r,
                 2 * this.r
             );
@@ -118,21 +118,21 @@ export class Disk extends CObject {
         this.aargh = true;
     }
 
-    anim(canvas: CanvasUtil, ctx: CanvasRenderingContext2D) {
+    anim(drawArea: DrawArea, ctx: CanvasRenderingContext2D) {
         this.x += this.vx;
         this.y += this.vy;
         ctx.drawImage(
             this.shape,
-            this.x - this.r + canvas.x + canvas.width * 0.5,
-            this.y - this.r + canvas.y + canvas.height * 0.5,
+            this.x - this.r + drawArea.x + drawArea.width * 0.5,
+            this.y - this.r + drawArea.y + drawArea.height * 0.5,
             2 * this.r,
             2 * this.r
         );
-        if (this.y < -canvas.y - canvas.height) {
+        if (this.y < -drawArea.y - drawArea.height) {
             this.r = this.size * 4 + Math.random() * this.size * 3;
             this.y =
-                this.r + canvas.height * 0.5 - canvas.y + Math.random() * canvas.height;
-            this.x = -canvas.x + Math.random() * canvas.width - canvas.width * 0.5;
+                this.r + drawArea.height * 0.5 - drawArea.y + Math.random() * drawArea.height;
+            this.x = -drawArea.x + Math.random() * drawArea.width - drawArea.width * 0.5;
             this.sat = 0;
             this.aargh = true;
         }
