@@ -1,0 +1,401 @@
+
+$ton: #F8ECDD;
+$pink: #F9C8BC;
+$pink-dark: mix(black, $pink, 13%);
+
+// breakpoints
+
+$bp-700: 43.75em;
+$bp-900: 52.25em;
+
+@mixin bg-img {
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        transition: filter .4s ease;
+    }
+    // &::before {
+    //     background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/97621/Ivy-Sole-2.jpg) no-repeat center #CF0;
+    //     background-size: cover;
+    //     filter: opacity(.0);
+    //     // filter: grayscale(100%);
+    //     @media (min-width: $bp-900) {
+    //         background-size: contain;
+    //         background-position: -7em center;
+    //     }
+    // }
+    // &::after {
+    //     background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/97621/bricks-wall-garden-door.jpg) no-repeat center top;
+    //     background-size: cover;
+    //     mix-blend-mode: screen;
+    //     filter: saturate(150%);
+    //     @media (min-width: $bp-900) {
+    //         background-size: 1200px;
+    //         background-position: center top;
+    //     }
+    // }
+}
+
+:root {
+    @include bg-img;
+}
+
+body {
+    // color: #FFF;
+    display: flex;
+    flex-direction: column;
+    // flex-grow: 1;
+    position: relative;
+    transition: color .4s, background .4s ease;
+    &:hover {
+        color: #111;
+    }
+    @media (min-width: $bp-900) {
+        flex-grow: 0;
+        padding: calc(1vw + 5em) 0;
+    }
+}
+
+img {
+    line-height: 0;
+    max-width: 100%;
+}
+
+.grid {
+    box-shadow: 0 0 0 100vh $ton;
+
+    // flex as parent
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    // flex as child
+    align-self: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+
+    padding: calc(1vw + .5em);
+    padding: .75rem;
+    position: relative;
+    width: 100%;
+    will-change: transform, grid-gap;
+    transition: .4s ease;
+    z-index: 1;
+
+    // &.mask {
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     height: 100%;
+    //     width: 100%;
+    //     z-index: 0;
+    // }
+
+    > * {
+        box-shadow: 0 0 0 .75rem $ton;
+        counter-increment: grid-items;
+        line-height: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 3;
+        transition: .4s ease;
+    }
+
+    @media (min-width: $bp-900) {
+        height: 36em;
+        width: 44.25em;
+        // &.mask {
+        //     height: 36em;
+        //     width: 44.25em;
+        //     margin-top: -18em;
+        //     margin-left: -22.125em;
+        //     top: 50%;
+        //     left: 50%;
+        // }
+    }
+
+    // @supports (grid-gap: 0) {
+        display: grid;
+        // https://css-tricks.com/snippets/css/complete-guide-grid/#article-header-id-13
+        grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+        grid-gap: .75em;
+
+        @media (min-width: $bp-700) {
+            grid-template-columns: repeat(6, 1fr);
+            padding: 0;
+        }
+
+        @media (min-width: $bp-900) {
+            transform: rotate(-45deg);
+            > *::before {
+                transform: rotate(45deg);
+            }
+            .grid-item::before {
+                transform: rotate(45deg);
+            }
+        }
+
+    // }
+}
+
+@mixin grid-mask {
+    background-color: #000;
+}
+
+.grid-item {
+    background-color: $pink;
+    padding: 3em;
+
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4),
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8),
+    &:nth-child(9),
+    &:nth-child(11),
+    &:nth-child(13)
+    {
+        background-color: transparent;
+    }
+    &:nth-child(11) {
+        // for debug
+        &:before {
+            position: absolute;
+            content: 'grid-column: span 2; grid-row: 2 / 3';
+        }
+        grid-column: span 2;
+        grid-row: 2 / 3;
+    }
+    &:nth-child(14),
+    &:nth-child(15) {
+        display: none;
+        background-color: mix(black, $pink-dark, 20%);
+    }
+
+    // > 528
+    @media (min-width: 33em) {
+        &:nth-child(3),
+        &:nth-child(4),
+        &:nth-child(9) {
+            background-color: $pink;
+        }
+        &:nth-child(5) {
+            background-color: transparent;
+        }
+        &:nth-child(11) {
+            grid-column: 1 / 4;
+        }
+    }
+
+    // > 700
+    @media (min-width: $bp-700) {
+        &:nth-child(1),
+        &:nth-child(2),
+        &:nth-child(3) {
+            grid-column: 1 / 3;
+        }
+
+        &:nth-child(1) {
+            &:before {
+                position: absolute;
+                content: 'grid-row: 1 / 1;';
+            }
+            grid-row: 1 / 1;
+        }
+
+        &:nth-child(2) {
+            &:before {
+                position: absolute;
+                content: 'grid-row: 2 / 2;';
+            }
+            grid-row: 2 / 2;
+        }
+
+        &:nth-child(3) {
+            &:before {
+                position: absolute;
+                content: 'grid-row: 3 / 3;';
+            }
+            grid-row: 3 / 3;
+        }
+
+        &:nth-child(4) {
+            grid-column: 1 / 3;
+            grid-row: 4 / 6;
+        }
+
+        &:nth-child(5) {
+            grid-column: 3 / 5;
+            grid-row: 1 / 3;
+        }
+
+        &:nth-child(6) {
+            grid-column: 3 / 4;
+            grid-row: 3 / 4;
+        }
+
+        &:nth-child(7) {
+            grid-column: 4 / 5;
+            grid-row: 3 / 4;
+        }
+
+        &:nth-child(8) {
+            grid-column: 3 / 5;
+            grid-row: 4 / 6;
+        }
+
+        &:nth-child(9) {
+            grid-column: 5 / 6;
+        }
+
+        &:nth-child(10) {
+            grid-column: 6 / 7;
+        }
+
+        &:nth-child(11) {
+            grid-column: 5 / 7;
+            grid-row: 2 / 4;
+        }
+
+        &:nth-child(12) {
+            grid-column: 5 / 7;
+            grid-row: 4 / 5;
+        }
+
+        &:nth-child(13) {
+            grid-column: 5 / 7;
+            grid-row: 5 / 6;
+        }
+
+        &:nth-child(14) {
+            grid-column: 1 / 1;
+            grid-row: 1 / 4;
+        }
+
+        &:nth-child(15) {
+            grid-column: 6 / 7;
+            grid-row: 4 / 6;
+        }
+    }
+
+    @media (min-width: $bp-900) {
+        &:nth-child(1),
+        &:nth-child(2),
+        &:nth-child(3) {
+            grid-column: 2 / 3;
+        }
+
+        &:nth-child(1) {
+            grid-row: 1 / 1;
+        }
+
+        &:nth-child(2) {
+            grid-row: 2 / 2;
+        }
+
+        &:nth-child(3) {
+            grid-row: 3 / 3;
+        }
+
+        &:nth-child(4) {
+            grid-column: 1 / 3;
+            grid-row: 4 / 6;
+        }
+
+        &:nth-child(5) {
+            grid-column: 3 / 5;
+            grid-row: 1 / 3;
+        }
+
+        &:nth-child(6) {
+            grid-column: 3 / 4;
+            grid-row: 3 / 4;
+        }
+
+        &:nth-child(7) {
+            grid-column: 4 / 5;
+            grid-row: 3 / 4;
+        }
+
+        &:nth-child(8) {
+            grid-column: 3 / 5;
+            grid-row: 4 / 6;
+        }
+
+        &:nth-child(9) {
+            grid-column: 5 / 6;
+        }
+
+        &:nth-child(10) {
+            grid-column: 6 / 7;
+        }
+
+        &:nth-child(11) {
+            grid-column: 5 / 7;
+            grid-row: 2 / 4;
+        }
+
+        &:nth-child(12) {
+            grid-column: 5 / 6;
+            grid-row: 4 / 5;
+        }
+
+        &:nth-child(13) {
+            background-color: $pink;
+            grid-column: 5 / 6;
+            grid-row: 5 / 6;
+        }
+
+        &:nth-child(14),
+        &:nth-child(15) {
+            display: block;
+            background-color: $ton;
+        }
+    }
+}
+
+.ref {
+    display: flex;
+    display: none;
+    flex-direction: column;
+    // flex-wrap: wrap;
+    // justify-content: space-between;
+    // justify-content: flex-end;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+    img {
+        align-self: flex-end;
+        flex-basis: 10em;
+        max-width: 15em;
+        opacity: 0;
+        transition: opacity .4s ease;
+        @media (min-width: $bp-900) {
+            opacity: .9;
+        }
+    }
+    a {
+        align-self: flex-start;
+        background-color: $pink;
+        color: #000;
+        // opacity: 0;
+        padding: 1em;
+        text-decoration-skip: ink;
+        transition: opacity .4s ease;
+        @media (min-width: $bp-900) {
+            max-width: 30em;
+        }
+    }
+}

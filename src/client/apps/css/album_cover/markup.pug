@@ -1,0 +1,19 @@
+.grid
+
+    // first ten
+    - for (var x = 0; x < 10; x++)
+        .grid-item #{x + 1}
+
+    // album title
+    .grid-item.title
+        .text-wrap
+            h1 Eden
+            p Ivy Sole
+    
+    // last four
+    - for (var x = 0; x < 4; x++)
+        .grid-item #{x + 12}
+
+.ref
+  img(src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/97621/grid-cover-Eden.png" alt="Ivy Sole album cover, Eden.")
+  a(href="https://ivysole.bandcamp.com/album/eden") https://ivysole.bandcamp.com/album/eden
