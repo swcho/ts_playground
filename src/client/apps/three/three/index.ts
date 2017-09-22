@@ -1,5 +1,7 @@
 
 import * as THREE from 'three';
+export * from 'three/examples/js/loaders/OBJLoader';
+export * from 'three/examples/js/controls/OrbitControls';
 export * from './OBJExporter';
 export * from './STLExporter';
 // https://github.com/Microsoft/TypeScript/issues/4336#issuecomment-264636767

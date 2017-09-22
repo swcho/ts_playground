@@ -892,7 +892,7 @@ export class BasicAnimationMaterial extends BaseAnimationMaterial {
      * @constructor
      */
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['basic']);
+        super(parameters, THREE.ShaderLib['basic'].uniforms);
         this.lights = false;
         this.vertexShader = this._concatVertexShader();
         this.fragmentShader = this._concatFragmentShader();
@@ -1039,7 +1039,7 @@ class DepthAnimationMaterial extends BaseAnimationMaterial {
 
 
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['depth']);
+        super(parameters, THREE.ShaderLib['depth'].uniforms);
         this.clipping = true;
 
         // BaseAnimationMaterial.call(this, parameters);
@@ -1099,7 +1099,7 @@ class DistanceAnimationMaterial extends BaseAnimationMaterial {
     private vertexPosition = [];
 
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['distanceRGBA']);
+        super(parameters, THREE.ShaderLib['distanceRGBA'].uniforms);
         this.clipping = true;
 
         // BaseAnimationMaterial.call(this, parameters);
@@ -1173,7 +1173,7 @@ class PhongAnimationMaterial extends BaseAnimationMaterial {
      * @constructor
      */
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['phong']);
+        super(parameters, THREE.ShaderLib['phong'].uniforms);
 
         // let phongShader = THREE.ShaderLib['phong'];
 
@@ -1372,7 +1372,7 @@ class PointsAnimationMaterial extends BaseAnimationMaterial {
      * @constructor
      */
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['points']);
+        super(parameters, THREE.ShaderLib['points'].uniforms);
 
         // let pointsShader = THREE.ShaderLib['points'];
 
@@ -1498,7 +1498,7 @@ class StandardAnimationMaterial extends BaseAnimationMaterial {
      * @constructor
      */
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['standard']);
+        super(parameters, THREE.ShaderLib['standard'].uniforms);
         // let standardShader = THREE.ShaderLib['standard'];
 
         // BaseAnimationMaterial.call(this, parameters, standardShader.uniforms);
