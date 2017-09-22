@@ -1,6 +1,6 @@
 
 // ---- set canvas ----
-export class CanvasUtil {
+export class CanvasUtil implements DrawArea {
     x: number;
     y: number;
     vx: number;
@@ -33,6 +33,7 @@ export class CanvasUtil {
         } else this.s = 0.01;
     }
 
+    // draw full moon
     private createBackground() {
         const shape = document.createElement('canvas');
         shape.width = this.width;
@@ -53,6 +54,7 @@ export class CanvasUtil {
         return shape;
     }
 
+    // draw 2 pixcel radius circles
     private createFilter() {
         const shape = document.createElement('canvas');
         shape.width = this.width;

@@ -45,8 +45,12 @@ for (let i = 0; i < 10; i++) {
 
 const run = () => {
     requestAnimationFrame(run);
+
+    // draw full moon
     ctx.drawImage(canvas.background, 0, 0);
-    canvas.scroll(zombie.points[3], !!pointer.draggingObj);
+
+    canvas.scroll(zombie.points[0], !!pointer.draggingObj);
+
     for (const disk of disks) disk.anim(canvas, ctx);
     ctx.stroke();
     zombie.collide(canvas, disks, particles, aarghs);
@@ -54,7 +58,10 @@ const run = () => {
     for (const p of particles.items) p.anim(canvas, ctx);
     for (const a of aarghs.items) a.anim(canvas, ctx);
     ctx.globalCompositeOperation = 'lighter';
+
+    // draw 2 pixcel radius circles
     ctx.drawImage(canvas.filter, 0, 0);
+
     ctx.globalCompositeOperation = 'source-over';
 };
 

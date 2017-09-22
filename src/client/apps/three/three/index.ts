@@ -2,6 +2,10 @@
 import * as THREE from 'three';
 export * from './OBJExporter';
 export * from './STLExporter';
+// https://github.com/Microsoft/TypeScript/issues/4336#issuecomment-264636767
+export import BAS = require('./BAS');
+
+// export const BAS: typeof _BAS = _BAS;
 
 declare module 'three' {
 
@@ -27,6 +31,12 @@ declare module 'three' {
 
     // interface Material {
     //     uniforms: any;
+    // }
+
+    // export const BAS: typeof _BAS;
+
+    // export namespace BAS {
+
     // }
 
 }

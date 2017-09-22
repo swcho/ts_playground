@@ -6,12 +6,39 @@ export interface CollideItems<O extends CObject> {
     index: number;
 }
 
+interface LinkParam {
+    p0: number;
+    p1: number;
+    length: number;
+    width: number;
+    shape: string;
+    offset?: number;
+}
+
+interface Constraint {
+    p1: number;
+    p2: number;
+    p3: number;
+    angle: number;
+    range: number;
+}
+
+interface Shape {
+    [id: string]: string;
+}
+
+export interface Structure {
+    links: LinkParam[];
+    constraints: Constraint[];
+    shapes: Shape;
+}
+
 export class Doll {
     s: number;
     points: Doll.Point[];
     links: Doll.Link[];
     angles: Doll.Angle[];
-    constructor(size: number, structure) {
+    constructor(size: number, structure: Structure) {
         this.s = size;
         this.points = [];
         this.links = [];
@@ -121,25 +148,17 @@ export namespace Doll {
     }
 
     export class Angle {
-        p1;
-        p2;
-        p3;
-        len1;
-        len2;
-        angle;
-        range;
-        force;
-        constructor(p1, p2, p3, len1, len2, angle, range, force) {
-            this.p1 = p1;
-            this.p2 = p2;
-            this.p3 = p3;
-            this.len1 = len1;
-            this.len2 = len2;
-            this.angle = angle;
-            this.range = range;
-            this.force = force;
+        constructor(
+            public p1: Point,
+            public p2: Point,
+            public p3: Point,
+            public len1: number,
+            public len2: number,
+            public angle: number,
+            public range: number,
+            public force: number) {
         }
-        a12(p1, p2, p3) {
+        a12(p1: Point, p2: Point, p3: Point) {
             const a = Math.atan2(p2.y - p1.y, p2.x - p1.x);
             const b = Math.atan2(p3.y - p2.y, p3.x - p2.x);
             const c = this.angle - (b - a);
@@ -160,7 +179,7 @@ export namespace Doll {
             p2.y = y1 + sin * this.len1 * m1;
             return e;
         }
-        a23(e, p2, p3) {
+        a23(e: number, p2: Point, p3: Point) {
             const a = Math.atan2(p2.y - p3.y, p2.x - p3.x) + e;
             const m = p2.mass + p3.mass;
             const m2 = p2.mass / m;

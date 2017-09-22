@@ -31,146 +31,146 @@ export function createZombie(size: number) {
                 width: 2.5,
                 shape: 'handRight'
             },
-            {
-                p0: 3,
-                p1: 7,
-                length: 6,
-                width: 3.5,
-                shape: 'leftLeg'
-            },
-            {
-                p0: 7,
-                p1: 8,
-                length: 7,
-                width: 3,
-                shape: 'leftFoot'
-            },
-            {
-                p0: 3,
-                p1: 9,
-                length: 6,
-                width: 2.5,
-                offset: 0.3,
-                shape: 'rightLeg'
-            },
-            {
-                p0: 9,
-                p1: 10,
-                length: 7,
-                width: 4,
-                offset: 0.05,
-                shape: 'rightFoot'
-            },
-            {
-                p0: 0,
-                p1: 4,
-                length: 4.5,
-                width: 4.5,
-                offset: -0.3,
-                shape: 'head'
-            },
-            {
-                p0: 0,
-                p1: 11,
-                length: 4,
-                width: 5,
-                offset: 0.1,
-                shape: 'tors'
-            },
-            {
-                p0: 11,
-                p1: 3,
-                length: 4,
-                width: 3,
-                offset: 0.2,
-                shape: 'stomach'
-            },
-            {
-                p0: 0,
-                p1: 5,
-                length: 6,
-                width: 2,
-                shape: 'leftArm'
-            },
-            {
-                p0: 5,
-                p1: 6,
-                length: 7,
-                width: 4,
-                shape: 'leftHand'
-            }
+            // {
+            //     p0: 3,
+            //     p1: 7,
+            //     length: 6,
+            //     width: 3.5,
+            //     shape: 'leftLeg'
+            // },
+            // {
+            //     p0: 7,
+            //     p1: 8,
+            //     length: 7,
+            //     width: 3,
+            //     shape: 'leftFoot'
+            // },
+            // {
+            //     p0: 3,
+            //     p1: 9,
+            //     length: 6,
+            //     width: 2.5,
+            //     offset: 0.3,
+            //     shape: 'rightLeg'
+            // },
+            // {
+            //     p0: 9,
+            //     p1: 10,
+            //     length: 7,
+            //     width: 4,
+            //     offset: 0.05,
+            //     shape: 'rightFoot'
+            // },
+            // {
+            //     p0: 0,
+            //     p1: 4,
+            //     length: 4.5,
+            //     width: 4.5,
+            //     offset: -0.3,
+            //     shape: 'head'
+            // },
+            // {
+            //     p0: 0,
+            //     p1: 11,
+            //     length: 4,
+            //     width: 5,
+            //     offset: 0.1,
+            //     shape: 'tors'
+            // },
+            // {
+            //     p0: 11,
+            //     p1: 3,
+            //     length: 4,
+            //     width: 3,
+            //     offset: 0.2,
+            //     shape: 'stomach'
+            // },
+            // {
+            //     p0: 0,
+            //     p1: 5,
+            //     length: 6,
+            //     width: 2,
+            //     shape: 'leftArm'
+            // },
+            // {
+            //     p0: 5,
+            //     p1: 6,
+            //     length: 7,
+            //     width: 4,
+            //     shape: 'leftHand'
+            // }
         ],
         constraints: [
-            {
-                p1: 4,
-                p2: 0,
-                p3: 11,
-                angle: 0,
-                range: 1
-            },
+            // {
+            //     p1: 4,
+            //     p2: 0,
+            //     p3: 11,
+            //     angle: 0,
+            //     range: 1
+            // },
             {
                 p1: 0,
                 p2: 1,
                 p3: 2,
-                angle: -Math.PI / 2,
+                angle: Math.PI / 2,
                 range: Math.PI / 2
             },
-            {
-                p1: 0,
-                p2: 5,
-                p3: 6,
-                angle: -Math.PI / 2,
-                range: Math.PI / 2
-            },
-            {
-                p1: 11,
-                p2: 3,
-                p3: 7,
-                angle: -Math.PI / 4,
-                range: Math.PI / 3
-            },
-            {
-                p1: 11,
-                p2: 3,
-                p3: 9,
-                angle: Math.PI / 4,
-                range: Math.PI / 3
-            },
-            {
-                p1: 3,
-                p2: 7,
-                p3: 8,
-                angle: Math.PI / 2,
-                range: Math.PI / 3
-            },
-            {
-                p1: 3,
-                p2: 9,
-                p3: 10,
-                angle: Math.PI / 2,
-                range: Math.PI / 3
-            },
-            {
-                p1: 0,
-                p2: 11,
-                p3: 3,
-                angle: 0,
-                range: 0.1
-            },
-            {
-                p1: 11,
-                p2: 0,
-                p3: 1,
-                angle: Math.PI / 2,
-                range: Math.PI / 3
-            },
-            {
-                p1: 11,
-                p2: 0,
-                p3: 5,
-                angle: -Math.PI / 2,
-                range: Math.PI / 3
-            }
+            // {
+            //     p1: 0,
+            //     p2: 5,
+            //     p3: 6,
+            //     angle: -Math.PI / 2,
+            //     range: Math.PI / 2
+            // },
+            // {
+            //     p1: 11,
+            //     p2: 3,
+            //     p3: 7,
+            //     angle: -Math.PI / 4,
+            //     range: Math.PI / 3
+            // },
+            // {
+            //     p1: 11,
+            //     p2: 3,
+            //     p3: 9,
+            //     angle: Math.PI / 4,
+            //     range: Math.PI / 3
+            // },
+            // {
+            //     p1: 3,
+            //     p2: 7,
+            //     p3: 8,
+            //     angle: Math.PI / 2,
+            //     range: Math.PI / 3
+            // },
+            // {
+            //     p1: 3,
+            //     p2: 9,
+            //     p3: 10,
+            //     angle: Math.PI / 2,
+            //     range: Math.PI / 3
+            // },
+            // {
+            //     p1: 0,
+            //     p2: 11,
+            //     p3: 3,
+            //     angle: 0,
+            //     range: 0.1
+            // },
+            // {
+            //     p1: 11,
+            //     p2: 0,
+            //     p3: 1,
+            //     angle: Math.PI / 2,
+            //     range: Math.PI / 3
+            // },
+            // {
+            //     p1: 11,
+            //     p2: 0,
+            //     p3: 5,
+            //     angle: -Math.PI / 2,
+            //     range: Math.PI / 3
+            // }
         ],
         shapes: {
             armRight: `
