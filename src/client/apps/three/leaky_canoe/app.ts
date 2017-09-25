@@ -10,27 +10,11 @@ import {GeoGenPattern} from './geogenpattern';
 import {GeoGenTilemap} from './geogentilemap';
 import {alea} from './alea';
 
-setTimeout(() => {
-    const worldGenerator = new GeoGenPattern(sampleFn, seed, worldOptions);
-    const tilemap = new GeoGenTilemap(tileSize, tileColors);
-    const tileFinder = tilemap.tilePositionFinder(worldGenerator.tileCache);
-    const textureEl = new ImageTexture(tilemap, tileFinder, tileSize, worldOptions);
-    const loader = new THREE.OBJLoader();
-    loader.crossOrigin = 'Anonymous';
-    loader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/292951/Cannoe.obj', boatGroup => {
-        const pivot = new THREE.Group();
-        boatGroup.position.x = -3;
-        boatGroup.position.y = -2.25;
-        boatGroup.position.z = -1.5;
-        pivot.add(boatGroup);
-        new Simulation('js-app', textureEl, pivot);
-    });
-}, 0);
-
 const tileSize = 4;
-const seed = 5625463739 + +(new Date());
+const seed = 5625463739; // + +(new Date());
 
-function sampleFn(index, x, y) {
+function sampleFn(index: number, x: number, y: number, seed: number) {
+    console.log(index, x, y, seed);
     return alea(index)();
 }
 
@@ -192,7 +176,7 @@ class Boat extends THREE.Mesh {
 }
 
 class Ocean extends THREE.Mesh {
-    static createMaterial(texture) {
+    static createMaterial(texture: THREE.Texture) {
         return new THREE.BAS.BasicAnimationMaterial({
             shading: THREE.FlatShading,
             side: THREE.DoubleSide,
@@ -257,11 +241,11 @@ class Ocean extends THREE.Mesh {
         });
     }
 
-    constructor(textureEl) {
+    constructor(textureEl: HTMLCanvasElement) {
         const {
-      width,
+            width,
             height
-    } = textureEl;
+        } = textureEl;
         const w = width / 18;
         const h = height / 18;
         const plane = new THREE.PlaneGeometry(w, h, w / 2, h / 2);
@@ -302,3 +286,20 @@ class Ocean extends THREE.Mesh {
         this.getMaterial().uniforms.map.value.needsUpdate = true;
     }
 }
+
+setTimeout(() => {
+    const worldGenerator = new GeoGenPattern(sampleFn, seed, worldOptions);
+    const tilemap = new GeoGenTilemap(tileSize, tileColors);
+    const tileFinder = tilemap.tilePositionFinder(worldGenerator.tileCache);
+    const textureEl = new ImageTexture(tilemap, tileFinder, tileSize, worldOptions);
+    const loader = new THREE.OBJLoader();
+    loader.crossOrigin = 'Anonymous';
+    loader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/292951/Cannoe.obj', boatGroup => {
+        const pivot = new THREE.Group();
+        boatGroup.position.x = -3;
+        boatGroup.position.y = -2.25;
+        boatGroup.position.z = -1.5;
+        pivot.add(boatGroup);
+        new Simulation('js-app', textureEl, pivot);
+    });
+}, 0);

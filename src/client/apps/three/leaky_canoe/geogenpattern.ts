@@ -24,8 +24,34 @@ const geoGenPattern = new GeoGenPattern(sampleFn(), seed, options);
 console.log('cell', geoGenPattern.getCell(20, 20));
 */
 
+interface SampeFunc {
+    (index: number, x: number, y: number, seed: number): number;
+}
+
+interface Options {
+    chunkTileHeight?: number;
+    chunkTileWidth?: number;
+    maxHeight?: number;
+    worldChunkHeight?: number;
+    worldChunkWidth?: number;
+}
+
+interface ComputedOptions extends Options {
+    worldTileHeight: number;
+    worldTileWidth: number;
+}
+
+interface Chunk {
+    [y: number]: {
+        [x: number]: number;
+    };
+}
+
+type Edge = {[i: number]: number};
+
 export class GeoGenPattern {
-    static defaultOptions = {
+
+    static defaultOptions: Options = {
         chunkTileHeight: 10,
         chunkTileWidth: 10,
         maxHeight: 5,
@@ -33,24 +59,22 @@ export class GeoGenPattern {
         worldChunkWidth: 4
     };
 
+    options: ComputedOptions;
+
     chunkCache = [];
 
     tileCache = [];
 
-    seed;
-    sampleFn;
-    options;
-
-    constructor(sampleFn, seed, options, cacheAllTiles = true) {
+    constructor(private sampleFn: SampeFunc, private seed: number, options: Options, cacheAllTiles = true) {
+        console.log('seed', seed);
         this.seed = seed;
-        this.sampleFn = sampleFn;
         const { defaultOptions } = GeoGenPattern;
-        const combinedOptions = Object.assign({}, defaultOptions, options);
+        const combinedOptions = {...defaultOptions, ...options};
         const { chunkTileWidth, chunkTileHeight, worldChunkWidth, worldChunkHeight } = combinedOptions;
-        this.options = Object.assign({}, combinedOptions, {
+        this.options = {...combinedOptions, ...{
             worldTileHeight: chunkTileHeight * worldChunkHeight,
             worldTileWidth: chunkTileWidth * worldChunkWidth
-        });
+        }};
         if (cacheAllTiles) {
             this.cacheAllTiles();
         }
@@ -74,10 +98,11 @@ export class GeoGenPattern {
         }
     }
 
-    getChunk(worldChunkX, worldChunkY) {
+    getChunk(worldChunkX: number, worldChunkY: number): Chunk {
         if (this.chunkCache[worldChunkY] && this.chunkCache[worldChunkY][worldChunkX]) {
             return this.chunkCache[worldChunkY][worldChunkX];
         }
+        console.log('getChunk', worldChunkX, worldChunkY);
         const row0 = [
             this.chunkEdgeIndex(worldChunkX - 1, worldChunkY - 1),
             this.chunkEdgeIndex(worldChunkX, worldChunkY - 1),
@@ -105,8 +130,8 @@ export class GeoGenPattern {
         const { chunkTileWidth, chunkTileHeight } = this.options;
         const chunk = this.generateChunk(chunkTileWidth, chunkTileHeight, row0, row1, row2, row3);
         this.chunkCache[worldChunkY] = this.chunkCache[worldChunkY] || [];
-        this.chunkCache[worldChunkY][worldChunkX] = chunk
-        return chunk
+        this.chunkCache[worldChunkY][worldChunkX] = chunk;
+        return chunk;
     }
 
     getCell(worldX, worldY) {
@@ -119,8 +144,8 @@ export class GeoGenPattern {
         const { chunkTileWidth, chunkTileHeight } = this.options;
         const worldChunkX = Math.floor(x / chunkTileWidth);
         const worldChunkY = Math.floor(y / chunkTileHeight);
-        const chunkX = x % chunkTileWidth
-        const chunkY = y % chunkTileHeight
+        const chunkX = x % chunkTileWidth;
+        const chunkY = y % chunkTileHeight;
         const chunk = this.getChunk(worldChunkX, worldChunkY);
         const cell = chunk[chunkY][chunkX];
         this.tileCache[y] = this.tileCache[y] || [];
@@ -128,7 +153,7 @@ export class GeoGenPattern {
         return cell;
     }
 
-    chunkEdgeIndex(worldChunkX, worldChunkY) {
+    chunkEdgeIndex(worldChunkX: number, worldChunkY: number) {
         const { seed } = this;
         const { worldChunkWidth, worldChunkHeight } = this.options;
         const x = this.clamp(worldChunkX, worldChunkWidth);
@@ -136,8 +161,8 @@ export class GeoGenPattern {
         return this.sampleFn(y * worldChunkWidth + x + seed, x, y, seed);
     }
 
-    generateChunk(width, height, row0, row1, row2, row3) {
-        const cells = []
+    generateChunk(width: number, height: number, row0: Edge, row1: Edge, row2: Edge, row3: Edge): Chunk {
+        const cells = [];
         let yFactor, xFactor; // trying to reduce memory churn;
         let i0, i1, i2, i3;
         const { maxHeight } = this.options;
@@ -163,7 +188,7 @@ export class GeoGenPattern {
         return val;
     }
 
-    clamp(index, size) {
+    clamp(index: number, size: number) {
         return (index + size) % size;
     }
 }

@@ -1,9 +1,16 @@
 
 import * as THREE from 'three';
 
+interface BaseAnimationMaterialParameters extends THREE.ShaderMaterialParameters {
+    uniformValues: any;
+    // uniformValues: {
+    //     map: THREE.Texture;
+    // };
+}
+
 export class BaseAnimationMaterial extends THREE.ShaderMaterial {
 
-    constructor(parameters, uniforms) {
+    constructor(parameters: BaseAnimationMaterialParameters, uniforms, valueInit?: (self: any) => void) {
         super(parameters);
 
         // THREE.ShaderMaterial.call(this);
@@ -11,6 +18,10 @@ export class BaseAnimationMaterial extends THREE.ShaderMaterial {
         let uniformValues = parameters.uniformValues;
 
         delete parameters.uniformValues;
+
+        if (valueInit) {
+            valueInit(this);
+        }
 
         this.setValues(parameters);
 
@@ -472,7 +483,6 @@ export class ModelBufferGeometry extends THREE.BufferGeometry {
      */
     constructor(model: THREE.Geometry, options?) {
         super();
-        // THREE.BufferGeometry.call(this);
 
         /**
          * A reference to the geometry used to create this instance.
@@ -868,20 +878,6 @@ class PrefabBufferGeometry extends THREE.BufferGeometry {
 }
 
 export class BasicAnimationMaterial extends BaseAnimationMaterial {
-    private varyingParameters = [];
-
-    private vertexFunctions = [];
-    private vertexParameters = [];
-    private vertexInit = [];
-    private vertexNormal = [];
-    private vertexPosition = [];
-    private vertexColor = [];
-
-    private fragmentFunctions = [];
-    private fragmentParameters = [];
-    private fragmentInit = [];
-    private fragmentMap = [];
-    private fragmentDiffuse = [];
 
     /**
      * Extends THREE.MeshBasicMaterial with custom shader chunks.
@@ -892,7 +888,23 @@ export class BasicAnimationMaterial extends BaseAnimationMaterial {
      * @constructor
      */
     constructor(parameters) {
-        super(parameters, THREE.ShaderLib['basic'].uniforms);
+        super(parameters, THREE.ShaderLib['basic'].uniforms, (self) => {
+
+            self.varyingParameters = [];
+
+            self.vertexFunctions = [];
+            self.vertexParameters = [];
+            self.vertexInit = [];
+            self.vertexNormal = [];
+            self.vertexPosition = [];
+            self.vertexColor = [];
+
+            self.fragmentFunctions = [];
+            self.fragmentParameters = [];
+            self.fragmentInit = [];
+            self.fragmentMap = [];
+            self.fragmentDiffuse = [];
+        });
         this.lights = false;
         this.vertexShader = this._concatVertexShader();
         this.fragmentShader = this._concatFragmentShader();
