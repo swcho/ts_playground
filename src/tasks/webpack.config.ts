@@ -154,6 +154,10 @@ const webpackConfig: webpack.Configuration = {
                 test: /\.png$/,
                 loader: 'file-loader?prefix=imgs/'
             },
+            {
+                test: /\.jpg$/,
+                loader: 'file-loader?prefix=imgs/'
+            },
             // required for react jsx
             // {
             //     test: /\.js$/,

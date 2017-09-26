@@ -12,13 +12,25 @@ const tilemap = new GeoGenTilemap(tileSize, tileColors);
 document.body.appendChild(tilemap.spritesheetEl);
 */
 
+import {Chunk} from './geogenpattern';
+
+interface DrawFunc {
+    (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, backgroundColor: string, foregroundColor: string): void;
+}
+
+export interface TileFinder {
+    (x: number, y: number): [number, number];
+}
+
+type DrawName = 'drawNW' | 'drawNE' | 'drawN' | 'drawSW' | 'drawW' | 'drawSWNE' | 'drawNNWW' | 'drawSE' | 'drawNWSE' | 'drawE' | 'drawNNEE' | 'drawS' | 'drawSSWW' | 'drawSSEE';
+
 export class GeoGenTilemap {
 
-    ring;
-    spritesheetEl: HTMLCanvasElement;
+    private ring: DrawFunc[][];
+    private spritesheetEl: HTMLCanvasElement;
     tileLibrary;
 
-    constructor(tileSize, tileColors) {
+    constructor(tileSize: number, tileColors: string[]) {
         const { drawNW, drawNE, drawN, drawSW, drawW, drawSWNE, drawNNWW, drawSE, drawNWSE, drawE, drawNNEE, drawS, drawSSWW, drawSSEE } = this.tiles;
         this.ring = [
             [drawNW, drawNE, drawN, drawSW, drawW, drawSWNE, drawNNWW, drawSE, drawNWSE, drawE, drawNNEE, drawS, drawSSWW, drawSSEE],
@@ -33,7 +45,7 @@ export class GeoGenTilemap {
         this.tileLibrary = this.buildTileLibrary(this.spritesheetEl, tileSize);
     }
 
-    buildTileLibrary(spritesheetEl, tileSize) {
+    buildTileLibrary(spritesheetEl: HTMLCanvasElement, tileSize: number) {
         const cols = spritesheetEl.width / tileSize;
         const rows = spritesheetEl.height / tileSize;
         const library = [];
@@ -51,7 +63,7 @@ export class GeoGenTilemap {
         return library;
     }
 
-    drawSpriteSheet(ctx, tileSize, tileColors, width, height) {
+    drawSpriteSheet(ctx: CanvasRenderingContext2D, tileSize: number, tileColors: string[], width: number, height: number) {
         const lastColor = tileColors[tileColors.length - 1];
         ctx.fillStyle = lastColor;
         ctx.fillRect(0, 0, width, height);
@@ -69,7 +81,7 @@ export class GeoGenTilemap {
         });
     }
 
-    drawRing(ctx, ring, isOdd, offsetY, tileSize, backgroundColor, foregroundColor) {
+    drawRing(ctx: CanvasRenderingContext2D, ring: DrawFunc[][], isOdd: boolean, offsetY: number, tileSize: number, backgroundColor: string, foregroundColor: string) {
         const offsetX = isOdd ? tileSize : 0;
         ring.forEach((track, yIndex) => {
             const y = yIndex * tileSize;
@@ -87,7 +99,7 @@ export class GeoGenTilemap {
         }
     }
 
-    tilePositionFinder(heightmap) {
+    tilePositionFinder(heightmap: Chunk): TileFinder {
         const worldTileHeight = heightmap.length;
         const worldTileWidth = heightmap[0].length;
         const clampX = (x) => (x + worldTileWidth) % worldTileWidth;
@@ -101,7 +113,7 @@ export class GeoGenTilemap {
             ];
         };
         const memo = {};
-        return (xIndex, yIndex) => {
+        return (xIndex: number, yIndex: number) => {
             const index = `${xIndex}_${yIndex}`;
             if (memo[index] !== undefined) {
                 return memo[index];
@@ -121,7 +133,7 @@ export class GeoGenTilemap {
         };
     }
 
-    tiles = {
+    tiles: { [drawName: string]: DrawFunc } = {
         drawSSEE: (ctx, x, y, size, backgroundColor, foregroundColor) => {
             const halfSize = size / 2;
             ctx.fillStyle = foregroundColor;

@@ -7,7 +7,7 @@ console.log(__filename);
 
 import * as THREE from '../../three/three';
 import {GeoGenPattern} from './geogenpattern';
-import {GeoGenTilemap} from './geogentilemap';
+import {GeoGenTilemap, TileFinder} from './geogentilemap';
 import {alea} from './alea';
 
 const tileSize = 4;
@@ -18,6 +18,7 @@ function sampleFn(index: number, x: number, y: number, seed: number) {
     return alea(index)();
 }
 
+// length 16
 const tileColors = [
     '#000',
     '#000',
@@ -45,29 +46,46 @@ const worldOptions = {
     worldChunkWidth: 4
 };
 
-class ImageTexture {
-    constructor(tilemap, tileFinder, tileSize, worldOptions) {
+function testTexture() {
+    return new Promise<HTMLCanvasElement>((resolve, reject) => {
         const canvasEl = document.createElement('canvas');
-        const width = worldOptions.worldChunkWidth * worldOptions.chunkTileWidth;
-        const height = worldOptions.worldChunkHeight * worldOptions.chunkTileHeight;
-        canvasEl.width = width * tileSize;
-        canvasEl.height = height * tileSize;
-        const tileCtx = canvasEl.getContext('2d');
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const [
-                    col,
-                    row
-                ] = tileFinder(x, y);
-                tileCtx.drawImage(tilemap.tileLibrary[row][col], 0, 0, tileSize, tileSize, x * tileSize, y * tileSize, tileSize, tileSize);
-            }
+        const ctx = canvasEl.getContext('2d');
+        const img = new Image();
+        img.src = require('./album.jpg');
+        img.onload = () => {
+            console.log('image loaded');
+            const width = worldOptions.worldChunkWidth * worldOptions.chunkTileWidth;
+            const height = worldOptions.worldChunkHeight * worldOptions.chunkTileHeight;
+            canvasEl.width = width * tileSize;
+            canvasEl.height = height * tileSize;
+            ctx.drawImage(img, 0, 0);
+            resolve(canvasEl);
+        };
+        img.onerror = (err) => reject(err);
+    });
+}
+
+function ImageTexture (tilemap: GeoGenTilemap, tileFinder: TileFinder, tileSize, worldOptions) {
+    const canvasEl = document.createElement('canvas');
+    const width = worldOptions.worldChunkWidth * worldOptions.chunkTileWidth;
+    const height = worldOptions.worldChunkHeight * worldOptions.chunkTileHeight;
+    canvasEl.width = width * tileSize;
+    canvasEl.height = height * tileSize;
+    const tileCtx = canvasEl.getContext('2d');
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const [
+                col,
+                row
+            ] = tileFinder(x, y);
+            tileCtx.drawImage(tilemap.tileLibrary[row][col], 0, 0, tileSize, tileSize, x * tileSize, y * tileSize, tileSize, tileSize);
         }
-        return canvasEl;
     }
+    return canvasEl;
 }
 
 class Simulation {
-    constructor(domId, textureEl, boatGroup) {
+    constructor(domId, textureEl: HTMLCanvasElement, boatGroup) {
         const camera = this.createCamera(80, 8, 16, -16, window.innerWidth, window.innerHeight);
         camera['target'] = new THREE.Vector3(0, 0, 0);
         camera.lookAt(camera['target']);
@@ -234,8 +252,9 @@ class Ocean extends THREE.Mesh {
           uv.y += 0.12 * (sin(uv.x * 4.2 + uTime * 0.64) + sin(uv.x * 6.3 + uTime * 1.65) + sin(uv.x * 8.2 + uTime * 0.45)) / 3.0;
           vec4 tex1 = texture2D(map, uv * 1.0);
           vec4 tex2 = texture2D(map, uv * 1.0 + vec2(0.2));
-          vec3 blue = uColor;
-          diffuseColor = vec4(blue + vec3(tex1.r * 0.9 - tex2.g * 0.04), 1.0);
+        //   vec3 blue = uColor;
+        //   diffuseColor = vec4(blue + vec3(tex1.r * 0.9 - tex2.g * 0.04), 1.0);
+          diffuseColor = vec4(vec3(tex1.r * 0.9 - tex2.g * 0.04), 1.0);
         `
             ]
         });
@@ -287,11 +306,13 @@ class Ocean extends THREE.Mesh {
     }
 }
 
-setTimeout(() => {
+setTimeout(async () => {
     const worldGenerator = new GeoGenPattern(sampleFn, seed, worldOptions);
     const tilemap = new GeoGenTilemap(tileSize, tileColors);
     const tileFinder = tilemap.tilePositionFinder(worldGenerator.tileCache);
-    const textureEl = new ImageTexture(tilemap, tileFinder, tileSize, worldOptions);
+    const textureEl = await testTexture();
+    // const textureEl = ImageTexture(tilemap, tileFinder, tileSize, worldOptions);
+    console.log(textureEl);
     const loader = new THREE.OBJLoader();
     loader.crossOrigin = 'Anonymous';
     loader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/292951/Cannoe.obj', boatGroup => {

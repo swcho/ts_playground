@@ -41,9 +41,11 @@ interface ComputedOptions extends Options {
     worldTileWidth: number;
 }
 
-interface Chunk {
-    [y: number]: {
-        [x: number]: number;
+export type Chunk = number[][];
+
+interface ChunkCache {
+    [worldX: number]: {
+        [worldY: number]: Chunk;
     };
 }
 
@@ -61,9 +63,11 @@ export class GeoGenPattern {
 
     options: ComputedOptions;
 
-    chunkCache = [];
+    // worldChunkWidth * worldChunkHeight
+    chunkCache: ChunkCache = [];
 
-    tileCache = [];
+    // (chunkTileWidth * worldChunkWidth) * (chunkTileWidth * worldChunkHeight)
+    tileCache: Chunk = [];
 
     constructor(private sampleFn: SampeFunc, private seed: number, options: Options, cacheAllTiles = true) {
         console.log('seed', seed);
@@ -134,7 +138,7 @@ export class GeoGenPattern {
         return chunk;
     }
 
-    getCell(worldX, worldY) {
+    getCell(worldX: number, worldY: number) {
         const { worldTileWidth, worldTileHeight } = this.options;
         const x = this.clamp(worldX, worldTileWidth);
         const y = this.clamp(worldY, worldTileHeight);
@@ -158,7 +162,7 @@ export class GeoGenPattern {
         const { worldChunkWidth, worldChunkHeight } = this.options;
         const x = this.clamp(worldChunkX, worldChunkWidth);
         const y = this.clamp(worldChunkY, worldChunkHeight);
-        return this.sampleFn(y * worldChunkWidth + x + seed, x, y, seed);
+        return this.sampleFn(y * worldChunkHeight + x + seed, x, y, seed);
     }
 
     generateChunk(width: number, height: number, row0: Edge, row1: Edge, row2: Edge, row3: Edge): Chunk {
