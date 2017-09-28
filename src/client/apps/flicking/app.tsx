@@ -30,18 +30,6 @@ const StyledItem = styled.ul`
     }
 `;
 
-const FlickView = styled.div`
-    border: 1px solid red;
-    position: absolute;
-    overflow: hidden;
-    width: ${(props) => props.height}px;
-    height: ${(props) => props.height}px;
-    .view {
-        position: absolute;
-        height: ${(props) => props.height}px;
-    }
-`;
-
 interface Pos {
     x: number;
     y: number;
@@ -59,11 +47,50 @@ function flick(value: number, speed: number, cb: (value: number) => void) {
     }, 16);
 }
 
-class Flick extends React.Component<{
+
+interface ViewItem {
+    key: number;
+    index: number;
+    el?: HTMLDivElement;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    visible?: boolean;
+}
+
+
+function updateViewItemInfo(viewItem: ViewItem) {
+    const {
+        el
+    } = viewItem;
+    const elChild = el.children[0] as HTMLElement;
+    viewItem.width = elChild.clientWidth;
+    viewItem.height = elChild.clientHeight;
+    viewItem.visible = true;
+}
+
+function needMore(unit: number, pos: number, filledStart: number, filledSize: number) {
+    const boundMin = pos - unit;
+    const boundMax = pos + unit * 2;
+    return {
+        prev: boundMin < filledStart,
+        next: filledStart + filledSize < boundMax,
+    };
+}
+
+type ViewOrientation = 'vertical' | 'horizontal';
+
+class View extends React.Component<{
+    items: any[];
     height: number;
+    orientation: ViewOrientation;
+    renderer: (item) => React.ReactElement<any>
 }, {
-    x: number;
-    y: number;
+    x?: number;
+    y?: number;
+    activeIndex: number;
+    viewItems: ViewItem[];
 }> {
 
     constructor(props) {
@@ -71,6 +98,14 @@ class Flick extends React.Component<{
         this.state = {
             x: 0,
             y: 0,
+            activeIndex: 0,
+            viewItems: [{
+                key: 0,
+                index: 0,
+                x: 0,
+                y: 0,
+                visible: true,
+            }]
         };
     }
 
@@ -86,22 +121,46 @@ class Flick extends React.Component<{
         };
     }
 
+    private move(pos: Partial<Pos>) {
+        const {
+            orientation,
+        } = this.props;
+        // if (pos.x !== undefined) {
+        //     if (pos.x < 0) {
+        //         pos.x = 0;
+        //     }
+        // }
+        if (orientation === 'horizontal' && pos.y !== undefined) {
+            if (pos.y < 0) {
+                pos.y = 0;
+            }
+        }
+        this.setState({...pos});
+    }
+
+    private elRoot: HTMLDivElement;
     render() {
         const {
-            height
+            items,
+            renderer,
+            height,
         } = this.props;
         const {
             x,
             y,
+            activeIndex,
+            viewItems,
         } = this.state;
+
+        const activeItem = items[activeIndex];
         return (
             <div
-                ref='root'
+                ref={(ref) => this.elRoot = ref}
                 style={{
                     position: 'absolute',
                     overflow: 'hidden',
-                    width: `${height}px`,
-                    height: `${height}px`,
+                    width: `100vw`,
+                    height: `100vh`,
                     border: '1px solid red',
                 }}
                 onTouchStart={
@@ -132,7 +191,7 @@ class Flick extends React.Component<{
                                 y: (applyX ? 0 : divY),
                             };
                             this.divApplied = divApplied;
-                            this.setState({
+                            this.move({
                                 x: x + divApplied.x,
                                 y: y + divApplied.y,
                             });
@@ -151,16 +210,12 @@ class Flick extends React.Component<{
                             if (y === 0) {
                                 flick(x, 1, (divX) => {
                                     console.log('flick', divX);
-                                    this.setState({
-                                        x: this.state.x + divX
-                                    });
+                                    this.move({x: this.state.x + divX});
                                 });
                             } else {
                                 flick(y, 1, (divY) => {
                                     console.log('flick', divY);
-                                    this.setState({
-                                        y: this.state.y + divY
-                                    });
+                                    this.move({y: this.state.y + divY});
                                 });
                             }
                             this.divApplied = null;
@@ -172,6 +227,7 @@ class Flick extends React.Component<{
                     style={{
                         position: 'absolute',
                         height: `${height}px`,
+                        border: '1px solid blue',
                         transform: `translateX(${x}px) translateY(${y}px)`,
                     }}
                 >
@@ -180,18 +236,91 @@ class Flick extends React.Component<{
                         height: '1px',
                         backgroundColor: 'red',
                     }}></div>
-                {
-                    data.map((item, i) => (
-                        <StyledItem style={{position: 'absolute'}}>
-                            <li className='name'>{item.first_name}</li>
-                            <li className='email'>{item.email}</li>
-                            <li className='img'><img src={item.img}/></li>
-                        </StyledItem>
-                    ))
-                }
+                    {
+                        viewItems.map((viewItem) => (
+                            <div ref={(ref) => viewItem.el = ref}
+                                key={viewItem.key}
+                                style={{
+                                    position: 'absolute',
+                                    backgroundColor: 'red',
+                                    visibility: viewItem.visible ? 'visible' : 'hidden',
+                                    left: viewItem.x || 0,
+                                    top: viewItem.y || 0,
+                                    width: viewItem.width || 0,
+                                    height: viewItem.height || 0,
+                                }}
+                            >
+                                {
+                                renderer(items[viewItem.index])
+                                }
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         );
+    }
+
+    private reconsileItems(force: boolean = false) {
+        const {
+            orientation,
+        } = this.props;
+        const {
+            x,
+            y,
+            viewItems
+        } = this.state;
+        const horizontal = orientation === 'horizontal';
+
+        let itemFirst: ViewItem;
+        let itemLast: ViewItem;
+        let visibleSize = 0;
+        for (const viewItem of viewItems) {
+            if (viewItem.visible) {
+                if (!itemFirst) itemFirst = viewItem;
+                visibleSize += horizontal ? viewItem.width : viewItem.height;
+                itemLast = viewItem;
+            }
+        }
+
+        let dirty = false;
+
+        // Update size
+        for (const viewItem of viewItems) {
+            if (!viewItem.visible) {
+                updateViewItemInfo(viewItem);
+                dirty = true;
+            }
+        }
+
+        // Need more
+        const elRoot = this.elRoot;
+        const need = horizontal
+            ? needMore(elRoot.clientWidth, x, itemFirst.x, visibleSize)
+            : needMore(elRoot.clientHeight, y, itemFirst.y, visibleSize);
+        if (need.prev) {
+        }
+        if (need.next) {
+        }
+
+        const update = force || dirty;
+        if (update) {
+            this.setState({viewItems});
+        }
+        console.log('reconsileItems', update, viewItems);
+    }
+
+    componentDidMount() {
+        const {
+            viewItems,
+        } = this.state;
+        const firstItem = viewItems[0];
+        updateViewItemInfo(firstItem);
+        this.reconsileItems(true);
+    }
+
+    componentDidUpdate() {
+        this.reconsileItems();
     }
 
 }
@@ -201,7 +330,22 @@ class App extends React.Component<{}, {}> {
     render() {
         return (
             <div>
-                <Flick height={200}/>
+                <View
+                    height={200}
+                    items={data}
+                    orientation='horizontal'
+                    renderer={
+                        (item) => {
+                            return (
+                                <StyledItem style={{position: 'absolute'}}>
+                                    <li className='name'>{item.first_name}</li>
+                                    <li className='email'>{item.email}</li>
+                                    <li className='img'><img src={item.img}/></li>
+                                </StyledItem>
+                            );
+                        }
+                    }
+                />
             </div>
         );
     }
