@@ -39,6 +39,11 @@ export function maxIndex<T>(obj: LinearBufferObj<T>) {
     return getKeys(obj).pop();
 }
 
+export function getMinMaxIndex<T>(obj: LinearBufferObj<T>) {
+    const keys = getKeys(obj);
+    return [keys[0], keys[keys.length - 1]];
+}
+
 export function minValue<T>(obj: LinearBufferObj<T>) {
     return obj[minIndex(obj)];
 }

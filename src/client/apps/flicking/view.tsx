@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import {map, forEach} from './linearbuffer';
-import {ViewItems, ViewItem, calculateInfo, updateViewItemInfo, addToNext, addToPrev} from './viewitems';
+import {ViewItems, ViewItem, calculateInfo, updateViewItemInfo, addToNext, addToPrev, reconcile} from './viewitems';
 
 interface Pos {
     x: number;
@@ -156,7 +156,7 @@ export class View extends React.Component<{
                                 y,
                             } = this.divApplied;
                             console.log('end', x, y);
-                            if (y === 0) {
+                            {/* if (y === 0) {
                                 flick(x, 1, (divX) => {
                                     console.log('flick', divX);
                                     this.move({x: this.state.x + divX});
@@ -166,7 +166,7 @@ export class View extends React.Component<{
                                     console.log('flick', divY);
                                     this.move({y: this.state.y + divY});
                                 });
-                            }
+                            } */}
                             this.divApplied = null;
                         }
                     }
@@ -258,17 +258,38 @@ export class View extends React.Component<{
         console.log('reconsileItems', update, need, viewItems);
     }
 
+    private reconcile() {
+        const {
+            orientation,
+            itemLen,
+        } = this.props;
+        const {
+            x,
+            y,
+            viewItems
+        } = this.state;
+        const elRoot = this.elRoot;
+        const horizontal = orientation === 'horizontal';
+        reconcile(
+            viewItems,
+            horizontal,
+            horizontal ? elRoot.clientWidth : elRoot.clientHeight,
+            horizontal ? x : y,
+            itemLen
+        );
+    }
+
     componentDidMount() {
         const {
             viewItems,
         } = this.state;
         const firstItem = viewItems[0];
         updateViewItemInfo(firstItem);
-        this.reconsileItems(true);
+        this.reconcile();
     }
 
     componentDidUpdate() {
-        this.reconsileItems();
+        this.reconcile();
     }
 
 }
