@@ -34,7 +34,7 @@ export function updateViewItemInfo(viewItem: ViewItem) {
 export function reconcile(viewItems: ViewItems, horizontal: boolean, viewSize: number, anchorPos: number, itemLen: number) {
     const [idxMin, idxMax] = getMinMaxIndex(viewItems);
     const heaf = viewSize / 2;
-    const boundMin = -anchorPos - heaf;
+    const boundMin = -anchorPos - viewSize;
     const boundMax = -anchorPos + viewSize + heaf;
 
     let viewItemsModified = false;
@@ -104,4 +104,37 @@ export function reconcile(viewItems: ViewItems, horizontal: boolean, viewSize: n
     });
 
     return viewItemsModified;
+}
+
+function findByPos(viewItems: ViewItems, horizontal: boolean, pos: number) {
+    const [idxMin, idxMax] = getMinMaxIndex(viewItems);
+    for (let i = idxMin; i <= idxMax; i += 1) {
+        const viewItem = viewItems[i];
+        if (horizontal ? pos === viewItem.x : pos === viewItem.y) {
+            return viewItem;
+        }
+    }
+    return null;
+}
+
+export function getNextAnchorableItem(viewItems: ViewItems, horizontal: boolean, anchorPos: number) {
+    const [idxMin, idxMax] = getMinMaxIndex(viewItems);
+    for (let i = idxMin; i <= idxMax; i += 1) {
+        const viewItem = viewItems[i];
+        const pos = horizontal ? viewItem.x : viewItem.y;
+        if (anchorPos < pos) {
+            return viewItem;
+        }
+    }
+}
+
+export function getPrevAnchorableItem(viewItems: ViewItems, horizontal: boolean, anchorPos: number) {
+    const [idxMin, idxMax] = getMinMaxIndex(viewItems);
+    for (let i = idxMax; i >= idxMin; i -= 1) {
+        const viewItem = viewItems[i];
+        const pos = horizontal ? viewItem.x : viewItem.y;
+        if (pos < anchorPos) {
+            return viewItem;
+        }
+    }
 }

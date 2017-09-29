@@ -46,12 +46,14 @@ class App extends React.Component<{}, {}> {
                     itemLen={data.length}
                     orientation='horizontal'
                     height={200}
+                    anchorPos={10}
                     renderer={
                         (index) => {
                             const item = data[index];
                             return (
                                 <StyledItem>
                                     <div className='content'>
+                                        <li className='name'>Index: {index}</li>
                                         <li className='name'>{item.first_name}</li>
                                         <li className='email'>{item.email}</li>
                                         <li className='img'><img src={item.img}/></li>

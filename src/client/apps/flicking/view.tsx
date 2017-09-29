@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import {map} from './linearbuffer';
-import {ViewItems, updateViewItemInfo, reconcile} from './viewitems';
+import {ViewItems, ViewItem, updateViewItemInfo, reconcile, getNextAnchorableItem, getPrevAnchorableItem} from './viewitems';
 
 interface Pos {
     x: number;
@@ -22,31 +22,57 @@ function flick(value: number, speed: number, cb: (value: number) => void) {
 
 type ViewOrientation = 'vertical' | 'horizontal';
 
-export class View extends React.Component<{
+interface Props {
     itemLen: number;
     height: number;
     orientation: ViewOrientation;
-    renderer: (index: number) => React.ReactElement<any>
-}, {
+    anchorPos?: number;
+    startIndex?: number;
+    renderer: (index: number) => React.ReactElement<any>;
+}
+
+export class View extends React.Component<Props, {
     x?: number;
     y?: number;
     activeIndex: number;
     viewItems: ViewItems;
+    transitioning?: boolean;
 }> {
 
-    constructor(props) {
+    static defaultProps: Partial<Props> = {
+        anchorPos: 0,
+        startIndex: 0,
+    };
+
+    constructor(props: Props) {
         super(props);
+        const {
+            orientation,
+            startIndex,
+            anchorPos,
+        } = this.props;
+
+        const horizontal = orientation === 'horizontal';
+        const initialIndex = startIndex || 0;
+        const initialItem: ViewItem = {
+            key: 0,
+            index: initialIndex,
+        };
+        if (anchorPos !== undefined) {
+            if (horizontal) {
+                initialItem.x = anchorPos;
+                initialItem.y = 0;
+            } else {
+                initialItem.y = anchorPos;
+                initialItem.x = 0;
+            }
+        }
+
         this.state = {
             x: 0,
             y: 0,
             activeIndex: 0,
-            viewItems: [{
-                key: 0,
-                index: 0,
-                x: 0,
-                y: 0,
-                visible: true,
-            }]
+            viewItems: [initialItem],
         };
         window['viewItems'] = this.state.viewItems;
     }
@@ -63,7 +89,7 @@ export class View extends React.Component<{
         };
     }
 
-    private move(pos: Partial<Pos>) {
+    private move(pos: Partial<Pos>, transitioning = false) {
         const {
             orientation,
         } = this.props;
@@ -75,7 +101,10 @@ export class View extends React.Component<{
         if (orientation === 'horizontal' && pos.y !== undefined) {
             pos.y = 0;
         }
-        this.setState({...pos});
+        this.setState({
+            ...pos,
+            transitioning,
+        });
     }
 
     private elRoot: HTMLDivElement;
@@ -84,11 +113,13 @@ export class View extends React.Component<{
             renderer,
             height,
             orientation,
+            anchorPos,
         } = this.props;
         const {
             x,
             y,
             viewItems,
+            transitioning,
         } = this.state;
         const horizontal = orientation === 'horizontal';
 
@@ -144,10 +175,22 @@ export class View extends React.Component<{
                         this.posPrev = null;
                         if (this.divApplied) {
                             const {
-                                x,
-                                y,
+                                x: divX,
+                                y: divY,
                             } = this.divApplied;
-                            console.log('end', x, y);
+                            console.log('end', divX, divY, x, anchorPos);
+                            if (divY === 0) {
+                                const anchorX = -x + anchorPos;
+                                if (divX < 0) {
+                                    const next = getNextAnchorableItem(viewItems, horizontal, anchorX);
+                                    this.move({x: anchorPos - next.x});
+                                    console.log('next', anchorX, next);
+                                } else {
+                                    const prev = getPrevAnchorableItem(viewItems, horizontal, anchorX);
+                                    this.move({x: anchorPos - prev.x});
+                                    console.log('prev', prev);
+                                }
+                            }
                             {/* if (y === 0) {
                                 flick(x, 1, (divX) => {
                                     console.log('flick', divX);
@@ -170,6 +213,7 @@ export class View extends React.Component<{
                         height: `${height}px`,
                         border: '1px solid blue',
                         transform: `translate3d(${x}px, ${y}px, 0)`,
+                        transition: `transform .3s ease`,
                     }}
                 >
                     <div style={{
@@ -214,13 +258,16 @@ export class View extends React.Component<{
         } = this.state;
         const elRoot = this.elRoot;
         const horizontal = orientation === 'horizontal';
-        reconcile(
+        const updated = reconcile(
             viewItems,
             horizontal,
             horizontal ? elRoot.clientWidth : elRoot.clientHeight,
             horizontal ? x : y,
             itemLen
         );
+        if (updated) {
+            this.setState({viewItems});
+        }
     }
 
     componentDidMount() {
