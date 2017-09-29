@@ -21,6 +21,8 @@ function flick(value: number, speed: number, cb: (value: number) => void) {
     }, 16);
 }
 
+const USE_TOUCH = true;
+
 type ViewOrientation = 'vertical' | 'horizontal';
 
 interface Props {
@@ -182,11 +184,9 @@ export class View extends React.Component<Props, {
         if (orientation === 'horizontal' && pos.y !== undefined) {
             pos.y = 0;
         }
-        requestAnimationFrame(() => {
-            this.setState({
-                ...pos,
-                transitioning,
-            });
+        this.setState({
+            ...pos,
+            transitioning,
         });
     }
 
@@ -218,27 +218,52 @@ export class View extends React.Component<Props, {
                     // touchAction: horizontal ? 'pan-x' : 'pan-y',
                     touchAction: 'none',
                 }}
+                onMouseDown={
+                    (e) => {
+                        this.pointings.processStart({
+                            x: e.pageX,
+                            y: e.pageY,
+                        });
+                    }
+                }
+                onMouseMove={
+                    (e) => {
+                        this.pointings.processMove({
+                            x: e.pageX,
+                            y: e.pageY,
+                        });
+                    }
+                }
+                onMouseUp={(e) => this.pointings.processEnd()}
+                onMouseLeave={(e) => this.pointings.processEnd()}
+                onMouseOut={(e) => this.pointings.processEnd()}
                 onTouchStart={
                     (e) => {
-                        const t = e.touches[e.touches.length - 1];
-                        this.pointings.processStart({
-                            x: t.pageX,
-                            y: t.pageY,
-                        });
+                        if (USE_TOUCH) {
+                            const t = e.touches[e.touches.length - 1];
+                            this.pointings.processStart({
+                                x: t.pageX,
+                                y: t.pageY,
+                            });
+                        }
                     }
                 }
                 onTouchMove={
                     (e) => {
-                        const t = e.touches[e.touches.length - 1];
-                        this.pointings.processMove({
-                            x: t.pageX,
-                            y: t.pageY,
-                        });
+                        if (USE_TOUCH) {
+                            const t = e.touches[e.touches.length - 1];
+                            this.pointings.processMove({
+                                x: t.pageX,
+                                y: t.pageY,
+                            });
+                        }
                     }
                 }
                 onTouchEnd={
                     (e) => {
-                        this.pointings.processEnd();
+                        if (USE_TOUCH) {
+                            this.pointings.processEnd();
+                        }
                     }
                 }
             >
