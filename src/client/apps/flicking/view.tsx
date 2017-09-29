@@ -111,6 +111,7 @@ export class View extends React.Component<Props, {
     private posPrev: Pos = null;
     private divPrev: Pos = null;
     private moveCount = 0;
+    private moveTotal = 0;
     render() {
         const {
             renderer,
@@ -177,7 +178,8 @@ export class View extends React.Component<Props, {
                                     y: y + div.y,
                                 });
                                 this.moveCount++;
-                                console.log('move', this.posPrev, divX, divY);
+                                this.moveTotal += div.x === 0 ? div.y : div.x;
+                                console.log('move', this.posPrev, divX, divY, this.moveTotal);
                             }
                         }
                     }
@@ -186,7 +188,7 @@ export class View extends React.Component<Props, {
                     (e) => {
                         if (this.divPrev) {
                             this.setState({transitioning: true});
-                            if (1 < this.moveCount) {
+                            if (35 < Math.abs(this.moveTotal)) {
                                 const {
                                     x: divX,
                                     y: divY,
@@ -221,6 +223,7 @@ export class View extends React.Component<Props, {
                             this.divPrev = null;
                         }
                         this.moveCount = 0;
+                        this.moveTotal = 0;
                         this.posPrev = null;
                         this.posStart = null;
                     }
@@ -230,16 +233,11 @@ export class View extends React.Component<Props, {
                     style={{
                         position: 'absolute',
                         height: `${height}px`,
-                        border: '1px solid blue',
+                        // border: '1px solid blue',
                         transform: `translate3d(${x}px, ${y}px, 0)`,
                         transition: transitioning && `transform .3s ease`,
                     }}
                 >
-                    <div style={{
-                        width: '1px',
-                        height: '1px',
-                        backgroundColor: 'red',
-                    }}></div>
                     {
                         map(viewItems, ((viewItem) => (
                             <div ref={(ref) => viewItem.el = ref}
