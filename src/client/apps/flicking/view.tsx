@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {map} from './linearbuffer';
 import {ViewItems, ViewItem, updateViewItemInfo, reconcile, getNextAnchorableItem, getPrevAnchorableItem} from './viewitems';
+import {Pointings, MoveStartHandler, MoveHandler, MoveFinishHandler} from './pointings';
 
 interface Pos {
     x: number;
@@ -44,6 +45,8 @@ export class View extends React.Component<Props, {
         startIndex: 0,
     };
 
+    private pointings: Pointings;
+
     constructor(props: Props) {
         super(props);
         const {
@@ -75,6 +78,87 @@ export class View extends React.Component<Props, {
             viewItems: [initialItem],
         };
         window['viewItems'] = this.state.viewItems;
+
+        this.pointings = new Pointings(this.onMoveStart, this.onMove, this.onMoveFinish);
+    }
+
+    private posStart: Pos = null;
+    private onMoveStart: MoveStartHandler = () => {
+        const {x, y} = this.state;
+        this.posStart = {x, y};
+    }
+
+    private onMove: MoveHandler = (divX: number, divY: number) => {
+        const {
+            x, y
+        } = this.state;
+        this.move({
+            x: x + divX,
+            y: y + divY,
+        });
+        this.posStart = {
+            x,
+            y,
+        };
+    }
+
+    private onMoveFinish: MoveFinishHandler = (summary) => {
+        const {
+            anchorPos,
+            orientation,
+        } = this.props;
+        const {
+            x,
+            y,
+            viewItems,
+        } = this.state;
+        const {
+            moveTotal,
+            xMoved,
+            yMoved,
+        } = summary;
+        const horizontal = orientation === 'horizontal';
+
+        this.setState({transitioning: true});
+        if (35 < Math.abs(moveTotal)) {
+            if (xMoved) {
+                const anchorX = -x + anchorPos;
+                if (moveTotal < 0) {
+                    const next = getNextAnchorableItem(viewItems, horizontal, anchorX);
+                    this.move({x: anchorPos - next.x}, true);
+                    console.log('next', next);
+                } else {
+                    const prev = getPrevAnchorableItem(viewItems, horizontal, anchorX);
+                    this.move({x: anchorPos - prev.x}, true);
+                    console.log('prev', prev);
+                }
+            }
+            if (yMoved) {
+                const anchorY = -y + anchorPos;
+                if (moveTotal < 0) {
+                    const next = getNextAnchorableItem(viewItems, horizontal, anchorY);
+                    this.move({y: anchorPos - next.y}, true);
+                    console.log('next', next);
+                } else {
+                    const prev = getPrevAnchorableItem(viewItems, horizontal, anchorY);
+                    this.move({y: anchorPos - prev.y}, true);
+                    console.log('prev', prev);
+                }
+            }
+            {/* if (y === 0) {
+                flick(x, 1, (divX) => {
+                    console.log('flick', divX);
+                    this.move({x: this.state.x + divX});
+                });
+            } else {
+                flick(y, 1, (divY) => {
+                    console.log('flick', divY);
+                    this.move({y: this.state.y + divY});
+                });
+            } */}
+        } else {
+            this.move(this.posStart, true);
+        }
     }
 
     private getRootPos(): Pos {
@@ -107,11 +191,6 @@ export class View extends React.Component<Props, {
     }
 
     private elRoot: HTMLDivElement;
-    private posStart: Pos = null;
-    private posPrev: Pos = null;
-    private divPrev: Pos = null;
-    private moveCount = 0;
-    private moveTotal = 0;
     render() {
         const {
             renderer,
@@ -142,90 +221,24 @@ export class View extends React.Component<Props, {
                 onTouchStart={
                     (e) => {
                         const t = e.touches[e.touches.length - 1];
-                        this.posStart = {
-                            x,
-                            y,
-                        };
-                        this.posPrev = {
+                        this.pointings.processStart({
                             x: t.pageX,
                             y: t.pageY,
-                        };
-                        console.log('start', this.posStart);
+                        });
                     }
                 }
                 onTouchMove={
                     (e) => {
-                        if (this.posStart) {
-                            const t = e.touches[e.touches.length - 1];
-                            const newPos = {
-                                x: t.pageX,
-                                y: t.pageY,
-                            };
-                            const divX = newPos.x - this.posPrev.x;
-                            const divY = newPos.y - this.posPrev.y;
-                            const applyX = Math.abs(divX) > Math.abs(divY);
-                            this.posPrev = newPos;
-                            const div = {
-                                x: (applyX ? divX : 0),
-                                y: (applyX ? 0 : divY),
-                            };
-                            if (!this.divPrev
-                                || (div.x === 0 && this.divPrev.x === 0) || (div.y === 0 && this.divPrev.y === 0) // check same direction
-                                ) {
-                                this.divPrev = div;
-                                this.move({
-                                    x: x + div.x,
-                                    y: y + div.y,
-                                });
-                                this.moveCount++;
-                                this.moveTotal += div.x === 0 ? div.y : div.x;
-                                console.log('move', this.posPrev, divX, divY, this.moveTotal);
-                            }
-                        }
+                        const t = e.touches[e.touches.length - 1];
+                        this.pointings.processMove({
+                            x: t.pageX,
+                            y: t.pageY,
+                        });
                     }
                 }
                 onTouchEnd={
                     (e) => {
-                        if (this.divPrev) {
-                            this.setState({transitioning: true});
-                            if (35 < Math.abs(this.moveTotal)) {
-                                const {
-                                    x: divX,
-                                    y: divY,
-                                } = this.divPrev;
-                                console.log('end', divX, divY, x, anchorPos);
-                                if (divY === 0) {
-                                    const anchorX = -x + anchorPos;
-                                    if (divX < 0) {
-                                        const next = getNextAnchorableItem(viewItems, horizontal, anchorX);
-                                        this.move({x: anchorPos - next.x}, true);
-                                        console.log('next', anchorX, next);
-                                    } else {
-                                        const prev = getPrevAnchorableItem(viewItems, horizontal, anchorX);
-                                        this.move({x: anchorPos - prev.x}, true);
-                                        console.log('prev', prev);
-                                    }
-                                }
-                                {/* if (y === 0) {
-                                    flick(x, 1, (divX) => {
-                                        console.log('flick', divX);
-                                        this.move({x: this.state.x + divX});
-                                    });
-                                } else {
-                                    flick(y, 1, (divY) => {
-                                        console.log('flick', divY);
-                                        this.move({y: this.state.y + divY});
-                                    });
-                                } */}
-                            } else {
-                                this.move(this.posStart, true);
-                            }
-                            this.divPrev = null;
-                        }
-                        this.moveCount = 0;
-                        this.moveTotal = 0;
-                        this.posPrev = null;
-                        this.posStart = null;
+                        this.pointings.processEnd();
                     }
                 }
             >
