@@ -77,9 +77,6 @@ export class View extends React.Component<Props, {
         window['viewItems'] = this.state.viewItems;
     }
 
-    private posPrev: Pos = null;
-    private divApplied: Pos = null;
-
     private getRootPos(): Pos {
         const elRoot = this.refs['root'] as HTMLDivElement;
         const rect = elRoot.getBoundingClientRect();
@@ -101,13 +98,19 @@ export class View extends React.Component<Props, {
         if (orientation === 'horizontal' && pos.y !== undefined) {
             pos.y = 0;
         }
-        this.setState({
-            ...pos,
-            transitioning,
+        requestAnimationFrame(() => {
+            this.setState({
+                ...pos,
+                transitioning,
+            });
         });
     }
 
     private elRoot: HTMLDivElement;
+    private posStart: Pos = null;
+    private posPrev: Pos = null;
+    private divPrev: Pos = null;
+    private moveCount = 0;
     render() {
         const {
             renderer,
@@ -138,16 +141,20 @@ export class View extends React.Component<Props, {
                 onTouchStart={
                     (e) => {
                         const t = e.touches[e.touches.length - 1];
+                        this.posStart = {
+                            x,
+                            y,
+                        };
                         this.posPrev = {
                             x: t.pageX,
                             y: t.pageY,
                         };
-                        console.log('start', this.posPrev);
+                        console.log('start', this.posStart);
                     }
                 }
                 onTouchMove={
                     (e) => {
-                        if (this.posPrev) {
+                        if (this.posStart) {
                             const t = e.touches[e.touches.length - 1];
                             const newPos = {
                                 x: t.pageX,
@@ -157,53 +164,65 @@ export class View extends React.Component<Props, {
                             const divY = newPos.y - this.posPrev.y;
                             const applyX = Math.abs(divX) > Math.abs(divY);
                             this.posPrev = newPos;
-                            // console.log('move', this.posPrev, divX, divY);
-                            const divApplied = {
+                            const div = {
                                 x: (applyX ? divX : 0),
                                 y: (applyX ? 0 : divY),
                             };
-                            this.divApplied = divApplied;
-                            this.move({
-                                x: x + divApplied.x,
-                                y: y + divApplied.y,
-                            });
+                            if (!this.divPrev
+                                || (div.x === 0 && this.divPrev.x === 0) || (div.y === 0 && this.divPrev.y === 0) // check same direction
+                                ) {
+                                this.divPrev = div;
+                                this.move({
+                                    x: x + div.x,
+                                    y: y + div.y,
+                                });
+                                this.moveCount++;
+                                console.log('move', this.posPrev, divX, divY);
+                            }
                         }
                     }
                 }
                 onTouchEnd={
                     (e) => {
-                        this.posPrev = null;
-                        if (this.divApplied) {
-                            const {
-                                x: divX,
-                                y: divY,
-                            } = this.divApplied;
-                            console.log('end', divX, divY, x, anchorPos);
-                            if (divY === 0) {
-                                const anchorX = -x + anchorPos;
-                                if (divX < 0) {
-                                    const next = getNextAnchorableItem(viewItems, horizontal, anchorX);
-                                    this.move({x: anchorPos - next.x});
-                                    console.log('next', anchorX, next);
-                                } else {
-                                    const prev = getPrevAnchorableItem(viewItems, horizontal, anchorX);
-                                    this.move({x: anchorPos - prev.x});
-                                    console.log('prev', prev);
+                        if (this.divPrev) {
+                            this.setState({transitioning: true});
+                            if (1 < this.moveCount) {
+                                const {
+                                    x: divX,
+                                    y: divY,
+                                } = this.divPrev;
+                                console.log('end', divX, divY, x, anchorPos);
+                                if (divY === 0) {
+                                    const anchorX = -x + anchorPos;
+                                    if (divX < 0) {
+                                        const next = getNextAnchorableItem(viewItems, horizontal, anchorX);
+                                        this.move({x: anchorPos - next.x}, true);
+                                        console.log('next', anchorX, next);
+                                    } else {
+                                        const prev = getPrevAnchorableItem(viewItems, horizontal, anchorX);
+                                        this.move({x: anchorPos - prev.x}, true);
+                                        console.log('prev', prev);
+                                    }
                                 }
-                            }
-                            {/* if (y === 0) {
-                                flick(x, 1, (divX) => {
-                                    console.log('flick', divX);
-                                    this.move({x: this.state.x + divX});
-                                });
+                                {/* if (y === 0) {
+                                    flick(x, 1, (divX) => {
+                                        console.log('flick', divX);
+                                        this.move({x: this.state.x + divX});
+                                    });
+                                } else {
+                                    flick(y, 1, (divY) => {
+                                        console.log('flick', divY);
+                                        this.move({y: this.state.y + divY});
+                                    });
+                                } */}
                             } else {
-                                flick(y, 1, (divY) => {
-                                    console.log('flick', divY);
-                                    this.move({y: this.state.y + divY});
-                                });
-                            } */}
-                            this.divApplied = null;
+                                this.move(this.posStart, true);
+                            }
+                            this.divPrev = null;
                         }
+                        this.moveCount = 0;
+                        this.posPrev = null;
+                        this.posStart = null;
                     }
                 }
             >
@@ -213,7 +232,7 @@ export class View extends React.Component<Props, {
                         height: `${height}px`,
                         border: '1px solid blue',
                         transform: `translate3d(${x}px, ${y}px, 0)`,
-                        transition: `transform .3s ease`,
+                        transition: transitioning && `transform .3s ease`,
                     }}
                 >
                     <div style={{
