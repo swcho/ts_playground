@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import {map} from './linearbuffer';
-import {ViewItems, ViewItem, updateViewItemInfo, reconcile, getNextAnchorableItem, getPrevAnchorableItem} from './viewitems';
+import {ViewItems, ViewItem, updateViewItemInfo, reconcile, getNextAnchorableItem, getPrevAnchorableItem, setActive} from './viewitems';
 import {Pointings, MoveStartHandler, MoveHandler, MoveFinishHandler} from './pointings';
 
 interface Pos {
@@ -30,7 +30,8 @@ interface Props {
     orientation: ViewOrientation;
     anchorPos?: number;
     startIndex?: number;
-    renderer: (index: number) => React.ReactElement<any>;
+    transitionDuration?: number;
+    renderer: (viewItem: ViewItem) => React.ReactElement<any>;
 }
 
 export class View extends React.Component<Props, {
@@ -44,6 +45,7 @@ export class View extends React.Component<Props, {
     static defaultProps: Partial<Props> = {
         anchorPos: 0,
         startIndex: 0,
+        transitionDuration: 300,
     };
 
     private pointings: Pointings;
@@ -61,6 +63,7 @@ export class View extends React.Component<Props, {
         const initialItem: ViewItem = {
             key: 0,
             index: initialIndex,
+            active: true,
         };
         if (anchorPos !== undefined) {
             if (horizontal) {
@@ -122,26 +125,30 @@ export class View extends React.Component<Props, {
 
         this.setState({transitioning: true});
         if (35 < Math.abs(moveTotal)) {
-            if (xMoved) {
+            if (horizontal && xMoved) {
                 const anchorX = -x + anchorPos;
                 if (moveTotal < 0) {
                     const next = getNextAnchorableItem(viewItems, horizontal, anchorX);
+                    setActive(viewItems, next);
                     this.move({x: anchorPos - next.x}, true);
                     console.log('next', next);
                 } else {
                     const prev = getPrevAnchorableItem(viewItems, horizontal, anchorX);
+                    setActive(viewItems, prev);
                     this.move({x: anchorPos - prev.x}, true);
                     console.log('prev', prev);
                 }
             }
-            if (yMoved) {
+            if (!horizontal && yMoved) {
                 const anchorY = -y + anchorPos;
                 if (moveTotal < 0) {
                     const next = getNextAnchorableItem(viewItems, horizontal, anchorY);
+                    setActive(viewItems, next);
                     this.move({y: anchorPos - next.y}, true);
                     console.log('next', next);
                 } else {
                     const prev = getPrevAnchorableItem(viewItems, horizontal, anchorY);
+                    setActive(viewItems, prev);
                     this.move({y: anchorPos - prev.y}, true);
                     console.log('prev', prev);
                 }
@@ -194,7 +201,7 @@ export class View extends React.Component<Props, {
         const {
             renderer,
             orientation,
-            anchorPos,
+            transitionDuration,
         } = this.props;
         const {
             x,
@@ -270,7 +277,7 @@ export class View extends React.Component<Props, {
                         position: 'absolute',
                         // border: '1px solid blue',
                         transform: `translate3d(${x}px, ${y}px, 0)`,
-                        transition: transitioning && `transform .3s ease`,
+                        transition: transitioning && `transform ${transitionDuration}ms ease`,
                     }}
                 >
                     {
@@ -282,13 +289,14 @@ export class View extends React.Component<Props, {
                                     visibility: viewItem.visible ? 'visible' : 'hidden',
                                     left: viewItem.x || 0,
                                     top: viewItem.y || 0,
-                                    width: viewItem.width || 0,
+                                    width: !horizontal && this.elRoot && this.elRoot.clientWidth || viewItem.width || 0,
                                     height: horizontal && this.elRoot && this.elRoot.clientHeight || viewItem.height || 0,
                                     overflowY: 'auto',
+                                    touchAction: horizontal ? 'pan-y' : 'pan-x',
                                 }}
                             >
                                 {
-                                renderer(viewItem.index)
+                                renderer(viewItem)
                                 }
                             </div>
                         )))

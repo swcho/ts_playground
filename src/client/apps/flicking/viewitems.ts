@@ -10,6 +10,7 @@ export interface ViewItem {
     width?: number;
     height?: number;
     visible?: boolean;
+    active?: boolean;
 }
 
 export type ViewItems = LinearBufferObj<ViewItem>;
@@ -136,5 +137,13 @@ export function getPrevAnchorableItem(viewItems: ViewItems, horizontal: boolean,
         if (pos < anchorPos) {
             return viewItem;
         }
+    }
+}
+
+export function setActive(viewItems: ViewItems, viewItem: ViewItem) {
+    const [idxMin, idxMax] = getMinMaxIndex(viewItems);
+    for (let i = idxMin; i <= idxMax; i += 1) {
+        const item = viewItems[i];
+        item.active = (viewItem.key === i);
     }
 }
