@@ -1,7 +1,7 @@
 
 import * as React from 'react';
-import {map, forEach} from './linearbuffer';
-import {ViewItems, ViewItem, calculateInfo, updateViewItemInfo, addToNext, addToPrev, reconcile} from './viewitems';
+import {map} from './linearbuffer';
+import {ViewItems, updateViewItemInfo, reconcile} from './viewitems';
 
 interface Pos {
     x: number;
@@ -18,16 +18,6 @@ function flick(value: number, speed: number, cb: (value: number) => void) {
             clearInterval(interval);
         }
     }, 16);
-}
-
-function needMore(unit: number, pos: number, filledStart: number, filledSize: number) {
-    const boundMin = -pos;
-    const boundMax = -pos + unit;
-    console.log('needMore', pos, filledStart, boundMin, boundMax, filledStart + filledSize);
-    return {
-        prev: boundMin < filledStart,
-        next: filledStart + filledSize < boundMax,
-    };
 }
 
 type ViewOrientation = 'vertical' | 'horizontal';
@@ -208,54 +198,6 @@ export class View extends React.Component<{
                 </div>
             </div>
         );
-    }
-
-    private reconsileItems(force: boolean = false) {
-        const {
-            orientation,
-            itemLen,
-        } = this.props;
-        const {
-            x,
-            y,
-            viewItems
-        } = this.state;
-        const horizontal = orientation === 'horizontal';
-
-        let dirty = false;
-        // Update size
-        dirty = calculateInfo(viewItems, horizontal);
-
-        let itemFirst: ViewItem;
-        let itemLast: ViewItem;
-        let visibleSize = 0;
-        forEach(viewItems, function(viewItem) {
-            if (viewItem.visible) {
-                if (!itemFirst) itemFirst = viewItem;
-                visibleSize += horizontal ? viewItem.width : viewItem.height;
-                itemLast = viewItem;
-            }
-        });
-
-        // Need more
-        const elRoot = this.elRoot;
-        const need = horizontal
-            ? needMore(elRoot.clientWidth, x, itemFirst.x, visibleSize)
-            : needMore(elRoot.clientHeight, y, itemFirst.y, visibleSize);
-        if (need.prev) {
-            addToPrev(viewItems, itemLen);
-            // dirty = true;
-        }
-        if (need.next) {
-            addToNext(viewItems, itemLen);
-            // dirty = true;
-        }
-
-        const update = force || dirty;
-        if (update) {
-            this.setState({viewItems});
-        }
-        console.log('reconsileItems', update, need, viewItems);
     }
 
     private reconcile() {
