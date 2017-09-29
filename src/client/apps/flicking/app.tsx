@@ -22,7 +22,7 @@ interface Item {
 const StyledItem = styled.ul`
     width: 200px;
     border: 1px solid green;
-    height: 500px;
+    height: 1000px;
     .content {
         width: 200px;
         height: 500px;
@@ -45,7 +45,6 @@ class App extends React.Component<{}, {}> {
                 <View
                     itemLen={data.length}
                     orientation='horizontal'
-                    height={200}
                     anchorPos={10}
                     renderer={
                         (index) => {

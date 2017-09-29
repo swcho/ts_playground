@@ -27,7 +27,6 @@ type ViewOrientation = 'vertical' | 'horizontal';
 
 interface Props {
     itemLen: number;
-    height: number;
     orientation: ViewOrientation;
     anchorPos?: number;
     startIndex?: number;
@@ -194,7 +193,6 @@ export class View extends React.Component<Props, {
     render() {
         const {
             renderer,
-            height,
             orientation,
             anchorPos,
         } = this.props;
@@ -270,7 +268,6 @@ export class View extends React.Component<Props, {
                 <div
                     style={{
                         position: 'absolute',
-                        height: `${height}px`,
                         // border: '1px solid blue',
                         transform: `translate3d(${x}px, ${y}px, 0)`,
                         transition: transitioning && `transform .3s ease`,
@@ -282,12 +279,12 @@ export class View extends React.Component<Props, {
                                 key={'' + viewItem.key}
                                 style={{
                                     position: 'absolute',
-                                    backgroundColor: 'red',
                                     visibility: viewItem.visible ? 'visible' : 'hidden',
                                     left: viewItem.x || 0,
                                     top: viewItem.y || 0,
                                     width: viewItem.width || 0,
-                                    height: viewItem.height || 0,
+                                    height: horizontal && this.elRoot && this.elRoot.clientHeight || viewItem.height || 0,
+                                    overflowY: 'auto',
                                 }}
                             >
                                 {
