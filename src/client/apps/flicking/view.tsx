@@ -81,16 +81,16 @@ export class View extends React.Component<{
     private elRoot: HTMLDivElement;
     render() {
         const {
-            itemLen,
             renderer,
             height,
+            orientation,
         } = this.props;
         const {
             x,
             y,
-            activeIndex,
             viewItems,
         } = this.state;
+        const horizontal = orientation === 'horizontal';
 
         return (
             <div
@@ -101,6 +101,8 @@ export class View extends React.Component<{
                     width: `100vw`,
                     height: `100vh`,
                     border: '1px solid red',
+                    // touchAction: horizontal ? 'pan-x' : 'pan-y',
+                    touchAction: 'none',
                 }}
                 onTouchStart={
                     (e) => {
@@ -124,7 +126,7 @@ export class View extends React.Component<{
                             const divY = newPos.y - this.posPrev.y;
                             const applyX = Math.abs(divX) > Math.abs(divY);
                             this.posPrev = newPos;
-                            console.log('move', this.posPrev, divX, divY);
+                            // console.log('move', this.posPrev, divX, divY);
                             const divApplied = {
                                 x: (applyX ? divX : 0),
                                 y: (applyX ? 0 : divY),
@@ -167,7 +169,7 @@ export class View extends React.Component<{
                         position: 'absolute',
                         height: `${height}px`,
                         border: '1px solid blue',
-                        transform: `translateX(${x}px) translateY(${y}px)`,
+                        transform: `translate3d(${x}px, ${y}px, 0)`,
                     }}
                 >
                     <div style={{

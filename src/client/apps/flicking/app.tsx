@@ -20,7 +20,13 @@ interface Item {
 }
 
 const StyledItem = styled.ul`
+    width: 200px;
     border: 1px solid green;
+    height: 500px;
+    .content {
+        width: 200px;
+        height: 500px;
+    }
     .name {
         font-size: 20px;
         line-height: 40px;
@@ -44,10 +50,12 @@ class App extends React.Component<{}, {}> {
                         (index) => {
                             const item = data[index];
                             return (
-                                <StyledItem style={{position: 'absolute'}}>
-                                    <li className='name'>{item.first_name}</li>
-                                    <li className='email'>{item.email}</li>
-                                    <li className='img'><img src={item.img}/></li>
+                                <StyledItem>
+                                    <div className='content'>
+                                        <li className='name'>{item.first_name}</li>
+                                        <li className='email'>{item.email}</li>
+                                        <li className='img'><img src={item.img}/></li>
+                                    </div>
                                 </StyledItem>
                             );
                         }

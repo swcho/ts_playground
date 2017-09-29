@@ -1,5 +1,5 @@
 
-import {LinearBufferObj, maxIndex, forEach, getMinMaxIndex} from './linearbuffer';
+import {LinearBufferObj, forEach, getMinMaxIndex} from './linearbuffer';
 
 export interface ViewItem {
     key: number;
@@ -33,8 +33,9 @@ export function updateViewItemInfo(viewItem: ViewItem) {
 
 export function reconcile(viewItems: ViewItems, horizontal: boolean, viewSize: number, anchorPos: number, itemLen: number) {
     const [idxMin, idxMax] = getMinMaxIndex(viewItems);
-    const boundMin = -anchorPos;
-    const boundMax = -anchorPos + viewSize;
+    const heaf = viewSize / 2;
+    const boundMin = -anchorPos - heaf;
+    const boundMax = -anchorPos + viewSize + heaf;
 
     let viewItemsModified = false;
 

@@ -9,7 +9,7 @@
     "watch_tasks": "npm run build_tasks -- --watch",
     "build": "npm run build_tasks && grunt dist",
     "test": "test command",
-    "serve": "npm run webpack-dev-server -- --config out/tasks/webpack.config.dev.js --hot --contentBase out/client",
+    "serve": "npm run webpack-dev-server -- --host 0.0.0.0 --public 10.66.105.10:8080 --config out/tasks/webpack.config.dev.js --hot --contentBase out/client",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "build_server": "tsc -p src/server",
     "server": "npm run build_server && node out/server/app.js"

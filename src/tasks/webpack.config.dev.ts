@@ -1,5 +1,4 @@
 
-import * as path from 'path';
 
 import * as webpack from 'webpack';
 import * as webpackMerge from 'webpack-merge';
@@ -19,8 +18,8 @@ const webpackConfig: webpack.Configuration = webpackMerge(
         //     ]
         // },
         output: {
-            filename: "[name].[hash].js",
-            chunkFilename: "[name].[hash].js",
+            filename: '[name].[hash].js',
+            chunkFilename: '[name].[hash].js',
         },
         plugins: [
             new webpack.HotModuleReplacementPlugin(),
@@ -28,9 +27,10 @@ const webpackConfig: webpack.Configuration = webpackMerge(
         ],
         devServer: {
             hot: true,
-            contentBase: "out/client",
+            contentBase: 'out/client',
+            disableHostCheck: true,
         },
-        devtool: 'inline-source-map'
+        devtool: 'inline-source-map',
     }
 );
 
