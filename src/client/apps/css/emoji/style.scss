@@ -1,0 +1,237 @@
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: #ccc;
+    font-family: monospace;
+    font-size: 3vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+#settings {
+    width: 8em;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    background: rgba(#000, .75);
+    padding: 1vh;
+    padding-bottom: 2vh;
+    padding-right: 0;
+    color: #fff;
+
+    span {
+        grid-column: 1/1;
+    }
+
+    .heading {
+        grid-column: 1/2;
+        font-size: 150%;
+        text-align: center;
+    }
+}
+
+input:checked + .emojiPart {
+    display: block;
+}
+
+.emojiPart {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    display: none;
+    background-repeat: no-repeat !important;
+
+    &#eyes {
+        background:
+            // pupils
+            radial-gradient(circle at calc(50% + 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            radial-gradient(circle at calc(50% - 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            // irises
+            radial-gradient(circle at calc(50% + 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            radial-gradient(circle at calc(50% - 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            // whites
+            radial-gradient(100px 70px at calc(50% - 12vh) 35%, #fff 9vh, transparent 9vh, transparent),
+            radial-gradient(100px 70px at calc(50% + 12vh) 35%, #fff 9vh, transparent 9vh, transparent),
+            ;
+    }
+
+    &#excited {
+        background: 
+            // eyelids
+            radial-gradient(circle at calc(50% + 11.5vh) 52%, #fcfc00 15vh, transparent 15vh, transparent),
+            radial-gradient(circle at calc(50% - 11.5vh) 52%, #fcfc00 15vh, transparent 15vh, transparent),
+            // pupils
+            radial-gradient(circle at calc(50% + 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            radial-gradient(circle at calc(50% - 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            // irises
+            radial-gradient(circle at calc(50% + 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            radial-gradient(circle at calc(50% - 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            // whites
+            radial-gradient(100px 70px at calc(50% - 12vh) 35%, #fff 9vh, transparent 9vh, transparent),
+            radial-gradient(100px 70px at calc(50% + 12vh) 35%, #fff 9vh, transparent 9vh, transparent),
+        ;
+        clip-path: inset(0 0 60vh 0);
+    }
+
+    &#crying {
+        background: 
+            // Tears
+            radial-gradient(circle at calc(50% + 5vh) 35%, rgba(#44f, .8), rgba(#22f, .5) 3vh, transparent 3vh, transparent),
+            radial-gradient(circle at calc(50% - 5vh) 35%, rgba(#44f, .8), rgba(#22f, .5) 3vh, transparent 3vh, transparent),
+            radial-gradient(100px 70px at calc(50% + 10vh) 35%, rgba(#44f, .7), rgba(#22a, .5) 6vh, transparent 6vh, transparent),
+            radial-gradient(100px 70px at calc(50% - 10vh) 35%, rgba(#44f, .7), rgba(#22a, .5) 6vh, transparent 6vh, transparent),
+            //Whites
+            radial-gradient( 120vh 10vh at calc(50% + 12vh) 35%, #444 7vh, transparent 7vh, transparent),
+            radial-gradient( 120vh 10vh at calc(50% - 12vh) 35%, #444 7vh, transparent 7vh, transparent);
+        ;
+    }
+
+    &#sobbing {
+        background:
+            //puddle
+            radial-gradient( 120vh 10vh at 50% 91%, rgba(#44F, 0.7), rgba(#22A, 0.5) 50vh, transparent 50vh, transparent),
+            //steams
+            repeating-linear-gradient( 15deg, rgba(#44F, 0.8), rgba(#22F, 0.5) 33%, rgba(#44F, 0.8) 66%) calc(50% - 11.25vh) 73% / 14vh 52.5% no-repeat,
+            repeating-linear-gradient( -15deg, rgba(#44F, 0.8), rgba(#22F, 0.5) 33%, rgba(#44F, 0.8) 66%) calc(50% + 11.25vh) 73% / 14vh 52.5% no-repeat,
+            //Tears
+            radial-gradient( circle at calc(50% + 5vh) 35%, rgba(#44F, 0.8), rgba(#22F, 0.5) 3vh, transparent 3vh, transparent),
+            radial-gradient( circle at calc(50% - 5vh) 35%, rgba(#44F, 0.5), rgba(#22A, 0.2) 3vh, transparent 3vh, transparent),
+            radial-gradient( 120vh 75vh at calc(50% + 10vh) 35%, rgba(#44F, 0.7), rgba(#22A, 0.5) 6vh, transparent 6vh, transparent),
+            radial-gradient( 120vh 75vh at calc(50% - 10vh) 35%, rgba(#44F, 0.7), rgba(#22A, 0.5) 6vh, transparent 6vh, transparent),
+            //Whites
+            radial-gradient( 120vh 10vh at calc(50% + 12vh) 35%, #444 7vh, transparent 7vh, transparent),
+            radial-gradient( 120vh 10vh at calc(50% - 12vh) 35%, #444 7vh, transparent 7vh, transparent),
+        ;
+    }
+
+    &#worried {
+        background:
+            //Eyelids
+            radial-gradient( circle at calc(50% + 17vh) 18%, #FCFC00 15vh, transparent 15vh, transparent),
+            radial-gradient( circle at calc(50% - 17vh) 18%, #FCFC00 15vh, transparent 15vh, transparent),
+            //Pupils
+            radial-gradient( circle at calc(50% + 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            radial-gradient( circle at calc(50% - 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            //irises
+            radial-gradient( circle at calc(50% + 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            radial-gradient( circle at calc(50% - 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            //Whites
+            radial-gradient( 120vh 75vh at calc(50% + 12vh) 35%, #FFF 9vh, transparent 9vh, transparent),
+            radial-gradient( 120vh 75vh at calc(50% - 12vh) 35%, #FFF 9vh, transparent 9vh, transparent)
+        ;
+        clip-path: circle(24vh at center);
+    }
+
+    &#angry {
+        background:
+            //Eyelids
+            radial-gradient( circle at calc(50% + 5vh) 14%, #FCFC00 20vh, transparent 20vh, transparent),
+            radial-gradient( circle at calc(50% - 5vh) 14%, #FCFC00 20vh, transparent 20vh, transparent),
+            //Pupils
+            radial-gradient( circle at calc(50% + 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            radial-gradient( circle at calc(50% - 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent),
+            //irises
+            radial-gradient( circle at calc(50% + 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            radial-gradient( circle at calc(50% - 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent),
+            //Whites
+            radial-gradient( 120vh 75vh at calc(50% + 12vh) 35%, #FFF 9vh, transparent 9vh, transparent),
+            radial-gradient( 120vh 75vh at calc(50% - 12vh) 35%, #FFF 9vh, transparent 9vh, transparent),
+        ;
+        clip-path: circle(27vh at center);
+    }
+
+    &#shocked {
+        background: //Pupils
+        radial-gradient( circle at calc(50% + 11.5vh) 35%, #002 2.5vh, transparent 2.5vh, transparent), radial-gradient( circle at calc(50% - 11.5vh) 35%, #002 2.5vh, transparent 2.5vh, transparent), //irises
+        radial-gradient( circle at calc(50% + 11.5vh) 35%, #922, #522 6vh, transparent 6vh, transparent), radial-gradient( circle at calc(50% - 11.5vh) 35%, #922, #522 6vh, transparent 6vh, transparent), //Whites
+        radial-gradient( 120vh 120vh at calc(50% + 12vh) 35%, #FFF 9vh, transparent 9vh, transparent), radial-gradient( 120vh 120vh at calc(50% - 12vh) 35%, #FFF 9vh, transparent 9vh, transparent);
+    }
+
+    &#confused {
+        background: //Eyelid
+        radial-gradient( circle at calc(50% + 12vh) 12%, #FCFC00 20vh, transparent 20vh, transparent), //Pupils
+        radial-gradient( circle at calc(50% + 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent), radial-gradient( circle at calc(50% - 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent), //irises
+        radial-gradient( circle at calc(50% + 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent), radial-gradient( circle at calc(50% - 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent), //Whites
+        radial-gradient( 120vh 75vh at calc(50% + 12vh) 35%, #FFF 9vh, transparent 9vh, transparent), radial-gradient( 120vh 75vh at calc(50% - 12vh) 35%, #FFF 9vh, transparent 9vh, transparent);
+        clip-path: circle(35vh at center);
+    }
+
+    &#wink {
+        background: //Eyelid
+        radial-gradient( circle at calc(50% - 12vh) 17%, #FCFC00 20vh, transparent 20vh, transparent), //Pupils
+        radial-gradient( circle at calc(50% + 11.5vh) 35%, #002 1.5vh, transparent 1.5vh, transparent), //irises
+        radial-gradient( circle at calc(50% + 11.5vh) 35%, #922, #522 4vh, transparent 4vh, transparent), //Whites
+        radial-gradient( 120vh 75vh at calc(50% - 12vh) 32.5%, #000 9vh, transparent 9vh, transparent), radial-gradient( 120vh 75vh at calc(50% + 12vh) 35%, #FFF 9vh, transparent 9vh, transparent);
+        clip-path: circle(35vh at center);
+    }
+
+    &#smile {
+        background: 
+            radial-gradient(circle at center, #fff 28vh, transparent 28vh),
+        ;
+        // ref: https://bennettfeely.com/clippy/
+        clip-path: inset(55% 0 0 0);
+    }
+    &#smirk {
+        background-image: radial-gradient( 100vh 90vh at 50% 40%, #FCFC00 34vh, transparent 15vh, transparent), radial-gradient(circle at 50% 45%, #000 28vh, transparent 28vh, transparent);
+        clip-path: circle(35vh at center);
+        transform: rotate(-15deg);
+    }
+
+    &#tongue {
+        background:
+            //teeth
+            linear-gradient( #FFF 0, #FFF 100vh) 50% 64% / 35vh 8vh,
+            //toungue
+            radial-gradient(40vh 70vh at 50% 65%, #F00 10vh, transparent 10vh, transparent),
+            //mouth
+            radial-gradient(100vh 50vh at 50% 65%, #000 20vh, transparent 20vh, transparent),
+        ;
+        clip-path: inset(65% 0 0 0);
+    }
+
+    &#shocked {
+        background: radial-gradient(circle at 50% 65%, #000 12.5vh, transparent 12.5vh, transparent);
+    }
+
+    &#frown {
+        background: radial-gradient(circle at 50% 75%, #FFF 20vh, transparent 20vh, transparent);
+        clip-path: inset(0 0 30% 0);
+    }
+
+
+
+    &#sweat {
+        width: 10vh;
+        height: 10vh;
+        background: rgba(#22F, 0.7);
+        border-radius: 0 10vh 10vh;
+        left: calc(50% + 17.5vh);
+        top: 17.5%;
+        transform: rotate(45deg);
+    }
+}
+
+#emojiBase {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background:
+        //main
+        radial-gradient(circle at center, #fcfc00 20vh, transparent 35vh, transparent),
+        // shadow
+        radial-gradient(circle at calc(50% + 1vh) calc(50% + 1vh), rgb(138, 138, 0) 35vh, transparent 35vh),
+        // highlight
+        radial-gradient(circle at center, #ff5 36vh, transparent 36vh, transparent)
+        ;
+}
