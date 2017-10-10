@@ -6,7 +6,9 @@ console.log(__filename);
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import styled from 'styled-components';
-import {View} from './view';
+// import {View} from './view';
+import {View} from 'react-anchoring-view';
+
 const data: Item[] = require('./data.json');
 
 interface Item {
