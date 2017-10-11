@@ -1936,6 +1936,17 @@ declare namespace p5 {
 
     }
 
+    class CanvasRenderingContext2D {
+        beginPath();
+        moveTo(x: number, y: number);
+        lineTo(x: number, y: number);
+        clip();
+    }
+
+    class Renderer2D extends Renderer {
+        drawingContext: CanvasRenderingContext2D;
+    }
+
     // src/image/p5.Image.js
 
     class Image {
