@@ -5,6 +5,7 @@ console.log(__filename);
 
 // ref: https://codepen.io/calvrix/pen/RgvvWK
 import * as THREE from '../../three/three';
+import * as $ from 'jquery';
 
 (function () {
     let scene = new THREE.Scene();
@@ -39,6 +40,7 @@ import * as THREE from '../../three/three';
     let target = 10.0;
     let distance = 10;
     let assignedposition = 2;
+    camera.position.z = assignedposition;
     let frame;
     const pendingBlow = { x: 0.0, y: 0.0 };
     camera.up = new THREE.Vector3(0, 1, 0);
@@ -54,9 +56,18 @@ import * as THREE from '../../three/three';
 
         (particleSystem.material as THREE.ShaderMaterial).uniforms.mx.value += (pendingBlow.x - (particleSystem.material as THREE.ShaderMaterial).uniforms.mx.value) / 100;
         (particleSystem.material as THREE.ShaderMaterial).uniforms.my.value += (pendingBlow.y - (particleSystem.material as THREE.ShaderMaterial).uniforms.my.value) / 100;
-        camera.position.z = distance;
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
-        distance += (assignedposition - distance) / 100;
+        $('.frame').text('' + frame);
+        $('.animating').text('' + animating);
+        $('.distance').text('' + distance);
+        $('.time').text('' + time);
+        $('.target').text('' + target);
+        $('.mx').text('' + (particleSystem.material as THREE.ShaderMaterial).uniforms.mx.value);
+        $('.my').text('' + (particleSystem.material as THREE.ShaderMaterial).uniforms.my.value);
+        $('.pendingBlowX').text('' + pendingBlow.x);
+        $('.pendingBlowY').text('' + pendingBlow.y);
+        // camera.position.z = distance;
+        // camera.lookAt(new THREE.Vector3(0, 0, 0));
+        // distance += (assignedposition - distance) / 100;
         renderer.render(scene, camera);
     };
 
@@ -77,8 +88,8 @@ import * as THREE from '../../three/three';
 
 function createParticleSystem() {
 
-    // let icosa = new THREE.PlaneBufferGeometry(2, 2, 100, 100);
-    let icosa = new THREE.PlaneGeometry(1.0, 1.0);
+    let icosa = new THREE.PlaneBufferGeometry(2, 2, 100, 100);
+    // let icosa = new THREE.PlaneGeometry(1.0, 1.0);
     let vertexShader = `
         varying vec3 pos;
         float posY;
@@ -87,12 +98,13 @@ function createParticleSystem() {
         uniform float mx;
         uniform float my;
         void main() {
-            pos = position + normal * vec3(sin(time * 0.2) * 3.0);
-            // pos = position;
+            // pos = position + normal * vec3(sin(time * 0.2) * 3.0);
+            pos = position;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
         }
         `;
 
+    // http://www.aclockworkberry.com/shader-derivative-functions/
     let fragmentShader = `#extension GL_OES_standard_derivatives : enable
         varying vec3 pos;
         uniform float time;
@@ -109,8 +121,8 @@ function createParticleSystem() {
         }
         void main() {
             vec3 N = normalize( cross( dFdx( pos.xyz ), dFdy( pos.xyz ) ) );
-            float level = max(0.0, pow(2.71,-0.1*distance(pos,light))*dot(normalize(N), normalize(light)));
-            vec3 col = (highlight*level + (1.0-level)*shadow)/(level+1.0);
+            float level = max(0.0, pow(2.71, -0.1 * distance(pos, light)) * dot(normalize(N), normalize(light)));
+            vec3 col = (highlight * level + (1.0 - level) * shadow) / (level + 1.0);
             gl_FragColor = vec4(col,1.0);
         }
         `;

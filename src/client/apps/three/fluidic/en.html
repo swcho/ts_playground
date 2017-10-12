@@ -30,12 +30,51 @@
             font-weight: 700;
             mix-blend-mode: overlay;
         }
+        #state {
+            color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .label {
+            margin-right: 20px;
+        }
+
     </style>
 </head>
 
 <body>
     <div id='webGLwrapper'></div>
     <div id='bullshit'>FLUIDIC</div>
+    <div id='state'>
+        <p>
+            <span class='label'>frame</span><span class="frame"></span>
+        </p>
+        <p>
+            <span class='label'>animating</span><span class="animating"></span>
+        </p>
+        <p>
+            <span class='label'>target</span><span class="target"></span>
+        </p>
+        <p>
+            <span class='label'>distance</span><span class="distance"></span>
+        </p>
+        <p>
+            <span class='label'>time</span><span class="time"></span>
+        </p>
+        <p>
+            <span class='label'>mx</span><span class="mx"></span>
+        </p>
+        <p>
+            <span class='label'>my</span><span class="my"></span>
+        </p>
+        <p>
+            <span class='label'>pendingBlowX</span><span class="pendingBlowX"></span>
+        </p>
+        <p>
+            <span class='label'>pendingBlowY</span><span class="pendingBlowY"></span>
+        </p>
+    </div>
 </body>
 
 </html>
