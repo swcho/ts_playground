@@ -2,15 +2,47 @@
 import * as THREE from 'three';
 
 interface BaseAnimationMaterialParameters extends THREE.ShaderMaterialParameters {
-    uniformValues: any;
+    uniformValues?: any;
     // uniformValues: {
     //     map: THREE.Texture;
     // };
+
+    varyingParameters?: string[];
+
+    vertexFunctions?: string[];
+    vertexParameters?: string[];
+    vertexInit?: string[];
+    vertexNormal?: string[];
+    vertexPosition?: string[];
+    vertexColor?: string[];
+
+    fragmentFunctions?: string[];
+    fragmentParameters?: string[];
+    fragmentInit?: string[];
+    fragmentMap?: string[];
+    fragmentDiffuse?: string[];
 }
+
+const DEFAULT_INITIALIZER = (self) => {
+    self.varyingParameters = [];
+
+    self.vertexFunctions = [];
+    self.vertexParameters = [];
+    self.vertexInit = [];
+    self.vertexNormal = [];
+    self.vertexPosition = [];
+    self.vertexColor = [];
+
+    self.fragmentFunctions = [];
+    self.fragmentParameters = [];
+    self.fragmentInit = [];
+    self.fragmentMap = [];
+    self.fragmentDiffuse = [];
+};
 
 export class BaseAnimationMaterial extends THREE.ShaderMaterial {
 
-    constructor(parameters: BaseAnimationMaterialParameters, uniforms, valueInit?: (self: any) => void) {
+    constructor(parameters: BaseAnimationMaterialParameters, uniforms, valueInit: (self: any) => void = DEFAULT_INITIALIZER) {
         super(parameters);
 
         // THREE.ShaderMaterial.call(this);
@@ -19,9 +51,7 @@ export class BaseAnimationMaterial extends THREE.ShaderMaterial {
 
         delete parameters.uniformValues;
 
-        if (valueInit) {
-            valueInit(this);
-        }
+        valueInit.call(this, this);
 
         this.setValues(parameters);
 
@@ -337,7 +367,7 @@ ShaderChunk['quaternion_slerp'] = 'vec4 quatSlerp(vec4 q0, vec4 q1, float t) {\n
  * Collection of utility functions.
  * @namespace
  */
-const Utils = {
+export const Utils = {
     /**
      * Duplicates vertices so each face becomes separate.
      * Same as THREE.ExplodeModifier.
@@ -466,6 +496,11 @@ const Utils = {
     }
 };
 
+export interface ModelBufferGeometryOptions {
+    computeCentroids?: boolean;
+    localizeFaces?: boolean;
+}
+
 export class ModelBufferGeometry extends THREE.BufferGeometry {
 
     modelGeometry;
@@ -481,7 +516,7 @@ export class ModelBufferGeometry extends THREE.BufferGeometry {
      * @param {Boolean=} options.localizeFaces If true, the positions for each face will be stored relative to the centroid. This is useful if you want to rotate or scale faces around their center.
      * @constructor
      */
-    constructor(model: THREE.Geometry, options?) {
+    constructor(model: THREE.Geometry, options?: ModelBufferGeometryOptions) {
         super();
 
         /**
@@ -889,7 +924,6 @@ export class BasicAnimationMaterial extends BaseAnimationMaterial {
      */
     constructor(parameters) {
         super(parameters, THREE.ShaderLib['basic'].uniforms, (self) => {
-
             self.varyingParameters = [];
 
             self.vertexFunctions = [];
@@ -1157,24 +1191,24 @@ class DistanceAnimationMaterial extends BaseAnimationMaterial {
     }
 }
 
-class PhongAnimationMaterial extends BaseAnimationMaterial {
+export class PhongAnimationMaterial extends BaseAnimationMaterial {
 
-    private varyingParameters = [];
+    // private varyingParameters = [];
 
-    private vertexFunctions = [];
-    private vertexParameters = [];
-    private vertexInit = [];
-    private vertexNormal = [];
-    private vertexPosition = [];
-    private vertexColor = [];
+    // private vertexFunctions = [];
+    // private vertexParameters = [];
+    // private vertexInit = [];
+    // private vertexNormal = [];
+    // private vertexPosition = [];
+    // private vertexColor = [];
 
-    private fragmentFunctions = [];
-    private fragmentParameters = [];
-    private fragmentInit = [];
-    private fragmentMap = [];
-    private fragmentDiffuse = [];
-    private fragmentEmissive = [];
-    private fragmentSpecular = [];
+    // private fragmentFunctions = [];
+    // private fragmentParameters = [];
+    // private fragmentInit = [];
+    // private fragmentMap = [];
+    // private fragmentDiffuse = [];
+    // private fragmentEmissive = [];
+    // private fragmentSpecular = [];
 
     /**
      * Extends THREE.MeshPhongMaterial with custom shader chunks.
@@ -1184,19 +1218,21 @@ class PhongAnimationMaterial extends BaseAnimationMaterial {
      * @param {Object} parameters Object containing material properties and custom shader chunks.
      * @constructor
      */
-    constructor(parameters) {
-        super(parameters, THREE.ShaderLib['phong'].uniforms);
+    constructor(parameters: BaseAnimationMaterialParameters) {
+        super(parameters, THREE.ShaderLib['phong'].uniforms, (self) => {
+            DEFAULT_INITIALIZER(self);
+            self.lights = true;
+            self.vertexShader = self._concatVertexShader();
+            self.fragmentShader = self._concatFragmentShader();
+        });
 
         // let phongShader = THREE.ShaderLib['phong'];
 
         // BaseAnimationMaterial.call(this, parameters, phongShader.uniforms);
 
-        this.lights = true;
-        this.vertexShader = this._concatVertexShader();
-        this.fragmentShader = this._concatFragmentShader();
     }
 
-    _concatVertexShader() {
+    private _concatVertexShader() {
         // based on THREE.ShaderLib.phong
         return [
             '#define PHONG',
@@ -1270,7 +1306,7 @@ class PhongAnimationMaterial extends BaseAnimationMaterial {
         ].join('\n');
     }
 
-    _concatFragmentShader() {
+    private _concatFragmentShader() {
         return [
             '#define PHONG',
 

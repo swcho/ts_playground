@@ -4,8 +4,11 @@ export * from 'three/examples/js/loaders/OBJLoader';
 export * from 'three/examples/js/controls/OrbitControls';
 export * from './OBJExporter';
 export * from './STLExporter';
+
+export import BAS = require('three-bas');
+
 // https://github.com/Microsoft/TypeScript/issues/4336#issuecomment-264636767
-export import BAS = require('./BAS');
+// export import BAS = require('./BAS');
 
 // export const BAS: typeof _BAS = _BAS;
 
