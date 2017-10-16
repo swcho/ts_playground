@@ -114,7 +114,7 @@ const webpackConfig: webpack.Configuration = {
                 ]
             },
             {
-                test: /\.scss$/,
+                test: /\.s[ca]ss$/,
                 use: [
                     {
                         loader: 'style-loader' // creates style nodes from JS strings
