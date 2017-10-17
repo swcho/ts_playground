@@ -3610,7 +3610,7 @@ lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
 
-lodash.clonedeep@^4.3.2:
+lodash.clonedeep@^4.3.2, lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
@@ -6053,6 +6053,14 @@ stylis@^3.2.1:
   version "3.2.13"
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.2.13.tgz#1a5d2ff5ab09f362d6d8065186d526740e9f4f24"
 
+stylus-loader@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/stylus-loader/-/stylus-loader-3.0.1.tgz#77f4b34fd030d25b2617bcf5513db5b0730c4089"
+  dependencies:
+    loader-utils "^1.0.2"
+    lodash.clonedeep "^4.5.0"
+    when "~3.6.x"
+
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
@@ -6190,10 +6198,6 @@ three-bas@^2.2.0:
   resolved "https://registry.yarnpkg.com/three-bas/-/three-bas-2.2.0.tgz#de516f7aa6d9700777fb5ddc05575b30a2ba49af"
   dependencies:
     three "^0.87.1"
-
-three@^0.86.0:
-  version "0.86.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.86.0.tgz#1c33e476a1537e9a8a18f5792d024b1046cd2000"
 
 three@^0.87.1:
   version "0.87.1"
@@ -6656,6 +6660,10 @@ whatwg-fetch@0.11.1:
 whatwg-fetch@>=0.10.0, whatwg-fetch@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
+
+when@~3.6.x:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/when/-/when-3.6.4.tgz#473b517ec159e2b85005497a13983f095412e34e"
 
 whet.extend@~0.9.9:
   version "0.9.9"

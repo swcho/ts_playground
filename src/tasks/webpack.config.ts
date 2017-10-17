@@ -130,6 +130,23 @@ const webpackConfig: webpack.Configuration = {
                     },
                 ]
             },
+            {
+                test: /\.stylus$/,
+                use: [
+                    {
+                        loader: 'style-loader' // creates style nodes from JS strings
+                    },
+                    {
+                        loader: 'css-loader' // translates CSS into CommonJS
+                    },
+                    {
+                        loader: 'postcss-loader' // translates CSS into CommonJS
+                    },
+                    {
+                        loader: 'styl-loader' // compiles Sass to CSS
+                    },
+                ],
+            },
 
             // required for bootstrap icons
             {
