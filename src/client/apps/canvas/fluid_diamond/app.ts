@@ -2,7 +2,10 @@
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 console.log(__filename);
-console.log('hi');
+
+// https://codepen.io/jscottsmith/pen/XgGZaL
+
+console.log('Device Pixel Ratio', window.devicePixelRatio);
 
 /*------------------------------*\
 |* Constants
@@ -18,7 +21,9 @@ const RADIANS = Math.PI / 180;
 
 const STRENGTH = 4;
 const ELASTICITY = 0.0001;
+// const ELASTICITY = 0.1;
 const DAMPING = 0.995;
+// const DAMPING = 0.1;
 const MASS = 0.15;
 
 /*------------------------------*\
