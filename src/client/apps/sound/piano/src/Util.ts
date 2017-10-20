@@ -1,26 +1,26 @@
-import Tone, { Frequency, BufferSource } from 'tone'
+import * as Tone from 'tone';
 
 function noteToMidi(note) {
-    return Frequency(note).toMidi()
+    return new Tone.Frequency(note).toMidi();
 }
 
 function midiToNote(midi) {
-    return Frequency(midi, 'midi').toNote().replace('#', 's')
+    return new Tone.Frequency(midi, 'midi').toNote().replace('#', 's');
 }
 
 function midiToFrequencyRatio(midi) {
-    let mod = midi % 3
+    let mod = midi % 3;
     if (mod === 1) {
-        return [midi - 1, Tone.prototype.intervalToFrequencyRatio(1)]
+        return [midi - 1, Tone.prototype.intervalToFrequencyRatio(1)];
     } else if (mod === 2) {
-        return [midi + 1, Tone.prototype.intervalToFrequencyRatio(-1)]
+        return [midi + 1, Tone.prototype.intervalToFrequencyRatio(-1)];
     } else {
-        return [midi, 1]
+        return [midi, 1];
     }
 }
 
 function createSource(buffer) {
-    return new BufferSource(buffer)
+    return new Tone.BufferSource(buffer);
 }
 
 export { midiToNote, noteToMidi, createSource, midiToFrequencyRatio }

@@ -1,4 +1,4 @@
-import Tone, { Buffers } from 'tone';
+import * as Tone from 'tone';
 import Salamander from './Salamander';
 import PianoBase from './PianoBase';
 import { noteToMidi, createSource, midiToFrequencyRatio } from './Util';
@@ -11,26 +11,26 @@ class Note extends Tone {
     private _startTime;
     constructor(time, source, velocity, gain) {
         super()
-        //round the velocity
-        this._velocity = velocity
-        this._startTime = time
+        // round the velocity
+        this._velocity = velocity;
+        this._startTime = time;
 
-        this.output = source
-        this.output.start(time, 0, undefined, gain, 0)
+        this.output = source;
+        this.output.start(time, 0, undefined, gain, 0);
     }
 
     stop(time) {
         if (this.output.buffer) {
 
             // return the amplitude of the damper playback
-            let progress = Math.min(1, (time - this._startTime) / this.output.buffer.duration)
-            progress = (1 - progress) * this._velocity
+            let progress = Math.min(1, (time - this._startTime) / this.output.buffer.duration);
+            progress = (1 - progress) * this._velocity;
             // stop the buffer
-            this.output.stop(time, 0.2)
+            this.output.stop(time, 0.2);
 
-            return Math.pow(progress, 0.5)
+            return Math.pow(progress, 0.5);
         } else {
-            return 0
+            return 0;
         }
     }
 }
@@ -55,33 +55,33 @@ const velocitiesMap = {
     14: [1, 2, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 15, 16],
     15: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16],
     16: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-}
+};
 
-const notes = [21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96, 99, 102, 105, 108]
+const notes = [21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96, 99, 102, 105, 108];
 
 /**
  *  Manages all of the hammered string sounds
  */
-export default class Strings extends PianoBase {
+class Strings extends PianoBase {
 
     private _buffers;
 
     constructor(range = [21, 108], velocities = 1) {
-        super()
+        super();
 
-        const lowerIndex = notes.findIndex((note) => note >= range[0])
-        let upperIndex = notes.findIndex((note) => note >= range[1])
-        upperIndex = upperIndex === -1 ? upperIndex = notes.length : upperIndex + 1
+        const lowerIndex = notes.findIndex((note) => note >= range[0]);
+        let upperIndex = notes.findIndex((note) => note >= range[1]);
+        upperIndex = upperIndex === -1 ? upperIndex = notes.length : upperIndex + 1;
 
-        const slicedNotes = notes.slice(lowerIndex, upperIndex)
+        const slicedNotes = notes.slice(lowerIndex, upperIndex);
 
-        this._buffers = velocitiesMap[velocities].slice()
+        this._buffers = velocitiesMap[velocities].slice();
 
         this._buffers.forEach((vel, i) => {
             this._buffers[i] = {};
             slicedNotes.forEach((note) => {
-                this._buffers[i][note] = Salamander.getNotesUrl(note, vel)
-            })
+                this._buffers[i][note] = Salamander.getNotesUrl(note, vel);
+            });
         });
     }
 
@@ -118,10 +118,12 @@ export default class Strings extends PianoBase {
         const promises = [];
         this._buffers.forEach((obj, i) => {
             let prom = new Promise((success) => {
-                this._buffers[i] = new Buffers(obj, success, baseUrl)
-            })
-            promises.push(prom)
+                this._buffers[i] = new Tone.Buffers(obj, success, baseUrl);
+            });
+            promises.push(prom);
         });
         return Promise.all(promises);
     }
 }
+
+export default Strings;

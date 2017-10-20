@@ -393,8 +393,8 @@ const compressor = new Tone.Compressor().toMaster();
 const isTouch = 'ontouchstart' in window;
 const pianoVelocities = isTouch ? 1 : 4;
 const pianoRelease = !isTouch;
-debugger;
-const piano = new Piano['default'](
+
+const piano = new Piano(
     [21, 90],
     pianoVelocities,
     pianoRelease

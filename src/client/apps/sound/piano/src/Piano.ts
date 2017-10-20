@@ -1,6 +1,6 @@
-import Tone, { Frequency } from 'tone';
+import * as Tone from 'tone';
 import Pedal from './Pedal';
-import Note from './Note';
+import Strings from './Note';
 import Harmonics from './Harmonics';
 import Release from './Release';
 import './Salamander';
@@ -9,12 +9,12 @@ import './Salamander';
  *  @class Multisampled Grand Piano using [Salamander Piano Samples](https://archive.org/details/SalamanderGrandPianoV3)
  *  @extends {Tone}
  */
-export default class Piano extends Tone {
+class Piano extends Tone {
 
     private _loaded: boolean;
     private _heldNotes: Map<any, any>;
     private _sustainedNotes: Map<any, any>;
-    private _notes: Note;
+    private _notes: Strings;
     private _pedal: Pedal;
     private _harmonics: Harmonics;
     private _release: Release;
@@ -29,7 +29,11 @@ export default class Piano extends Tone {
 
         this._sustainedNotes = new Map();
 
-        this._notes = new Note(range, velocities).connect(this.output);
+        const test = new Strings(range, velocities);
+
+        debugger;
+
+        this._notes = test.connect(this.output);
 
         this._pedal = new Pedal().connect(this.output);
 
@@ -108,7 +112,7 @@ export default class Piano extends Tone {
             time = this.toSeconds(time);
 
             if (this.isString(note)) {
-                note = Math.round(Frequency(note).toMidi());
+                note = Math.round(new Tone.Frequency(note).toMidi());
             }
 
             if (!this._heldNotes.has(note)) {
@@ -132,7 +136,7 @@ export default class Piano extends Tone {
             time = this.toSeconds(time);
 
             if (this.isString(note)) {
-                note = Math.round(Frequency(note).toMidi());
+                note = Math.round(new Tone.Frequency(note).toMidi());
             }
 
             if (this._heldNotes.has(note)) {
@@ -193,3 +197,5 @@ export default class Piano extends Tone {
         return this;
     }
 }
+
+export default Piano;
