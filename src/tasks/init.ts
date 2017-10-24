@@ -32,7 +32,7 @@ module.exports = (grunt: IGrunt) => {
             options: webpackConfig,
             build: {
                 output: {
-                    publicPath: "//swcho.github.io/ts_boilerplate/dist/client/assets/",
+                    publicPath: "//swcho.github.io/ts_playground/dist/client/assets/",
                 },
                 plugins: webpackConfig.plugins.concat(
                     new webpack.DefinePlugin({
@@ -46,13 +46,13 @@ module.exports = (grunt: IGrunt) => {
             },
             watch: {
                 output: {
-                    publicPath: "//localhost:3000/assets/",
+                    publicPath: '//localhost:3000/assets/',
                 },
-                devtool: "sourcemap",
+                devtool: 'sourcemap',
                 watch: true
             }
         },
-        "webpack-dev-server": {
+        'webpack-dev-server': {
             options: {
                 webpack: webpackConfig,
             },
@@ -60,12 +60,12 @@ module.exports = (grunt: IGrunt) => {
                 webpack: {
                     output: {
                         publicPath: '/',
-                        filename: "[name].js",
+                        filename: '[name].js',
 
                         // publicPath: "//localhost:3000/assets/",
                     },
                     // devtool: "sourcemap",
-                    devtool: "inline-source-map", // for Chrome saving file
+                    devtool: 'inline-source-map', // for Chrome saving file
                     plugins: [
                         new webpack.NamedModulesPlugin(),
                         new webpack.HotModuleReplacementPlugin(),
@@ -122,4 +122,4 @@ module.exports = (grunt: IGrunt) => {
     grunt.registerTask('build', ['clean:client', 'webpack:build', 'ts:server']);
     grunt.registerTask('dist', ['build', 'copy:client']);
     grunt.registerTask('default', ['build']);
-}
+};
