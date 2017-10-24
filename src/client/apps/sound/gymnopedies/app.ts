@@ -8,7 +8,7 @@ import * as buckets from 'buckets-js';
 import * as d3 from 'd3';
 import * as Tone from 'tone';
 import * as MidiConvert from 'midiconvert';
-import Piano from '../piano/src/Piano';
+import {Piano} from 'tone-piano';
 
 declare const StartAudioContext: any;
 
@@ -255,6 +255,7 @@ function setCurrentAndRender(graphData, d3Graph, current, activeColor) {
 }
 
 function beginSong(leftMidi, rightMidi, activeColor) {
+
     const leftSuccession = processMidi(leftMidi);
     const rightSuccession = processMidi(rightMidi);
     const leftMarkovChain = new buckets.Dictionary(JSON.stringify);
@@ -326,8 +327,13 @@ function beginSong(leftMidi, rightMidi, activeColor) {
         const durationToNext =
             (current.duration || 4) * (originalPlayback.length ? 1 : 2);
         for (const note of current.notes) {
-            piano.keyDown(note, velocity, t);
-            piano.keyUp(note, t + durationToNext - 0.1);
+            console.log(note, t);
+            // piano.keyDown(note, velocity, t);
+            // piano.keyUp(note, t + durationToNext - 0.1);
+            // piano.keyDown(note, velocity, t + 0.1);
+            // piano.keyUp(note, t + durationToNext + 0.1);
+            // piano.keyDown(note, velocity);
+            // piano.keyUp(note, durationToNext - 0.1);
         }
         Tone.Draw.schedule(() => {
             updateGraphData(graphData, markovChain, linkPrefix);
@@ -350,8 +356,21 @@ function beginSong(leftMidi, rightMidi, activeColor) {
         );
     }
 
-    Tone.Transport.schedule(
-        t =>
+    function playMidi(midi, cb) {
+        if (stopped) return;
+        let noteOffEvents = new Tone.Part((time, event) => {
+            piano.keyUp(event.midi, time, event.velocity);
+        }, midi.tracks[0].noteOffs).start(0);
+
+        let noteOnEvents = new Tone.Part((time, event) => {
+            console.log(event);
+            cb(time);
+            piano.keyDown(event.midi, time, event.velocity);
+        }, midi.tracks[0].notes).start(0);
+        console.log(noteOnEvents);
+    }
+
+    playMidi(leftMidi, t =>
             playLoop(
                 t,
                 leftMarkovChain,
@@ -361,11 +380,8 @@ function beginSong(leftMidi, rightMidi, activeColor) {
                 'left',
                 leftCenterX,
                 centerY
-            ),
-        Tone.now() + 1 + leftSuccession[0].time
-    );
-    Tone.Transport.schedule(
-        t =>
+            ));
+    playMidi(rightMidi, t =>
             playLoop(
                 t,
                 rightMarkovChain,
@@ -375,9 +391,36 @@ function beginSong(leftMidi, rightMidi, activeColor) {
                 'right',
                 rightCenterX,
                 centerY
-            ),
-        Tone.now() + 1 + rightSuccession[0].time
-    );
+            ));
+
+    // Tone.Transport.schedule(
+    //     t =>
+    //         playLoop(
+    //             t,
+    //             leftMarkovChain,
+    //             leftGraphData,
+    //             leftD3Graph,
+    //             leftSuccession,
+    //             'left',
+    //             leftCenterX,
+    //             centerY
+    //         ),
+    //     Tone.now() + 1 + leftSuccession[0].time
+    // );
+    // Tone.Transport.schedule(
+    //     t =>
+    //         playLoop(
+    //             t,
+    //             rightMarkovChain,
+    //             rightGraphData,
+    //             rightD3Graph,
+    //             rightSuccession,
+    //             'right',
+    //             rightCenterX,
+    //             centerY
+    //         ),
+    //     Tone.now() + 1 + rightSuccession[0].time
+    // );
 
     renderD3Graph(leftD3Graph, leftGraphData, activeColor);
     renderD3Graph(rightD3Graph, rightGraphData, activeColor);
@@ -388,20 +431,28 @@ function beginSong(leftMidi, rightMidi, activeColor) {
     };
 }
 
-const compressor = new Tone.Compressor().toMaster();
+// const compressor = new Tone.Compressor().toMaster();
 // Piano assets crash mobile devices, try to pare down if detecting touch device.
 const isTouch = 'ontouchstart' in window;
 const pianoVelocities = isTouch ? 1 : 4;
 const pianoRelease = !isTouch;
 
-const piano = new Piano(
-    [21, 90],
-    pianoVelocities,
-    pianoRelease
-).connect(compressor);
+// const piano = new Piano(
+//     [21, 90],
+//     pianoVelocities,
+//     pianoRelease
+// ).toMaster();
+// let piano = new Piano([21, 108], 5).toMaster();
+let piano = new Piano([21, 108], 1, true).toMaster();
+
+// piano.setVolume('note', 10);
+// piano.setVolume('harmonics', 10);
+// piano.setVolume('padal', 10);
+// piano.setVolume('release', 10);
+// .connect(compressor);
 
 Promise.all([
-    piano.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/'),
+    piano.load('./'),
     new Promise(r => MidiConvert.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/left.mid', r)),
     new Promise(r => MidiConvert.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/right.mid', r)),
     new Promise(r => MidiConvert.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/left2.mid', r)),
@@ -415,7 +466,8 @@ Promise.all([
         document.querySelector('.loading').remove();
         piano.pedalDown();
 
-        let stopSong = beginSong(leftMidi1, rightMidi1, ACTIVE_COLOR_1);
+        // let stopSong = beginSong(leftMidi1, rightMidi1, ACTIVE_COLOR_1);
+        let stopSong = beginSong(leftMidi2, rightMidi2, ACTIVE_COLOR_1);
 
         const g1Button = document.querySelector('#g1');
         const g2Button = document.querySelector('#g2');

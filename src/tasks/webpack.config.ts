@@ -260,6 +260,12 @@ const webpackConfig: webpack.Configuration = {
         new webpack.ProvidePlugin({
             'THREE': 'three'
         }),
+        // new CopyWebpackPlugin([
+        //     {
+        //         from: 'src/client/assets',
+        //         to: 'assets',
+        //     }
+        // ])
     ],
     context: path.join(BASE_SRC_CLIENT + '/apps'),
     node: {
