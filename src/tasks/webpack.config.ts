@@ -175,6 +175,13 @@ const webpackConfig: webpack.Configuration = {
                 test: /\.jpg$/,
                 loader: 'file-loader?prefix=imgs/'
             },
+
+            // audio
+            {
+                test: /\.(mp3|ogg)$/,
+                loader: 'file-loader?prefix=audio/'
+            },
+
             // required for react jsx
             // {
             //     test: /\.js$/,
