@@ -62,7 +62,7 @@ const webpackConfig: webpack.Configuration = {
                 loader: 'html-loader'
             },
 
-            // haml
+            // pug
             {
                 test: /\.pug$/,
                 use: [{
@@ -71,6 +71,22 @@ const webpackConfig: webpack.Configuration = {
                     loader: 'pug-html-loader'
                 }]
             },
+
+            // // haml
+            // {
+            //     test: /\.haml$/,
+            //     use: [{
+            //         loader: 'ruby-haml-loader'
+            //     }]
+            // },
+
+            // // haml
+            // {
+            //     test: /\.haml$/,
+            //     use: [{
+            //         loader: 'haml-loader'
+            //     }]
+            // },
 
             // require to write markdown
             {
