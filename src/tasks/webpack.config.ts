@@ -227,6 +227,7 @@ const webpackConfig: webpack.Configuration = {
         alias: {
             '$lib': path.join(BASE_SRC_CLIENT, 'lib'),
             'yaml-js$': path.resolve(__dirname, '../../node_modules/yaml-js/lib/yaml.js'),
+            'vue$': 'vue/dist/vue.esm.js',
             // Bind version of jquery
             // jquery: "jquery-2.0.3",
 

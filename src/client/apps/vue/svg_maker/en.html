@@ -1,0 +1,91 @@
+<html>
+
+<head>
+    <title>SVG Maker</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="flex">
+            <div class="svg-contain">
+                <svg xmlns="http://www.w3.org/2000/svg" ref="figure">
+                    <defs>
+                        <linearGradient id="lin-gradient1" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="objectBoundingBox">
+                            <stop offset="0" stop-color="#77A1D3" />
+                            <stop offset="0.5" stop-color="#79CBCA" />
+                            <stop offset="1" stop-color="#E684AE" />
+                        </linearGradient>
+                        <linearGradient id="lin-gradient2" x1="0" y1="0" x2="100%" y2="100%" gradientUnits="objectBoundingBox">
+                            <stop offset="0" stop-color="#FEAC5E" />
+                            <stop offset="0.5" stop-color="#C779D0" />
+                            <stop offset="1" stop-color="#4BC0C8" />
+                        </linearGradient>
+                        <radialGradient id="rad-gradient1" x1="50%" y1="50%" x2="10%" y2="10%" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#000" />
+                            <stop offset="0.3" stop-color="#2529bf" />
+                            <stop offset="0.6" stop-color="#e93e3a" />
+                            <stop offset="0.7" stop-color="#f3903f" />
+                            <stop offset="0.8" stop-color="#fdc70c" />
+                            <stop offset="0.9" stop-color="#fff33b" />
+                        </radialGradient>
+                        <radialGradient id="rad-gradient2" x1="50%" y1="50%" x2="10%" y2="10%" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#000" />
+                            <stop offset="0.3" stop-color="#2529bf" />
+                            <stop offset="0.9" stop-color="#5BE2D4" />
+                        </radialGradient>
+                        <radialGradient id="rad-gradient3" x1="50%" y1="50%" x2="10%" y2="10%" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#000" />
+                            <stop offset="0.6" stop-color="#2529bf" />
+                            <stop offset="0.85" stop-color="#e93e3a" />
+                            <stop offset="0.93" stop-color="#f3903f" />
+                            <stop offset="0.97" stop-color="#fdc70c" />
+                            <stop offset="1" stop-color="#fff33b" />
+                        </radialGradient>
+                    </defs>
+                    <rect x="0" y="0" width="800" height="800"></rect>
+
+                    <g ref="patterngroup"></g>
+
+                    <text x="50%" y="50%" :style="{fill: textFill, stroke: textStroke, fontSize: textSize}" font-family="Helvetica" text-anchor="middle">{{ type }}</text>
+                </svg>
+            </div>
+            <!--svg-contain-->
+            <div class="controls">
+                <div class="formarea">
+                    <label for="textupdate">Update the text:</label>
+                    <input v-model="type" id="textupdate" type="text" />
+                </div>
+                <div class="formarea">
+                    <h3>Create Circles:</h3>
+                    <button @click="createSmCircles">Make small circles</button>
+                    <button @click="createBigCircles">Make big circles</button>
+                </div>
+                <div class="formarea">
+                    <h3>Create Lines:</h3>
+                    <button @click="createBigLines">Make big lines</button>
+                    <button @click="createRandLines">Make random lines</button>
+                </div>
+                <div class="formarea">
+                    <h3>Animation:</h3>
+                    <button @click="animation">Play Animation</button>
+                    <button @click="pauseAnim">Stop Animation</button>
+                </div>
+                <div class="formarea">
+                    <h3>Change Text Color:</h3>
+                    <label for="fill">Fill color:</label>
+                    <input type="color" v-model="textFill" id="fill" />
+                    <label for="stroke">Stroke color:</label>
+                    <input type="color" v-model="textStroke" id="stroke" />
+                    <br />
+                    <label for="size">Text size:</label>
+                    <input type="number" v-model.number="textSize" id="size" step="5" />
+                </div>
+                <a ref="dl" @click="downloadSVG">
+                    <button class="dlbtn">Download Image</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

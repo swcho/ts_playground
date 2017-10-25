@@ -28,6 +28,7 @@
             "check-operator",
             "check-separator",
             "check-type"
-        ]
+        ],
+        "trailing-comma": true
     }
 }

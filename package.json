@@ -48,7 +48,8 @@
     "template-string-loader": "^0.0.3",
     "three-bas": "^2.2.0",
     "tone": "^0.11.11",
-    "tone-piano": "^0.0.12"
+    "tone-piano": "^0.0.12",
+    "vue": "^2.5.2"
   },
   "devDependencies": {
     "@types/browser-sync": "0.0.34",
