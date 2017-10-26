@@ -142,7 +142,13 @@ const webpackConfig: webpack.Configuration = {
                         loader: 'postcss-loader' // translates CSS into CommonJS
                     },
                     {
-                        loader: 'sass-loader' // compiles Sass to CSS
+                        loader: 'sass-loader', // compiles Sass to CSS
+                        options: {
+                            includePaths: [
+                                ...require('bourbon').includePaths,
+                                ...require('bourbon-neat').includePaths,
+                            ]
+                        }
                     },
                 ]
             },
