@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Raleway');
 html {
     box-sizing: border-box;
+    width: 100%;
 }
 
 *,
@@ -216,6 +217,7 @@ body {
 }
 
 .content-modal {
+    // display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -229,6 +231,7 @@ body {
     transition: opacity .4s ease-in-out, transform .5s ease-in-out .2s;
     transform: translate(-5px, -5px) scale(1.01);
     &.active {
+        // display: block;
         opacity: 1;
         visibility: visible;
         transform: translate(0, 0) scale(1);
