@@ -1,0 +1,304 @@
+// Default Font Stacks
+$sans-serif: 'Helvetica Neue',
+Helvetica,
+sans-serif;
+$serif: 'Cambria',
+Georgia,
+serif;
+// hosted fonts
+@import url('https://codepen.io/ericthayer/pen/0c7b5f509fe30bb0730e3d89483eaced.css');
+$Whitney-Bold: 'Whitney-Bold',
+$sans-serif;
+$Whitney-SemiBold: 'Whitney-SemiBold',
+$sans-serif;
+$Whitney-Med: 'Whitney-Medium',
+$sans-serif;
+.whitney-bold {
+    font-family: $Whitney-Bold;
+}
+
+.whitney-semibold {
+    font-family: $Whitney-SemiBold;
+}
+
+.whitney-medium {
+    font-family: $Whitney-Med;
+}
+
+// ** Set 1 ** //
+@import url('https://fonts.googleapis.com/css?family=Bungee|Bungee+Inline|Bungee+Shade|Rubik+One|Shrikhand|Varela');
+$Bungee: 'Bungee',
+$sans-serif;
+$BungeeInline: 'Bungee Inline',
+$sans-serif;
+$BungeeShade: 'Bungee Shade',
+$sans-serif;
+$RubikOne: 'Rubik One',
+$sans-serif;
+$Shrikhand: 'Shrikhand',
+$sans-serif;
+$Varela: 'Varela',
+$sans-serif;
+.bungee {
+    font-family: $Bungee;
+}
+
+.bungee-inline {
+    font-family: $BungeeInline;
+}
+
+.bungee-shade {
+    font-family: $BungeeShade;
+}
+
+.rubik-one {
+    font-family: $RubikOne;
+}
+
+.shrikhand {
+    font-family: $Shrikhand;
+}
+
+.varela {
+    font-family: $Varela;
+}
+
+// ** Set 2 ** //
+@import url('https://fonts.googleapis.com/css?family=Lobster|Merriweather|News+Cycle|Patua+One|Voltaire');
+$Lobster: 'Lobster',
+$sans-serif;
+$Merriweather: 'Merriweather',
+$serif;
+$NewsCycle: 'News Cycle',
+$sans-serif;
+$PatuaOne: 'Patua One',
+$sans-serif;
+$Voltaire: 'Voltaire',
+$sans-serif;
+.lobster {
+    font-family: $Lobster;
+}
+
+.merriweather {
+    font-family: $Merriweather;
+}
+
+.news-cycle {
+    font-family: $NewsCycle;
+}
+
+.patua-one {
+    font-family: $PatuaOne;
+}
+
+.voltaire {
+    font-family: $Voltaire;
+}
+
+// ** Set 3 ** //
+@import url('https://fonts.googleapis.com/css?family=Acme|Alfa+Slab+One|Anton|Archivo+Black|Arvo');
+$Acme: 'Acme',
+$sans-serif;
+$AlfaSlabOne: 'Alfa Slab One',
+$sans-serif;
+$Anton: 'Anton',
+$sans-serif;
+$ArchivoBlack: 'Archivo Black',
+$sans-serif;
+$Arvo: 'Arvo',
+$serif;
+.acme {
+    font-family: $Acme;
+}
+
+.alfa-slab-one {
+    font-family: $AlfaSlabOne;
+}
+
+.anton {
+    font-family: $Anton;
+}
+
+.archivo-black {
+    font-family: $ArchivoBlack;
+}
+
+.arvo {
+    font-family: $Arvo;
+}
+
+// ** Set 4 ** //
+@import url('https://fonts.googleapis.com/css?family=Bevan|Bree+Serif|Hammersmith+One|Josefin+Sans|Kaushan+Script');
+$Bevan: 'Bevan',
+$sans-serif;
+$BreeSerif: 'Bree Serif',
+$serif;
+$HammersmithOne: 'Hammersmith One',
+$sans-serif;
+$JoesefinSans: 'Josefin Sans',
+$sans-serif;
+$KaushanScript: 'Kaushan Script',
+$sans-serif;
+.bevan {
+    font-family: $Bevan;
+}
+
+.bree-serif {
+    font-family: $BreeSerif;
+}
+
+.hammersmith-one {
+    font-family: $HammersmithOne;
+}
+
+.joesefin-sans {
+    font-family: $JoesefinSans;
+}
+
+.kaushan-script {
+    font-family: $KaushanScript;
+}
+
+// ** Set 5 ** //
+@import url('https://fonts.googleapis.com/css?family=Domine|Oswald|Alegreya+Sans|BenchNine|Crete+Round');
+$Domine: 'Domine',
+$sans-serif;
+$Oswald: "Oswald",
+$sans-serif;
+$AlegreyaSans: 'Alegreya Sans',
+$sans-serif;
+$CreteRound: 'Crete Round',
+$serif;
+$BenchNine: 'BenchNine',
+$sans-serif;
+.domine {
+    font-family: $Domine;
+}
+
+.oswald {
+    font-family: $Oswald;
+}
+
+.crete-round {
+    font-family: $CreteRound;
+}
+
+.alegreya-sans {
+    font-family: $AlegreyaSans;
+}
+
+.bench-nine {
+    font-family: $BenchNine;
+}
+
+// ** Set 6 ** //
+@import url('https://fonts.googleapis.com/css?family=Luckiest+Guy|Bitter|Montserrat|Raleway|Ranga');
+$LuckiestGuy: 'Luckiest Guy',
+$sans-serif;
+$Bitter: 'Bitter',
+$sans-serif;
+$Montserrat: 'Montserrat',
+$sans-serif;
+$Raleway: 'Raleway',
+$sans-serif;
+$Ranga: 'Ranga',
+$sans-serif;
+.luckiest-guy {
+    font-family: $LuckiestGuy;
+}
+
+.bitter {
+    font-family: $Bitter;
+}
+
+.montserrat {
+    font-family: $Montserrat;
+}
+
+.raleway {
+    font-family: $Raleway;
+}
+
+.ranga {
+    font-family: $Ranga;
+}
+
+// ** Set 7 ** //
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One|Fredoka+One|Quicksand|Sanchez|Yellowtail');
+$FjallaOne: 'Fjalla One',
+$sans-serif;
+$FredokaOne: 'Fredoka One',
+$sans-serif;
+$Quicksand: 'Quicksand',
+$sans-serif;
+$Sanchez: 'Sanchez',
+$sans-serif;
+$Yellowtail: 'Yellowtail',
+$sans-serif;
+.fjalla-one {
+    font-family: $FjallaOne;
+}
+
+.fredoka-one {
+    font-family: $FredokaOne;
+}
+
+.quicksand {
+    font-family: $Quicksand;
+}
+
+.sanchez {
+    font-family: $Sanchez;
+}
+
+.yellow-tail {
+    font-family: $Yellowtail;
+}
+
+// ** Set 8 ** //
+@import url('https://fonts.googleapis.com/css?family=Alice|Chewy|Reem+Kufi|Righteous|Rock+Salt');
+$ReemKufi: 'Reem Kufi',
+$sans-serif;
+$Righteous: 'Righteous',
+$sans-serif;
+$Chewy: 'Chewy',
+$sans-serif;
+$RockSalt: 'Rock Salt',
+$sans-serif;
+$Alice: 'Alice',
+$serif;
+.reem-kufi {
+    font-family: $ReemKufi;
+}
+
+.righteous {
+    font-family: $Righteous;
+}
+
+.chewy {
+    font-family: $Chewy;
+}
+
+.rock-salt {
+    font-family: $RockSalt;
+}
+
+.alice {
+    font-family: $Alice;
+}
+
+// SVG icons
+.icon {
+    display: inline-block;
+    fill: currentColor;
+    height: 1em;
+    width: 1em;
+    vertical-align: middle;
+    position: relative;
+    top: -.0625em;
+    margin-right: .25em;
+    margin-left: .25em;
+    text-align: center;
+    transform-origin: center;
+    transition: transform .3 ease;
+}
