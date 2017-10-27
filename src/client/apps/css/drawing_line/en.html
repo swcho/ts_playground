@@ -1,0 +1,266 @@
+<html>
+
+<head>
+    <title>drawing line</title>
+    <style>
+        svg {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid blue;
+        }
+
+        .stem {
+            stroke-dashoffset: 285;
+            /*how far down the svg path to move the dashed lines*/
+            stroke-dasharray: 285;
+            /* length of dashes */
+            animation: drawStem 3s linear;
+            animation-fill-mode: forwards;
+            /* final state of animation ends as is */
+            animation-delay: 2s;
+        }
+
+        .stem1 {
+            stroke-dashoffset: 906;
+            stroke-dasharray: 906;
+            animation: drawStem1 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem2 {
+            stroke-dashoffset: 1127;
+            stroke-dasharray: 1127;
+            animation: drawStem2 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem3 {
+            stroke-dashoffset: 680;
+            stroke-dasharray: 680;
+            animation: drawStem3 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem4 {
+            stroke-dashoffset: 225;
+            stroke-dasharray: 225;
+            animation: drawStem4 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem5 {
+            stroke-dashoffset: 680;
+            stroke-dasharray: 680;
+            animation: drawStem5 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem6 {
+            stroke-dashoffset: 1127;
+            stroke-dasharray: 1127;
+            animation: drawStem6 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem7 {
+            stroke-dashoffset: 906;
+            stroke-dasharray: 906;
+            animation: drawStem7 3s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 5s;
+        }
+
+        .stem8 {
+            stroke-dashoffset: 270;
+            stroke-dasharray: 270;
+            animation: drawStem8 2s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 8s;
+        }
+
+        .stem9 {
+            stroke-dashoffset: 343;
+            stroke-dasharray: 343;
+            animation: drawStem9 2s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 8s;
+        }
+
+        .stem10 {
+            stroke-dashoffset: 346;
+            stroke-dasharray: 346;
+            animation: drawStem9 2s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 8s;
+        }
+
+        .stem11 {
+            stroke-dashoffset: 270;
+            stroke-dasharray: 270;
+            animation: drawStem11 2s linear;
+            animation-fill-mode: forwards;
+            animation-delay: 8s;
+        }
+
+
+        @keyframes drawStem {
+            from {
+                stroke-dashoffset: 285;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem1 {
+            from {
+                stroke-dashoffset: 906;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem2 {
+            from {
+                stroke-dashoffset: 1127;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem3 {
+            from {
+                stroke-dashoffset: 680;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem4 {
+            from {
+                stroke-dashoffset: 225;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem5 {
+            from {
+                stroke-dashoffset: 680;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem6 {
+            from {
+                stroke-dashoffset: 1127;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem7 {
+            from {
+                stroke-dashoffset: 906;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem8 {
+            from {
+                stroke-dashoffset: 270;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem9 {
+            from {
+                stroke-dashoffset: 343;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem10 {
+            from {
+                stroke-dashoffset: 346;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawStem11 {
+            from {
+                stroke-dashoffset: 270;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1000"
+        height="900" xml:space="preserve">
+
+        <path class="stem" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="1" stroke-linecap="square" d="M500 900 L500 615"
+        />
+
+        <path class="stem1" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M500 615 L370 740 L30 615 L363 490"
+        />
+
+        <path class="stem2" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M500 615 L280 615 L88 204 L500 393"
+        />
+
+        <path class="stem3" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="round" d="M500 615 L340 460 L500 35"
+        />
+
+        <path class="stem4" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M500 615 L500 393"
+        />
+
+        <path class="stem5" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="round" d="M500 615 L660 460 L500 35"
+        />
+
+        <path class="stem6" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M500 615 L720 615 L912 204 L500 393"
+        />
+
+        <path class="stem7" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M500 615 L630 740 L970 615 L637 490"
+        />
+
+        <path class="stem8" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M165 557 L74 464 L205 470"
+        />
+
+        <path class="stem9" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M296 291 L294 122 L412 249"
+        />
+
+        <path class="stem10" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M704 291 L706 122 L583 249"
+        />
+
+        <path class="stem11" fill="none" stroke="#c02025" stroke-width="10" stroke-miterlimit="4" stroke-linecap="square" d="M835 557 L926 464 L795 470"
+        />
+
+    </svg>
+
+</body>
+
+</html>

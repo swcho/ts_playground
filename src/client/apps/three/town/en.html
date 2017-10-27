@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <title>town</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Barrio');
+        html,
+        body,
+        canvas {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url('https://preview.ibb.co/gEtpsk/town.jpg');
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+
+        #followme {
+            cursor: pointer;
+            font-family: 'Barrio', cursive;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 100px;
+            font-family: 'Barrio', cursive;
+            transform: translateX(-50%) translateY(-50%);
+            color: white;
+        }
+
+        #info:before {
+            position: absolute;
+            top: 95%;
+            left: 50%;
+            font-size: 30px;
+            font-family: 'Barrio', cursive;
+            transform: translateX(-50%) translateY(-50%);
+            color: white;
+            content: 'Each house is a follower!'
+        }
+    </style>
+</head>
+
+<body>
+    <div id=loading>Loading...</div>
+</body>
+
+</html>
