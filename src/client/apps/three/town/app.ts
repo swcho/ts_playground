@@ -63,6 +63,7 @@ let texture = THREE.ImageUtils.loadTexture(prairieImg, null, function () {
         let renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
+        renderer.shadowMap.enabled = true;
         // renderer.shadowMapSoft = true;
         document.body.appendChild(renderer.domElement);
 
@@ -73,12 +74,15 @@ let texture = THREE.ImageUtils.loadTexture(prairieImg, null, function () {
         light.position.multiplyScalar(1.3); // 1.3
 
         light.castShadow = true;
-        // const cameraHelper = new THREE.CameraHelper(light.shadow.camera);
-        // light.shadowCameraVisible = true;
-        // scene.add(cameraHelper);
 
-        light.shadowMapWidth = 3500;
-        light.shadowMapHeight = 3500;
+        // light.shadowCameraVisible = true;
+        const cameraHelper = new THREE.CameraHelper(light.shadow.camera);
+        scene.add(cameraHelper);
+
+        // light.shadowMapWidth = 3500;
+        light.shadow.mapSize.width = 3500;
+        // light.shadowMapHeight = 3500;
+        light.shadow.mapSize.height = 3500;
 
         let d = 500;
 
