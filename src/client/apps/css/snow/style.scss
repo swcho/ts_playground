@@ -1,0 +1,107 @@
+$white: #fff;
+@mixin transform($info) {
+    transform: $info;
+    -webkit-transform: $info;
+    -moz-transform: $info;
+    -ms-transform: $info;
+}
+
+@mixin gradient($type, $info) {
+    background: #{$type}-gradient($info);
+    background: -webkit-#{$type}-gradient($info);
+    background: -moz-#{$type}-gradient($info);
+    background: -ms-#{$type}-gradient($info);
+}
+
+@mixin browsers($info) {
+    animation: $info;
+    -webkit-animation: $info;
+    -moz-animation: $info;
+    -ms-animation: $info;
+    -o-animation: $info;
+}
+
+@mixin blur($info) {
+    filter: blur($info);
+    -webkit-filter: blur($info);
+    -moz-filter: blur($info);
+    -ms-filter: blur($info);
+    -o-filter: blur($info);
+}
+
+@mixin animation($name) {
+    @keyframes #{$name} {
+        @content;
+    }
+    @-webkit-keyframes #{$name} {
+        @content;
+    }
+    @-moz-keyframes #{$name} {
+        @content;
+    }
+    @-ms-keyframes #{$name} {
+        @content;
+    }
+}
+
+body {
+    background-color: #506A73;
+    margin: 0;
+}
+
+.snow {
+    background-color: $white;
+    border-radius: 30%;
+    bottom: 110vh;
+    position: absolute;
+}
+
+@for $i from 1 through 100 {
+    .snow.s#{$i} {
+        $speed: random(5) + 1/random(7) + 10 + s;
+        $delay: (random(12) + 1/random(5)) + s;
+        $size: (random(4) + 1);
+        height: $size*3px;
+        left: random(100) + 0vw;
+        opacity: random(7)/10;
+        width: $size + px;
+        @include browsers((letItSnow $speed $delay linear infinite, shakeIt 4s $delay linear infinite));
+        &:after {
+            background-color: $white;
+            border-radius: 100%;
+            content: '';
+            height: $size*3px;
+            position: absolute;
+            @include transform(rotate(60deg));
+            width: $size + px;
+        }
+        &:before {
+            @extend .snow.s#{$i}:after;
+            @include transform(rotate(-60deg));
+        }
+    }
+}
+
+@include animation(letItSnow) {
+    from {
+        bottom: 100vh;
+    }
+    to {
+        bottom: -20vh;
+    }
+}
+
+@include animation(shakeIt) {
+    0% {
+        @include transform(rotate(-10deg));
+    }
+    40% {
+        @include transform(rotate(10deg) translateX(0px));
+    }
+    60% {
+        @include transform(rotate(10deg) translateX(-10px));
+    }
+    100% {
+        @include transform(rotate(-10deg));
+    }
+}
