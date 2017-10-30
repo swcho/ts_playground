@@ -1,0 +1,169 @@
+$timing: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+
+html, body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: radial-gradient(ellipse at center, rgba(3,0,114,1) 0%,rgba(51,0,162,1) 75%);
+	background-size: cover;
+}
+
+.lamp-lava {
+	position: relative;
+	perspective: 100px;
+}
+
+.top {
+	width: 33.5px;
+	height: 61px;
+	background-image: linear-gradient(90deg, white 0%, #f1f1f1 80%, #e1e1e1 51%, #f6f6f6 100%);
+	position: absolute;
+	top: -49px;
+	left: 18px;
+	transform: rotateX(199deg);
+}
+
+.glass-reflection {
+	position: absolute;
+	top: 0;
+	left: -1px;
+	background: -webkit-linear-gradient(
+		315deg,
+		rgba(255, 255, 255, 0) 0%,
+		white 67%,
+		rgba(255, 255, 255, 0.76) 75%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	background: linear-gradient(
+		89deg,
+		rgba(255, 255, 255, 0) 0%,
+		white 67%,
+		rgba(255, 255, 255, 0.75) 75%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	width: 72px;
+	height: 200px;
+	z-index: 100;
+	opacity: .5;
+}
+
+.bottom {
+	width: 50px;
+	height: 25px;
+	background-image: linear-gradient(
+		90deg,
+		white 0%,
+		#f1f1f1 80%,
+		#e1e1e1 51%,
+		#f6f6f6 100%
+	);
+	position: absolute;
+	bottom: -27px;
+	left: 10px;
+	transform: rotateX(246deg);
+	z-index: -1;
+	box-shadow: 0 -3px 9px -3px #000000;
+}
+
+.lamp {
+	background-image: linear-gradient(to bottom, #fff707, #fd2300);
+	clip-path: polygon(
+		24% 0%,
+		0% 93%,
+		18% 100%,
+		83% 100%,
+		100% 93%,
+		100% 90%,
+		76% 0%
+	);
+	overflow: hidden;
+}
+
+.glass {
+	filter: url('#goo');
+	width: 70px;
+	height: 200px;
+	position: relative;
+}
+
+.blob {
+	position: absolute;
+	background: #ffffff;
+	opacity: .8;
+	left: calc(50% - 25px);
+	border-radius: 50%;
+	animation: blob-wave $timing 30s infinite;
+	transform-origin: center center;
+
+	@for $i from 1 to 11 {
+		&:nth-child(#{$i}) {
+			width: $i * 10 + px;
+			height: $i * 8 + px;
+
+			@if $i % 2 == 0 {
+				top: -25px;
+				animation-delay: $i * 3 / 10 + s;
+				animation-duration: $i * 6 + s;
+			}
+			@if $i % 2 == 1 {
+				top: 180px;
+				animation-direction: reverse;
+				animation-delay: $i * 2 / 10 + s;
+				animation-duration: $i * 6 + s;
+			}
+
+			@if $i == 1 {
+				top: 0;
+				width: 50px;
+				height: 30px;
+				animation: rotate 40s $timing infinite;
+				border-radius: 20%;				
+			}
+
+			@if $i == 8 {
+				top: 185px;
+				border-radius: 20%;
+				left: calc(50% - 41px);
+				width: 70px;
+				height: 35px;
+				animation: rotate 20s $timing infinite;
+				animation-direction: reverse;
+			}
+		}
+	}
+}
+
+@keyframes blob-wave {
+	0% {
+		transform: scale(.8) translateY(0) rotate(0);
+	}
+	50% {
+		transform: scale(1) translateY(180px) rotate(180deg);
+	}
+	100% {
+		transform: scale(.8) translateY(0) rotate(0);
+	}
+}
+
+@keyframes rotate {
+	0% {
+		transform: scale(.9) rotate(0);
+	}
+	50% {
+		transform: scale(1.2) rotate(360deg);
+	}
+	100% {
+		transform: scale(.9) rotate(0deg);
+	}
+}
+
+svg {
+	display: none;
+}

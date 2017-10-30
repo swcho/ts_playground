@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <title>Lava Lamp</title>
+</head>
+
+<body>
+<div class="lamp-lava">
+	<div class="top"></div>
+	<div class="lamp">
+		<div class="glass-reflection"></div>
+		<div class="glass">
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="0" height="0">
+  <defs>
+    <filter id="goo">
+  <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+  <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 
+                                                 0 1 0 0 0 
+                                                 0 0 1 0 0 
+                                                 0 0 0 19 -9" result="color" />
+  <!-- <feComposite in="SourceGraphic" in2="color" operator="atop"/> -->
+  <feComposite in="SourceGraphic" in2="color" operator="in"/>
+  	</filter>
+  </defs>
+</svg>
+</body>
+
+</html>
