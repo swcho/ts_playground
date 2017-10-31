@@ -1,0 +1,199 @@
+<html>
+
+<head>
+    <title>Survival Game</title>
+    <style>
+        a {
+            cursor: pointer;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        fieldset,
+        img {
+            border: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .pos {
+            position: relative;
+            top: -80px;
+        }
+        /*input[type="Submit"]{cursor:pointer;}*/
+
+        strong {
+            font-weight: bold;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Comfortaa', cursive;
+            font-size: 11px;
+        }
+
+        canvas {
+            background-image: url(https://i.stack.imgur.com/p9mUO.jpg);
+            background-position-x: initial;
+            background-position-y: initial;
+            background-size: cover;
+            background-repeat-x: initial;
+            background-repeat-y: initial;
+            background-attachment: initial;
+            background-origin: initial;
+            background-clip: initial;
+            background-position: center;
+            font-family: 'Comfortaa', cursive;
+        }
+
+        .ui {
+            border-radius: 50px 120px 120px;
+            font-family: 'Comfortaa', cursive;
+            font-size: 17px;
+            color: #fa3380;
+            background: linear-gradient(to right, rgba(2, 179, 228, 0.6) 0%, rgba(2, 204, 186, 0.6) 100%);
+            position: absolute;
+            width: 70%;
+        }
+
+        #message {
+            border-radius: 50px 120px 120px;
+            padding: 30px;
+            position: relative;
+            margin: 0 auto;
+            -webkit-animation: colorchange 50s infinite alternate;
+        }
+
+        #startButton {
+            margin-top: 50px;
+        }
+
+        #status {
+            width: 100%;
+            height: 15px;
+            padding: 8px;
+            display: none;
+        }
+
+        #status span {
+            color: #fff;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        #title {
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 5px;
+            color: #fa3380;
+            -webkit-animation: colorchange 7s infinite alternate;
+        }
+
+        .ui a {
+            outline: none;
+            font-family: 'Comfortaa', cursive;
+            font-size: 38px;
+            width: 150px;
+            text-align: center;
+            margin: 0 auto;
+            text-decoration: none;
+            color: deepskyblue;
+            padding: 2px;
+            display: block;
+            -webkit-animation: colorchange 1s infinite alternate;
+        }
+
+        .ui a:hover {
+            font-weight: bold;
+            background: linear-gradient(to right, rgba(2, 179, 228, 0.9) 0%, rgba(2, 204, 186, 0.9) 100%);
+            border-radius: 50px 120px 120px;
+        }
+
+
+
+
+        @-webkit-keyframes colorchange {
+            0% {
+
+                color: darkviolet;
+            }
+
+            10% {
+
+                color: #fa3380;
+            }
+
+            20% {
+
+                color: rgba(2, 179, 228, 0.8);
+            }
+
+            30% {
+
+                color: rgba(2, 204, 186, 0.8);
+            }
+
+            40% {
+
+                color: rgba(169, 81, 237, 0.8);
+            }
+
+            50% {
+
+                color: rgba(255, 162, 52, 0.8);
+            }
+
+            60% {
+
+                color: rgba(255, 84, 131, 0.8);
+            }
+
+            70% {
+
+                color: deepskyblue;
+            }
+            80% {
+
+                color: purple;
+            }
+
+            90% {
+
+                color: lightpink;
+            }
+
+            100% {
+
+                color: rgba(125, 151, 173, 0.8);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='world'></canvas>
+    <div id="status" class="ui"></div>
+    <div class="pos">
+        <div id="message" class="ui">
+            <h2 id="title">Survival Game</h2>
+            <ul>
+                <li>1. Avoid white dots.</li>
+                <li>2. Touch the green dots for invulnerability.</li>
+                <li>3. Stay at the center, Don't touch the sides</li>
+                <li>4. Use invulnerability to destroy red dots.</li>
+                <li>5. Score extra points by moving around a lot.</li>
+                <li>6. Stay alive.</li>
+            </ul>
+            <a href="#" class="btn" id="startButton">Play</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+// helper
+html
+	box-sizing: border-box
+	font-size: 62.5%
+
+*
+	padding: 0
+	margin: 0
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+	box-sizing: inherit
+	&::after, &::before
+		box-sizing: inherit
+
+%center
+	position: absolute
+	top: 50%
+	left: 50%
+	transform: translate(-50%, -50%)
+
+=size($w, $h)
+	width: $w
+	height: $h
+
+=font-size($sizeValue: 1.6)
+	font-size: ($sizeValue * 10) + px
+	font-size: $sizeValue + rem
+
+//
+$red-light: #e74c3c
+$red-dark: #c0392b
+$grey-light: #bdc3c7
+$grey: #95a5a6
+$white: #ecf0f1
+$black: #212121
+
+// corpus
+body
+	background-color: #e74c3c
+.input-wrapper
+	@extend %center
+	+size(250px, 50px)
+	transition: border-color .25s ease-out
+	input
+		border-radius: 1px
+		position: absolute
+		left: 0
+		top: 0	
+		+size(calc(100% - 54px), 100%)
+		padding: 12px 15px
+		border: none
+		outline: none
+		background-color: $white
+		color: $black
+		transform-origin: center
+		font: small-caption	
+		+font-size(1.8)	
+	.input-trigger
+		border-radius: 1px
+		position: relative
+		display: inline
+		float: right
+		+size(50px, 50px)
+		background-color: $red-light
+		transition: background-color .25s ease-out
+		cursor: pointer
+		.material-icons.icon-1,
+		.material-icons.icon-2
+			+font-size(2.6)
+			position: absolute
+			top: 11px
+			right: 12px
+			color: $grey-light
+			transition: color .25s ease-out
+		.material-icons.icon-2
+			display: none
+			right: 14px
+		&:hover
+			transition: background-color .25s ease-out
+			background-color: $red-dark
+			.material-icons.icon-1, 
+			.material-icons.icon-2
+				color: #ecf0f1
+				transition: color .25s ease-in
+
+.passive-pw		
+	transform: rotateX(180deg) scale(1.05)
+	transition: transform .3s ease, opacity .1s .1s ease-out
+	opacity: 0
+	z-index: 1
+.active-pw
+	transform: rotateX(0deg) scale(1)
+	transition: transform 0.3s ease
+	z-index: 2
+	opacity: 1
+
+.passive-text
+	opacity: 0
+	z-index: 1
+	transform: rotateX(180deg) scale(1.2)
+.active-text
+	transform: rotateX(0deg) scale(1)
+	transition: transform .3s ease, opacity .1s .1s ease-out
+	opacity: 1
+	z-index: 2
