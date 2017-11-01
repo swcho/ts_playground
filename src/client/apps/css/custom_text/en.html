@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Custom Text Loader</title>
+    <style>
+        body {
+            background: #1abc9c;
+            text-align: center;
+        }
+
+        input {
+            margin-top: 100px;
+            font-size: 16px;
+            line-height: 1.5;
+            padding: 10px 20px;
+            outline: none;
+            border: none;
+            color: #333;
+            min-width: 200px;
+            background-color: #e6e6e6;
+            box-shadow: 0 2px 0 #c1c1c1;
+        }
+
+        button {
+            margin-top: 100px;
+            font-size: 16px;
+            line-height: 1.5;
+            padding: 10px 20px;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+            min-width: 200px;
+            background-color: #e6e6e6;
+            box-shadow: 0 2px 0 #c1c1c1;
+        }
+    </style>
+</head>
+
+<body>
+    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    
+        <path d="M10 10 H 90 V 90 H 10" />
+
+        <!-- Points -->
+        <circle cx="10" cy="10" r="2" fill="red" />
+        <circle cx="90" cy="90" r="2" fill="red" />
+        <circle cx="90" cy="10" r="2" fill="red" />
+        <circle cx="10" cy="90" r="2" fill="red" />
+    
+    </svg>
+    <input type="text" value="lorem ipsum" id="text">
+    <button id="reload">Reload</button>
+</body>
+
+</html>
