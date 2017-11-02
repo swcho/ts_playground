@@ -10,6 +10,8 @@ import * as GPU from 'gpu.js';
 
 declare global {
     function mix(a, b, c);
+    function cos(a);
+    function sin(a);
     const thread;
     const dimensions;
     const uTexSize;
@@ -18,17 +20,30 @@ declare global {
 
 let anim;
 let gpu = new GPU();
-let kernel = gpu.createKernel(function (from, to) {
+let kernel = gpu.createKernel(function (timeArray, from, to) {
     // let tX = vTexCoord.x / uTexSize.x;
     // let tY = vTexCoord.y / uTexSize.y;
     let tX = this.thread.x / uTexSize.x;
     let tY = this.thread.y / uTexSize.y;
     // let tX = this.thread.x / this.dimensions.x;
     // let tY = this.thread.y / this.dimensions.y;
+    // color(
+    //     mix(from[0], to[0], tX),
+    //     mix(from[1], to[1], tY),
+    //     mix(from[2], to[2], tX)
+    // );
+
+    // const time = timeArray[0];
+    const time = from[1]; // timeArray[0];
+    const vc = cos(-time);
+    const vs = sin(time * 1.5);
+    const c = (vc + 1.0) / 2.0;
+    const s = (vs + 1.0) / 2.0;
+
     color(
-        mix(from[0], to[0], tX),
-        mix(from[1], to[1], tY),
-        mix(from[2], to[2], tX)
+        mix(1.0, 0.25, tX),
+        mix(c, 1.0, tY),
+        mix(0.25, s, tX)
     );
 }, {
     dimensions: [window.innerWidth, window.innerHeight],
@@ -57,8 +72,9 @@ function draw() {
     let s = (sin + 1) / 2;
 
     kernel(
+        [time, time, time],
         [1.0, c, 0.25],
-        [0.25, 1.0, s]
+        [0.25, 1.0, s],
     );
 
     anim = requestAnimationFrame(draw);
