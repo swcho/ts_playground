@@ -15,26 +15,58 @@ declare global {
     }
 
     interface Window {
-        mozRequestAnimationFrame
-        requestAnimFrame
+        mozRequestAnimationFrame;
+        requestAnimFrame;
     }
 }
 
+interface Options {
+    text: string;
+    color: string;
+    lineSize: number;
+    lineJoin: 'round';
+
+    speed: number;
+    slowing: boolean;
+    slowingSpeed: number;
+
+    hideScroll: boolean;
+
+    fadeIn: boolean;
+    fadeInDuration: number;
+    fadeOut: boolean;
+    fadeOutDuration: number;
+
+    backgroundColor: string;
+
+    gradientBackground: string;
+    gradientColor1: string;
+    gradientColor2: string;
+
+    canvas: {
+        id: string;
+        style: any;
+    };
+
+    onFinish: () => void;
+}
+
+const colors = ['#9ED110', '#50B517', '#179067', '#476EAF', '#9f49ac', '#CC42A2', '#FF3BA7', '#FF5800', '#FF8100', '#FEAC00', '#FFCC00', '#EDE604'];
+
 (function ($, window, document) {
 
-    $.fn.lineLoader = function (options) {
+    $.fn.lineLoader = function (options: Options) {
 
-
-        var options = $.extend({}, $.fn.lineLoader.defaults, options);
+        options = $.extend({}, $.fn.lineLoader.defaults, options);
 
         this.finishLoading = function () {
             options.slowing = false;
             options.speed = 10;
-        }
+        };
 
         return this.each(function () {
 
-            var element = $(this);
+            let element = $(this);
 
             window.requestAnimFrame = (function () {
                 return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
@@ -42,11 +74,11 @@ declare global {
                 };
             })();
 
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext("2d");
+            let canvas = document.createElement('canvas');
+            let ctx = canvas.getContext('2d');
 
-            var grd;
-            var path;
+            let grd;
+            let path;
             let progres = 0;
             let currentPath = 0;
             let t0 = 0;
@@ -55,7 +87,7 @@ declare global {
             let finish = false;
 
             function percente(x1, y1, bx1, by1, bx2, by2, x2, y2) {
-                let u0 = 1 - t0;
+                const u0 = 1 - t0;
                 const u1 = 1 - t1;
 
                 const qxa = x1 * u0 * u0 + bx1 * 2 * t0 * u0 + bx2 * t0 * t0;
@@ -89,19 +121,23 @@ declare global {
             function drawPath() {
                 ctx.beginPath();
                 for (let i = 0; i < path.length; i++) {
+                    const pathItem = path[i];
+                    // Stepping drawing for current path
                     if (i === currentPath) {
-                        path[i][8] = path[i][8] >= 1 ? true : path[i][8];
-                        currentPath = path[i][8] >= 1 ? currentPath += 1 : currentPath;
-                        t1 = path[i][8] >= 1 ? 0 : t1;
-                        t1 = path[i][8];
-                        let v = percente(path[i][0], path[i][1], path[i][2], path[i][3], path[i][4], path[i][5], path[i][6], path[i][7]);
-                        console.log(currentPath, path[i], v);
+                        ctx.strokeStyle = colors[i % colors.length];
+                        pathItem[8] = pathItem[8] >= 1 ? true : pathItem[8];
+                        currentPath = pathItem[8] >= 1 ? currentPath += 1 : currentPath;
+                        t1 = pathItem[8] >= 1 ? 0 : t1;
+                        t1 = pathItem[8];
+                        let v = percente(pathItem[0], pathItem[1], pathItem[2], pathItem[3], pathItem[4], pathItem[5], pathItem[6], pathItem[7]);
+                        console.log(currentPath, t1);
                         drawCurve(v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7]);
-                        // drawCurve(path[i][0], path[i][1], path[i][2], path[i][3], path[i][4], path[i][5], path[i][6], path[i][7]);
-                        path[i][8] += options.speed;
+                        // drawCurve(pathItem[0], pathItem[1], pathItem[2], pathItem[3], pathItem[4], pathItem[5], pathItem[6], pathItem[7]);
+                        pathItem[8] += options.speed;
                     }
-                    else if (path[i][8]) {
-                        drawCurve(path[i][0], path[i][1], path[i][2], path[i][3], path[i][4], path[i][5], path[i][6], path[i][7]);
+                    else if (pathItem[8]) {
+                        // Draw directyl previously drawn path
+                        drawCurve(pathItem[0], pathItem[1], pathItem[2], pathItem[3], pathItem[4], pathItem[5], pathItem[6], pathItem[7]);
                     }
                 };
                 ctx.lineWidth = options.lineSize;
@@ -199,7 +235,7 @@ declare global {
                         $(canvas).fadeOut(options.fadeOutDuration, function () {
                             $(this).remove();
                             if (options.onFinish) {
-                                options.onFinish.call();
+                                options.onFinish.call(window);
                             }
                             if (options.hideScroll) {
                                 element.css('overflow', 'auto');
@@ -208,7 +244,7 @@ declare global {
                     } else {
                         $(canvas).remove();
                         if (options.onFinish) {
-                            options.onFinish.call();
+                            options.onFinish.call(window);
                         }
                         if (options.hideScroll) {
                             element.css('overflow', 'auto');
@@ -222,7 +258,8 @@ declare global {
                 drawBackground();
                 drawPath();
                 // isFinish();
-                requestAnimationFrame(reDraw);
+                // requestAnimationFrame(reDraw);
+                setTimeout(reDraw, 1000);
             }
 
             function start() {
@@ -257,7 +294,7 @@ declare global {
         lineSize: 1.5,
         lineJoin: 'round',
 
-        speed: 1,
+        speed: .5,
         slowing: false,
         slowingSpeed: 1.04,
 
