@@ -20,7 +20,7 @@ declare global {
 
 let anim;
 let gpu = new GPU();
-let kernel = gpu.createKernel(function (timeArray, from, to) {
+let kernel = gpu.createKernel(function (time, from, to) {
     // let tX = vTexCoord.x / uTexSize.x;
     // let tY = vTexCoord.y / uTexSize.y;
     let tX = this.thread.x / uTexSize.x;
@@ -33,8 +33,6 @@ let kernel = gpu.createKernel(function (timeArray, from, to) {
     //     mix(from[2], to[2], tX)
     // );
 
-    // const time = timeArray[0];
-    const time = from[1]; // timeArray[0];
     const vc = cos(-time);
     const vs = sin(time * 1.5);
     const c = (vc + 1.0) / 2.0;
@@ -72,7 +70,8 @@ function draw() {
     let s = (sin + 1) / 2;
 
     kernel(
-        [time, time, time],
+        // Date.now() * 0.0025 % (Math.PI * 2),
+        Date.now() * 0.001 % (Math.PI * 2),
         [1.0, c, 0.25],
         [0.25, 1.0, s],
     );
