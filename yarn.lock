@@ -396,6 +396,10 @@ acorn@^5.0.0:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.0.3.tgz#c460df08491463f028ccb82eab3730bf01087b3d"
 
+acorn@^5.1.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.2.1.tgz#317ac7821826c22c702d66189ab8359675f135d7"
+
 after@0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/after/-/after-0.8.1.tgz#ab5d4fb883f596816d3515f8f791c0af486dd627"
@@ -3082,6 +3086,12 @@ glslify@^2.1.1:
     static-module "^1.1.2"
     through2 "^0.6.3"
     xtend "^4.0.0"
+
+gpu.js@^1.0.0-rc.5:
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/gpu.js/-/gpu.js-1.0.0-rc.5.tgz#456d4fd071bc4cfea8b9d5d5fcdc64c5adb97255"
+  dependencies:
+    acorn "^5.1.1"
 
 graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
