@@ -77,6 +77,7 @@ class Branch {
                 this.growPosition,
                 nextLength,
                 this.divergeAt,
+                // spread for newly created branches angles
                 this.angle + this.spread,
                 nextDepth,
                 this.spread
@@ -85,6 +86,7 @@ class Branch {
                 this.growPosition,
                 nextLength,
                 this.divergeAt,
+                // spread for newly created branches angles
                 this.angle - this.spread,
                 nextDepth,
                 this.spread
@@ -100,6 +102,7 @@ class Branch {
     }
 
     get growPosition() {
+        // divergeAt used for cacluating position of newly created branches.
         const dl = this.length * this.divergeAt;
 
         return {
@@ -155,9 +158,10 @@ const drawBranch = (branch, phase) => {
     });
 };
 
+// map start1 < value < stop1 to start2 < ? < stop2
 const map = (value, start1, stop1, start2, stop2) => ((value - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
 
-const clear = (phase) => {
+const clear = () => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx2.clearRect(0, 0, ctx2.canvas.width, ctx2.canvas.height);
 };
@@ -165,7 +169,7 @@ const clear = (phase) => {
 const loop = () => {
     let phase = rootBranch.spread / maxSpread;
 
-    clear(phase);
+    clear();
 
     if (autoAnimate) {
         phase = map(Math.sin(autoTick), -1, 1, 0, 1);
