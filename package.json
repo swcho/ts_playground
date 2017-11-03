@@ -38,6 +38,7 @@
     "gl-matrix": "^2.3.2",
     "gpu.js": "^1.0.0-rc.5",
     "gsap": "^1.20.2",
+    "gyronorm": "^2.0.6",
     "lodash-es": "^4.17.4",
     "lodash.range": "^3.2.0",
     "matter-js": "^0.13.0",
