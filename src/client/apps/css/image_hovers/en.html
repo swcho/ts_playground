@@ -1,0 +1,1713 @@
+<html>
+
+<head>
+    <title></title>
+    <style>
+        /*
+* The function calc is working wrong in case calculations in the Firefox
+*/
+
+        .photobox {
+            display: inline-block;
+        }
+
+        .photobox__previewbox {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photobox__preview {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .photobox__previewbox:before {
+            content: "";
+        }
+        /* type 1 */
+
+        .photobox_type1 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+            border-radius: 50%;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            transition: transform calc(var(--photoboxAnimationDuration, .2s) / 2) ease calc(var(--photoboxAnimationDuration, .2s) / 2);
+            will-change: transform;
+            transform: scale(0);
+        }
+
+        .photobox_type1:hover .photobox__previewbox:before {
+            transform: scale(2);
+            transition-duration: var(--photoboxAnimationDuration, .2s);
+            transition-delay: 0s;
+        }
+
+        .photobox_type1 .photobox__label {
+            width: 50%;
+            transform: translate(-200%, -50%);
+            transition: transform var(--photoboxAnimationDuration, .2s) ease-out;
+            will-change: transform;
+
+            position: absolute;
+            top: 50%;
+            left: 15%;
+        }
+
+        .photobox_type1:hover .photobox__label {
+            transition-duration: var(--photoboxAnimationDuration, .2s);
+            transform: translate(0, -50%);
+        }
+        /* type 2*/
+
+        .photobox_type2 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            border-radius: 50%;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            transition: transform var(--photoboxAnimationDuration, .2s) ease calc(var(--photoboxAnimationDuration, .2s) / 2);
+            will-change: transform;
+            transform: scale(0);
+        }
+
+        .photobox_type2:hover .photobox__previewbox:before {
+            transform: scale(2);
+            transition-duration: var(--photoboxAnimationDuration, .2s);
+            transition-delay: 0s;
+        }
+
+        .photobox_type2 .photobox__label {
+            width: 50%;
+            text-align: right;
+
+            transform: translate(200%, -50%);
+            transition: transform var(--photoboxAnimationDuration, .2s) ease-out;
+            will-change: transform;
+
+            position: absolute;
+            top: 50%;
+            right: 15%;
+        }
+
+        .photobox_type2:hover .photobox__label {
+            transition-duration: var(--photoboxAnimationDuration, .2s);
+            transform: translate(0, -50%);
+        }
+        /* type 3 */
+
+        .photobox_type3 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .photobox_type3:hover .photobox__previewbox:before {
+            opacity: 1;
+        }
+
+        .photobox_type3 .photobox__label {
+            width: 98%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type3:hover .photobox__label {
+            opacity: 1;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+
+        .photobox_type3 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type3:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+        /* type 4 */
+
+        .photobox_type4 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .photobox_type4:hover .photobox__previewbox:before {
+            opacity: 1;
+        }
+
+        .photobox_type4 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 2;
+        }
+
+        .photobox_type4:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+
+        .photobox_type4 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type4:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+        /* type 5 */
+
+        .photobox_type5 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .photobox_type5:hover .photobox__previewbox:before {
+            opacity: 1;
+        }
+
+        .photobox_type5 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-200%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type5:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+
+        .photobox_type5 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type5:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+        /* type 6 */
+
+        .photobox_type6 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type6:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: var(--photoboxAnimationDuration, .8s);
+        }
+
+        .photobox_type6 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            transform: translate(-200%, -50%);
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease-out;
+            will-change: transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        .photobox_type6:hover .photobox__label {
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 4);
+            transform: translate(-50%, -50%);
+        }
+        /* type 7 */
+
+        .photobox_type7 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type7:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: var(--photoboxAnimationDuration, .8s);
+        }
+
+        .photobox_type7 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            transform: translate(-200%, -50%);
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease-out;
+            will-change: transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .photobox_type7:hover .photobox__label {
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 4);
+            transform: translate(-50%, -50%);
+        }
+
+        .photobox_type7 .photobox__preview {
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type7:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+        /* type 8 */
+
+        .photobox_type8 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type8:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: var(--photoboxAnimationDuration, .8s);
+        }
+
+        .photobox_type8 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .8s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .8s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 3;
+        }
+
+        .photobox_type8:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .8s) / 4);
+        }
+
+        .photobox_type8 .photobox__preview {
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type8:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+        /* type 9 */
+
+        .photobox_type9 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type9:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: var(--photoboxAnimationDuration, .8s);
+        }
+
+        .photobox_type9 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .8s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .8s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 3;
+        }
+
+        .photobox_type9:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .8s) / 4);
+        }
+
+        .photobox_type9 .photobox__preview {
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type9:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+        /* type 10 */
+
+        .photobox_type10 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type10:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: var(--photoboxAnimationDuration, .8s);
+        }
+
+        .photobox_type10 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .8s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .8s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 3;
+        }
+
+        .photobox_type10:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .8s) / 4);
+        }
+        /* type 11 */
+
+        .photobox_type11 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease;
+            transform: translate(-50%, -50%) scale(0);
+            will-change: transform;
+        }
+
+        .photobox_type11:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: var(--photoboxAnimationDuration, .8s);
+        }
+
+        .photobox_type11 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            transform: translate(-200%, -50%);
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) ease-out;
+            will-change: transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .photobox_type11:hover .photobox__label {
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 4);
+            transform: translate(-50%, -50%);
+        }
+
+        .photobox_type11 .photobox__preview {
+            transition: transform calc(var(--photoboxAnimationDuration, .8s) / 2) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type11:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+        /* type 12 */
+
+        .photobox_type12 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform var(--photoboxAnimationDuration, .4s) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type12:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) * 2);
+        }
+
+        .photobox_type12 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity var(--photoboxAnimationDuration, .4s) ease-out;
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .photobox_type12:hover .photobox__label {
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            opacity: 1;
+        }
+
+        .photobox_type12 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type12:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+        /* type 13 */
+
+        .photobox_type13 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 45%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+            opacity: 0;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease;
+            will-change: opacity, transform;
+            transform: translate(-50%, -200%);
+        }
+
+        .photobox_type13:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type13 .photobox__label {
+            width: 80%;
+            text-align: center;
+
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .photobox_type13:hover .photobox__label {
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: var(--photoboxAnimationDuration, .4s);
+            opacity: 1;
+        }
+
+        .photobox_type13 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type13:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+        /* type 14 */
+
+        .photobox_type14 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 45%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform var(--photoboxAnimationDuration, .4s) ease calc(var(--photoboxAnimationDuration, .4s) / 2);
+            will-change: transform;
+            transform: translate(-50%, -250%);
+        }
+
+        .photobox_type14:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%);
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: 0s;
+        }
+
+        .photobox_type14 .photobox__label {
+            width: 80%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+            transform: translate(-50%, -200%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .photobox_type14:hover .photobox__label {
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: var(--photoboxAnimationDuration, .4s);
+            opacity: 1;
+        }
+
+        .photobox_type14 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type14:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+        /* type 15 */
+
+        .photobox_type15 .photobox__previewbox:before {
+            width: 0;
+            height: 0;
+            padding: 25%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            border-radius: 50%;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform var(--photoboxAnimationDuration, .4s) ease;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type15:hover .photobox__previewbox:before {
+            transform: translate(-50%, -50%) scale(4);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) * 2);
+        }
+
+        .photobox_type15 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity var(--photoboxAnimationDuration, .4s) ease-out;
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .photobox_type15:hover .photobox__label {
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            opacity: 1;
+        }
+
+        .photobox_type15 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) translate(0, 0);
+        }
+
+        .photobox_type15:hover .photobox__preview {
+            transform: scale(1.2) translate(4%, 4%);
+        }
+        /* type 16 */
+
+        .photobox_type16 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .photobox_type16:hover .photobox__previewbox:before {
+            opacity: 1;
+        }
+
+        .photobox_type16 .photobox__label {
+            width: 98%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type16:hover .photobox__label {
+            opacity: 1;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+
+        .photobox_type16 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) translate(0, 0);
+        }
+
+        .photobox_type16:hover .photobox__preview {
+            transform: scale(1.2) translate(4%, 4%);
+        }
+        /* type 17 */
+
+        .photobox_type17 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .photobox_type17:hover .photobox__previewbox:before {
+            opacity: 1;
+        }
+
+        .photobox_type17 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 2;
+        }
+
+        .photobox_type17:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+
+        .photobox_type17 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+            transform: scale(1) translate(0, 0);
+        }
+
+        .photobox_type17:hover .photobox__preview {
+            transform: scale(1.2) translate(4%, 4%);
+        }
+        /* type 18 */
+
+        .photobox_type18 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            opacity: 0;
+            transition: opacity var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .photobox_type18:hover .photobox__previewbox:before {
+            opacity: 1;
+        }
+
+        .photobox_type18 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-200%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type18:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 4);
+        }
+
+        .photobox_type18 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) translate(0, 0);
+        }
+
+        .photobox_type18:hover .photobox__preview {
+            transform: scale(1.2) translate(4%, 4%);
+        }
+        /* type 19 */
+
+        .photobox_type19 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type19:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2), 0s;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type19 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 3;
+        }
+
+        .photobox_type19:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+        /* type 20 */
+
+        .photobox_type20 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type20:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2), 0s;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type20 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-200%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type20:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: var(--photoboxAnimationDuration, .4s);
+        }
+        /* type 21 */
+
+        .photobox_type21 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type21:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2), 0s;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type21 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type21:hover .photobox__label {
+            opacity: 1;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: var(--photoboxAnimationDuration, .4s);
+        }
+        /* type 22 */
+
+        .photobox_type22 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type22:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+
+        .photobox_type22 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type22:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2), 0s;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type22 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type22:hover .photobox__label {
+            opacity: 1;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: var(--photoboxAnimationDuration, .4s);
+        }
+        /* type 23 */
+
+        .photobox_type23 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type23:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+
+        .photobox_type23 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type23:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2), 0s;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type23 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-200%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type23:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: var(--photoboxAnimationDuration, .4s);
+        }
+        /* type 24 */
+
+        .photobox_type24 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1);
+        }
+
+        .photobox_type24:hover .photobox__preview {
+            transform: scale(1.2);
+        }
+
+        .photobox_type24 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type24:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2), 0s;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type24 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 3;
+        }
+
+        .photobox_type24:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+        /* type 25 */
+
+        .photobox_type25 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type25:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .photobox_type25 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: .2;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type25:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type25 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type25:hover .photobox__label {
+            opacity: 1;
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+        /* type 26 */
+
+        .photobox_type26 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type26:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .photobox_type26 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: .2;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type26:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type26 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-200%, -50%);
+            z-index: 2;
+        }
+
+        .photobox_type26:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .4s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+        /* type 27 */
+
+        .photobox_type27 .photobox__preview {
+            transition: transform var(--photoboxAnimationDuration, .4s) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: transform;
+            transform: scale(1) rotate(0);
+        }
+
+        .photobox_type27:hover .photobox__preview {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .photobox_type27 .photobox__previewbox:before {
+            width: 100%;
+            height: 100%;
+
+            opacity: .4;
+            background-color: var(--photoboxOverlay, rgba(0, 0, 0, .8));
+            clip-path: polygon(50% 10%, 15% 90%, 85% 90%);
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+
+            transition: transform calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out, opacity calc(var(--photoboxAnimationDuration, .4s) / 2) ease-out;
+            will-change: transform;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .photobox_type27:hover .photobox__previewbox:before {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(7);
+            transition-duration: var(--photoboxAnimationDuration, .4s);
+        }
+
+        .photobox_type27 .photobox__label {
+            width: 95%;
+            text-align: center;
+
+            opacity: 0;
+            transition: opacity calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9), transform calc(var(--photoboxAnimationDuration, .4s) / 4) cubic-bezier(0.71, 0.05, 0.29, 0.9);
+            will-change: opacity, transform;
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 200%);
+            z-index: 3;
+        }
+
+        .photobox_type27:hover .photobox__label {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition-duration: calc(var(--photoboxAnimationDuration, .8s) / 2);
+            transition-delay: calc(var(--photoboxAnimationDuration, .4s) / 2);
+        }
+        /*
+* demo styles for photobox
+*/
+
+        .photobox {
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            width: 33.33333%;
+            --photoboxOverlay: rgba(72, 27, 174, .7);
+            /*--photoboxAnimationDuration: .5s;*/
+        }
+
+        @media screen and (max-width: 480px) {
+            .photobox {
+                width: 100%;
+            }
+        }
+        /*
+* demo page
+*/
+
+        @media screen and (min-width: 768px) {
+
+            html {
+                font-size: 62.5%;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+
+            html {
+                font-size: 50%;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Open Sans, Ubuntu, Fira Sans, Helvetica Neue, sans-serif;
+            font-size: 1.6rem;
+            color: #fff;
+            margin: 0;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover,
+        a:focus {
+            text-decoration: underline;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .page__demo {
+            flex-grow: 1;
+        }
+
+        .page__container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .main-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .footer {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            text-align: center;
+            font-size: 1.4rem;
+            background-color: #222;
+        }
+
+        @media screen and (min-width: 641px) {
+
+            .footer__container {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .melnik909 {
+                margin-left: 2rem;
+            }
+        }
+
+        @media screen and (max-width: 640px) {
+
+            .melnik909 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="page__demo">
+            <div class="page__container">
+                <div class="photobox photobox_type1">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #1</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type2">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #2</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type3">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #3</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type4">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #4</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type5">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #5</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type6">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #6</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type7">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #7</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type8">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #8</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type9">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #9</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type10">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #10</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type11">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #11</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type12">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #12</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type13">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #13</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type14">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #14</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type15">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #15</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type16">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #16</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type17">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #17</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type18">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #18</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type19">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #19</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type20">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #20</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type21">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #21</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type22">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #22</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type23">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #23</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type24">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #24</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type25">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/nature640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #25</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type26">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/man3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #26</span>
+                    </div>
+                </div>
+                <div class="photobox photobox_type27">
+                    <div class="photobox__previewbox">
+                        <img src="https://stas-melnikov.ru/cliparts/girl3_640x426.jpg" class="photobox__preview" alt="Preview">
+                        <span class="photobox__label">Effect #27</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="main-container footer__container">
+                <a href="http://stas-melnikov.ru/donate/" rel="noopener noreferrer" target="_blank">Liked? Please, look the page</a>
+                <a href="http://stas-melnikov.ru" class="melnik909" rel="noopener noreferrer" target="_blank">Developed by Stas Melnikov</a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
