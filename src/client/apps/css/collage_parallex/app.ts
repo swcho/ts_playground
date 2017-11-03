@@ -3,6 +3,9 @@ import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 console.log(__filename);
 
+// https://codepen.io/mimikos/pen/eRqzaq
+// https://codepen.io/mimikos/pen/vJBENm/
+
 import './style.scss';
 import {TweenMax} from 'gsap';
 
@@ -18,9 +21,9 @@ function ImageCollage(defaults) {
     var containerHeight = container.offsetHeight;
     var containerStyle = container.currentStyle || window.getComputedStyle(container);
     var piecesNum = defaults.piecesNum;
-    var levelIndex = Math.floor(piecesNum * 0.75);
-    var maxsizeX = Math.round(container.offsetWidth / 2);
-    var maxsizeY = Math.round(container.offsetHeight / 2);
+    let levelIndex = Math.floor(piecesNum * 0.75);
+    let maxsizeX = Math.round(container.offsetWidth / 2);
+    let maxsizeY = Math.round(container.offsetHeight / 2);
     let offset = 15;
     let strength = 3;
 
