@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/d3": "^4.11.0",
     "@types/matter-js": "^0.9.33",
+    "@types/youtube": "^0.0.31",
     "bourbon": "^4.3.4",
     "bourbon-neat": "^1.9.0",
     "buckets-js": "^1.98.2",

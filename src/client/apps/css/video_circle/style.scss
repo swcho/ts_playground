@@ -1,0 +1,54 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ececec;
+}
+
+.videocontainer {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .circle {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        border: 4px solid #EC6A5C;
+        z-index: 10;
+        margin: -4px;
+    }
+    .knob {
+        width: 40px;
+        height: 40px;
+        background: #AF4034;
+        box-shadow: 2px 2px 35px 0 rgba(0, 0, 0, 0.75);
+        position: absolute;
+        border-radius: 100%;
+        top: 50%;
+        margin-left: -22px;
+        margin-top: -22px;
+        transform: rotate(0deg);
+        transform-origin: 222px 22px;
+        z-index: 20;
+        cursor: grab;
+    }
+    .playerwrapper {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        overflow: hidden;
+        #player {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
