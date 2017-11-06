@@ -1,0 +1,61 @@
+$spinSize: 300px;
+$ballSize: 100px;
+$ballMaxSize: 300;
+$ballMinSize: 40;
+$ballCount: 5;
+body {
+    background: #000;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#ui {
+    .spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: $spinSize * 2;
+        height: $spinSize * 2;
+        margin: -#{$spinSize} 0 0 -#{$spinSize};
+        background: #000;
+        filter: blur(10px) contrast(30);
+        animation: spin 8000ms infinite alternate cubic-bezier(0.545, 0.080, 0.520, 0.975);
+        &_ball {
+            position: absolute;
+            top: 50%;
+            left: $spinSize / 2;
+            width: $ballSize;
+            height: $ballSize;
+            margin-top: -#{$ballSize / 2};
+            border-radius: 100%;
+            transform-origin: #{$spinSize / 2} 50%; // mix-blend-mode: screen;
+            @for $i from 1 through $ballCount {
+                &:nth-child(#{$i}) {
+                    transform: rotateZ(#{360 / $ballCount * $i}deg);
+                    animation: ball_#{$i} #{random(12000) + 12000}ms infinite alternate cubic-bezier(0.545, 0.080, 0.520, 0.975);
+                }
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(359deg);
+    }
+}
+
+@for $i from 1 through $ballCount {
+    @keyframes ball_#{$i} {
+        @for $j from 0 through 10 {
+            #{$j * 10}% {
+                width: #{random($ballMaxSize - $ballMinSize) + $ballMinSize}px;
+                height: #{random($ballMaxSize - $ballMinSize) + $ballMinSize}px;
+                background: rgba(random(255), random(255), random(255), 1);
+            }
+        }
+    }
+}
