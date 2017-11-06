@@ -1,0 +1,184 @@
+$color: darken(#492A35, 10%);
+body {
+    background-color: $color;
+    &>p {
+        clear: left;
+    }
+}
+
+div {
+    height: 300px;
+    width: 300px;
+    border: solid black 1px;
+    float: left;
+    position: relative;
+    background-repeat: no-repeat;
+    p {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        padding: 1rem;
+        text-align: center;
+        background: rgba(255, 255, 255, .30);
+    }
+}
+
+.c1 {
+    background-image: url("http://www.transparenttextures.com/patterns/light-wool.png");
+}
+
+.c2 {
+    background-image: url("http://www.transparenttextures.com/patterns/light-sketch.png");
+}
+
+.c3 {
+    background-image: url("http://www.transparenttextures.com/patterns/3px-tile.png");
+}
+
+.c4 {
+    background-image: url("http://www.transparenttextures.com/patterns/random-grey-variations.png");
+}
+
+.c5 {
+    background-image: url("http://www.transparenttextures.com/patterns/redox-02.png");
+}
+
+.c6 {
+    background-image: url("http://www.transparenttextures.com/patterns/rice-paper-2.png");
+}
+
+.c7 {
+    background-image: url("http://www.transparenttextures.com/patterns/rough-cloth.png");
+    background-color: shade($color, 20%);
+}
+
+.c8 {
+    background-image: url("http://www.transparenttextures.com/patterns/shattered.png");
+    background-color: shade($color, 20%);
+}
+
+.c9 {
+    background-image: url("http://www.transparenttextures.com/patterns/scribble-light.png");
+}
+
+.c10 {
+    background-image: url("http://www.transparenttextures.com/patterns/snow.png");
+}
+
+.c11 {
+    background-image: url("http://www.transparenttextures.com/patterns/subtle-freckles.png");
+}
+
+.c12 {
+    background-image: url("http://www.transparenttextures.com/patterns/subtle-grey.png");
+}
+
+.c13 {
+    background-image: url("http://www.transparenttextures.com/patterns/subtle-white-feathers.png");
+}
+
+.c14 {
+    background-image: url("http://www.transparenttextures.com/patterns/wave-grid.png");
+}
+
+.c15 {
+    background-image: url("http://www.transparenttextures.com/patterns/white-diamond.png");
+}
+
+.c16 {
+    background-image: url("http://www.transparenttextures.com/patterns/xv.png");
+}
+
+.c17 {
+    background-image: url("http://www.transparenttextures.com/patterns/mooning.png");
+    background-color: shade($color, 25%);
+}
+
+.c18 {
+    background-image: url("http://www.transparenttextures.com/patterns/honey-im-subtle.png");
+    background-color: shade($color, 20%);
+}
+
+.c19 {
+    background-image: url("http://www.transparenttextures.com/patterns/asfalt-dark.png");
+}
+
+.c20 {
+    background-image: url("http://www.transparenttextures.com/patterns/black-linen.png");
+}
+
+.c21 {
+    background-image: url("http://www.transparenttextures.com/patterns/french-stucco.png");
+}
+
+.c22 {
+    background-image: url("http://www.transparenttextures.com/patterns/bright-squares.png");
+}
+
+.c23 {
+    background-image: url("http://www.transparenttextures.com/patterns/crisp-paper-ruffles.png");
+}
+
+.c24 {
+    background-image: url("http://www.transparenttextures.com/patterns/crossword.png");
+}
+
+.c25 {
+    background-image: url("http://www.transparenttextures.com/patterns/hexellence.png");
+}
+
+.c26 {
+    background-image: url("http://www.transparenttextures.com/patterns/dark-mosaic.png");
+}
+
+.c27 {
+    background-image: url("http://www.transparenttextures.com/patterns/dark-tire.png");
+}
+
+.c28 {
+    background-image: url("http://www.transparenttextures.com/patterns/diagmonds.png");
+    background-color: tint($color, 15%);
+}
+
+.c29 {
+    background-image: url("http://www.transparenttextures.com/patterns/egg-shell.png");
+}
+
+.c30 {
+    background-image: url("http://www.transparenttextures.com/patterns/fabric-of-squares.png");
+}
+
+.c31 {
+    background-image: url("http://www.transparenttextures.com/patterns/grey-jean.png");
+}
+
+.c32 {
+    background-image: url("http://www.transparenttextures.com/patterns/grunge-wall.png");
+}
+
+.c33 {
+    background-image: url("http://www.transparenttextures.com/patterns/leather.png");
+}
+
+.c34 {
+    background-image: url("http://www.transparenttextures.com/patterns/natural-paper.png");
+}
+
+.c35 {
+    background-image: url("http://www.transparenttextures.com/patterns/retina-wood.png");
+}
+
+.c36 {
+    background-image: url("http://www.transparenttextures.com/patterns/transparent-square-tiles.png");
+    background-color: tint($color, 10%);
+}
+
+.c37 {
+    background-image: url("http://www.transparenttextures.com/patterns/wavecut.png");
+}
+
+.c38 {
+    background-image: url("http://www.transparenttextures.com/patterns/white-diamond-dark.png");
+}
