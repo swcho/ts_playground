@@ -48,6 +48,22 @@ function initTilt() {
             ease: Expo.easeOut
         });
     });
+    $body.mouseleave(function(e) {
+        TweenMax.to($pContent, 2, {
+            rotationY: 0,
+            rotationX: 0,
+            transformPerspective: 500,
+            transformOrigin: 'center center -400',
+            ease: Expo.easeOut
+        });
+        TweenMax.to($img, 2, {
+            rotationY: 0,
+            rotationX: 0,
+            transformPerspective: 500,
+            transformOrigin: 'center center -200',
+            ease: Expo.easeOut
+        });
+    });
 };
 
 initTilt();
