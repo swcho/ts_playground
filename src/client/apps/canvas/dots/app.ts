@@ -56,7 +56,7 @@ let dynamics = easeInCubic;
 
 // Unchangeable vars
 const quanX = 10; // 19
-let numberOfSides = 30;
+let numberOfSides = 5;
 let nudgeKoef;
 let nudgeAnim;
 let downX, downDist, oldDist, bd;
@@ -175,8 +175,8 @@ function calcNew(array) {
         let distance = Math.sqrt((canX - x) * (canX - x) + (canY - y) * (canY - y));
 
         if (distance < maxD) {
-            // newXY[a][b][0] = x + (canX - x) * dynamics(1 - distance / maxD) * nudgeKoef;
-            // newXY[a][b][1] = y + (canY - y) * dynamics(1 - distance / maxD) * nudgeKoef;
+            newXY[a][b][0] = x + (canX - x) * dynamics(1 - distance / maxD) * nudgeKoef;
+            newXY[a][b][1] = y + (canY - y) * dynamics(1 - distance / maxD) * nudgeKoef;
         }
         else {
             newXY[a][b][0] = allXY[a][b][0];
@@ -188,12 +188,13 @@ function calcNew(array) {
 function drawAllPolygones(arr) {
 
     for (let i = arr.length; i--; ) {
-        if (Polygone.calc[i] === 1) {
-            drawPolygone(arr[i], i);
-        }
-        else {
-            drawCircle(i);
-        }
+        drawPolygone(arr[i], i);
+        // if (Polygone.calc[i] === 1) {
+        //     drawPolygone(arr[i], i);
+        // }
+        // else {
+        //     drawCircle(i);
+        // }
     }
 
     function drawCircle(num) {
