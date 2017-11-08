@@ -8,6 +8,7 @@ $color-shadow: #E1EAFF;
 $duration: 500ms;
 $delay: 70ms;
 $easing: cubic-bezier(.1, 0, .3, 1);
+
 $parts: ( 6: ( wings: 425px, front: 150px, ), 5: ( wings: 355px, front: 150px, ), 4: ( wings: 300px, front: 125px, ), 3: ( wings: 240px, front: 150px, ), );
 @each $rooms,
 $dimensions in $parts {
@@ -18,14 +19,11 @@ $dimensions in $parts {
                 width: $width;
                 left: calc(50% - #{$width / 2});
             }
-            #{--#{$part}-width
+            #{--#{$part}-width}: $width;
         }
-        : $width;
     }
 }
 
-
-}
 .house {
     height: 225px;
     width: 520px;

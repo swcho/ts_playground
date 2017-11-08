@@ -22,9 +22,21 @@ const update = f.wrap(rooms => {
     label.setAttribute('data-rooms-delta', '' + (rooms - parseInt(prevRooms)));
 });
 
+const test = (rooms) => {
+    console.log(rooms);
+    const prevRooms = house.getAttribute('data-rooms');
+    house.setAttribute('data-prev-rooms', prevRooms);
+    house.setAttribute('data-rooms', rooms);
+
+    label.setAttribute('data-prev-rooms', prevRooms);
+    label.setAttribute('data-rooms', rooms);
+    label.setAttribute('data-rooms-delta', '' + (rooms - parseInt(prevRooms)));
+};
+
 const range$ = Rx.Observable
     .fromEvent<KeyboardEvent>(range, 'input')
     .map(e => e.target['value'])
     .startWith(6);
 
-range$.subscribe(update);
+// range$.subscribe(update);
+range$.subscribe(test);
