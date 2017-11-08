@@ -248,6 +248,10 @@
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/@types/gsap/-/gsap-1.19.1.tgz#ee93590b1ef7dc86b0b779e94e38b5bad6e8c678"
 
+"@types/hammerjs@^2.0.35":
+  version "2.0.35"
+  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.35.tgz#7b7c950c7d54593e23bffc8d2b4feba9866a7277"
+
 "@types/jquery.transit@^0.9.28":
   version "0.9.29"
   resolved "https://registry.yarnpkg.com/@types/jquery.transit/-/jquery.transit-0.9.29.tgz#f99f56291d803c3ed71dc48abdcce8affbe9e024"
@@ -3247,6 +3251,10 @@ haml-loader@^0.1.0:
   dependencies:
     haml-coffee "^1.14.1"
     loader-utils "0.2.x"
+
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
 
 handle-thing@^1.2.5:
   version "1.2.5"
