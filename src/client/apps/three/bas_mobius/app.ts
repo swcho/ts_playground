@@ -8,10 +8,11 @@ console.log(__filename);
 import * as THREE from '../three';
 
 setTimeout(() => {
-    const loader = new THREE.JSONLoader()
-    loader.crossOrigin = 'Anonymous'
-    const mobiusRot = new MobiusRot(3, 291, 100, 31, 5) // tileSize, ringSize, radius, layers, twists
-    new Simulation('js-app', [mobiusRot], 0, 0, -320)
+    const loader = new THREE.JSONLoader();
+    loader.crossOrigin = 'Anonymous';
+    // const mobiusRot = new MobiusRot(3, 291, 100, 31, 5); // tileSize, ringSize, radius, layers, twists
+    const mobiusRot = new MobiusRot(3, 50, 50, 10, 2); // tileSize, ringSize, radius, layers, twists
+    new Simulation('js-app', [mobiusRot], 0, 0, -320);
 }, 0);
 
 class MobiusRot extends THREE.Mesh {
@@ -45,9 +46,12 @@ class MobiusRot extends THREE.Mesh {
                 'float timeScale = 0.333;',
                 'float seed = 5625463739.0;',
                 'float time = (uTime * timeScale);',
-                'vec4 tQuatRotation = quatFromAxisAngle(aRotation.xyz, aRotation.w + time);',
-                'vec4 tQuatOrient = quatFromAxisAngle(aOrient.xyz, aOrient.w + time);',
-                'vec4 tQuatTwist = quatFromAxisAngle(aTwist.xyz, aTwist.w + time);'
+                // 'vec4 tQuatRotation = quatFromAxisAngle(aRotation.xyz, aRotation.w + time);',
+                // 'vec4 tQuatOrient = quatFromAxisAngle(aOrient.xyz, aOrient.w + time);',
+                // 'vec4 tQuatTwist = quatFromAxisAngle(aTwist.xyz, aTwist.w + time);',
+                'vec4 tQuatRotation = quatFromAxisAngle(aRotation.xyz, aRotation.w);',
+                'vec4 tQuatOrient = quatFromAxisAngle(aOrient.xyz, aOrient.w);',
+                'vec4 tQuatTwist = quatFromAxisAngle(aTwist.xyz, aTwist.w);'
             ],
             vertexNormal: [],
             vertexPosition: [
@@ -99,9 +103,10 @@ class MobiusRot extends THREE.Mesh {
     }
 
     material: THREE.BAS.BasicAnimationMaterial;
-    constructor(size, tileCount, radius, layers, twists) {
+    constructor(size: number, tileCount: number, radius: number, layers: number, twists: number) {
         const prefabCount = tileCount * layers;
         const boxGeometry = new THREE.BoxGeometry(size, size, size);
+        // const boxGeometry = new THREE.SphereGeometry(size, 10, 10);
         const geometry = new THREE.BAS.PrefabBufferGeometry(boxGeometry, prefabCount);
         geometry.computeVertexNormals();
         geometry.bufferUvs();
