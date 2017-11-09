@@ -13,7 +13,12 @@ export * from 'three/examples/js/shaders/ColorCorrectionShader';
 export * from 'three/examples/js/shaders/CopyShader';
 export * from 'three/examples/js/shaders/FXAAShader';
 
-export import BAS = require('three-bas/dist/bas');
+// for mobius
+export * from 'three/examples/js/postprocessing/UnrealBloomPass';
+export * from 'three/examples/js/shaders/LuminosityHighPassShader';
+
+// export import BAS = require('three-bas/dist/bas');
+export import BAS = require('./bas.index');
 
 // https://github.com/Microsoft/TypeScript/issues/4336#issuecomment-264636767
 // export import BAS = require('./BAS');
@@ -53,6 +58,11 @@ declare module 'three' {
     // }
 
     export const ColorCorrectionShader: THREE.Shader;
+    export const FilmShader: THREE.Shader;
+
+    export class UnrealBloomPass {
+        constructor(resolution?: THREE.Vector2, strength?: number, radius?: number, threshold?: number);
+    }
 
 }
 

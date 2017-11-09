@@ -27,7 +27,7 @@ function createMaterial() {
 
         // https://github.com/zadvorsky/three.bas/wiki/02.-Material-Overview#threebas-material-constructors
         vertexFunctions: [
-            require('./noise.orig.vert'),
+            require('./noise.orig.vert') as string,
         ],
 
         vertexParameters: [
