@@ -1,0 +1,53 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+
+.split {
+    width: 750px;
+    height: 468px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    perspective: 400px;
+    cursor: pointer;
+    &:before {
+        content: 'CLICK';
+        color: #777;
+        letter-spacing: 1px;
+        font-size: 10px;
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translate(-50%);
+    }
+    img {
+        height: auto;
+        width: 100%;
+        opacity: 0;
+    }
+    div {
+        position: absolute;
+        z-index: 1;
+        background-repeat: no-repeat;
+        transform: rotateY(-50deg) scale(0.5);
+        opacity: 0;
+        transform-origin: bottom;
+        transition: all .6s cubic-bezier(.71, .05, .09, .91);
+    }
+    &.active {
+        div {
+            opacity: 1;
+            transform: rotate(0deg) translateY(0);
+        }
+    }
+}
