@@ -1,0 +1,30 @@
+body {
+    background-color: #1A1919;
+    text-align: center;
+}
+
+.placeholder {
+    display: inline-block;
+    position: relative;
+    width: 600px;
+    height: 600px;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin-top: 100px;
+}
+
+.gridContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.gridTile {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-origin: center;
+}
