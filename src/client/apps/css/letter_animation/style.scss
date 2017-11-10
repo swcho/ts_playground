@@ -1,0 +1,52 @@
+$background: #232323;
+$color: #E04744;
+// width of single letter
+$charWidth: 167;
+// number of letter fragments
+$letterCount: 64;
+$frac: $charWidth/$letterCount;
+body {
+    height: 100vh;
+    background: $background;
+    color: $color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid {
+    font-family: Helvetica;
+    font-size: 200px;
+    width: #{$charWidth}px;
+    display: grid;
+    grid-template-columns: repeat(#{$letterCount}, 1fr);
+    perspective: 100px;
+    overflow: visible;
+}
+
+.grid div {
+    overflow: hidden;
+    // transform-origin: 100% 50%;
+    transform-origin: 50% 50%;
+    transition: transform .3 ease;
+    @for $i from 1 through $letterCount {
+        &:nth-of-type( #{$i}) {
+            text-indent: #{(10 - ($i * $frac))}px;
+            animation: anim#{$i} 8s ease-in-out alternate infinite;
+            &:hover {
+                transform: scaleY(1.2);
+            }
+        }
+    }
+}
+
+@for $i from 1 through $letterCount {
+    @keyframes anim#{$i} {
+        0% {
+            transform : rotateY(random(600)-300+deg) rotateX(random(600)-300+deg) translateX( #{(-($letterCount/2) + $i) * 30}px) translateY( #{random(400) - 200}px) translateZ( #{random(200)-100}px);
+        }
+        80% {
+            transform: rotateY(0deg) rotateX(0deg) translateX(0) translateY(0) translateZ(0);
+        }
+    }
+}
