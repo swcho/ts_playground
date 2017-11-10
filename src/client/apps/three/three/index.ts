@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 export * from 'three/examples/js/loaders/OBJLoader';
 export * from 'three/examples/js/controls/OrbitControls';
+export * from 'three/examples/js/controls/FirstPersonControls';
 export * from './OBJExporter';
 export * from './STLExporter';
 

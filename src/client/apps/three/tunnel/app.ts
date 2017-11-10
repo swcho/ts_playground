@@ -13,8 +13,11 @@ const stone = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/163598/matallo.jpg';
 const stone2 =
     'http://s3-us-west-2.amazonaws.com/s.cdpn.io/163598/corrugated2.jpg';
 
+// const bmp =
+//     'https://s3-us-west-2.amazonaws.com/s.cdpn.io/163598/matallo_bmp.jpg';
+
 const bmp =
-    'https://s3-us-west-2.amazonaws.com/s.cdpn.io/163598/matallo_bmp.jpg';
+    'https://s3-us-west-2.amazonaws.com/s.cdpn.io/33170/egyptian_friz_2.png';
 
 // Render Class Object //
 class Render {
@@ -55,7 +58,7 @@ class Render {
         this.devicePixelRatio = window.devicePixelRatio;
         // Configurations //
         this.cameraConfig = {
-            position: [0, 0, 0],
+            position: [0, 0, 4000],
             lookAt: [0, 0, 0],
             aspect: this.width / this.height,
             viewAngle: 45,
@@ -104,6 +107,11 @@ class Render {
         this.scene.add(this.lightB);
         this.lightC = new THREE.PointLight(0x0000ff, 1, 350);
         this.scene.add(this.lightC);
+
+        let lightH = new THREE.HemisphereLight(0xffffff, 0x241623, 1);
+        lightH.position.set(0, 205, 20);
+        this.scene.add(lightH);
+
         this.createScene();
     }
 
@@ -157,7 +165,7 @@ class Render {
         });
         this.tunnelMaterial2 = new THREE.MeshPhongMaterial({
             map: texture2,
-            // side: THREE.DoubleSide
+            side: THREE.DoubleSide
         });
         const initialPoints = [
             [0.0, 0.0, 600.0],
@@ -200,6 +208,34 @@ class Render {
             this.renderLoop();
         }, 800); // bad fix for images to load before it starts
 
+        const controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        // controls.enableDamping = true;
+        // controls.dampingFactor = .wwss25;
+        controls.enableZoom = true;
+        controls.autoRotate = false;
+        controls.autoRotateSpeed = 5.0;
+        controls.minDistance = -4000;
+        // controls.maxDistance = 20;
+        // controls.minPolarAngle = 0;
+        // controls.maxPolarAngle = 1.5;
+
+        // const controls = new THREE.TrackballControls(this.camera);
+        // controls.rotateSpeed = 1.5;
+        // controls.zoomSpeed = 1.2;
+        // controls.panSpeed = 2.5;
+        // controls.maxDistance = 5.5;
+        // controls.minDistance = 1.25;
+        // controls.noZoom = false;
+        // controls.noPan = false;
+        // controls.staticMoving = true;
+        // controls.dynamicDampingFactor = 0.3;
+
+        // var dragControls = new THREE.DragControls(activeObjects, camera, renderer.domElement);
+        // dragControls.addEventListener('dragstart', function (event) { controls.enabled = false; });
+        // dragControls.addEventListener('dragend', function (event) { controls.enabled = true; });
+
+        // const controls = new THREE.FirstPersonControls(this.camera);
+
     }
 
     pointsIndex;
@@ -236,7 +272,7 @@ class Render {
         const p3 = this.path1.getPointAt(Math.abs((this.stopFrame + 0.07) % 1));
         const p4 = this.path1.getPointAt(Math.abs((this.stopFrame - 0.07) % 1));
         if (Math.random() * 255 > 254 && this.allowChange) {
-            this.isRnd = !this.isRnd;
+            // this.isRnd = !this.isRnd;
             this.allowChange = false;
             setTimeout(() => {
                 this.allowChange = true;
