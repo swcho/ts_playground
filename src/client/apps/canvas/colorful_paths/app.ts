@@ -6,6 +6,20 @@ console.log(__filename);
 
 // https://codepen.io/zayncollege/pen/EvYzEw
 
+import dat = require('dat-gui');
+const CONFIG = {
+    division: 25,
+    add: 0.1,
+    usePrev: false,
+    noFade: false,
+};
+
+let gui = new dat.GUI();
+gui.add(CONFIG, 'division', 0.01, 50).step(0.01);
+gui.add(CONFIG, 'add', -1, 1).step(0.1);
+gui.add(CONFIG, 'usePrev');
+gui.add(CONFIG, 'noFade');
+
 interface Particle {
     x: number;
     y: number;
@@ -19,6 +33,7 @@ let context = canvas.getContext('2d');
 let width = canvas.width = window.innerWidth - 21;
 let height = canvas.height = window.innerHeight - 21;
 let max_particles = width * height / 810;
+// let max_particles = 1; // width * height / 810;
 let particles: Particle[] = [];
 let math = Math;
 let rnd = math.random;
@@ -29,15 +44,23 @@ let i = 0;
 doc.bgColor = '#fff';
 
 while (particles.length < max_particles) {
-    particles.push({ x: (rnd() * width) | 0, y: (rnd() * height) | 0, vx: 0, vy: 0 });
+    particles.push({
+        x: (rnd() * width) | 0,
+        y: (rnd() * height) | 0,
+        vx: 0,
+        vy: 0
+    });
 }
 
 function x_movement_fn(particle) {
-    return math.sin(particle.y / 25) - 0.5;
+    const prev = CONFIG.usePrev ? particle.x : particle.y;
+    const ret = math.sin(prev / CONFIG.division) + CONFIG.add;
+    return ret;
 }
 
 function y_movement_fn(particle) {
-    return math.sin(particle.x / 25) - 0.5;
+    const prev = CONFIG.usePrev ? particle.y : particle.x;
+    return math.cos(prev / CONFIG.division) + CONFIG.add;
 }
 
 function update(index) {
@@ -81,7 +104,7 @@ function draw(index) {
 setInterval(
     function () {
 
-        context.fillStyle = 'rgba(0,0,0,0.01)';
+        context.fillStyle = CONFIG.noFade ? 'rgba(0,0,0,1)' : 'rgba(0,0,0,0.01)';
         context.fillRect(0, 0, width, height);
         for (i = 0; i < max_particles; i++) {
             update(i);
