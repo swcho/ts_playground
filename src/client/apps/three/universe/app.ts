@@ -6,7 +6,17 @@ console.log(__filename);
 // https://codepen.io/gvrban/pen/rzNGpW
 
 import * as THREE from '../three';
-let camera, scene, renderer: THREE.Renderer;
+import dat = require('dat-gui');
+const CONFIG = {
+    wireframe: false,
+    distance: 500,
+};
+
+let gui = new dat.GUI();
+gui.add(CONFIG, 'wireframe');
+gui.add(CONFIG, 'distance', 0, 1000);
+
+let camera, scene, renderer: THREE.WebGLRenderer;
 
 let texture_placeholder,
     isUserInteracting = false,
@@ -21,39 +31,39 @@ let onPointerDownPointerY;
 
 let onPointerDownLon;
 let onPointerDownLat;
-init();
-animate();
-
 // https://stackoverflow.com/questions/24087757/three-js-and-loading-a-cross-domain-image
 THREE.ImageUtils.crossOrigin = '';
+
+const gMaterials: THREE.MeshBasicMaterial[] = [];
 
 function loadTexture(path) {
 
     let texture = new THREE.Texture(texture_placeholder);
     // https://stackoverflow.com/questions/29421702/threejs-texture
     texture.minFilter = THREE.LinearFilter;
-    let material = new THREE.MeshBasicMaterial({ map: texture, overdraw: 0.5 });
+    let material = new THREE.MeshBasicMaterial({
+        map: texture,
+        // overdraw: 0.5,
+        // side: THREE.DoubleSide,
+    });
 
     let image = new Image();
     image.onload = function () {
-
         texture.image = this;
         texture.needsUpdate = true;
-
     };
     image.src = path;
 
+    gMaterials.push(material);
     return material;
 
 }
 
 function init() {
 
-    let container, mesh;
+    const container = document.getElementById('container');
 
-    container = document.getElementById('container');
-
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1500);
 
     scene = new THREE.Scene();
 
@@ -75,18 +85,22 @@ function init() {
         loadTexture(require('./space5.jpg')) // front
     ];
 
-    mesh = new THREE.Mesh(new THREE.BoxGeometry(300, 300, 300, 7, 7, 7), new THREE.MultiMaterial(materials));
-    mesh.scale.x = - 1;
-    mesh.wireframe = true;
+    const DETAIL = 7;
+
+    const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(550, 550, 550, DETAIL, DETAIL, DETAIL),
+        new THREE.MultiMaterial(materials),
+        // materials[0],
+    );
+
+    // Render texture inner side, this makes no need to set double sided
+    mesh.scale.x = -1;
     scene.add(mesh);
-
-    for (let i = 0, l = mesh.geometry.vertices.length; i < l; i++) {
-
-        let vertex = mesh.geometry.vertices[i];
-
+    const geometry = mesh.geometry as THREE.Geometry;
+    for (let i = 0, l = geometry.vertices.length; i < l; i++) {
+        let vertex = geometry.vertices[i];
         vertex.normalize();
         vertex.multiplyScalar(550);
-
     }
 
     // renderer = new THREE.CanvasRenderer();
@@ -191,23 +205,27 @@ function animate() {
 
 }
 
-const DISTANCE = 500;
-
 function update() {
+    const {
+        wireframe,
+        distance,
+    } = CONFIG;
 
     if (isUserInteracting === false) {
-
         lon += 0.1;
+    }
 
+    for (const m of gMaterials) {
+        m.wireframe = CONFIG.wireframe;
     }
 
     lat = Math.max(- 85, Math.min(85, lat));
     phi = THREE.Math.degToRad(90 - lat);
     theta = THREE.Math.degToRad(lon);
 
-    target.x = DISTANCE * Math.sin(phi) * Math.cos(theta);
-    target.y = DISTANCE * Math.cos(phi);
-    target.z = DISTANCE * Math.sin(phi) * Math.sin(theta);
+    target.x = distance * Math.sin(phi) * Math.cos(theta);
+    target.y = distance * Math.cos(phi);
+    target.z = distance * Math.sin(phi) * Math.sin(theta);
 
     camera.position.copy(target).negate();
     camera.lookAt(target);
@@ -215,3 +233,6 @@ function update() {
     renderer.render(scene, camera);
 
 }
+
+init();
+animate();
