@@ -18,6 +18,9 @@ export * from 'three/examples/js/shaders/FXAAShader';
 export * from 'three/examples/js/postprocessing/UnrealBloomPass';
 export * from 'three/examples/js/shaders/LuminosityHighPassShader';
 
+// for universe
+export * from 'three/examples/js/renderers/CanvasRenderer';
+
 // export import BAS = require('three-bas/dist/bas');
 export import BAS = require('./bas.index');
 
