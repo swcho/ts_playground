@@ -3,9 +3,26 @@ import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 console.log(__filename);
 
-//
+// https://codepen.io/mnmxmx/pen/BdjdMz
 
 import * as THREE from '../three';
+import dat = require('dat-gui');
+const CONFIG = {
+    wireframe: false,
+    uMove: false,
+    uSphere: true,
+    uMobius: false,
+    uRotation: false,
+    uShapeRatio: 0.5,
+};
+
+let gui = new dat.GUI();
+gui.add(CONFIG, 'wireframe');
+gui.add(CONFIG, 'uMove');
+gui.add(CONFIG, 'uSphere');
+gui.add(CONFIG, 'uMobius');
+gui.add(CONFIG, 'uRotation');
+gui.add(CONFIG, 'uShapeRatio', -1, 2).step(0.1);
 
 window.onload = () => {
     let webgl = new Webgl();
@@ -14,14 +31,13 @@ window.onload = () => {
     };
 };
 
-
 class Webgl {
 
     vertShader: string;
     fragShader: string;
 
     constructor() {
-        this.vertShader = require('./vert.glsl');
+        this.vertShader = require('./vert.1.glsl');
         this.fragShader = require('./frag.glsl');
 
         this.setProps();
@@ -30,6 +46,7 @@ class Webgl {
     }
 
     scene: THREE.Scene;
+    shaderMaterial: THREE.ShaderMaterial;
     private camera: THREE.PerspectiveCamera;
     private renderer: THREE.WebGLRenderer;
     private div: HTMLDivElement;
@@ -49,8 +66,6 @@ class Webgl {
 
         this.renderer.setClearColor(0xb7d3dc, 0.3);
         this.renderer.setSize(this.props.width, this.props.height);
-
-
 
         this.div = document.getElementById('wrapper') as HTMLDivElement;
         this.div.appendChild(this.renderer.domElement);
@@ -101,8 +116,14 @@ class Webgl {
 
     render() {
         this.obj.uniforms.uTick.value += 1;
-        this.renderer.render(this.scene, this.camera);
+        this.obj.uniforms.uMove.value = CONFIG.uMove;
+        this.obj.uniforms.uSphere.value = CONFIG.uSphere;
+        this.obj.uniforms.uMobius.value = CONFIG.uMobius;
+        this.obj.uniforms.uRotation.value = CONFIG.uRotation;
+        this.obj.uniforms.uShapeRatio.value = CONFIG.uShapeRatio;
 
+        this.shaderMaterial.wireframe = CONFIG.wireframe;
+        this.renderer.render(this.scene, this.camera);
         requestAnimationFrame(this.render.bind(this));
     };
 }
@@ -115,13 +136,16 @@ class Obj {
         this.init();
     }
 
-    paramFunc() {
+    paramFunc(u: number, v: number, p: THREE.Vector3) {
         return new THREE.Vector3(0, 0, 0);
+        // return new THREE.Vector3(v, u, 0);
+        // return p;
     }
 
     uniforms;
     init() {
         let g = new THREE.ParametricBufferGeometry(this.paramFunc, 100, 100);
+        // let g = new THREE.ParametricBufferGeometry(this.paramFunc, 10, 10);
 
         // const uvArray = [];
 
@@ -134,7 +158,12 @@ class Obj {
         // }
 
         this.uniforms = {
-            uTick: { type: 'f', value: 0 }
+            uTick: { type: 'f', value: 0 },
+            uMove: { value: false },
+            uSphere: { value: true },
+            uMobius: { value: false },
+            uRotation: { value: false },
+            uShapeRatio: { value: 0.5 },
         };
 
         let m = new THREE.ShaderMaterial({
@@ -148,5 +177,6 @@ class Obj {
 
         let mesh = new THREE.Mesh(g, m);
         this.webgl.scene.add(mesh);
+        this.webgl.shaderMaterial = m;
     }
 }
