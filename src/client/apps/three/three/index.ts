@@ -23,6 +23,7 @@ export * from 'three/examples/js/renderers/CanvasRenderer';
 
 // export import BAS = require('three-bas/dist/bas');
 export import BAS = require('./bas.index');
+import { Geometry } from 'three';
 
 // https://github.com/Microsoft/TypeScript/issues/4336#issuecomment-264636767
 // export import BAS = require('./BAS');
@@ -66,6 +67,26 @@ declare module 'three' {
 
     export class UnrealBloomPass {
         constructor(resolution?: THREE.Vector2, strength?: number, radius?: number, threshold?: number);
+    }
+
+    /**
+     *
+     * https://threejs.org/docs/#api/geometries/ParametricBufferGeometry
+     * https://github.com/mrdoob/three.js/blob/master/src/geometries/ParametricGeometry.js
+     *
+     * @export
+     * @class ParametricBufferGeometry
+     * @extends {Geometry}
+     */
+    export class ParametricBufferGeometry extends Geometry {
+        /**
+         * Creates an instance of ParametricBufferGeometry.
+         * @param {any} func A function that takes in a u and v value each between 0 and 1 and returns a Vector3
+         * @param {number} slices The count of slices to use for the parametric function
+         * @param {number} stacks The count of stacks to use for the parametric function
+         * @memberof ParametricBufferGeometry
+         */
+        constructor(func, slices: number, stacks: number);
     }
 
 }
