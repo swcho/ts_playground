@@ -1,0 +1,287 @@
+/* Generic styles */
+
+body {
+    font-family: sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    background-color: #1a1a1a;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: auto;
+    -webkit-scroll-snap-points-y: repeat(100%);
+    -webkit-scroll-snap-type: mandatory;
+    scroll-snap-points-y: repeat(100%);
+    scroll-snap-type: mandatory;
+}
+
+h1 {
+    font-weight: 100;
+    position: absolute;
+    color: #000;
+    box-shadow: 0 0rem 1rem rgba(0, 0, 0, .5);
+    background-color: rgba(255, 255, 255, .8);
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: .5rem 1rem;
+    max-width: calc(100% - 2rem);
+    text-align: center;
+    line-height: 1.2;
+}
+
+p {
+    margin: 1rem;
+    max-width: 34rem;
+}
+
+figure {
+    margin: 0;
+}
+
+figcaption {
+    background-color: rgba(0, 0, 0, .8);
+    text-align: center;
+    padding: .25rem;
+    font-weight: 700;
+}
+
+pre {
+    margin: 0
+}
+
+pre>code {
+    display: block;
+    padding: .5rem 1rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: rgba(26, 26, 26, 0.8);
+    box-shadow: 0 0 1rem 1rem rgba(0, 0, 0, .5);
+    transition: all .3s ease-out;
+    outline: 0 solid;
+    text-shadow: 1px 1px #000;
+}
+
+pre>code:hover,
+pre>code:focus {
+    background-color: rgba(26, 26, 26, 1);
+}
+
+pre>code::-moz-selection {
+    color: #000;
+    background-color: #fff;
+}
+
+pre>code::selection {
+    color: #000;
+    background-color: #fff;
+}
+
+pre[class*="language-"] {
+    padding: 0;
+    background-color: rgba(26, 26, 26, 0.9);
+    border-radius: 0;
+}
+
+a {
+    color: #fff !important;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, .5);
+}
+
+[class^="container-"] {
+    -webkit-scroll-snap-type: mandatory;
+    scroll-snap-type: mandatory;
+}
+
+[class^="centered-"] {
+    /* Optional: Keep inside viewport */
+    max-width: 100%;
+    /* OPTIONAL: */
+    /* max-height: 250px; */
+    /* Not required but plays nice */
+    overflow-y: auto;
+    box-shadow: 0 0 1rem 1rem rgba(0, 0, 0, .5);
+    transition: all .3s ease-out;
+}
+
+[class^="centered-"]:hover {
+    background-color: #1a1a1a;
+    box-shadow: 0 0 .5rem .25rem rgba(0, 0, 0, .75);
+}
+
+
+/* Required centring styles */
+
+[class^="container-float"] {
+    height: 100vh;
+    /* Unit irrevelant */
+    /* padding: 1rem; /* Optional */
+}
+
+[class^="container-float"]::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+[class^="centered-float"] {
+    position: relative;
+    float: left;
+    /* Collapses box */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* OR */
+
+[class^="container-noFixedHeight"] {
+    position: relative;
+    min-height: 100vh;
+    /* Unit irrevelant */
+}
+
+[class^="centered-noFixedHeight"] {
+    position: absolute;
+    /* Collapses box */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* OR */
+
+[class^="container-absolute"] {
+    position: relative;
+    height: 100vh;
+    /* Unit irrevelant */
+}
+
+[class^="centered-absolute"] {
+    position: absolute;
+    /* Requires fixed width in IE9 */
+    width: 50%;
+    max-height: 20rem;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+
+/* OR */
+
+
+/* Doesn't work at all in IE9 */
+
+.container-flexbox {
+    height: 100vh;
+    /* Unit irrevelant */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.centered-flexbox {}
+
+
+/* OR */
+
+[class^="container-section"] {
+    position: relative;
+    height: 100vh;
+    /* Unit irrevelant */
+}
+
+[class^="centered-div"],
+[class^="centered-span"] {
+    position: absolute;
+    /* Collapses box */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+[class^="centered-div"] {
+    /* Sets this div to 50% sq */
+    bottom: 0;
+    right: 0;
+}
+
+[class^="centered-span"] {
+    /*   max-height: 4rem; */
+}
+
+
+/* Pretty-pretties - Not required */
+
+
+/* Images unsplash.com */
+
+.container-float {
+    background-position: center bottom;
+    background-size: cover;
+    /* Dmitri Popov */
+    background-image: url(https://images.unsplash.com/photo-1497514935393-24b153421536?w=1920);
+}
+
+.container-noFixedHeight {
+    background-position: center;
+    background-size: cover;
+    /* Michał Grosicki */
+    background-image: url(https://images.unsplash.com/photo-1489343511429-5482f78c15cf?w=1920);
+}
+
+.container-absolute {
+    background-position: center;
+    background-size: cover;
+    /* Michał Grosicki */
+    background-image: url(https://images.unsplash.com/photo-1494187042164-c3d951f93e5c?w=1920);
+}
+
+.container-flexbox {
+    background-position: center bottom;
+    background-size: cover;
+    /* James Padolsey */
+    background-image: url(https://images.unsplash.com/photo-1476958526483-36efcaa80b1b?w=1920);
+}
+
+.container-section {
+    background-position: center;
+    background-size: cover;
+    /* Michał Grosicki */
+    background-image: url(https://images.unsplash.com/photo-1488485300416-de7f8f876d4b?w=1920);
+}
+
+.centered-div {
+    border-radius: 50%;
+    box-shadow: inset 0 2.5rem 5rem 1.5rem rgba(0, 0, 0, .8), 0 0 1rem .125rem #000;
+    background: linear-gradient(to bottom, #342a29 0%, #b4300a 9%, #ffc102 30%, #edddd7 44%, #e8ebf2 50%, #edddd7 56%, #ffc102 70%, #b4300a 87%, #342a29 100%);
+}
+
+.centered-div:hover {
+    box-shadow: inset 0 2.5rem 5rem 1.5rem rgba(0, 0, 0, .8), 0 0 1rem .125rem #000;
+}
+
+.centered-span {
+    background-color: #000;
+    padding: 1rem;
+    font-weight: 700;
+    border-radius: 50%;
+    box-shadow: 0 0 1rem 2rem #b4300a;
+}
+
+.container-float-4 {
+    padding: 1rem;
+    height: calc(100vh - 2rem);
+    background-position: center bottom;
+    background-size: cover;
+    background-image: url(https://images.unsplash.com/photo-1431576901776-e539bd916ba2?w=1920);
+}
+
+.centered-float-4 {
+    background-color: rgba(0, 0, 0, .85);
+}
