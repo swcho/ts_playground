@@ -12,13 +12,21 @@
         ],
         "baseUrl": ".",
         "paths": {
-            "$lib/*": ["lib/*"]
+            "$lib/*": ["lib/*"],
+            "*": [
+                "local-types/*"
+            ]
         },
         "lib": [
             "dom",
             "es2015"
         ],
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/",
+            "./local-types"
+        ]
     },
     "include": [
         "../common/config.d.ts",
