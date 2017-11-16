@@ -6,11 +6,15 @@ console.log(__filename);
 // https://codepen.io/mimikos/pen/rzNzVP
 
 import './style.scss';
-// import * as anime from 'animejs';
 import {TweenMax, Power1} from 'gsap';
+import * as anime from 'animejs';
+import {tween, css, easing} from 'popmotion';
+
+const USE_ANIME = false;
+const USE_POPMOTION = true;
 
 let options = {
-    imgSrc: 'https://unsplash.it/g/1024/768?image=874',
+    imgSrc: require('./picture.jpg'),
     containerName: 'placeholder',
     rows: 5,
     columns: 5,
@@ -55,13 +59,28 @@ function ImageGrid(defaults) {
     placeholder.addEventListener('mouseover', function (e: any) {
         let allTiles = e.currentTarget.querySelectorAll('.gridTile');
         for (let t = 0, le = allTiles.length; t < le; t++) {
-            TweenMax.to(allTiles[t], defaults.animTime, { css: { backgroundPosition: '0px 0px' }, ease: Power1.easeOut } as any);
-            // anime({
-            //     targets: allTiles[t],
+            if (USE_ANIME) {
+                anime({
+                    targets: allTiles[t],
+                    duration: defaults.animTime * 1000,
+                    backgroundPosition: '0px 0px',
+                    easing: 'easeOutQuad',
+                });
+            } else if (USE_POPMOTION) {
+            } else {
+                TweenMax.to(allTiles[t], defaults.animTime, { css: { backgroundPosition: '0px 0px' }, ease: Power1.easeOut } as any);
+            }
+        }
+        if (USE_POPMOTION) {
+            // tween({
             //     duration: defaults.animTime * 1000,
-            //     backgroundPosition: '0px 0px',
-            //     easing: 'easeOutQuad',
-            // });
+            //     ease: easing.easeOut,
+            //     onUpdate: (v) => {
+            //         css(allTiles).set({
+            //             backgroundPosition: `${left * v}px ${top * v}px`,
+            //         });
+            //     }
+            // }).start();
         }
     });
 
@@ -72,7 +91,7 @@ function ImageGrid(defaults) {
         }
     });
 
-    function fixTilePosition(tile, ind, time?) {
+    function fixTilePosition(tile: HTMLElement, ind, time?) {
         if (time == null) time = 0;
         let centr, centrCol, centrRow, offsetW, offsetH, left, top;
 
@@ -88,13 +107,28 @@ function ImageGrid(defaults) {
 
         // console.log(left, top)
 
-        TweenMax.to(tile, time, { css: { backgroundPosition: left + 'px ' + top + 'px' }, ease: Power1.easeOut } as any);
-        // anime({
-        //     targets: tile,
-        //     duration: time * 1000,
-        //     backgroundPosition: `${left}px ${top}px`,
-        //     easing: 'easeOutQuad',
-        // });
+        if (USE_ANIME) {
+            anime({
+                targets: tile,
+                duration: time * 1000,
+                backgroundPosition: `${left}px ${top}px`,
+                easing: 'easeOutQuad',
+            });
+        } else if (USE_POPMOTION) {
+            tile.dataset['left'] = left;
+            tile.dataset['top'] = top;
+            tween({
+                duration: time * 1000,
+                ease: easing.easeOut,
+                onUpdate: (v) => {
+                    css(tile).set({
+                        backgroundPosition: `${left * v}px ${top * v}px`,
+                    });
+                }
+            }).start();
+        } else {
+            TweenMax.to(tile, time, { css: { backgroundPosition: left + 'px ' + top + 'px' }, ease: Power1.easeOut } as any);
+        }
     }
 }
 
