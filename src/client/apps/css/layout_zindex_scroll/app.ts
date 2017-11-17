@@ -41,7 +41,7 @@ const OpacityScroll = (() => {
                     child.style.zIndex = '0';
                 } else {
                     child.style.position = 'absolute';
-                    child.style.top = `${idx}00vh`;
+                    child.style.top = `${idx * 2}00vh`;
                     child.style.zIndex = idx;
 
                     let scrollOffset = child.getBoundingClientRect().top + document.body.scrollTop;
