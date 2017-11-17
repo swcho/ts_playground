@@ -21,6 +21,9 @@ export * from 'three/examples/js/shaders/LuminosityHighPassShader';
 // for universe
 export * from 'three/examples/js/renderers/CanvasRenderer';
 
+// for flip_pannel
+export const Detector = require('three/examples/js/Detector') as any;
+
 // export import BAS = require('three-bas/dist/bas');
 export import BAS = require('./bas.index');
 import { Geometry } from 'three';
