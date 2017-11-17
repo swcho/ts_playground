@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    position: relative;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    background: #c6d9d3;
+    font-family: Helvetica, Arial, san-serif;
+}
+
+.hide {
+    display: none;
+}
+
+@media only screen and (min-width: 800px) {
+    .wrap {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(calc(8rem + 5vw + 5vh), 1fr));
+        grid-gap: 2.5vmin;
+        padding: 2.5vmin;
+    }
+    #dense:checked+.wrap {
+        grid-auto-flow: dense;
+    }
+    figure:first-child {
+        grid-row-start: span 3;
+        grid-column-start: span 3;
+    }
+    figure:nth-child(2n+3) {
+        grid-row-start: span 3;
+    }
+    figure:nth-child(4n+5) {
+        grid-column-start: span 2;
+        grid-row-start: span 2;
+    }
+    figure:nth-child(6n+7) {
+        grid-row-start: span 2;
+    }
+    figure:nth-child(8n+9) {
+        grid-column-start: span 2;
+        grid-row-start: span 3;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        box-shadow: 0 0 3px #496b7b;
+        border-radius: 5px;
+    }
+    figure {
+        counter-increment: numImg;
+    }
+    figure::after {
+        background: rgba(0, 0, 0, .5);
+        content: counter(numImg);
+        position: absolute;
+        top: 0%;
+        left: 0;
+        font-size: 2rem;
+        color: #c6d9d3;
+        width: 4rem;
+        height: 4rem;
+        line-height: 4rem;
+        text-align: center;
+    }
+}
+
+figure,
+img {
+    transition: .4s;
+}
+
+label {
+    background: rgba(73, 107, 123, .75);
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    font-weight: 100;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 2px;
+    padding: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 3px rgba(25, 42, 46, .75);
+}
+
+label span {
+    background: #b1cccb;
+    display: block;
+    font-variant: small-caps;
+    font-size: 150%;
+    color: #496b7b;
+}
+
+label span::after {
+    content: ' initial';
+}
+
+#dense:checked~label span:after {
+    content: ' dense';
+}
+
+a {
+    color: #f7e371
+}
+
+figcaption {
+    background: #932e26;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 4rem;
+    padding: 1.3rem 1rem 1rem 4.5rem;
+    font-weight: 100;
+    line-height: 1.5;
+    color: #fff;
+}
