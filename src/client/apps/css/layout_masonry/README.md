@@ -29,8 +29,11 @@ jQuery plugin 형식으로 라이브러리도 있다.
 
 원본 작품은 `<img>` tag에 `width: 100%` 속성을 주었지만, 동작을 하지않았다. 다행히 `min-width: 100%`를 적용한 뒤에 원하는 모습을 볼 수 있었다. 
 
-swcho/ts_playground#0115f73b483700a966db30db317b82b20700af5b
+swcho/ts_playground@0115f73b483700a966db30db317b82b20700af5b
 https://github.com/swcho/ts_playground/commit/0115f73b483700a966db30db317b82b20700af5b
+@0115f73b483700a966db30db317b82b20700af5b
+@0115f73
+swcho@0115f73b483700a966db30db317b82b20700af5b
 
 ![](2017-11-17-11-03-13.png)
 
