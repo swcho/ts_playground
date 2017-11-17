@@ -27,7 +27,7 @@ jQuery plugin 형식으로 라이브러리도 있다.
 
 최소 값 만큼 반복적으로 배열하고, 남으면 이를 1 fraction 설정에 따라 동일한 너비로 배열하게 된다.
 
-원본 작품은 `<img>` tag에 `width: 100%` 속성을 주었지만, 동작을 하지않았다. 다행히 `min-width: 100%`를 적용한 뒤에 원하는 모습을 볼 수 있었다. (https://github.com/swcho/ts_playground/commit/0115f73b483700a966db30db317b82b20700af5b)
+원본 작품은 `<img>` tag에 `width: 100%` 속성을 주었지만, 동작을 하지않았다. 다행히 `min-width: 100%`를 적용한 뒤에 원하는 모습을 볼 수 있었다. (swcho/ts_playground#0115f73b483700a966db30db317b82b20700af5b)
 
 ![](2017-11-17-11-03-13.png)
 
