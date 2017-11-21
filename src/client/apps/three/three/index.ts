@@ -38,7 +38,7 @@ declare module 'three' {
     class Mesh<M = THREE.Material, G = THREE.Geometry> extends THREE.Object3D {
         constructor(geometry?: Geometry | THREE.BufferGeometry, material?: THREE.Material | THREE.Material []);
 
-        geometry: G|THREE.BufferGeometry;
+        geometry: G;
         material: M;
         drawMode: THREE.TrianglesDrawModes;
         morphTargetInfluences?: number[];
@@ -47,6 +47,35 @@ declare module 'three' {
         setDrawMode(drawMode: THREE.TrianglesDrawModes): void;
         updateMorphTargets(): void;
         getMorphTargetIndexByName(name: string): number;
+        raycast(raycaster: THREE.Raycaster, intersects: any): void;
+    }
+
+    /**
+     * A class for displaying particles in the form of variable size points. For example, if using the WebGLRenderer, the particles are displayed using GL_POINTS.
+     *
+     * @see <a href="https://github.com/mrdoob/three.js/blob/master/src/objects/ParticleSystem.js">src/objects/ParticleSystem.js</a>
+     */
+    export class Points<G = THREE.Geometry, M = THREE.Material> extends THREE.Object3D {
+
+        /**
+         * @param geometry An instance of Geometry or BufferGeometry.
+         * @param material An instance of Material (optional).
+         */
+        constructor(
+            geometry?: G,
+            material?: M
+        );
+
+        /**
+         * An instance of Geometry or BufferGeometry, where each vertex designates the position of a particle in the system.
+         */
+        geometry: G;
+
+        /**
+         * An instance of Material, defining the object's appearance. Default is a PointsMaterial with randomised colour.
+         */
+        material: M;
+
         raycast(raycaster: THREE.Raycaster, intersects: any): void;
     }
 
