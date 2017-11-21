@@ -60,6 +60,7 @@ h1 {
     height: auto;
     border-radius: 10px;
     color: #fff;
+    color: salmon;
     font-size: 1.5rem;
 }
 
@@ -103,8 +104,9 @@ h1 {
 }
 
 .inner {
-    -webkit-transform: translateY(-50%) translateZ(60px) scale(0.94);
-    transform: translateY(-50%) translateZ(60px) scale(0.94);
+    // -webkit-transform: translateY(-50%) translateZ(60px) scale(0.94);
+    // transform: translateY(-50%) translateZ(60px) scale(0.94);
+    transform: translateY(-50%) translateZ(60px);
     top: 50%;
     position: absolute;
     left: 0;
@@ -135,8 +137,8 @@ h1 {
 .container:hover .back {
     -webkit-transform: rotateY(0deg);
     transform: rotateY(0deg);
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
+    // -webkit-transform-style: preserve-3d;
+    // transform-style: preserve-3d;
 }
 
 .container:hover .front {
