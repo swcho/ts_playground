@@ -44,7 +44,7 @@ var cubes;
 var geometry;
 var material;
 
-var config = {
+let config = {
     // size of the grid in world units
     gridSize: 100,
     // length of each axis
@@ -62,46 +62,46 @@ function createCubes() {
     dispose();
 
     // determine size of each cube based size and length
-    var cubeSize = config.gridSize / (config.gridLength * 1.125);
-    var gridHalfSize = config.gridSize * 0.5;
+    let cubeSize = config.gridSize / (config.gridLength * 1.125);
+    let gridHalfSize = config.gridSize * 0.5;
 
     // total cubes based on grid length on each axis
-    var cubeCount = config.gridLength * config.gridLength * config.gridLength;
+    let cubeCount = config.gridLength * config.gridLength * config.gridLength;
 
     console.log('CREATING ' + cubeCount + ' CUBES');
 
     // create the geometry that will be repeated in the buffer geometry
     // I refer to this 'base' geometry as a prefab
-    var prefab = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    let prefab = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 
     // create the buffer geometry where a set number of prefabs are repeated
     // PrefabBufferGeometry offers some utility methods for working with such geometries
     geometry = new THREE.BAS.PrefabBufferGeometry(prefab, cubeCount);
 
     // create a buffer for start positions per prefab, with an item size of 3 (x, y, z)
-    var startPositionBuffer = geometry.createAttribute('startPosition', 3);
+    let startPositionBuffer = geometry.createAttribute('startPosition', 3);
     // create a buffer for end positions per prefab, with an item size of 3 (x, y, z)
-    var endPositionBuffer = geometry.createAttribute('endPosition', 3);
+    let endPositionBuffer = geometry.createAttribute('endPosition', 3);
     // create a buffer for duration per prefab, with the item size of 1
-    var durationBuffer = geometry.createAttribute('duration', 1);
+    let durationBuffer = geometry.createAttribute('duration', 1);
     // create a buffer for start time per prefab, with the item size of 1
-    var startTimeBuffer = geometry.createAttribute('startTime', 1);
+    let startTimeBuffer = geometry.createAttribute('startTime', 1);
 
     // create a buffer for rotation with 4 components per vertex
     // we use x, y and z to store an axis
     // and w to store the rotation around that axis
-    var rotationBuffer = geometry.createAttribute('rotation', 4);
+    let rotationBuffer = geometry.createAttribute('rotation', 4);
 
     // populate the buffers
 
-    var cubeIndex = 0;
+    let cubeIndex = 0;
     // reuse the same array and vector each loop iteration
-    var tmpa = [];
-    var tmpv = new THREE.Vector3();
+    let tmpa = [];
+    let tmpv = new THREE.Vector3();
 
-    for (var x = 0; x < config.gridLength; x++) {
-        for (var y = 0; y < config.gridLength; y++) {
-            for (var z = 0; z < config.gridLength; z++) {
+    for (let x = 0; x < config.gridLength; x++) {
+        for (let y = 0; y < config.gridLength; y++) {
+            for (let z = 0; z < config.gridLength; z++) {
 
                 // calculate start position spread around the x, y, and z axes, offset by half delta on the x axis
                 // the x, y and z values are stored in the temporary array
@@ -149,7 +149,8 @@ function createCubes() {
     // create the animation material
     // it 'extends' THREE.MeshPhongMaterial by injecting arbitrary GLSL code at key places in the shader code
     material = new THREE.BAS.PhongAnimationMaterial({
-        shading: THREE.FlatShading,
+        // shading: THREE.FlatShading,
+        flatShading: true,
         // define a time uniform that will control the state of the animation
         // the uniform will be the same for each vertex
         uniforms: {
@@ -254,8 +255,8 @@ requestAnimationFrame(tick);
 // resize
 
 function resize() {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
+    let w = window.innerWidth;
+    let h = window.innerHeight;
 
     renderer.setSize(w, h);
     camera.aspect = w / h;
@@ -267,9 +268,9 @@ resize();
 
 // html controls
 
-var btnIncr = document.querySelector('.btn.incr');
-var btnDecr = document.querySelector('.btn.decr');
-var counter = document.querySelector('.count');
+let btnIncr = document.querySelector('.btn.incr');
+let btnDecr = document.querySelector('.btn.decr');
+let counter = document.querySelector('.count');
 
 btnIncr.addEventListener('click', function () {
     config.gridLength++;

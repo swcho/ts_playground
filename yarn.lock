@@ -345,9 +345,9 @@
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-0.2.3.tgz#0888b0f20cc7e58e1c22a1888b4e963eefaa810a"
 
-"@types/three@^0.84.15":
-  version "0.84.15"
-  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.84.15.tgz#4aa1965de2153fc7827e0c2cfb996e15c92a0a40"
+"@types/three@^0.84.30":
+  version "0.84.30"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.84.30.tgz#0c3478faf1db0cbb0b5014629f72599482a768b6"
   dependencies:
     "@types/webvr-api" "*"
 

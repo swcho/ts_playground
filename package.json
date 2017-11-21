@@ -84,7 +84,7 @@
     "@types/react-dom": "^0.14.23",
     "@types/react-motion": "^0.0.23",
     "@types/swagger-schema-official": "^2.0.6",
-    "@types/three": "^0.84.15",
+    "@types/three": "^0.84.30",
     "@types/webpack": "^2.2.6",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.25.0",

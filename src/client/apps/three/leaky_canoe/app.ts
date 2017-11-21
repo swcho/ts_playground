@@ -314,7 +314,8 @@ setTimeout(async () => {
     // const textureEl = ImageTexture(tilemap, tileFinder, tileSize, worldOptions);
     console.log(textureEl);
     const loader = new THREE.OBJLoader();
-    loader.crossOrigin = 'Anonymous';
+    // DEPRECATED FIND Proper API
+    // loader.crossOrigin = 'Anonymous';
     loader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/292951/Cannoe.obj', boatGroup => {
         const pivot = new THREE.Group();
         boatGroup.position.x = -3;
