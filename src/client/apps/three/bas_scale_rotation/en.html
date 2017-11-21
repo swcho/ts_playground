@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #three {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        #controls {
+            color: white;
+            font-size: 24px;
+            font-family: monospace;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            padding-bottom: 16px;
+
+            display: none;
+        }
+
+        #controls div {
+            display: inline-block;
+            padding: 0 16px;
+            text-align: center;
+        }
+
+        .btn {
+            cursor: pointer;
+        }
+
+        .btn.disabled {
+            color: gray;
+            pointer-events: none;
+        }
+
+        .count {
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="three"></div>
+
+    <div id=controls>
+        <div class="btn decr">-</div>
+        <div class="count">4</div>
+        <div class="btn incr">+</div>
+    </div>
+</body>
+
+</html>

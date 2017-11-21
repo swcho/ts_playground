@@ -37,6 +37,14 @@ export declare class PhongAnimationMaterial extends BaseAnimationMaterial {
     constructor(params: BaseAnimationMaterialParameters);
 }
 
+export declare class DepthAnimationMaterial extends BaseAnimationMaterial {
+    constructor(params: BaseAnimationMaterialParameters);
+}
+
+export declare class DistanceAnimationMaterial extends BaseAnimationMaterial {
+    constructor(params: BaseAnimationMaterialParameters);
+}
+
 export interface ModelBufferGeometryOptions {
     computeCentroids?: boolean;
     localizeFaces?: boolean;
@@ -80,7 +88,56 @@ export declare namespace Utils {
      *
      * @param {THREE.Geometry} geometry Geometry instance to modify.
      */
-    export function separateFaces(geometry): THREE.Geometry;
+    export function separateFaces(geometry: THREE.Geometry): THREE.Geometry;
+
+    /**
+     * Compute the centroid (center) of a THREE.Face3.
+     *
+     * @param {THREE.Geometry} geometry Geometry instance the face is in.
+     * @param {THREE.Face3} face Face object from the THREE.Geometry.faces array
+     * @param {THREE.Vector3=} v Optional vector to store result in.
+     * @returns {THREE.Vector3}
+     */
+    export function computeCentroid(geometry: THREE.Geometry, face: THREE.Face3, v?: THREE.Vector3): THREE.Vector3;
+
+    /**
+     * Get a random vector between box.min and box.max.
+     *
+     * @param {THREE.Box3} box THREE.Box3 instance.
+     * @param {THREE.Vector3=} v Optional vector to store result in.
+     * @returns {THREE.Vector3}
+     */
+    export function randomInBox(box: THREE.Box3, v: THREE.Vector3): THREE.Vector3;
+
+    /**
+     * Get a random axis for quaternion rotation.
+     *
+     * @param {THREE.Vector3=} v Option vector to store result in.
+     * @returns {THREE.Vector3}
+     */
+    export function randomAxis(v: THREE.Vector3): THREE.Vector3;
+
+    /**
+     * Create a DepthAnimationMaterial for shadows from a THREE.SpotLight or THREE.DirectionalLight by copying relevant shader chunks.
+     * Uniform values must be manually synced between the source material and the depth material.
+     *
+     * @see {@link http://three-bas-examples.surge.sh/examples/shadows/}
+     *
+     * @param {BaseAnimationMaterial} sourceMaterial Instance to get the shader chunks from.
+     * @returns {DepthAnimationMaterial}
+     */
+    export function createDepthAnimationMaterial(sourceMaterial: BaseAnimationMaterial): DepthAnimationMaterial;
+
+    /**
+     * Create a DistanceAnimationMaterial for shadows from a THREE.PointLight by copying relevant shader chunks.
+     * Uniform values must be manually synced between the source material and the distance material.
+     *
+     * @see {@link http://three-bas-examples.surge.sh/examples/shadows/}
+     *
+     * @param {BaseAnimationMaterial} sourceMaterial Instance to get the shader chunks from.
+     * @returns {DistanceAnimationMaterial}
+     */
+    export function createDistanceAnimationMaterial(sourceMaterial: BaseAnimationMaterial): DistanceAnimationMaterial;
 };
 
 type ShaderChunkName =
