@@ -9,40 +9,56 @@ import * as THREE from '../three';
 
 // setup three.js
 
-var renderer = new THREE.WebGLRenderer({
+let renderer = new THREE.WebGLRenderer({
     antialias: true
 });
-var camera = new THREE.PerspectiveCamera(80);
-var scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(80);
+let scene = new THREE.Scene();
 
 document.querySelector('#three').appendChild(renderer.domElement);
 
 // camera config
 
-var controls = new THREE.OrbitControls(camera, renderer.domElement);
+let controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 camera.position.z = 200;
 
+function createPoint(x: number, y: number, z: number, color) {
+    let geometry = new THREE.SphereGeometry(5, 32, 32);
+    let material = new THREE.MeshBasicMaterial({ color });
+    let sphere = new THREE.Mesh(geometry, material);
+    sphere.position.set(x, y, z);
+    scene.add(sphere);
+}
+
 // lights
 
-var light;
+const lightRed = new THREE.DirectionalLight(0xff0000, 1);
+lightRed.position.set(-100, 0, 0);
+createPoint(-100, 0, 0, 0xff0000);
+scene.add(lightRed);
+// scene.add(new THREE.CameraHelper(lightRed.shadow.camera));
 
-light = new THREE.DirectionalLight(0xff0000, 1);
-light.position.set(-1, 1, 1);
-scene.add(light);
+const light2 = new THREE.DirectionalLight(0x0000ff, 1);
+light2.position.set(100, 0, 0);
+light2.target.position.set(0, 0, 0);
+scene.add(light2);
+scene.add(new THREE.CameraHelper(light2.shadow.camera));
+createPoint(100, 0, 0, 0x0000ff);
 
-light = new THREE.DirectionalLight(0x0000ff, 1);
-light.position.set(1, 1, 1);
-scene.add(light);
+const light3 = new THREE.PointLight(0x00ff00, 1, 200);
+light3.position.set(0, 0, 0);
+createPoint(0, 0, 0, 0x00ff00);
+scene.add(new THREE.CameraHelper(light3.shadow.camera));
+scene.add(light3);
 
-light = new THREE.PointLight(0x00ff00, 1, 200);
-scene.add(light);
+scene.add(new THREE.AxisHelper(100));
 
 // create meshes
 
-var cubes;
-var geometry;
-var material;
+let cubes: THREE.Mesh<THREE.BAS.PhongAnimationMaterial, THREE.BAS.PrefabBufferGeometry>;
+let geometry: THREE.BAS.PrefabBufferGeometry;
+let material: THREE.BAS.PhongAnimationMaterial;
 
 let config = {
     // size of the grid in world units
@@ -52,10 +68,10 @@ let config = {
     // translation delta on the x axis
     deltaX: 300,
     // animation duration for each mesh
-    duration: 2.0,
+    duration: 4.0,
     // startTime for each mesh will be based on the total delay
     totalDelay: 1.0
-}
+};
 
 function createCubes() {
     // dispose previous cubes
@@ -72,7 +88,8 @@ function createCubes() {
 
     // create the geometry that will be repeated in the buffer geometry
     // I refer to this 'base' geometry as a prefab
-    let prefab = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    // let prefab = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    let prefab = new THREE.CircleGeometry(cubeSize, cubeSize, cubeSize * 10);
 
     // create the buffer geometry where a set number of prefabs are repeated
     // PrefabBufferGeometry offers some utility methods for working with such geometries
@@ -137,6 +154,7 @@ function createCubes() {
                 tmpv.toArray(tmpa);
                 // set the rotation to 2 PI (can be anything)
                 tmpa[3] = Math.PI * 4;
+                // tmpa[3] = 0;
 
                 geometry.setPrefabData(rotationBuffer, cubeIndex, tmpa);
 

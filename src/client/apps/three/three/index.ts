@@ -35,6 +35,21 @@ import { Geometry } from 'three';
 
 declare module 'three' {
 
+    class Mesh<M = THREE.Material, G = THREE.Geometry> extends THREE.Object3D {
+        constructor(geometry?: Geometry | THREE.BufferGeometry, material?: THREE.Material | THREE.Material []);
+
+        geometry: G|THREE.BufferGeometry;
+        material: M;
+        drawMode: THREE.TrianglesDrawModes;
+        morphTargetInfluences?: number[];
+        morphTargetDictionary?: { [key: string]: number; };
+
+        setDrawMode(drawMode: THREE.TrianglesDrawModes): void;
+        updateMorphTargets(): void;
+        getMorphTargetIndexByName(name: string): number;
+        raycast(raycaster: THREE.Raycaster, intersects: any): void;
+    }
+
     class DragControls extends THREE.EventDispatcher {
         constructor(objs: any[], camera: THREE.Camera, domElement: HTMLCanvasElement);
     }
