@@ -7,25 +7,162 @@ console.log(__filename);
 import './style.scss';
 import { ClipboardEvent } from 'react';
 
-let ks, kx, ky;
-
 // random image on page load
-let images = [require('./ksImg.jpg'),
-    require('./Colorfuleye.jpg'),
-    require('./geometric.jpg'),
-    require('./bwSpiral.jpg'),
-    require('./colorfulVertex.jpg'),
+let images = [
+    require('./ksImg.jpg'),
+    // require('./Colorfuleye.jpg'),
+    // require('./geometric.jpg'),
+    // require('./bwSpiral.jpg'),
+    // require('./colorfulVertex.jpg'),
 ];
 
 let rndImg = function () {
     let len = images.length;
-
     let rnd = Math.floor(Math.random() * len);
     return images[rnd];
 };
 
+let opts = {
+    imgURL: rndImg(),
+    speed: 0.002,
+    segmentSize: 200,
+    smoothing: 0.1,
+};
+
+class Obj {
+
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
+    private segmentWidth: number;
+    private segmentHeight: number;
+
+    private fillStyle: string | CanvasPattern;
+    offsetX: number;
+    offsetY: number;
+    rotation: number;
+
+    private stock: HTMLCanvasElement;
+    private stockctx: CanvasRenderingContext2D;
+
+    constructor(canvas: HTMLCanvasElement, segmentMotion: number) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.ctx.font = 'bold 24px monospace';
+        this.segmentWidth = segmentMotion;
+        this.segmentHeight = segmentMotion * Math.sqrt(3) / 2;
+        console.log('segment', this.segmentWidth, this.segmentHeight);
+
+        this.fillStyle = 'hsla(0,0%,0%,1)';
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.rotation = 0;
+
+        this.stock = document.createElement('canvas');
+        this.stock.width = segmentMotion * 9 / 2;
+        this.stock.height = segmentMotion;
+        this.stockctx = this.stock.getContext('2d');
+    }
+
+    draw() {
+        const stockCtx = this.stockctx;
+        let segmentWidth = this.segmentWidth;
+        let segmentHeight = this.segmentHeight;
+        stockCtx.fillStyle = this.fillStyle;
+        stockCtx.strokeStyle = this.fillStyle;
+
+        // red border for debug
+        stockCtx.strokeStyle = '#ff0000';
+
+        stockCtx.clearRect(0, 0, this.stock.width, this.stock.height);
+
+        this.drawSegment(stockCtx, 0, 0, 0, false);
+        this.drawSegment(stockCtx, segmentWidth, 0, Math.PI / 3, true);
+        this.drawSegment(stockCtx, segmentWidth * 3 / 2, segmentHeight, Math.PI * 4 / 3, false);
+        this.drawSegment(stockCtx, segmentWidth * 5 / 2, segmentHeight, Math.PI * 3 / 3, true);
+        this.drawSegment(stockCtx, segmentWidth * 3, 0, Math.PI * 2 / 3, false);
+        this.drawSegment(stockCtx, segmentWidth * 5 / 2, segmentHeight, Math.PI * 5 / 3, true);
+
+        const ctx = this.ctx;
+        let ofsX = 0;
+
+        // start 0 for debug
+        let heightstart = 0;
+        // let heightstart = -1;
+
+        let initPOV = 0;
+        let heightend = Math.ceil(this.canvas.width / (segmentWidth * 3));
+        let finalPOV = Math.ceil(this.canvas.height / segmentHeight);
+
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Display fillStyle for debug
+        // ctx.fillStyle = this.fillStyle;
+        // ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        for (let i = initPOV; i < finalPOV; i++) {
+            for (let j = heightstart; j < heightend; j++) {
+                const x = j * segmentWidth * 3 + ofsX;
+                const y = i * segmentHeight;
+                // console.log('repeate segment', x, y);
+                ctx.drawImage(this.stock, x, y);
+
+                // Draw single image for debug
+                // return;
+            }
+            ofsX = segmentWidth * 3 / 2 - ofsX;
+        }
+    }
+
+    resize(w: number, h: number) {
+        this.canvas.width = w;
+        this.canvas.height = h;
+    }
+
+    setImage(img: HTMLImageElement) {
+        const calibrate = Math.max(this.segmentWidth / img.naturalWidth, this.segmentHeight / img.naturalHeight);
+        console.log('setImage', calibrate);
+
+        if (calibrate < 1.0) {
+            const pre = document.createElement('canvas');
+            Set.partitions(pre, img, calibrate);
+            this.fillStyle = this.stockctx.createPattern(pre, 'repeat');
+        } else {
+            this.fillStyle = this.stockctx.createPattern(img, 'repeat');
+        }
+    }
+
+    drawSegment(ctx: CanvasRenderingContext2D, kx: number, ky: number, dt: number, reverse: boolean) {
+        let w = this.segmentWidth;
+        let h = this.segmentHeight;
+        ctx.save();
+        ctx.translate(kx, ky);
+        ctx.rotate(dt);
+        if (reverse) {
+            ctx.translate(w, 0);
+            ctx.scale(-1, 1);
+        }
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(w, 0);
+        ctx.lineTo(w / 2, h);
+        ctx.closePath();
+
+        ctx.translate(this.offsetX, this.offsetY);
+        ctx.rotate(this.rotation);
+        ctx.fill();
+        // debug positiong
+        ctx.fillStyle = '#00ff00';
+        ctx.fillText(`${this.offsetX},${this.offsetY},${this.rotation}`, 20, 20, 200);
+
+        ctx.stroke();
+        ctx.restore();
+    }
+}
+
+let ks: Obj, kx, ky;
+
 namespace Set {
-    export function partitions(display, img, scale) {
+    export function partitions(display: HTMLCanvasElement, img: HTMLImageElement, scale: number) {
         let c1 = document.createElement('canvas');
         let c2 = document.createElement('canvas');
         let w = c1.width = c2.width = img.naturalWidth || img.width;
@@ -53,105 +190,9 @@ namespace Set {
     }
 }
 
-let opts = {
-    imgURL: rndImg(),
-    speed: 0.002,
-    segmentSize: 200,
-    smoothing: 0.1,
-};
-
-let Obj = function (canvas, segmentMotion) {
-    this._c = canvas;
-    this._$ = canvas.getContext('2d');
-    this.segmentWidth = segmentMotion;
-    this.segmentHeight = segmentMotion * Math.sqrt(3) / 2;
-
-    this.fillStyle = 'hsla(0,0%,0%,1)';
-    this.offsetX = 0;
-    this.offsetY = 0;
-    this.rotation = 0;
-
-    this.stock = document.createElement('canvas');
-    this.stock.width = segmentMotion * 9 / 2;
-    this.stock.height = segmentMotion;
-    this.stockctx = this.stock.getContext('2d');
-};
-
-Obj.prototype = {
-    draw: function () {
-        let _$_ = this.stockctx;
-        let w = this.segmentWidth;
-        let h = this.segmentHeight;
-        _$_.fillStyle = this.fillStyle;
-        _$_.strokeStyle = this.fillStyle;
-        _$_.clearRect(0, 0, this.stock.width, this.stock.height);
-
-        this.drawSegment(_$_, 0, 0, 0, false);
-        this.drawSegment(_$_, w, 0, Math.PI / 3, true);
-        this.drawSegment(_$_, w * 3 / 2, h, Math.PI * 4 / 3, false);
-        this.drawSegment(_$_, w * 5 / 2, h, Math.PI * 3 / 3, true);
-        this.drawSegment(_$_, w * 3, 0, Math.PI * 2 / 3, false);
-        this.drawSegment(_$_, w * 5 / 2, h, Math.PI * 5 / 3, true);
-
-        _$_ = this._$;
-        let ofsX = 0;
-        let heightstart = -1;
-        let initPOV = 0;
-        let heightend = Math.ceil(this._c.width / (w * 3));
-        let finalPOV = Math.ceil(this._c.height / h);
-
-        _$_.clearRect(0, 0, this._c.width, this._c.height);
-        for (let i = initPOV; i < finalPOV; i++) {
-            for (let j = heightstart; j < heightend; j++) {
-                _$_.drawImage(this.stock, j * w * 3 + ofsX, i * h);
-            }
-            ofsX = w * 3 / 2 - ofsX;
-        }
-    },
-
-    resize: function (w, h) {
-        this._c.width = w;
-        this._c.height = h;
-    },
-
-    setImage: function (img) {
-        let calibrate = Math.max(this.segmentWidth / img.naturalWidth, this.segmentHeight / img.naturalHeight);
-
-        if (calibrate < 1.0) {
-            let pre = document.createElement('canvas');
-            Set.partitions(pre, img, calibrate);
-            this.fillStyle = this.stockctx.createPattern(pre, 'repeat');
-        } else {
-            this.fillStyle = this.stockctx.createPattern(img, 'repeat');
-        }
-    },
-
-    drawSegment: function (_$_, kx, ky, dt, reverse) {
-        let w = this.segmentWidth;
-        let h = this.segmentHeight;
-
-        _$_.save();
-        _$_.translate(kx, ky);
-        _$_.rotate(dt);
-        if (reverse) {
-            _$_.translate(w, 0);
-            _$_.scale(-1, 1);
-        }
-        _$_.beginPath();
-        _$_.moveTo(0, 0);
-        _$_.lineTo(w, 0);
-        _$_.lineTo(w / 2, h);
-        _$_.closePath();
-        _$_.translate(this.offsetX, this.offsetY);
-        _$_.rotate(this.rotation);
-        _$_.fill();
-        _$_.stroke();
-        _$_.restore();
-    }
-};
 
 function ready() {
-    let c = document.getElementById('canv');
+    let c = document.getElementById('canv') as HTMLCanvasElement;
     ks = new Obj(c, opts.segmentSize);
     ks.resize(window.innerWidth, window.innerHeight);
     kx = 0;
@@ -244,9 +285,8 @@ function loadImage(src, callback) {
 
 function setImage(img) {
     ks.setImage(img);
+    draw();
 }
 
 ready();
-draw();
-
 console.log('Code With ❤ Always, @tmrDevelops');
