@@ -1,0 +1,57 @@
+$fireSize: 500;
+$burnSize: 100;
+$burnCount: 40;
+body {
+    background: #000;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#ui {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: #{-$fireSize / 4}px;
+    transform: translate(-50%, -50%);
+    transition: 100ms;
+    .fire {
+        position: relative;
+        width: #{$fireSize}px;
+        height: #{$fireSize}px;
+        background: #ff9900;
+        filter: blur(20px) contrast(30);
+        border: #{$fireSize/2}px solid #000;
+        border-bottom-color: transparent;
+        border-radius: 40%;
+        box-sizing: border-box;
+        transform: scale(0.4, 1);
+        .burn {
+            position: absolute;
+            top: #{$fireSize}px;
+            left: #{-$burnSize / 2}px;
+            width: #{$burnSize}px;
+            height: #{$burnSize}px;
+            background: #000;
+            border-radius: 100%;
+            @for $i from 1 through $burnCount * 2 {
+                &.heat:nth-child(#{$i}) {
+                    height: #{random(10)}px;
+                }
+                &:nth-child(#{$i}) {
+                    height: #{random($burnSize / 2)}px;
+                    margin-left: #{random($fireSize) - $fireSize / 2}px;
+                    animation: burning #{random(2000) + 1000}ms infinite linear;
+                }
+            }
+        }
+    }
+}
+
+@keyframes burning {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-#{$fireSize+$burnSize}px);
+    }
+}
