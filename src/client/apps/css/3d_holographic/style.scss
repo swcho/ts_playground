@@ -1,0 +1,452 @@
+@mixin animation($animate...) {
+    $max: length($animate);
+    $animations: '';
+    @for $i from 1 through $max {
+        $animations: #{$animations + nth($animate, $i)};
+        @if $i < $max {
+            $animations: #{$animations + ", "};
+        }
+    }
+    -webkit-animation: $animations;
+    -moz-animation : $animations;
+    -o-animation : $animations;
+    animation : $animations;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+$cardHeight: 70vh;
+$animSpeed: 5s;
+
+/* these animations are hard-coded to demonstrate the effect - not prtable in the slightest! */
+
+@include keyframes(rotate-card-base) {
+    0% {
+        transform: perspective(550px) rotateX(0deg) rotateY(0deg)
+    }
+    10% {
+        transform: perspective(550px) rotateX(0deg) rotateY(0deg)
+    }
+    30% {
+        transform: perspective(550px) rotateX(20deg) rotateY(-20deg)
+    }
+    50% {
+        transform: perspective(550px) rotateX(20deg) rotateY(20deg)
+    }
+    70% {
+        transform: perspective(550px) rotateX(-20deg) rotateY(20deg)
+    }
+    90% {
+        transform: perspective(550px) rotateX(-20deg) rotateY(-20deg)
+    }
+    100% {
+        transform: perspective(550px) rotateX(0deg) rotateY(0deg)
+    }
+}
+
+@include keyframes(rotate-trees) {
+    0% {
+        transform: perspective(550px) translateZ(90px);
+        left: 0%;
+        top: 0%;
+    }
+    10% {
+        transform: perspective(550px) translateZ(90px);
+        left: 0%;
+        top: 0%;
+    }
+    30% {
+        transform: perspective(550px) translateZ(90px);
+        left: 12%;
+        top: 12%;
+    }
+    50% {
+        transform: perspective(550px) translateZ(90px);
+        left: -12%;
+        top: 12%;
+    }
+    70% {
+        transform: perspective(550px) translateZ(90px);
+        left: -12%;
+        top: -12%;
+    }
+    90% {
+        transform: perspective(550px) translateZ(90px);
+        left: 12%;
+        top: -12%;
+    }
+    100% {
+        transform: perspective(550px) translateZ(90px);
+        left: 0%;
+        top: 0%;
+    }
+}
+
+@include keyframes(rotate-gruffalo-body) {
+    0% {
+        transform: perspective(550px) translateZ(60px);
+        left: 0%;
+        top: 0%;
+    }
+    10% {
+        transform: perspective(550px) translateZ(60px);
+        left: 0%;
+        top: 0%;
+    }
+    30% {
+        transform: perspective(550px) translateZ(60px);
+        left: 8%;
+        top: 8%;
+    }
+    50% {
+        transform: perspective(550px) translateZ(60px);
+        left: -8%;
+        top: 8%;
+    }
+    70% {
+        transform: perspective(550px) translateZ(60px);
+        left: -8%;
+        top: -8%;
+    }
+    90% {
+        transform: perspective(550px) translateZ(60px);
+        left: 8%;
+        top: -8%;
+    }
+    100% {
+        transform: perspective(550px) translateZ(60px);
+        left: 0%;
+        top: 0%;
+    }
+}
+
+@include keyframes(rotate-mist) {
+    0% {
+        transform: perspective(550px) translateZ(43px);
+        left: 0%;
+        top: 0%;
+    }
+    10% {
+        transform: perspective(550px) translateZ(43px);
+        left: 0%;
+        top: 0%;
+    }
+    30% {
+        transform: perspective(550px) translateZ(43px);
+        left: 6%;
+        top: 6%;
+    }
+    50% {
+        transform: perspective(550px) translateZ(43px);
+        left: -6%;
+        top: 6%;
+    }
+    70% {
+        transform: perspective(550px) translateZ(43px);
+        left: -6%;
+        top: -6%;
+    }
+    90% {
+        transform: perspective(550px) translateZ(43px);
+        left: 6%;
+        top: -6%;
+    }
+    100% {
+        transform: perspective(550px) translateZ(43px);
+        left: 0%;
+        top: 0%;
+    }
+}
+
+@include keyframes(rotate-gruffalo-head) {
+    0% {
+        transform: perspective(550px) translateZ(36px);
+        left: 0%;
+        top: 0%;
+    }
+    10% {
+        transform: perspective(550px) translateZ(36px);
+        left: 0%;
+        top: 0%;
+    }
+    30% {
+        transform: perspective(550px) translateZ(36px);
+        left: 5%;
+        top: 5%;
+    }
+    50% {
+        transform: perspective(550px) translateZ(36px);
+        left: -5%;
+        top: 5%;
+    }
+    70% {
+        transform: perspective(550px) translateZ(36px);
+        left: -5%;
+        top: -5%;
+    }
+    90% {
+        transform: perspective(550px) translateZ(36px);
+        left: 5%;
+        top: -5%;
+    }
+    100% {
+        transform: perspective(550px) translateZ(36px);
+        left: 0%;
+        top: 0%;
+    }
+}
+
+@include keyframes(rotate-hellboy-bg) {
+    0% {
+        transform: perspective(550px) translateZ(22px);
+        left: 0%;
+        top: 0%;
+    }
+    10% {
+        transform: perspective(550px) translateZ(22px);
+        left: 0%;
+        top: 0%;
+    }
+    30% {
+        transform: perspective(550px) translateZ(22px);
+        left: 3%;
+        top: 3%;
+    }
+    50% {
+        transform: perspective(550px) translateZ(22px);
+        left: -3%;
+        top: 3%;
+    }
+    70% {
+        transform: perspective(550px) translateZ(22px);
+        left: -3%;
+        top: -3%;
+    }
+    90% {
+        transform: perspective(550px) translateZ(22px);
+        left: 3%;
+        top: -3%;
+    }
+    100% {
+        transform: perspective(550px) translateZ(22px);
+        left: 0%;
+        top: 0%;
+    }
+}
+
+@include keyframes(rotate-hellboy-fg) {
+    0% {
+        transform: perspective(550px) translateZ(15px);
+        left: 0%;
+        top: 0%;
+    }
+    10% {
+        transform: perspective(550px) translateZ(15px);
+        left: 0%;
+        top: 0%;
+    }
+    30% {
+        transform: perspective(550px) translateZ(15px);
+        left: 2%;
+        top: 2%;
+    }
+    50% {
+        transform: perspective(550px) translateZ(15px);
+        left: -2%;
+        top: 2%;
+    }
+    70% {
+        transform: perspective(550px) translateZ(15px);
+        left: -2%;
+        top: -2%;
+    }
+    90% {
+        transform: perspective(550px) translateZ(15px);
+        left: 2%;
+        top: -2%;
+    }
+    100% {
+        transform: perspective(550px) translateZ(15px);
+        left: 0%;
+        top: 0%;
+    }
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: #000;
+}
+
+#cardWrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    perspective: 550px;
+    white-space: nowrap;
+}
+
+#card {
+    position: relative;
+    width: calc(#{$cardHeight} * 0.70756062767475);
+    height: $cardHeight;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    .layer1 {
+        z-index: 1;
+    }
+    .layer2 {
+        z-index: 2;
+    }
+    .layer3 {
+        z-index: 3;
+    }
+    .layer4 {
+        z-index: 4;
+    }
+    .layer5 {
+        z-index: 5;
+    }
+    .layer6 {
+        z-index: 6;
+    }
+}
+
+#border {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 20px solid white;
+    display: block;
+    z-index: 7;
+}
+
+#autoToggle {
+    border: none;
+    background-color: #0275d8;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 120%;
+    padding: 1em;
+    cursor: pointer;
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: lighten( #0275d8, 10%)
+    }
+}
+
+#instructions {
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+    color: #fff;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 300%;
+    opacity: 0.3;
+}
+
+.auto {
+    #card.orig {
+        @include animation('rotate-card-base #{$animSpeed} infinite')
+    }
+    .orig {
+        .layer1 {
+            @include animation('rotate-trees #{$animSpeed} infinite')
+        }
+        .layer2 {
+            @include animation('rotate-gruffalo-body #{$animSpeed} infinite')
+        }
+        .layer3 {
+            @include animation('rotate-mist #{$animSpeed} infinite')
+        }
+        .layer4 {
+            @include animation('rotate-gruffalo-head #{$animSpeed} infinite')
+        }
+        .layer5 {
+            @include animation('rotate-hellboy-bg #{$animSpeed} infinite')
+        }
+        .layer5 {
+            @include animation('rotate-hellboy-fg #{$animSpeed} infinite')
+        }
+    }
+}
+
+@include keyframes(rotate-card-base-test) {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg)
+    }
+    10% {
+        transform: rotateX(0deg) rotateY(0deg)
+    }
+    30% {
+        transform: rotateX(20deg) rotateY(-20deg)
+    }
+    50% {
+        transform: rotateX(20deg) rotateY(20deg)
+    }
+    70% {
+        transform: rotateX(-20deg) rotateY(20deg)
+    }
+    90% {
+        transform: rotateX(-20deg) rotateY(-20deg)
+    }
+    100% {
+        transform: rotateX(0deg) rotateY(0deg)
+    }
+}
+
+#card.test {
+    transform-style: preserve-3d;
+    transform-origin: center center 0px;
+    animation: rotate-card-base-test 5s infinite;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible;
+
+    .layer1 {
+        transform: translateZ(10px);
+    }
+    .layer2 {
+        transform: translateZ(20px);
+    }
+    .layer3 {
+        transform: translateZ(30px);
+    }
+    .layer4 {
+        transform: translateZ(40px);
+    }
+    .layer5 {
+        transform: translateZ(50px);
+    }
+    .layer6 {
+        transform: translateZ(60px);
+    }
+}
