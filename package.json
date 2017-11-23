@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/d3": "^4.11.0",
     "@types/matter-js": "^0.9.33",
+    "@types/plotly.js": "^1.28.9",
     "@types/simplemde": "^1.11.7",
     "@types/youtube": "^0.0.31",
     "animejs": "^2.2.0",

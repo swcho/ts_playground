@@ -165,7 +165,7 @@
     "@types/d3-interpolate" "*"
     "@types/d3-selection" "*"
 
-"@types/d3@^4.11.0":
+"@types/d3@*", "@types/d3@^4.11.0":
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/@types/d3/-/d3-4.11.0.tgz#1850b3b94a3bc42099b38200ceb7844479fa30d9"
   dependencies:
@@ -305,6 +305,12 @@
 "@types/pixi.js@^4.4.0":
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/@types/pixi.js/-/pixi.js-4.5.0.tgz#bdb44481bc42de9fd37a2277d9a4d6386819b71b"
+
+"@types/plotly.js@^1.28.9":
+  version "1.28.9"
+  resolved "https://registry.yarnpkg.com/@types/plotly.js/-/plotly.js-1.28.9.tgz#a8cfa28fe11a3d037c5f6615bb075a3c5579a3c5"
+  dependencies:
+    "@types/d3" "*"
 
 "@types/react-dom@^0.14.23":
   version "0.14.23"

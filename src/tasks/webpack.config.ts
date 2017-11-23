@@ -261,6 +261,9 @@ const webpackConfig: webpack.Configuration = {
             // "jquery-ui-1.10.3$": "jquery-ui-1.10.3/ui/jquery-ui.js",
         },
     },
+    externals: {
+        'plotly.js': 'Plotly',
+    },
     resolveLoader: {
         alias: {
             'config-loader': path.join(__dirname, './loaders/config-loader'),

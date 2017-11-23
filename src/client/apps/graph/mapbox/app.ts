@@ -1,11 +1,36 @@
 
+// <reference path="../../../../../node_modules/@types/plotly.js/index.d.ts"/>
+// <reference types="plotly.js"/>
+
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
+
 console.log(__filename);
 
 import './style.scss';
+import * as Plotly from 'plotly.js';
+// import * as Plotly from '../../../../../node_modules/@types/plotly.js';
 
-declare const Plotly;
+declare module 'plotly.js' {
+
+    interface Layout {
+        mapbox;
+        paper_bgcolor;
+        plot_bgcolor;
+        annotations;
+    }
+
+    interface Margin {
+        pad: number;
+    }
+
+    // Not working
+    // interface ScatterData {
+    //     type: 'bar' | 'scatter' | 'scattergl' | 'scattermapbox';
+    // }
+
+    function setPlotConfig(config);
+}
 
 function unpack(rows, key) {
     return rows.map(function (row) { return row[key]; });
@@ -25,14 +50,14 @@ Plotly.d3.csv('https://raw.githubusercontent.com/bcdunbar/datasets/master/meteor
             return (row.class === classes);
         });
         return {
-            type: 'scattermapbox',
+            type: 'scattermapbox' as any,
             name: classes,
             lat: unpack(rowsFiltered, 'reclat'),
             lon: unpack(rowsFiltered, 'reclong')
         };
     });
 
-    let layout = {
+    let layout: Partial<Plotly.Layout> = {
         title: 'Meteorite Landing Locations',
         font: {
             color: 'white'
