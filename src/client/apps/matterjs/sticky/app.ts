@@ -6,41 +6,36 @@ console.log(__filename);
 
 import './style.scss';
 require('p5');
-import * as Matter from '../matter-js';
+import {
+    Engine,
+    World,
+    Bodies,
+    Body,
+    Constraint,
+    Composite,
+    MouseConstraint,
+    Mouse,
+} from '../matter-js';
 
-// Module aliases
-var Engine = Matter.Engine,
-    World = Matter.World,
-    Bodies = Matter.Bodies,
-    Body = Matter.Body,
-    Constraint = Matter.Constraint,
-    Composite = Matter.Composite,
-    Composites = Matter.Composites,
-    MouseConstraint = Matter.MouseConstraint,
-    Mouse = Matter.Mouse,
-    Events = Matter.Events,
-    Vertices = Matter.Vertices;
+let engine = Engine.create();
+let world = engine.world;
 
-var engine = Engine.create();
-var world = engine.world;
+let chain: CreateChain = null;
+let heatLines = [];
 
-var chain = null;
-var heatLines = [];
-
-var distanceToCup = 10000;
-var distanceFromCup = { size: 500, towards: true };
+let distanceToCup = 10000;
+let distanceFromCup = { size: 500, towards: true };
 let firstAnimation = { max: 241, min: 171, percent: 1 };
 let secondAnimation = { max: 170, min: 100, percent: 0 };
 let thirdAnimation = { max: 241, min: 100, percent: 0 };
 
-let marshmallow
+let marshmallow;
 
 // ---------------
 // Box Constructor
 // ---------------
 
 class Box {
-
     w;
     h;
     body;
@@ -48,9 +43,7 @@ class Box {
         this.w = w;
         this.h = h;
         this.body = Bodies.rectangle(x, y, w, h, options);
-
         World.add(world, this.body);
-
     }
 }
 
@@ -60,8 +53,6 @@ let cupLeft: Box;
 let cupRight: Box;
 let cupHandle: Box;
 
-
-//
 function calculateLinks() {
     // 77 is the offset from the bottom and the top
     // 200 is the amount of space we want between the marshmallow and cup when hanging
@@ -77,197 +68,222 @@ function calculateLinks() {
     }
 }
 
-
-
 // ------------
 // Create chain
 // ------------
 
-function CreateChain(x, y, chainLinks, linkLength) {
-    this.x = x;
-    this.y = y;
-    this.hinges = [];
-    this.constraints = [];
-    this.chainLinks = chainLinks;
-    this.linkLength = linkLength;
-}
+class CreateChain {
 
-CreateChain.prototype.remove = function () {
-    for (let i = 0; i < this.constraints.length; i++) {
-        World.remove(world, this.constraints[i]);
+    x: number;
+    y: number;
+    private hinges: Box[];
+    private constraints: Constraint[];
+    private chainLinks: number;
+    private linkLength: number;
+    constructor(x: number, y: number, chainLinks: number, linkLength: number) {
+        this.x = x;
+        this.y = y;
+        this.hinges = [];
+        this.constraints = [];
+        this.chainLinks = chainLinks;
+        this.linkLength = linkLength;
     }
 
-    chain = null;
-};
-
-CreateChain.prototype.init = function () {
-    // Create hinges
-    for (let i = 0; i < this.chainLinks; i++) {
-        let isStatic = (i === 0) ? true : false;
-
-        let anchor = new Box(this.x, this.y + (this.linkLength * i), 5, 5, {
-            isStatic,
-            collisionFilter: {
-                category: 0x0001
-            }
-        });
-
-        this.hinges.push(anchor);
-    }
-
-    // Create links between hinges
-    for (let i = 0; i < this.hinges.length; i++) {
-        let constraint;
-
-        if (i === this.chainLinks - 1) {
-            constraint = Constraint.create({
-                bodyA: this.hinges[i].body,
-                bodyB: marshmallow.body,
-                pointB: { x: 0, y: (marshmallow.h / 2 * -1) + 12 },
-                length: this.linkLength,
-                damping: 0.5,
-                stiffness: 0.1,
-                label: 'marshmallowAttachment'
-            });
-        } else {
-            constraint = Constraint.create({
-                bodyA: this.hinges[i].body,
-                bodyB: this.hinges[i + 1].body,
-                length: this.linkLength,
-                damping: 0.5,
-                stiffness: 0.1
-            });
+    remove() {
+        for (let i = 0; i < this.constraints.length; i++) {
+            World.remove(world, this.constraints[i]);
         }
 
-        this.constraints.push(constraint);
-        World.add(world, constraint);
+        chain = null;
     }
-};
+
+    init() {
+        // Create hinges
+        for (let i = 0; i < this.chainLinks; i++) {
+            let isStatic = (i === 0) ? true : false;
+
+            let anchor = new Box(this.x, this.y + (this.linkLength * i), 5, 5, {
+                isStatic,
+                collisionFilter: {
+                    category: 0x0001
+                }
+            });
+
+            this.hinges.push(anchor);
+        }
+
+        // Create links between hinges
+        for (let i = 0; i < this.hinges.length; i++) {
+            let constraint;
+
+            if (i === this.chainLinks - 1) {
+                constraint = Constraint.create({
+                    bodyA: this.hinges[i].body,
+                    bodyB: marshmallow.body,
+                    pointB: { x: 0, y: (marshmallow.h / 2 * -1) + 12 },
+                    length: this.linkLength,
+                    damping: 0.5,
+                    stiffness: 0.1,
+                    label: 'marshmallowAttachment'
+                });
+            } else {
+                constraint = Constraint.create({
+                    bodyA: this.hinges[i].body,
+                    bodyB: this.hinges[i + 1].body,
+                    length: this.linkLength,
+                    damping: 0.5,
+                    stiffness: 0.1
+                });
+            }
+
+            this.constraints.push(constraint);
+            World.add(world, constraint);
+        }
+    }
+}
 
 function createChain() {
     chain = new CreateChain(width / 2, 50, calculateLinks(), 10);
     chain.init();
 }
 
-
-
 // --------------
 // Heat particles
 // --------------
 
-function HeatParticle(x, y) {
-    this.position = createVector(x, y);
-    this.index = 0;
-}
+class HeatParticle {
 
-HeatParticle.prototype.render = function () {
-    push();
-    noStroke();
-    fill('#f0d38d');
-    ellipse(this.position.x, this.position.y, this.parent.particleSize, this.parent.particleSize);
-    pop();
-};
-
-HeatParticle.prototype.updatePos = function () {
-    this.position.y -= 0.5;
-    this.position.x = Math.sin((frameCount + this.index / 0.4) / 35) * 10 + this.parent.position.x;
-};
-
-HeatParticle.prototype.checkPos = function () {
-    if (this.position.y < this.parent.position.y - this.parent.height) {
-        this.reset();
+    private position: p5.Vector;
+    constructor(private parent: HeatLine, private index: number, x: number, y: number) {
+        this.position = createVector(x, y);
+        this.index = 0;
     }
-};
 
-HeatParticle.prototype.reset = function () {
-    this.parent.particleIndex += 1;
-    this.index = this.parent.particleIndex;
-    this.position.y = this.parent.position.y;
-};
+    render() {
+        push();
+        noStroke();
+        fill('#f0d38d');
+        ellipse(this.position.x, this.position.y, this.parent.particleSize, this.parent.particleSize);
+        pop();
+    }
 
+    updatePos() {
+        this.position.y -= 0.5;
+        this.position.x = Math.sin((frameCount + this.index / 0.4) / 35) * 10 + this.parent.position.x;
+    }
 
+    checkPos() {
+        if (this.position.y < this.parent.position.y - this.parent.height) {
+            this.reset();
+        }
+    }
+
+    reset() {
+        this.parent.particleIndex += 1;
+        this.index = this.parent.particleIndex;
+        this.position.y = this.parent.position.y;
+    }
+}
 
 // ----------
 // Heat lines
 // ----------
 
-function HeatLine(x, y, height, particleSize) {
-    this.position = createVector(x, y);
-    this.particles = [];
-    this.particleIndex = 0;
-    this.height = height;
-    this.particleSize = particleSize;
+class HeatLine {
+
+    position: p5.Vector;
+    private particles: HeatParticle[];
+    particleIndex: number;
+    constructor(x: number, y: number, public height: number, public particleSize: number) {
+        this.position = createVector(x, y);
+        this.particles = [];
+        this.particleIndex = 0;
+        this.height = height;
+        this.particleSize = particleSize;
+    }
+
+    render() {
+        for (let i = 0; i < this.particles.length; i++) {
+            this.particles[i].updatePos();
+            this.particles[i].render();
+            this.particles[i].checkPos();
+        }
+    }
+
+    init() {
+        let particleCount = this.height / (this.particleSize / 6);
+
+        for (let i = 0; i < particleCount; i++) {
+            this.particleIndex += 1;
+            let particle = new HeatParticle(this, this.particleIndex, this.position.x, this.position.y + (i * this.particleSize / 6));
+            this.particles.push(particle);
+        }
+    }
 }
-
-HeatLine.prototype.render = function () {
-    for (let i = 0; i < this.particles.length; i++) {
-        this.particles[i].updatePos();
-        this.particles[i].render();
-        this.particles[i].checkPos();
-    }
-};
-
-HeatLine.prototype.init = function () {
-    let particleCount = this.height / (this.particleSize / 6);
-
-    for (let i = 0; i < particleCount; i++) {
-        this.particleIndex += 1;
-
-        let particle = new HeatParticle(this.position.x, this.position.y + (i * this.particleSize / 6));
-        particle.index = this.particleIndex;
-        particle.parent = this;
-
-        this.particles.push(particle);
-    }
-};
 
 function populateHeatLines() {
     heatLines.push(new HeatLine(cup.body.position.x, cup.body.position.y - cup.h / 2, 50, 5));
     heatLines.push(new HeatLine(cup.body.position.x - 60, cup.body.position.y - cup.h / 2, 50, 5));
     heatLines.push(new HeatLine(cup.body.position.x + 60, cup.body.position.y - cup.h / 2, 50, 5));
-
     for (let i = 0; i < heatLines.length; i++) {
         heatLines[i].init();
     }
 }
-
-
 
 // -----------
 // Cup + Floor
 // -----------
 // Change this to an object since we don't need it to construct anything
 
-function CupFloor() { }
+class CupFloor {
 
-CupFloor.prototype.destroy = function () {
-    World.remove(world, [
-        floor.body,
-        cup.body,
-        cupLeft.body,
-        cupRight.body,
-        cupHandle.body,
-    ] as any);
+    constructor() {
 
-    floor = null;
-    cup = null;
-    cupLeft = null;
-    cupRight = null;
-    cupHandle = null;
-};
+    }
 
-CupFloor.prototype.init = function () {
-    // All of the magic numbers here are to position the elements relative to the marshmallow body
-    floor = new Box(width / 2, height - 31.75, 320, 3.5, { isStatic: true, collisionFilter: { category: 0x0002 } });
-    cup = new Box(width / 2, height - 93, 259, 125.5, { isStatic: true, isSensor: true, label: 'cup', collisionFilter: { category: 0x0002 } });
-    cupLeft = new Box(width / 2 - 134.5, height - 93, 10, 125.5, { isStatic: true, collisionFilter: { category: 0x0002 } });
-    cupRight = new Box(width / 2 + 134.5, height - 93, 10, 125.5, { isStatic: true, collisionFilter: { category: 0x0002 } });
-    cupHandle = new Box(width / 2 + 153, height - 114, 31, 60.5, { isStatic: true, collisionFilter: { category: 0x0002 } });
-};
+    destroy() {
+        World.remove(world, [
+            floor.body,
+            cup.body,
+            cupLeft.body,
+            cupRight.body,
+            cupHandle.body,
+        ] as any);
 
+        floor = null;
+        cup = null;
+        cupLeft = null;
+        cupRight = null;
+        cupHandle = null;
+    }
+
+    init() {
+        // All of the magic numbers here are to position the elements relative to the marshmallow body
+        floor = new Box(
+            width / 2,
+            height - 31.75, 320, 3.5,
+            {
+                isStatic: true,
+                collisionFilter: {
+                    category: COLLISION_CATEGORY_STATIC
+                }
+            }
+        );
+        cup = new Box(width / 2, height - 93, 259, 125.5, {
+            isStatic: true,
+            isSensor: true,
+            label: 'cup',
+            collisionFilter: {
+                category: COLLISION_CATEGORY_STATIC
+            }
+        });
+        cupLeft = new Box(width / 2 - 134.5, height - 93, 10, 125.5, { isStatic: true, collisionFilter: { category: COLLISION_CATEGORY_STATIC } });
+        cupRight = new Box(width / 2 + 134.5, height - 93, 10, 125.5, { isStatic: true, collisionFilter: { category: COLLISION_CATEGORY_STATIC } });
+        cupHandle = new Box(width / 2 + 153, height - 114, 31, 60.5, { isStatic: true, collisionFilter: { category: COLLISION_CATEGORY_STATIC } });
+    }
+
+}
 let cupFloor = new CupFloor();
-
-
 
 // ---------
 // P5 Resize
@@ -319,6 +335,9 @@ let armLeft: Matter.Body;
 let armRight: Matter.Body;
 let legRight: Matter.Body;
 let legLeft: Matter.Body;
+let mouseConstraint: MouseConstraint;
+const COLLISION_CATEGORY_MARSHMALLOW = 0x0001;
+const COLLISION_CATEGORY_STATIC = 0x0002;
 function setup() {
 
     // Setup the canvas
@@ -329,16 +348,23 @@ function setup() {
     let mouse = Mouse.create(canvas.elt);
     mouse.pixelRatio = pixelDensity();
 
-    let mouseConstraint = MouseConstraint.create(engine, { mouse: mouse, constraint: { stiffness: 0.2 } as any });
-    mouseConstraint.collisionFilter.category = 0x0002;
+    mouseConstraint = MouseConstraint.create(
+        engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2
+            } as any
+        }
+    );
+    mouseConstraint.collisionFilter.category = COLLISION_CATEGORY_STATIC;
 
     World.add(world, mouseConstraint);
 
     // Load all of the image assets
-    marshmallowBody = loadImage('https://s3-us-west-2.amazonaws.com/s.cdpn.io/49240/body.png');
-    floorImg = loadImage('https://s3-us-west-2.amazonaws.com/s.cdpn.io/49240/ground.png');
-    cupImg = loadImage('https://s3-us-west-2.amazonaws.com/s.cdpn.io/49240/cup.png');
-    cupHandleImg = loadImage('https://s3-us-west-2.amazonaws.com/s.cdpn.io/49240/cupHandle.png');
+    marshmallowBody = loadImage(require('./body.png'));
+    floorImg = loadImage(require('./ground.png'));
+    cupImg = loadImage(require('./cup.png'));
+    cupHandleImg = loadImage(require('./cupHandle.png'));
 
     // Create the boundaries
     cupFloor.init();
@@ -353,7 +379,7 @@ function setup() {
         density: 0.00001,
         label: 'marshmallow',
         collisionFilter: {
-            category: 0x0001,
+            category: COLLISION_CATEGORY_MARSHMALLOW,
             mask: 0x0002
         }
     });
@@ -362,28 +388,28 @@ function setup() {
 
     armLeft = Bodies.circle(width / 2 - 40, 300, 5, {
         collisionFilter: {
-            category: 0x0001
+            category: COLLISION_CATEGORY_MARSHMALLOW
         } as any,
         density: 0.00001
     });
 
     armRight = Bodies.circle(width / 2 + 40, 300, 5, {
         collisionFilter: {
-            category: 0x0001
+            category: COLLISION_CATEGORY_MARSHMALLOW
         } as any,
         density: 0.00001
     });
 
     legRight = Bodies.circle(width / 2 + 20, 300 + 50, 0.1, {
         collisionFilter: {
-            category: 0x0001
+            category: COLLISION_CATEGORY_MARSHMALLOW
         } as any,
         density: 0.00001
     });
 
     legLeft = Bodies.circle(width / 2 - 20, 300 + 50, 0.1, {
         collisionFilter: {
-            category: 0x0001
+            category: COLLISION_CATEGORY_MARSHMALLOW
         } as any,
         density: 0.00001
     });
@@ -459,23 +485,22 @@ function draw() {
     // Outline matter objects
     // ----------------------
 
-    // push();
-    // var bodies = Composite.allBodies(engine.world);
-    //
-    // drawingContext.beginPath();
-    // for (var i = 0; i < bodies.length; i += 1) {
-    //   var vertices = bodies[i].vertices;
-    //   drawingContext.moveTo(vertices[0].x, vertices[0].y);
-    //   for (var j = 1; j < vertices.length; j += 1) {
-    //     drawingContext.lineTo(vertices[j].x, vertices[j].y);
-    //   }
-    //   drawingContext.lineTo(vertices[0].x, vertices[0].y);
-    // }
-    //
-    // drawingContext.lineWidth = 1;
-    // drawingContext.strokeStyle = '#9e9e9e';
-    // drawingContext.stroke();
-    // pop();
+    push();
+    let bodies = Composite.allBodies(engine.world);
+    drawingContext.beginPath();
+    for (let i = 0; i < bodies.length; i += 1) {
+        let vertices = bodies[i].vertices;
+        drawingContext.moveTo(vertices[0].x, vertices[0].y);
+        for (let j = 1; j < vertices.length; j += 1) {
+            drawingContext.lineTo(vertices[j].x, vertices[j].y);
+        }
+        drawingContext.lineTo(vertices[0].x, vertices[0].y);
+    }
+
+    drawingContext.lineWidth = 1;
+    drawingContext.strokeStyle = '#9e9e9e';
+    drawingContext.stroke();
+    pop();
 
 
     if (cup) {
@@ -495,7 +520,6 @@ function draw() {
     rotate(marshmallow.body.angle);
     image(marshmallowBody, marshmallow.w / 2 * -1, marshmallow.h / 2 * -1, marshmallow.w, marshmallow.h);
     pop();
-
 
 
     // --------------
@@ -554,8 +578,8 @@ function draw() {
     // When the arms enter the cup, raise them
     if (cup) {
         if (marshmallow.body.position.y / height > 0.75 && marshmallow.body.position.x > cup.body.position.x - cup.w / 2 && marshmallow.body.position.x < cup.body.position.x + cup.w / 2) {
-            Matter.Body.setVelocity(armLeft, { x: 0, y: -3 });
-            Matter.Body.setVelocity(armRight, { x: 0, y: -3 });
+            Body.setVelocity(armLeft, { x: 0, y: -3 });
+            Body.setVelocity(armRight, { x: 0, y: -3 });
         }
     }
 
@@ -629,7 +653,17 @@ function draw() {
     arc(0, 12 + (thirdAnimation.percent * 5), 16, thirdAnimation.percent * 14, 3.14, 0, CHORD);
     pop();
 
-
+    if (mouseConstraint.body) {
+        push();
+        const posBody = mouseConstraint.body.position;
+        fill(0, 255, 0);
+        ellipse(posBody.x, posBody.y, 5, 5);
+        const posMouse = mouseConstraint.mouse.position;
+        const posConstraints = mouseConstraint.constraint.bodyB.position;
+        // line(posBody.x, posBody.y, posMouse.x, posMouse.y);
+        line(posConstraints.x, posConstraints.y, posMouse.x, posMouse.y);
+        pop();
+    }
 
     // ---
     // Cup

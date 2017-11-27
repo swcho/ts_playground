@@ -1703,3 +1703,5 @@ declare function midiToFreq(midiNote: number): number;
 
 declare const CHORD;
 declare const ROUND;
+
+declare const drawingContext: CanvasRenderingContext2D;
