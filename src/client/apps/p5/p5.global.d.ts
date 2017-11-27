@@ -216,7 +216,7 @@ declare function arc(a: number, b: number, c: number, d: number, start: number, 
 /**
  * Draws an ellipse (oval) to the screen.
  */
-declare function ellipse(a: number, b: number, c: number, d: number): p5;
+declare function ellipse(a: number, b: number, c: number, d?: number): p5;
 
 /**
  * Draws a line (a direct path between two points) to the screen.
@@ -260,7 +260,7 @@ declare function noSmooth(): p5;
 //
 //   param "mode" has invalid type: Number/Constant
 //
-// declare function rectMode(mode: Number/Constant): p5;
+declare function rectMode(mode: Number | Constant): p5;
 
 /**
  * Draws all geometry with smooth (anti-aliased) edges.
@@ -277,7 +277,7 @@ declare function smooth(): p5;
 //
 //   param "join" has invalid type: Number/Constant
 //
-// declare function strokeJoin(join: Number/Constant): p5;
+declare function strokeJoin(join: Number | Constant): p5;
 
 /**
  * Sets the width of the stroke used for lines, points, and the border
@@ -970,7 +970,7 @@ declare function saveFrames(filename: string, extension: string, duration: numbe
 //   param "successCallback" has invalid type: Function(p5.Image)
 //   param "failureCallback" has invalid type: Function(Event)
 //
-// declare function loadImage(path: string, successCallback?: Function(p5.Image), failureCallback?: Function(Event)): p5.Image;
+declare function loadImage(path: string, successCallback?: (img: p5.Image) => void, failureCallback?: (evt: Event) => void): p5.Image;
 
 /**
  * Draw an image to the main canvas of the p5js sketch
@@ -1700,3 +1700,6 @@ declare function midiToFreq(midiNote: number): number;
 // declare function soundFormats(formats: string|Strings): void;
 
 // TODO: Property "{String} failedPath path to the file that failed to load", defined in lib/addons/p5.sound.js, is not a valid JS symbol name
+
+declare const CHORD;
+declare const ROUND;
