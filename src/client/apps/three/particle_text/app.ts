@@ -10,6 +10,27 @@ import * as BlurShader from './blurshader';
 import {ColorMatrixShader} from './colormatrixshader';
 
 import Stats = require('stats.js');
+import { BufferAttribute } from '../three';
+import dat = require('dat-gui');
+const CONFIG = {
+    wireframe: false,
+
+    bloom: true,
+    fxaa: true,
+    copy: true,
+    horizontalBlur: true,
+    verticalBlur: true,
+    colorMatrix: true,
+};
+
+let gui = new dat.GUI();
+gui.add(CONFIG, 'wireframe');
+gui.add(CONFIG, 'bloom');
+gui.add(CONFIG, 'fxaa');
+gui.add(CONFIG, 'copy');
+gui.add(CONFIG, 'horizontalBlur');
+gui.add(CONFIG, 'verticalBlur');
+gui.add(CONFIG, 'colorMatrix');
 
 ///////////
 // STATS //
@@ -32,14 +53,14 @@ const colorMultiplier = [0, 0, 0, -13];
 
 setTimeout(() => {
     const size = 64;
-    const particleCount = 5000;
+    const particleCount = 100;
     const lettersData = generateLetterTextures(size);
-    const particleText = new ParticleText(particleCount, lettersData, size);
+    const particleText = new ParticleText(particleCount, lettersData, size) as any;
     new Simulation('js-app', [particleText], 0, 0, 60);
 }, 0);
 
 class ParticleText extends THREE.Mesh<THREE.BAS.BasicAnimationMaterial, THREE.BAS.PrefabBufferGeometry> {
-    static createMaterial(count) {
+    static createMaterial(count: number) {
         const aLetterData = [];
         for (let i = 0; i < count; i++) {
             aLetterData.push(`attribute vec3 aLetterData${i};`);
@@ -92,8 +113,8 @@ class ParticleText extends THREE.Mesh<THREE.BAS.BasicAnimationMaterial, THREE.BA
         });
     }
 
-    static assignProps(geometry, prefabCount, lettersData, size) {
-        const aLettersData = [];
+    static assignProps(geometry: THREE.BAS.PrefabBufferGeometry, prefabCount: number, lettersData: number[][], size: number) {
+        const aLettersData: BufferAttribute[] = [];
         for (let j = 0; j < lettersData.length; j++) {
             aLettersData.push(geometry.createAttribute(`aLetterData${j}`, 3));
         }
@@ -113,7 +134,7 @@ class ParticleText extends THREE.Mesh<THREE.BAS.BasicAnimationMaterial, THREE.BA
         }
     }
 
-    constructor(prefabCount, lettersData, size) {
+    constructor(prefabCount: number, lettersData: number[][], size: number) {
         const model = new THREE.TetrahedronGeometry(1, 0);
         const geometry = new THREE.BAS.PrefabBufferGeometry(model, prefabCount);
         geometry.computeVertexNormals();
@@ -134,7 +155,7 @@ class ParticleText extends THREE.Mesh<THREE.BAS.BasicAnimationMaterial, THREE.BA
 }
 
 class Simulation {
-    constructor(domId, entities, x = 0, y = 0, z = 0) {
+    constructor(domId: string, private entities: THREE.Mesh[], x = 0, y = 0, z = 0) {
         const camera = this.createCamera(80, x, y, z, window.innerWidth, window.innerHeight);
         const target = new THREE.Vector3(0, 0, 0);
         camera.lookAt(target);
@@ -154,6 +175,12 @@ class Simulation {
         this.animate(composer, effects, renderer, scene, camera, controls, entities, +(new Date()));
     }
 
+    private bloom: THREE.UnrealBloomPass;
+    private fxaa: THREE.ShaderPass;
+    private copy: THREE.ShaderPass;
+    private horizontalBlur: THREE.ShaderPass;
+    private verticalBlur: THREE.ShaderPass;
+    private colorMatrix: THREE.ShaderPass;
     createComposerAndEffects(scene, camera, renderer) {
         const effects: any = {};
         const renderScene = new THREE.RenderPass(scene, camera);
@@ -161,22 +188,28 @@ class Simulation {
         const radius = 3.1;
         const threshold = 0.05;
         effects.bloom = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), strength, radius, threshold);
+        this.bloom = effects.bloom;
         // fast anti alias shader
         effects.fxaa = new THREE.ShaderPass(THREE.FXAAShader);
         effects.fxaa.uniforms.resolution.value.set(1 / window.innerWidth, 1 / window.innerHeight);
+        this.fxaa = effects.fxaa;
         // copy shader
         effects.copy = new THREE.ShaderPass(THREE.CopyShader);
         effects.copy.renderToScreen = true;
+        this.copy = effects.copy;
         // horizontal blur shader
         effects.horizontalBlur = new THREE.ShaderPass(BlurShader.horizontal(blurFactor, blurThreshold));
         effects.horizontalBlur.uniforms.h.value = 1 / window.innerWidth;
+        this.horizontalBlur = effects.horizontalBlur;
         // vertical blur shader
         effects.verticalBlur = new THREE.ShaderPass(BlurShader.vertical(blurFactor, blurThreshold));
         effects.verticalBlur.uniforms.v.value = 1 / window.innerHeight;
+        this.verticalBlur = effects.verticalBlur;
         // color matrix shader
         effects.colorMatrix = new THREE.ShaderPass(ColorMatrixShader);
         effects.colorMatrix.uniforms.uMatrix.value = colorMatrix;
         effects.colorMatrix.uniforms.uMultiplier.value = colorMultiplier;
+        this.colorMatrix = effects.colorMatrix;
         const composer = new THREE.EffectComposer(renderer);
         composer.setSize(window.innerWidth, window.innerHeight);
         composer.addPass(renderScene);
@@ -219,6 +252,13 @@ class Simulation {
         const currentTime = +(new Date());
         const timeDelta = currentTime - lastTime;
         entities.forEach(e => e.time += timeDelta / 1000);
+        this.bloom.enabled = CONFIG.bloom;
+        this.fxaa.enabled = CONFIG.fxaa;
+        this.copy.enabled = CONFIG.copy;
+        this.horizontalBlur.enabled = CONFIG.horizontalBlur;
+        this.verticalBlur.enabled = CONFIG.verticalBlur;
+        this.colorMatrix.enabled = CONFIG.colorMatrix;
+        this.entities.forEach(mash => mash.material['wireframe'] = CONFIG.wireframe);
         requestAnimationFrame(() => {
             this.animate(composer, effects, renderer, scene, camera, controls, entities, currentTime);
         });
@@ -261,8 +301,8 @@ class Simulation {
     }
 }
 
-function generateLetterTextures(size) {
-    const lettersData = [];
+function generateLetterTextures(size: number) {
+    const lettersData: number[][] = [];
     for (let i = 0; i < 10; i++) {
         const canvas = document.createElement('canvas');
         canvas.width = canvas.height = size;
@@ -273,13 +313,14 @@ function generateLetterTextures(size) {
         ctx.textBaseline = 'middle';
         ctx.fillText('' + i, canvas.width / 2, canvas.height / 2);
         const canvasData = ctx.getImageData(0, 0, size, size);
-        lettersData.push([]);
+        const letterData: number[] = [];
         for (let j = 0; j < canvasData.data.length / 4; j++) {
             const alpha = canvasData.data[j * 4 + 3];
             if (alpha > 0) {
-                lettersData[i].push(j);
+                letterData.push(j);
             }
         }
+        lettersData.push(letterData);
     }
     return lettersData;
 }

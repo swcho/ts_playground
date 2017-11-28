@@ -112,7 +112,21 @@ declare module 'three' {
     export const ColorCorrectionShader: THREE.Shader;
     export const FilmShader: THREE.Shader;
 
-    export class UnrealBloomPass {
+    export class Pass {
+        // if set to true, the pass is processed by the composer
+        enabled: boolean;
+
+        // if set to true, the pass indicates to swap read and write buffer after rendering
+        needsSwap: boolean;
+
+        // if set to true, the pass clears its buffer before rendering
+        clear: boolean;
+
+        // if set to true, the result of the pass is rendered to screen
+        renderToScreen: boolean;
+    }
+
+    export class UnrealBloomPass extends THREE.Pass {
         constructor(resolution?: THREE.Vector2, strength?: number, radius?: number, threshold?: number);
     }
 
