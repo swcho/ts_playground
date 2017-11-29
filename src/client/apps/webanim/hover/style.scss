@@ -1,0 +1,33 @@
+:root {
+    --blue: #23278A;
+}
+
+.grid {
+    display: grid;
+    grid-auto-columns: auto;
+    grid-auto-rows: 300px;
+    grid-gap: 10px;
+}
+
+.grid .box-cont {
+    box-sizing: border-box;
+    position: relative;
+    background-color: tomato;
+    overflow: hidden;
+}
+
+.box {
+    transform: scale(0);
+    position: absolute;
+    background-color: var(--blue);
+    border-radius: 100%;
+    will-change: transform;
+}
+
+.multiple-col {
+    grid-column: 3 / 5;
+}
+
+.multiple-row {
+    grid-row: 1 / 3;
+}
