@@ -1,0 +1,156 @@
+/* Generic styling */
+
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: sans-serif;
+    line-height: 1.5;
+    background-color: #B5C6AF;
+}
+
+h1 {
+    font-weight: 400
+}
+
+.credits {
+    margin: 2rem
+}
+
+h2 {
+    font-weight: 100
+}
+
+ul {
+    margin-left: 1rem
+}
+
+li {
+    margin: .5rem 0
+}
+
+a {
+    color: #000 !important;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: all .3s ease-out;
+    outline: 0 solid transparent;
+}
+
+a:hover,
+a:focus {
+    background-color: #fff;
+    outline: .25em solid #fff;
+}
+
+.IMG {
+    position: relative;
+    /* Maintain image aspect-ratio */
+    height: calc(100vw * 12 / 16);
+}
+
+[class^="IMG_title"] {
+    position: absolute;
+    z-index: 1;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 1rem;
+    /* Fluid-responsive font-size calculator: https://websemantics.uk/tools/responsive-font-calculator/ */
+    /* 1em(16px) @ 20em(320px) increasing to 2em(32px) @ 40em(640px) */
+    font-size: calc(1rem + ((1vw - 0.2em) * 5));
+    /* WCAG: Shadow to increase contrast around text edges */
+    text-shadow: 0 0 3px #000;
+}
+
+[class^="IMG_copy"] {
+    position: absolute;
+    white-space: nowrap;
+}
+
+.IMG_copy-1 {
+    top: 20vw;
+    left: 3.5vw;
+    font-size: 1.125em;
+}
+
+.IMG_copy-2 {
+    top: 41vw;
+    left: 3.2vw;
+    font-size: 1em;
+}
+
+.IMG_copy-3 {
+    top: 12vw;
+    left: 55.75vw;
+    font-size: 1.125em;
+}
+
+.IMG_copy-4 {
+    top: 28.75vw;
+    left: 36.1vw;
+    font-size: 0.75em;
+}
+
+.IMG_copy-4 span {
+    font-size: 2.65em;
+    vertical-align: middle;
+    display: inline-block;
+    color: rgb(255, 255, 255);
+    animation: color-rotate 4s infinite;
+}
+
+@keyframes color-rotate {
+    50% {
+        color: #6d3;
+        transform: scale(1.5)
+    }
+}
+
+.IMG_copy-5 {
+    top: 19.25vw;
+    left: 73vw;
+    font-size: 0.7em;
+}
+
+.IMG_copy-6 {
+    top: 33vw;
+    left: 71.4vw;
+    font-size: 0.85em;
+}
+
+.IMG_copy-7 {
+    top: 65vw;
+    left: 34vw;
+}
+
+.IMG_copy-7 span {
+    display: inline-block;
+    color: rgb(255, 255, 255);
+    font-size: 1.5em;
+    margin-right: .125em;
+    vertical-align: baseline;
+    animation: color-rotate-scale 2s infinite;
+}
+
+@keyframes color-rotate-scale {
+    50% {
+        color: #6d3;
+        transform: scale(1.5, 1)
+    }
+}
+
+.IMG_bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* Photo: Marcus Castro https://unsplash.com/?photo=6DivtP_WRYs */
+    background-image: url(https://images.unsplash.com/photo-1496241028573-69327bf8f9d5?w=1920);
+}
