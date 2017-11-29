@@ -22,7 +22,8 @@ let rndCol = function () {
 };
 
 namespace obj {
-    const cir = new Array(13);
+    // const cir = new Array(13);
+    const cir = new Array(2);
     const rad = 120;
     const echo = 80;
     const sp = 1.2;
@@ -40,19 +41,19 @@ namespace obj {
         return canvas.height / 2 - _y;
     }
     class Circle {
-        r: number;
-        e: boolean;
+        radius: number;
+        direction: boolean;
         max: number;
         min: number;
-        val: number;
-        col: string;
+        variation: number;
+        color: string;
         constructor(i) {
-            this.r = rad - i * rad / cir.length;
-            this.e = i % 2 ? true : false;
+            this.radius = rad - i * rad / cir.length;
+            this.direction = i % 2 ? true : false;
             this.max = Math.random() * echo;
             this.min = -Math.random() * echo;
-            this.val = Math.random() * (this.max - this.min) + this.min;
-            this.col = rndCol();
+            this.variation = Math.random() * (this.max - this.min) + this.min;
+            this.color = rndCol();
         }
     }
     function fill() {
@@ -62,21 +63,21 @@ namespace obj {
     function move(circle: Circle) {
         for (let i = 0; i < sz; i++) {
             let a = i * Math.PI * 2 / sz;
-            let _x = Math.cos(a) * (circle.r - circle.val * Math.sin(i * Math.PI / 18));
-            let _y = Math.sin(a) * (circle.r - circle.val * Math.sin(i * Math.PI / 18));
-            ctx.fillStyle = circle.col;
+            let _x = Math.cos(a) * (circle.radius - circle.variation * Math.sin(i * Math.PI / 18));
+            let _y = Math.sin(a) * (circle.radius - circle.variation * Math.sin(i * Math.PI / 18));
+            ctx.fillStyle = circle.color;
             ctx.fillRect(x(_x), y(_y), 2, 2);
         }
         check(circle);
     }
     function check(circle: Circle) {
-        circle.val = circle.e ? circle.val + sp : circle.val - sp;
-        if (circle.val < circle.min) {
-            circle.e = true;
+        circle.variation = circle.direction ? circle.variation + sp : circle.variation - sp;
+        if (circle.variation < circle.min) {
+            circle.direction = true;
             circle.max = Math.random() * echo;
         }
-        if (circle.val > circle.max) {
-            circle.e = false;
+        if (circle.variation > circle.max) {
+            circle.direction = false;
             circle.min = -Math.random() * echo;
         }
     }
