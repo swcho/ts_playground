@@ -82,19 +82,33 @@ function ddt_r(z, t, p, q) {
     ) / pow(_s(z, t, p, q), 2);
 }
 
-interface Root {
+interface RootTemp {
     ok: boolean;
     z?: number;
     t?: number;
     r?: number;
 }
 let epsilon = 1e-10;
+
+export interface Vector2 {
+    0: number;
+    1: number;
+}
+
+export interface Root {
+    a: Vector2;
+    b: Vector2;
+    r: number;
+    mod_a: number;
+    arg_a: number;
+}
+
 /**
  *
  * @param p Number of arms
  * @param q NUmber of arms
  */
-export function doyle(p, q) {
+export function doyle(p, q): Root {
     // We want to find (z, t) such that:
     //    _r(z,t,0,1) = _r(z,t,p,q) = _r(pow(z, p/q), (p*t + 2*pi)/q, 0,1)
     //
@@ -126,8 +140,8 @@ export function doyle(p, q) {
     }
 
 
-    function find_root(z, t): Root {
-        for (; ;) {
+    function find_root(z, t): RootTemp {
+        for (; ; ) {
             let v_f = _f(z, t),
                 v_g = _g(z, t);
             if (-epsilon < v_f && v_f < epsilon && -epsilon < v_g && v_g < epsilon)
@@ -149,8 +163,8 @@ export function doyle(p, q) {
     let root = find_root(2, 0);
     if (!root.ok) throw 'Failed to find root for p=' + p + ', q=' + q;
 
-    let a = [root.z * cos(root.t), root.z * sin(root.t)],
+    let a = [root.z * cos(root.t), root.z * sin(root.t)] as any,
         coroot = { z: pow(root.z, p / q), t: (p * root.t + 2 * pi) / q },
-        b = [coroot.z * cos(coroot.t), coroot.z * sin(coroot.t)];
+        b = [coroot.z * cos(coroot.t), coroot.z * sin(coroot.t)] as any;
     return { a: a, b: b, r: root.r, mod_a: root.z, arg_a: root.t };
 };
