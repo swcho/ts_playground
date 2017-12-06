@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <title>Centering in CSS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/themes/prism.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Vertical &amp; horizontal centring*</h1>
+
+    <section class="container-float">
+
+        <div class="centered-float">
+            <figcaption>IE9+</figcaption>
+            <figure>
+                <pre><code class="language-css" spellcheck="false" contenteditable="">[class^=&quot;container-float&quot;] {
+  height: 100vh; /* Unit irrelevant */
+}
+[class^=&quot;container-float&quot;]::after {
+  content: &quot;&quot;;
+  display: table;
+  clear: both;
+}
+[class^=&quot;centered-float&quot;] {
+  position: relative;
+  float: left; /* Collapses box */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}</code></pre>
+            </figure>
+        </div>
+
+    </section>
+
+
+
+    <section class="container-noFixedHeight">
+        <div class="centered-noFixedHeight">
+
+            <figure>
+                <figcaption>IE9+</figcaption>
+                <pre><code class="language-css" spellcheck="false" contenteditable="">[class^=&quot;container-noFixedHeight&quot;] {
+  position: relative;
+  min-height: 100vh; /* Unit irrelevant */
+}
+[class^=&quot;centered-noFixedHeight&quot;] {
+  position: absolute; /* Collapses box */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}</code></pre>
+            </figure>
+
+        </div>
+    </section>
+
+
+
+    <section class="container-absolute">
+        <div class="centered-absolute">
+
+            <figure>
+                <figcaption>IE9+</figcaption>
+                <pre><code class="language-css" spellcheck="false" contenteditable="">[class^=&quot;container-absolute&quot;] {
+  position: relative;
+  height: 100vh; /* Unit irrelevant */
+}
+[class^=&quot;centered-absolute&quot;] {
+  position: absolute; /* Collapses box */
+  width: 50%; /* Requires fixed width in IE9 */
+  max-height: 18.5rem;
+  top: 0; left: 0; bottom: 0; right: 0;
+  margin: auto;
+}</code></pre>
+            </figure>
+
+        </div>
+    </section>
+
+
+
+    <section class="container-flexbox">
+        <div class="centered-flexbox">
+
+            <figure>
+                <figcaption>IE10+ (preferred method)</figcaption>
+                <pre><code class="language-css" spellcheck="false" contenteditable="">.container-flexbox { 
+  height: 100vh; /* Unit irrelevant */
+  display: flex; /* Collapses box */
+  align-items: center;
+  justify-content: center;
+}
+.centered-flexbox {
+}</code></pre>
+            </figure>
+
+        </div>
+    </section>
+
+
+
+    <section class="container-section">
+        <div class="centered-div">
+            <span class="centered-span">
+                Centre?
+            </span>
+        </div>
+    </section>
+
+
+    <section class="container-float-4">
+        <div class="centered-float-4">
+
+            <p>More options and variants:
+                <a class="lnk" href="https://www.smashingmagazine.com/2013/08/absolute-horizontal-vertical-centering-css/" target="_blank" title="[new window]">Absolute horizontal vertical centering CSS</a>
+
+                </p><p>Photos:
+                    <a target="_blank" title="[new window]" href="https://unsplash.com/">Unsplash</a>
+
+                    </p><p>*Brit eh?
+                        <br>Why do I prefer British Oxford English &quot;centre&quot; over the American Webster &quot;center&quot; but completely
+                        dislike &quot;centring&quot; versus &quot;centering&quot;?
+                        <br>Both written and vernacular.</p>
+
+                    <p>
+                        <a target="_blank" title="[new window]" href="https://codepen.io/2kool2/pens/popular/?grid_type=list#">Pens by Mike Foskett</a> &#x2014;
+                        <a target="_blank" title="[new window]" href="https://websemantics.uk/">webSemantics</a>
+                    </p>
+
+        </div>
+    </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.8.4/prism.min.js"></script>
+
+<script type="text/javascript" src="//swcho.github.io/ts_playground/dist/client/assets/css/layout_center.de16cff154beea67e683.js"></script></body>
+
+</html>

@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <title>Lava Lamp</title>
+</head>
+
+<body>
+<div class="lamp-lava">
+	<div class="top"></div>
+	<div class="lamp">
+		<div class="glass-reflection"></div>
+		<div class="glass">
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="0" height="0">
+  <defs>
+    <filter id="goo">
+  <fegaussianblur in="SourceGraphic" stddeviation="10" result="blur">
+  <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0 
+                                                 0 1 0 0 0 
+                                                 0 0 1 0 0 
+                                                 0 0 0 19 -9" result="color">
+  <!-- <feComposite in="SourceGraphic" in2="color" operator="atop"/> -->
+  <fecomposite in="SourceGraphic" in2="color" operator="in">
+  	</fecomposite></fecolormatrix></fegaussianblur></filter>
+  </defs>
+</svg>
+<script type="text/javascript" src="//swcho.github.io/ts_playground/dist/client/assets/css/effect_lavalamp.35ae7b435c8716110a39.js"></script></body>
+
+</html>

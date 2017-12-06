@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <title>Canvas: </title>
+</head>
+<style>
+    body {
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #BBCCB6;
+    }
+
+    canvas {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+        background: #E9F0C9;
+        filter: drop-shadow(26px 26px 20px hsla(0, 0%, 0%, 0.5));
+        border: 2px solid #333838;
+    }
+</style>
+
+<body>
+    <canvas id="canv"></canvas>
+    <!-- 
+***Might be a little funky in OS X Firefox.
+
+"Droste Effect" Spiral composed of contiguous Equilateral triangles.
+
+Droste Effect is a pattern appearing recursively within itself; the smaller version contains an even smaller version of the pattern, and so on.
+!-->
+<script type="text/javascript" src="//swcho.github.io/ts_playground/dist/client/assets/canvas/droste.0c2a5fee41ee53373602.js"></script></body>
+
+</html>
