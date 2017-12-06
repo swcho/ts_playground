@@ -256,6 +256,10 @@
   version "2.0.35"
   resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.35.tgz#7b7c950c7d54593e23bffc8d2b4feba9866a7277"
 
+"@types/isomorphic-fetch@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.34.tgz#3c3483e606c041378438e951464f00e4e60706d6"
+
 "@types/jquery.transit@^0.9.28":
   version "0.9.29"
   resolved "https://registry.yarnpkg.com/@types/jquery.transit/-/jquery.transit-0.9.29.tgz#f99f56291d803c3ed71dc48abdcce8affbe9e024"
@@ -311,6 +315,12 @@
   resolved "https://registry.yarnpkg.com/@types/plotly.js/-/plotly.js-1.28.9.tgz#a8cfa28fe11a3d037c5f6615bb075a3c5579a3c5"
   dependencies:
     "@types/d3" "*"
+
+"@types/react-data-grid@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@types/react-data-grid/-/react-data-grid-2.0.7.tgz#d6400f1217836ed5c4157e8356c977bb3f1e452e"
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-dom@^0.14.23":
   version "0.14.23"
@@ -3898,7 +3908,7 @@ isobject@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.0.tgz#39565217f3661789e8a0a0c080d5f7e6bc46e1a0"
 
-isomorphic-fetch@2.2.1, isomorphic-fetch@^2.1.1:
+isomorphic-fetch@2.2.1, isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -5769,6 +5779,10 @@ react-addons-test-utils@^15.4.0:
 react-collapse@2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-2.3.1.tgz#2b164259ecd6fd749f4a187d35bdf0030bb60093"
+
+react-data-grid@^2.0.78:
+  version "2.0.78"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-2.0.78.tgz#f9dde48a804d19da28916ef7daa09a58abe633c6"
 
 react-deep-force-update@^2.0.1:
   version "2.0.1"

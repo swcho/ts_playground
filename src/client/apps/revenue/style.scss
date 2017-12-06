@@ -1,3 +1,8 @@
+
+div {
+    font-family: Courier New, Courier, monospace;
+}
+
 table.type11 {
     border-collapse: separate;
     border-spacing: 1px;
@@ -21,4 +26,8 @@ table.type11 td {
     vertical-align: top;
     border-bottom: 1px solid #ccc;
     background: #eee;
+}
+
+.money {
+    text-align: right;
 }
