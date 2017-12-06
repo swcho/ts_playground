@@ -1,8 +1,6 @@
 
-import * as path from 'path';
+/// <reference path='../../common/config.d.ts'/>
 
-import * as assert from 'assert';
-import * as debug from 'debug';
 import * as fs from 'fs-extra';
 import * as cheerio from 'cheerio';
 
@@ -80,7 +78,7 @@ export class ClientPlugin {
                         html
                     };
                     const files = entry.chunks.map((chunk) => chunk.files[0]);
-                    out_html(compilation.outputOptions, htmlPath, html, config, files); //compilation.assets);
+                    out_html(compilation.outputOptions, htmlPath, html, config, files); // compilation.assets);
                 }
             });
             callback();

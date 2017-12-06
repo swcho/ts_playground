@@ -111,6 +111,22 @@ const TEST: TransactionItem[] = [
         qty: 1,
         charge: 0.75,
     },
+    {
+        date: Date.now(),
+        type: 'BUY',
+        kind: 'BTC',
+        unit: 17578000,
+        qty: 0.01,
+        charge: 0.75,
+    },
+    {
+        date: Date.now(),
+        type: 'BUY',
+        kind: 'BTC',
+        unit: 18000000,
+        qty: 0.1,
+        charge: 0.75,
+    },
 ];
 
 export function getData(): TransactionItem[] {

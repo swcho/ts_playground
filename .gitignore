@@ -3,3 +3,4 @@ out/
 npm-debug.log*
 .tscache/
 .baseDir.ts
+src/client/assets
