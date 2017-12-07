@@ -1,4 +1,8 @@
 
+* {
+    box-sizing: border-box;
+}
+
 div {
     font-family: Courier New, Courier, monospace;
 }
@@ -30,4 +34,15 @@ table.type11 td {
 
 .money {
     text-align: right;
+}
+
+.react-grid-HeaderCell {
+    text-align: center;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
+}
+.react-grid-Cell{
+    text-align: center;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
 }

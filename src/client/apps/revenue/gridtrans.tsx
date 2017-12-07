@@ -5,7 +5,7 @@ import {DateFormatter, MoneyFormatter} from './formatters';
 import {TransactionItem, getExpenses} from './transation';
 
 interface TransactionRowItem extends TransactionItem {
-    expenses: number;
+    expense: number;
 }
 
 interface TransactionColum extends ReactDataGrid.Column {
@@ -14,26 +14,26 @@ interface TransactionColum extends ReactDataGrid.Column {
 
 const COLUMNS: TransactionColum[] = [{
     key: 'date',
-    name: '날짜',
+    name: 'Date',
     formatter: DateFormatter,
 }, {
     key: 'type',
-    name: '거래',
+    name: 'Type',
 }, {
     key: 'kind',
-    name: '종류',
+    name: 'Kind',
 }, {
     key: 'unit',
-    name: '단가',
+    name: 'Unit',
     formatter: MoneyFormatter,
 }, {
     key: 'qty',
-    name: '수량',
+    name: 'Qty.',
 }, {
     key: 'charge',
     name: '수수료',
 }, {
-    key: 'expenses',
+    key: 'expense',
     name: '합',
     formatter: MoneyFormatter,
 }];
@@ -52,7 +52,7 @@ export class GridTransaction extends React.Component<{
                     const item = transactions[index];
                     return {
                         ...item,
-                        expenses: getExpenses(item),
+                        expense: getExpenses(item),
                     };
                 }}
                 rowsCount={transactions.length}

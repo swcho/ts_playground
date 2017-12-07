@@ -70,7 +70,7 @@ class Component extends React.Component<{}, {
                             type: item.type,
                             current,
                             expected: sell_price,
-                            total: sum.expenses,
+                            expenses: sum.expenses,
                             return: sell_price - sum.expenses,
                         };
                     }}

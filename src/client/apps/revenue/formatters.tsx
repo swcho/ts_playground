@@ -26,7 +26,7 @@ export class MoneyFormatter extends React.Component<{
         } = this.props;
         return (
             <div className='money'>
-            {formatMoney(value)}
+            {formatMoney(value, 0)}
             </div>
         );
     }

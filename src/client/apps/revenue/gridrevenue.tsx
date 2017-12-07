@@ -9,7 +9,7 @@ interface RevenueRowItem {
     type: CoinType;
     current: number;
     expected: number;
-    total: number;
+    expenses: number;
     return: number;
     ratio?: number;
 }
@@ -20,26 +20,26 @@ interface RevenueColum extends ReactDataGrid.Column {
 
 const COLUMNS: RevenueColum[] = [{
     key: 'type',
-    name: '종류',
+    name: 'Type',
 }, {
     key: 'current',
-    name: '시세',
+    name: 'Current',
     formatter: MoneyFormatter,
 }, {
     key: 'expected',
-    name: '예상입금',
+    name: 'Expected',
     formatter: MoneyFormatter,
 }, {
-    key: 'total',
-    name: '투자금액',
+    key: 'expenses',
+    name: 'Expenses',
     formatter: MoneyFormatter,
 }, {
     key: 'return',
-    name: '예상수익',
+    name: 'Return',
     formatter: MoneyFormatter,
 }, {
     key: 'ratio',
-    name: '예상수익률',
+    name: 'Ratio',
 }];
 
 export class GridRevenue extends React.Component<{
