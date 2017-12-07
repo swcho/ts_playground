@@ -77,7 +77,7 @@ export class RatioFormatter extends React.Component<{
         }
         return (
             <div className={classNames.join(' ')}>
-            {Math.round(value * 1000) / 10}%
+            {Math.round(value * 100000) / 1000}%
             </div>
         );
     }

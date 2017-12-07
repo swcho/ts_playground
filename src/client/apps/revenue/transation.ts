@@ -1,14 +1,14 @@
 
 import {CoinType} from './common';
 
-export type TransactionType = 'BUY' | 'SELL';
+export type TransactionOrder = 'BUY' | 'SELL';
 
 export type Won = number;
 
 export interface TransactionItem {
     date: number;
-    type: TransactionType;
-    kind: CoinType;
+    order: TransactionOrder;
+    type: CoinType;
     unit: Won;
     qty: number;
     charge: number;
@@ -17,123 +17,123 @@ export interface TransactionItem {
 const TEST: TransactionItem[] = [
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 14461000,
         qty: 0.01,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 14600000,
         qty: 0.01,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 14700000,
         qty: 0.01,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 15874000,
         qty: 0.01,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 16044000,
         qty: 0.01,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 16140000,
         qty: 0.05,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 15450000,
         qty: 0.02,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'ETH',
+        order: 'BUY',
+        type: 'ETH',
         unit: 554000,
         qty: 1,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'DASH',
+        order: 'BUY',
+        type: 'DASH',
         unit: 921500,
         qty: 0.5,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'ETC',
+        order: 'BUY',
+        type: 'ETC',
         unit: 34430,
         qty: 5,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'ETC',
+        order: 'BUY',
+        type: 'ETC',
         unit: 33880,
         qty: 5,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'DASH',
+        order: 'BUY',
+        type: 'DASH',
         unit: 890000,
         qty: 1,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 17578000,
         qty: 0.01,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 18000000,
         qty: 0.1,
-        charge: 0.75,
+        charge: 0.00075,
     },
     {
         date: Date.now(),
-        type: 'BUY',
-        kind: 'BTC',
+        order: 'BUY',
+        type: 'BTC',
         unit: 18294000,
         qty: 0.02,
-        charge: 0.075,
+        charge: 0.00075,
     },
 ];
 

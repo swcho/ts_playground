@@ -17,11 +17,11 @@ const COLUMNS: TransactionColum[] = [{
     name: 'Date',
     formatter: DateFormatter,
 }, {
+    key: 'order',
+    name: 'Order',
+}, {
     key: 'type',
     name: 'Type',
-}, {
-    key: 'kind',
-    name: 'Kind',
 }, {
     key: 'unit',
     name: 'Unit',

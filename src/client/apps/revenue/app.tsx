@@ -17,19 +17,19 @@ import {GridRevenue, RevenueRowItem} from './gridrevenue';
 const transactions = getData();
 
 const sums: {[type in CoinType]?: {qty: number; expenses: number}} = transactions.reduce(function(ret, d) {
-    if (!ret[d.kind]) {
-        ret[d.kind] = {
+    if (!ret[d.type]) {
+        ret[d.type] = {
             qty: 0,
             expenses: 0,
         };
     }
-    const sum = ret[d.kind];
+    const sum = ret[d.type];
     sum.qty += d.qty;
     sum.expenses += getExpenses(d);
     return ret;
 }, {});
 
-const types = Array.from(new Set(transactions.map(d => d.kind)));
+const types = Array.from(new Set(transactions.map(d => d.type)));
 
 transactions.forEach(function(d) {
 });
@@ -61,15 +61,16 @@ class Component extends React.Component<{}, {
         let sumReturn = 0;
         tickerItems.forEach((item) => {
             const sum = sums[item.type];
-            const current = parseInt(item.ticker.data.closing_price);
-            const sell_price = current * sum.qty;
+            const currentUnit = parseInt(item.ticker.data.closing_price);
+            const sell_price = currentUnit * sum.qty;
             const ret = sell_price - sum.expenses;
             sumExpected += sell_price;
             sumExpenses += sum.expenses;
             sumReturn += ret;
             revenueItems.push({
                 type: item.type,
-                current,
+                currentUnit,
+                expensesUnit: sum.expenses / sum.qty,
                 expected: sell_price,
                 expenses: sum.expenses,
                 return: ret,
@@ -78,7 +79,8 @@ class Component extends React.Component<{}, {
         });
         revenueItems.push({
             type: 'ALL',
-            current: 0,
+            currentUnit: 0,
+            expensesUnit: 0,
             expected: sumExpected,
             expenses: sumExpenses,
             return: sumReturn,
