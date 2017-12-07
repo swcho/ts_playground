@@ -8,67 +8,15 @@ import './style.scss';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
-import * as ReactDataGrid from 'react-data-grid';
 import {CoinType} from './common';
-import {DateFormatter, MoneyFormatter} from './formatters';
-import {TransactionItem, getData} from './transation';
+import {getData, getExpenses} from './transation';
 import {getTicker, Ticker} from './bithumb';
-import {Revenue} from './revenue';
+import {GridTransaction} from './gridtrans';
+import {GridRevenue} from './gridrevenue';
 
-const data = getData();
+const transactions = getData();
 
-interface TransactionRowItem extends TransactionItem {
-    expenses: number;
-}
-
-interface TransactionColum extends ReactDataGrid.Column {
-    key: keyof TransactionRowItem;
-}
-
-const COLUMNS: TransactionColum[] = [{
-    key: 'date',
-    name: '날짜',
-    formatter: DateFormatter,
-}, {
-    key: 'type',
-    name: '거래',
-}, {
-    key: 'kind',
-    name: '종류',
-}, {
-    key: 'unit',
-    name: '단가',
-    formatter: MoneyFormatter,
-}, {
-    key: 'qty',
-    name: '수량',
-}, {
-    key: 'charge',
-    name: '수수료',
-}, {
-    key: 'expenses',
-    name: '합',
-    formatter: MoneyFormatter,
-}];
-
-
-function getExpenses(item: TransactionItem) {
-    return item.unit * item.qty * (1 + item.charge / 100);
-}
-
-function rowGetter(rowIndex: number): TransactionRowItem {
-    const item = data[rowIndex];
-    return {
-        ...item,
-        expenses: getExpenses(item),
-    };
-}
-
-function rowLength() {
-    return data.length;
-}
-
-const sums: {[type in CoinType]?: {qty: number; expenses: number}} = data.reduce(function(ret, d) {
+const sums: {[type in CoinType]?: {qty: number; expenses: number}} = transactions.reduce(function(ret, d) {
     if (!ret[d.kind]) {
         ret[d.kind] = {
             qty: 0,
@@ -80,11 +28,10 @@ const sums: {[type in CoinType]?: {qty: number; expenses: number}} = data.reduce
     sum.expenses += getExpenses(d);
     return ret;
 }, {});
-console.log(sums);
 
-const types = Array.from(new Set(data.map(d => d.kind)));
+const types = Array.from(new Set(transactions.map(d => d.kind)));
 
-data.forEach(function(d) {
+transactions.forEach(function(d) {
 });
 
 
@@ -110,12 +57,10 @@ class Component extends React.Component<{}, {
         } = this.state;
         return (
             <div>
-                <ReactDataGrid
-                    columns={COLUMNS}
-                    rowGetter={rowGetter}
-                    rowsCount={rowLength()}
+                <GridTransaction
+                    transactions={transactions}
                 />
-                <Revenue
+                <GridRevenue
                     getter={(index) => {
                         const item = tickerItems[index];
                         const sum = sums[item.type];

@@ -42,7 +42,7 @@ const COLUMNS: RevenueColum[] = [{
     name: '예상수익률',
 }];
 
-export class Revenue extends React.Component<{
+export class GridRevenue extends React.Component<{
     getter: (index: number) => RevenueRowItem;
     count: number;
 }, {}> {
