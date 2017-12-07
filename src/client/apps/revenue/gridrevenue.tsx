@@ -3,9 +3,9 @@ import * as React from 'react';
 import * as ReactDataGrid from 'react-data-grid';
 
 import {CoinType} from './common';
-import {MoneyFormatter} from './formatters';
+import {MoneyFormatter, MoneySignFormatter, RationSignFormatter} from './formatters';
 
-interface RevenueRowItem {
+export interface RevenueRowItem {
     type: CoinType;
     current: number;
     expected: number;
@@ -36,10 +36,11 @@ const COLUMNS: RevenueColum[] = [{
 }, {
     key: 'return',
     name: 'Return',
-    formatter: MoneyFormatter,
+    formatter: MoneySignFormatter,
 }, {
     key: 'ratio',
     name: 'Ratio',
+    formatter: RationSignFormatter,
 }];
 
 export class GridRevenue extends React.Component<{

@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import * as ReactDataGrid from 'react-data-grid';
-import {DateFormatter, MoneyFormatter} from './formatters';
+import {DateFormatter, MoneyFormatter, RatioFormatter} from './formatters';
 import {TransactionItem, getExpenses} from './transation';
 
 interface TransactionRowItem extends TransactionItem {
@@ -31,10 +31,11 @@ const COLUMNS: TransactionColum[] = [{
     name: 'Qty.',
 }, {
     key: 'charge',
-    name: '수수료',
+    name: 'Charge',
+    formatter: RatioFormatter
 }, {
     key: 'expense',
-    name: '합',
+    name: 'Expense',
     formatter: MoneyFormatter,
 }];
 

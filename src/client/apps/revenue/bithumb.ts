@@ -23,7 +23,7 @@ export interface Ticker {
 
 export async function getTicker(types: CoinType[], cb: (ret: Ticker[]) => void) {
     cb(await Promise.all(types.map(t => fetchJson<Ticker>(URL_TICKER(t)))));
-    setInterval(async function() {
+    setTimeout(async function() {
         cb(await Promise.all(types.map(t => fetchJson<Ticker>(URL_TICKER(t)))));
     }, 1000);
 };

@@ -8,11 +8,11 @@ import './style.scss';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
-import {CoinType} from './common';
+import {CoinType, returnRatio} from './common';
 import {getData, getExpenses} from './transation';
 import {getTicker, Ticker} from './bithumb';
 import {GridTransaction} from './gridtrans';
-import {GridRevenue} from './gridrevenue';
+import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
 const transactions = getData();
 
@@ -55,26 +55,43 @@ class Component extends React.Component<{}, {
         const {
             tickerItems,
         } = this.state;
+        const revenueItems: RevenueRowItem[] = [];
+        let sumExpected = 0;
+        let sumExpenses = 0;
+        let sumReturn = 0;
+        tickerItems.forEach((item) => {
+            const sum = sums[item.type];
+            const current = parseInt(item.ticker.data.closing_price);
+            const sell_price = current * sum.qty;
+            const ret = sell_price - sum.expenses;
+            sumExpected += sell_price;
+            sumExpenses += sum.expenses;
+            sumReturn += ret;
+            revenueItems.push({
+                type: item.type,
+                current,
+                expected: sell_price,
+                expenses: sum.expenses,
+                return: ret,
+                ratio: returnRatio(sum.expenses, sell_price),
+            });
+        });
+        revenueItems.push({
+            type: 'ALL',
+            current: 0,
+            expected: sumExpected,
+            expenses: sumExpenses,
+            return: sumReturn,
+            ratio: returnRatio(sumExpenses, sumExpected),
+        });
         return (
             <div>
                 <GridTransaction
                     transactions={transactions}
                 />
                 <GridRevenue
-                    getter={(index) => {
-                        const item = tickerItems[index];
-                        const sum = sums[item.type];
-                        const current = parseInt(item.ticker.data.closing_price);
-                        const sell_price = current * sum.qty;
-                        return {
-                            type: item.type,
-                            current,
-                            expected: sell_price,
-                            expenses: sum.expenses,
-                            return: sell_price - sum.expenses,
-                        };
-                    }}
-                    count={tickerItems.length}
+                    getter={(index) => revenueItems[index]}
+                    count={tickerItems.length + 1}
                 />
             </div>
         );

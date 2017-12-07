@@ -32,7 +32,7 @@ table.type11 td {
     background: #eee;
 }
 
-.money {
+.align-right {
     text-align: right;
 }
 
@@ -45,4 +45,14 @@ table.type11 td {
     text-align: center;
     border-right: 1px solid #eee;
     border-bottom: 1px solid #ddd;
+}
+
+.gain {
+    color: white;
+    background-color: MediumSeaGreen,
+}
+
+.loss {
+    color: white;
+    background-color: LightCoral,
 }
