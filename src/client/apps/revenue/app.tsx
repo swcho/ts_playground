@@ -92,9 +92,8 @@ class Component extends React.Component<{}, {
             tickerItems,
         } = this.state;
         const revenueItems: RevenueRowItem[] = [];
-        let sumExpected = 0;
-        let sumExpenses = 0;
-        let sumIncomes = 0;
+        let sum_sell_price = 0;
+        let sum_buy_price = 0;
         let sumReturn = 0;
         tickerItems.forEach((item) => {
             const sum = sums[item.type];
@@ -103,9 +102,8 @@ class Component extends React.Component<{}, {
             const sell_price = currentUnit * qty * (1 - 0.00075);
             const buy_price = sum.accExpenses;
             const ret = sell_price - buy_price;
-            sumExpected += sell_price;
-            sumExpenses += sum.expenses;
-            sumIncomes += sum.incomes;
+            sum_sell_price += sell_price;
+            sum_buy_price += buy_price;
             sumReturn += ret;
             revenueItems.push({
                 type: item.type,
@@ -122,7 +120,7 @@ class Component extends React.Component<{}, {
             avgUnit: 0,
             qty: 0,
             return: sumReturn,
-            ratio: returnRatio(sumExpenses, sumExpected),
+            ratio: returnRatio(sum_buy_price, sum_sell_price),
         });
         return (
             <div>
