@@ -2,10 +2,12 @@
 import * as React from 'react';
 import * as ReactDataGrid from 'react-data-grid';
 import {DateFormatter, MoneyFormatter, RatioFormatter} from './formatters';
-import {TransactionItem, getExpenses} from './transation';
+import {TransactionItem} from './transation';
 
-interface TransactionRowItem extends TransactionItem {
-    expense: number;
+export interface TransactionRowItem extends TransactionItem {
+    price: number;
+    accQty: number;
+    accExpenses: number;
 }
 
 interface TransactionColum extends ReactDataGrid.Column {
@@ -34,8 +36,8 @@ const COLUMNS: TransactionColum[] = [{
     name: 'Charge',
     formatter: RatioFormatter
 }, {
-    key: 'expense',
-    name: 'In/Out',
+    key: 'price',
+    name: 'Price',
     formatter: MoneyFormatter,
     // formatter: function(props) {
     //     return (
@@ -43,10 +45,17 @@ const COLUMNS: TransactionColum[] = [{
     //     );
     // },
     // getRowMetaData: (row) => row
+}, {
+    key: 'accQty',
+    name: 'Acc. Qty',
+}, {
+    key: 'accExpenses',
+    name: 'Acc. Expenses',
+    formatter: MoneyFormatter,
 }];
 
 export class GridTransaction extends React.Component<{
-    transactions: TransactionItem[];
+    transactions: TransactionRowItem[];
 }, {}> {
     render() {
         const {
@@ -55,13 +64,7 @@ export class GridTransaction extends React.Component<{
         return (
             <ReactDataGrid
                 columns={COLUMNS}
-                rowGetter={(index) => {
-                    const item = transactions[index];
-                    return {
-                        ...item,
-                        expense: getExpenses(item),
-                    };
-                }}
+                rowGetter={(index) => transactions[index]}
                 rowsCount={transactions.length}
             />
         );

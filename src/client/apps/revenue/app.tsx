@@ -9,41 +9,60 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
 import {CoinType, returnRatio} from './common';
-import {getData, getExpenses} from './transation';
+import {getData, getExpense, getIncome} from './transation';
 import {getTicker, Ticker} from './bithumb';
-import {GridTransaction} from './gridtrans';
+import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
 const transactions = getData();
 
-const sums: {[type in CoinType]?: {
+const transactionRowItems: TransactionRowItem[] = [];
+
+interface SumTotal {
     qty: number;
     expenses: number;
+    accExpenses: number;
     incomes: number;
-}} = transactions.reduce(function(ret, d) {
-    if (!ret[d.type]) {
-        ret[d.type] = {
+}
+
+const sums: {[type in CoinType]?: SumTotal} = {};
+const prevAvgUnit = 0;
+transactions.forEach(function(t, i) {
+    let price = 0;
+
+    if (!sums[t.type]) {
+        sums[t.type] = {
             qty: 0,
             expenses: 0,
+            accExpenses: 0,
             incomes: 0,
         };
     }
-    const sum = ret[d.type];
-    if (d.order === 'BUY') {
-        sum.qty += d.qty;
-        sum.expenses += getExpenses(d);
-    } else if (d.order === 'SELL') {
-        sum.qty -= d.qty;
-        sum.incomes += getExpenses(d);
+    const sum = sums[t.type];
+    // const prevTotal = prevAvgUnit * (sum.expensesQty - sum.incomesQty);
+    if (t.order === 'BUY') {
+        price = getExpense(t);
+        sum.qty += t.qty;
+        sum.expenses += price;
+        sum.accExpenses += price;
+    } else if (t.order === 'SELL') {
+        price = getIncome(t);
+        sum.accExpenses -= (sum.accExpenses / sum.qty) * t.qty;
+        sum.qty -= t.qty;
+        sum.incomes += price;
     }
-    return ret;
-}, {});
 
-const types = Array.from(new Set(transactions.map(d => d.type)));
+    // const avgUnit = sum.expenses / (sum.expensesQty - sum.incomesQty);
+    transactionRowItems.push({
+        ...t,
+        price,
+        accQty: sum.qty,
+        accExpenses: sum.accExpenses,
+    });
 
-transactions.forEach(function(d) {
 });
 
+const types = Array.from(new Set(transactions.map(d => d.type)));
 
 interface TickerItem {
     type: CoinType;
@@ -73,8 +92,10 @@ class Component extends React.Component<{}, {
         tickerItems.forEach((item) => {
             const sum = sums[item.type];
             const currentUnit = parseInt(item.ticker.data.closing_price);
-            const sell_price = currentUnit * sum.qty;
-            const ret = sell_price - sum.expenses;
+            const qty = sum.qty;
+            const sell_price = currentUnit * qty * (1 - 0.00075);
+            const buy_price = sum.accExpenses;
+            const ret = sell_price - buy_price;
             sumExpected += sell_price;
             sumExpenses += sum.expenses;
             sumIncomes += sum.incomes;
@@ -82,28 +103,24 @@ class Component extends React.Component<{}, {
             revenueItems.push({
                 type: item.type,
                 currentUnit,
-                sellUnit: sum.qty ? sum.expenses / sum.qty : 0,
-                expected: sell_price,
-                expenses: sum.expenses,
-                incomes: sum.incomes,
+                avgUnit: sum.accExpenses / qty,
+                qty: qty,
                 return: ret,
-                ratio: returnRatio(sum.expenses, sell_price),
+                ratio: returnRatio(buy_price, sell_price),
             });
         });
         revenueItems.push({
             type: 'ALL',
             currentUnit: 0,
-            sellUnit: 0,
-            expected: sumExpected,
-            expenses: sumExpenses,
-            incomes: sumIncomes,
+            avgUnit: 0,
+            qty: 0,
             return: sumReturn,
             ratio: returnRatio(sumExpenses, sumExpected),
         });
         return (
             <div>
                 <GridTransaction
-                    transactions={transactions}
+                    transactions={transactionRowItems}
                 />
                 <GridRevenue
                     getter={(index) => revenueItems[index]}

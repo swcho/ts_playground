@@ -173,6 +173,10 @@ export function getData(): TransactionItem[] {
     return TEST;
 }
 
-export function getExpenses(item: TransactionItem) {
-    return item.unit * item.qty * (1 + item.charge / 100);
+export function getExpense(item: TransactionItem) {
+    return item.unit * item.qty * (1 + item.charge);
+}
+
+export function getIncome(item: TransactionItem) {
+    return item.unit * item.qty * (1 - item.charge);
 }

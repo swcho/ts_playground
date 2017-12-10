@@ -8,10 +8,8 @@ import {MoneyFormatter, MoneySignFormatter, RationSignFormatter} from './formatt
 export interface RevenueRowItem {
     type: CoinType;
     currentUnit: number;
-    sellUnit: number;
-    expected: number;
-    expenses: number;
-    incomes: number;
+    avgUnit: number;
+    qty: number;
     return: number;
     ratio?: number;
 }
@@ -28,21 +26,12 @@ const COLUMNS: RevenueColum[] = [{
     name: 'Unit',
     formatter: MoneyFormatter,
 }, {
-    key: 'sellUnit',
-    name: 'Sell Unit',
+    key: 'avgUnit',
+    name: 'Avg. Unit',
     formatter: MoneyFormatter,
 }, {
-    key: 'expected',
-    name: 'Expected',
-    formatter: MoneyFormatter,
-}, {
-    key: 'expenses',
-    name: 'Expenses',
-    formatter: MoneyFormatter,
-}, {
-    key: 'incomes',
-    name: 'incomes',
-    formatter: MoneyFormatter,
+    key: 'qty',
+    name: 'Acc. Qty',
 }, {
     key: 'return',
     name: 'Return',
