@@ -24,6 +24,10 @@
   dependencies:
     "@types/node" "*"
 
+"@types/crypto-js@^3.1.38":
+  version "3.1.38"
+  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.38.tgz#e1367f773edde2986ba9aebee3bf1cdf3e818a5d"
+
 "@types/d3-array@*":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-1.2.1.tgz#e489605208d46a1c9d980d2e5772fa9c75d9ec65"
@@ -1636,6 +1640,10 @@ crypto-browserify@^3.11.0:
     pbkdf2 "^3.0.3"
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
+
+crypto-js@^3.1.9-1:
+  version "3.1.9-1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
 
 csproj2ts@^0.0.8:
   version "0.0.8"

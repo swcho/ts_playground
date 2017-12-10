@@ -10,7 +10,7 @@ import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
 import {CoinType, returnRatio} from './common';
 import {getData, getExpense, getIncome} from './transation';
-import {getTicker, Ticker} from './bithumb';
+import {getTicker, TickerResp, getOrderInfo, getUserTransactions} from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
@@ -73,7 +73,7 @@ const types = Array.from(new Set(transactions.map(d => d.type)));
 
 interface TickerItem {
     type: CoinType;
-    ticker: Ticker;
+    ticker: TickerResp;
 }
 
 class Component extends React.Component<{}, {
@@ -135,12 +135,18 @@ class Component extends React.Component<{}, {
         );
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         getTicker(types, (tickers) => {
             console.log(tickers);
             const tickerItems = types.map((type, i) => ({type, ticker: tickers[i]}));
             this.setState({tickerItems});
         });
+
+        // const transactions = await getUserTransactions();
+        // console.log(transactions);
+
+        // const orderInfo = await getOrderInfo();
+        // console.log(orderInfo);
     }
 }
 

@@ -34,3 +34,17 @@ export function formatMoney(n, c?, d?, t?) {
 export function returnRatio(buy: number, sell: number) {
     return (sell - buy) / buy;
 }
+
+export function queryToStr(query) {
+    let ret = [];
+    for (const key in query) {
+        const value = query[key];
+        const type = typeof value;
+        if (type === 'string' || type === 'number') {
+            ret.push(key + '=' + encodeURIComponent(query[key]));
+        } else if (value instanceof Array) {
+            value.forEach((v) => ret.push(key + '=' + encodeURIComponent(v)));
+        }
+    }
+    return ret.join('&');
+}
