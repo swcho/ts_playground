@@ -83,7 +83,7 @@ export class RatioFormatter extends React.Component<{
     }
 }
 
-export class RationSignFormatter extends React.Component<{
+export class RatioSignFormatter extends React.Component<{
     value: number;
 }, {}> {
     render() {

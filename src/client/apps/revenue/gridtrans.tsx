@@ -8,6 +8,8 @@ export interface TransactionRowItem extends TransactionItem {
     price: number;
     accQty: number;
     accExpenses: number;
+    return: number;
+    returnRatio: number;
 }
 
 interface TransactionColum extends ReactDataGrid.Column {
@@ -45,13 +47,23 @@ const COLUMNS: TransactionColum[] = [{
     //     );
     // },
     // getRowMetaData: (row) => row
-}, {
-    key: 'accQty',
-    name: 'Acc. Qty',
-}, {
-    key: 'accExpenses',
-    name: 'Acc. Expenses',
+},
+// {
+//     key: 'accQty',
+//     name: 'Acc. Qty',
+// }, {
+//     key: 'accExpenses',
+//     name: 'Acc. Expenses',
+//     formatter: MoneyFormatter,
+// },
+{
+    key: 'return',
+    name: 'Return',
     formatter: MoneyFormatter,
+}, {
+    key: 'returnRatio',
+    name: 'Return Ratio',
+    formatter: RatioFormatter,
 }];
 
 export class GridTransaction extends React.Component<{

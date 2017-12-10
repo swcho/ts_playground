@@ -29,6 +29,8 @@ const sums: {[type in CoinType]?: SumTotal} = {};
 const prevAvgUnit = 0;
 transactions.forEach(function(t, i) {
     let price = 0;
+    let ret = 0;
+    let retRatio = 0;
 
     if (!sums[t.type]) {
         sums[t.type] = {
@@ -47,9 +49,12 @@ transactions.forEach(function(t, i) {
         sum.accExpenses += price;
     } else if (t.order === 'SELL') {
         price = getIncome(t);
-        sum.accExpenses -= (sum.accExpenses / sum.qty) * t.qty;
+        const accExpense = (sum.accExpenses / sum.qty) * t.qty;
+        sum.accExpenses -= accExpense;
         sum.qty -= t.qty;
         sum.incomes += price;
+        ret = price - accExpense;
+        retRatio = (ret) / accExpense;
     }
 
     // const avgUnit = sum.expenses / (sum.expensesQty - sum.incomesQty);
@@ -58,6 +63,8 @@ transactions.forEach(function(t, i) {
         price,
         accQty: sum.qty,
         accExpenses: sum.accExpenses,
+        return: ret,
+        returnRatio: retRatio,
     });
 
 });
