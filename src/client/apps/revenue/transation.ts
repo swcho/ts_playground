@@ -135,6 +135,38 @@ const TEST: TransactionItem[] = [
         qty: 0.02,
         charge: 0.00075,
     },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'DASH',
+        unit: 865700,
+        qty: 0.5,
+        charge: 0.00075,
+    },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'DASH',
+        unit: 870000,
+        qty: 0.5,
+        charge: 0.00075,
+    },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'DASH',
+        unit: 880000,
+        qty: 0.5,
+        charge: 0.00075,
+    },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'BTC',
+        unit: 19380000,
+        qty: 0.25,
+        charge: 0.00075,
+    },
 ];
 
 export function getData(): TransactionItem[] {

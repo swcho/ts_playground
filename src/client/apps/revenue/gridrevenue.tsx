@@ -8,9 +8,10 @@ import {MoneyFormatter, MoneySignFormatter, RationSignFormatter} from './formatt
 export interface RevenueRowItem {
     type: CoinType;
     currentUnit: number;
-    expensesUnit: number;
+    sellUnit: number;
     expected: number;
     expenses: number;
+    incomes: number;
     return: number;
     ratio?: number;
 }
@@ -24,11 +25,11 @@ const COLUMNS: RevenueColum[] = [{
     name: 'Type',
 }, {
     key: 'currentUnit',
-    name: 'Cur. Unit',
+    name: 'Unit',
     formatter: MoneyFormatter,
 }, {
-    key: 'expensesUnit',
-    name: 'Exp. Unit',
+    key: 'sellUnit',
+    name: 'Sell Unit',
     formatter: MoneyFormatter,
 }, {
     key: 'expected',
@@ -37,6 +38,10 @@ const COLUMNS: RevenueColum[] = [{
 }, {
     key: 'expenses',
     name: 'Expenses',
+    formatter: MoneyFormatter,
+}, {
+    key: 'incomes',
+    name: 'incomes',
     formatter: MoneyFormatter,
 }, {
     key: 'return',

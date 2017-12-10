@@ -16,16 +16,26 @@ import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
 const transactions = getData();
 
-const sums: {[type in CoinType]?: {qty: number; expenses: number}} = transactions.reduce(function(ret, d) {
+const sums: {[type in CoinType]?: {
+    qty: number;
+    expenses: number;
+    incomes: number;
+}} = transactions.reduce(function(ret, d) {
     if (!ret[d.type]) {
         ret[d.type] = {
             qty: 0,
             expenses: 0,
+            incomes: 0,
         };
     }
     const sum = ret[d.type];
-    sum.qty += d.qty;
-    sum.expenses += getExpenses(d);
+    if (d.order === 'BUY') {
+        sum.qty += d.qty;
+        sum.expenses += getExpenses(d);
+    } else if (d.order === 'SELL') {
+        sum.qty -= d.qty;
+        sum.incomes += getExpenses(d);
+    }
     return ret;
 }, {});
 
@@ -58,6 +68,7 @@ class Component extends React.Component<{}, {
         const revenueItems: RevenueRowItem[] = [];
         let sumExpected = 0;
         let sumExpenses = 0;
+        let sumIncomes = 0;
         let sumReturn = 0;
         tickerItems.forEach((item) => {
             const sum = sums[item.type];
@@ -66,13 +77,15 @@ class Component extends React.Component<{}, {
             const ret = sell_price - sum.expenses;
             sumExpected += sell_price;
             sumExpenses += sum.expenses;
+            sumIncomes += sum.incomes;
             sumReturn += ret;
             revenueItems.push({
                 type: item.type,
                 currentUnit,
-                expensesUnit: sum.expenses / sum.qty,
+                sellUnit: sum.qty ? sum.expenses / sum.qty : 0,
                 expected: sell_price,
                 expenses: sum.expenses,
+                incomes: sum.incomes,
                 return: ret,
                 ratio: returnRatio(sum.expenses, sell_price),
             });
@@ -80,9 +93,10 @@ class Component extends React.Component<{}, {
         revenueItems.push({
             type: 'ALL',
             currentUnit: 0,
-            expensesUnit: 0,
+            sellUnit: 0,
             expected: sumExpected,
             expenses: sumExpenses,
+            incomes: sumIncomes,
             return: sumReturn,
             ratio: returnRatio(sumExpenses, sumExpected),
         });

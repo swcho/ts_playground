@@ -35,8 +35,14 @@ const COLUMNS: TransactionColum[] = [{
     formatter: RatioFormatter
 }, {
     key: 'expense',
-    name: 'Expense',
+    name: 'In/Out',
     formatter: MoneyFormatter,
+    // formatter: function(props) {
+    //     return (
+    //         <div/>
+    //     );
+    // },
+    // getRowMetaData: (row) => row
 }];
 
 export class GridTransaction extends React.Component<{
