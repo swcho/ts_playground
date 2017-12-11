@@ -1,0 +1,10 @@
+
+domain coin.api.com {
+    location / {
+        proxy_pass https://api.bithumb.com/
+    }
+}
+
+domain api.bithumb.com {
+    set_header Access-Control-Allow-Origin *;
+}

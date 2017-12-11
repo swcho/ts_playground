@@ -4,7 +4,7 @@ import * as webpack from 'webpack';
 import * as webpackMerge from 'webpack-merge';
 
 // import * as common from './webpack.config';
-const common = require('./webpack.config')
+const common = require('./webpack.config');
 
 // const entry = {...common.entry, }
 
@@ -29,6 +29,21 @@ const webpackConfig: webpack.Configuration = webpackMerge(
             hot: true,
             contentBase: 'out/client',
             disableHostCheck: true,
+            proxy: {
+                '/api': {
+                    target: 'https://api.bithumb.com',
+                    pathRewrite: { '^/api': '' },
+                    changeOrigin: true,
+                    logLevel: 'debug',
+                    // secure: false,
+                    // headers: {
+                    //     'Host': 'api.bithumb.com',
+                    //     'Origin': undefined,
+                    //     'X-Requested-With': undefined,
+                    //     'Referer': undefined,
+                    // }
+                }
+            }
         },
         devtool: 'inline-source-map',
     }

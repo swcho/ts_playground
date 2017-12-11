@@ -1,0 +1,6 @@
+
+domain example.com {
+    location / {
+        proxy_pass https://www.naver.com
+    }
+}

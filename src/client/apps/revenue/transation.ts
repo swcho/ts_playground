@@ -223,6 +223,30 @@ const TEST: TransactionItem[] = [
         qty: 0.2,
         charge: 0.00075,
     },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'BTC',
+        unit: 17122000,
+        qty: 0.2,
+        charge: 0.00075,
+    },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'ETH',
+        unit: 518000,
+        qty: 1,
+        charge: 0.00075,
+    },
+    {
+        date: Date.now(),
+        order: 'SELL',
+        type: 'ETC',
+        unit: 30200,
+        qty: 10,
+        charge: 0.00075,
+    },
 ];
 
 export function getData(): TransactionItem[] {

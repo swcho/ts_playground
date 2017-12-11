@@ -1,7 +1,6 @@
 
-import {CoinType, fetchJson} from './common';
+import {CoinType, fetchJson, queryToStr} from './common';
 import CryptoJS = require('crypto-js');
-import * as $ from 'jquery';
 
 declare global {
     const escape;
@@ -14,13 +13,44 @@ function microtime(get_as_float?) {
 	//  example 1: timeStamp > 1000000000 && timeStamp < 2000000000
 	//  returns 1: true
 
-	let now = new Date().getTime() / 1000;
-	let s = Math.floor(now);
-	return (get_as_float) ? '' + now : (Math.round((now - s) * 1000) / 1000) + ' ' + s;
+    const now = new Date().getTime() / 1000;
+    const s = Math.floor(now);
+    return (get_as_float) ? '' + now : (Math.round((now - s) * 1000) / 1000) + ' ' + s;
+}
+
+function usecTime() {
+    let rgMicrotime = microtime().split(' '),
+        usec = rgMicrotime[0],
+        sec = rgMicrotime[1];
+
+    usec = usec.substr(2, 3);
+    return Number(String(sec) + String(usec));
+}
+
+function privateCall<T>(endPoint: string, params) {
+    const apiKey = getConnectKey();
+    const secretKey = getSecretKey();
+    params['endPoint'] = endPoint;
+    const urlEncodedParams = queryToStr(params);
+    const nonce = usecTime();
+    const str = endPoint + ';' + urlEncodedParams + ';' + nonce;
+    const headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'api-client-type': '2',
+        'Api-Key' : apiKey,
+        'Api-Sign' : btoa(CryptoJS.HmacSHA512(str, secretKey).toString()),
+        'Api-Nonce' : nonce,
+        'User-Agent': 'test'
+    });
+    return fetchJson<T>(`/api/${endPoint}`, {
+        method: 'POST',
+        headers,
+        body: urlEncodedParams,
+    });
 }
 
 function http_build_query(obj) {
-	let output_string = [];
+	const output_string = [];
 	Object.keys(obj).forEach(function (val) {
         let key = val;
 		key = encodeURIComponent(key.replace(/[!'()*]/g, escape));
@@ -109,8 +139,9 @@ class XCoinAPI {
     private apiUrl: string;
     private api_key: string;
     private api_secret: string;
-    constructor(api_key: string, api_secret: string){
-        this.apiUrl = 'https://api.bithumb.com';
+    constructor(api_key: string, api_secret: string) {
+        // this.apiUrl = 'http://localhost:9000/https://api.bithumb.com';
+        this.apiUrl = '/api';
         this.api_key = api_key;
         this.api_secret = api_secret;
     }
@@ -121,7 +152,7 @@ class XCoinAPI {
         };
 
         if (params) {
-            for (const o in params){
+            for (const o in params) {
                 rgParams[o] = params[o];
             }
         }
@@ -133,40 +164,41 @@ class XCoinAPI {
     }
 
     request(strHost, strMethod, rgParams, httpHeaders) {
+        console.log('request', httpHeaders, rgParams);
         const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
         if (httpHeaders) {
             for (const key in httpHeaders) {
                 headers.append(key, httpHeaders[key]);
             }
         }
         const formData = new FormData();
-        for (const key of rgParams) {
-            formData.append(key, rgParams[key]);
+        for (const key in rgParams) {
+            // formData.append(key, rgParams[key]);
+            formData.append(key, encodeURIComponent(rgParams[key]));
         }
 
-        return new Promise(function(resolve, reject) {
-            $.ajax({
-                url: strHost,
-                type: 'POST',
-                headers: httpHeaders,
-                data: formData,
-                contentType: 'text/plain',
-                cache: false,
-                processData: false,
-                success: resolve,
-                error: reject,
-            });
-        });
+        // return new Promise(function(resolve, reject) {
+        //     $.ajax({
+        //         url: strHost,
+        //         type: 'POST',
+        //         headers: httpHeaders,
+        //         data: http_build_query(rgParams),
+        //         // data: JSON.stringify(rgParams),
+        //         cache: false,
+        //         processData: false,
+        //         success: resolve,
+        //         error: reject,
+        //     });
+        // });
 
-        // return fetchJson(strHost, {
-        //         // method : strMethod,
-        //         method: 'post',
-        //         headers,
-        //         body: formData,
-        //         mode: 'no-cors',
-        //         // formData : rgParams
-        //     }
-        // );
+        return fetchJson(strHost, {
+                method : strMethod,
+                headers,
+                body: http_build_query(rgParams),
+            }
+        );
+
         // request({
         //         method : strMethod,
         //         uri : strHost,
@@ -189,14 +221,19 @@ class XCoinAPI {
     _getHttpHeaders(endPoint, rgParams, api_key, api_secret) {
         let strData	= http_build_query(rgParams);
         let nNonce = this.usecTime();
+        const str = endPoint + ';' + strData + ';' + nNonce;
+        console.log('_getHttpHeaders', str, api_secret);
         return {
+            'api-client-type': '2',
             'Api-Key' : api_key,
-            'Api-Sign' : (base64_encode(CryptoJS.HmacSHA512(endPoint + chr(0) + strData + chr(0) + nNonce, api_secret).toString())),
-            'Api-Nonce' : nNonce
+            // 'Api-Sign' : btoa(CryptoJS.HmacSHA512(endPoint + chr(0) + strData + chr(0) + nNonce, api_secret).toString()),
+            'Api-Sign' : btoa(CryptoJS.HmacSHA512(str, api_secret).toString()),
+            'Api-Nonce' : nNonce,
+            'User-Agent': 'test'
         };
     }
 
-    usecTime(){
+    usecTime() {
         let rgMicrotime = microtime().split(' '),
             usec = rgMicrotime[0],
             sec = rgMicrotime[1];
@@ -221,7 +258,7 @@ interface RespCommon<T> {
 }
 
 // https://api.bithumb.com/public/ticker/{currency}
-const URL_TICKER = (type: CoinType) => `https://api.bithumb.com/public/ticker/${type}`;
+const URL_TICKER = (type: CoinType) => `/api/public/ticker/${type}`;
 
 export interface TickerResp {
     status: string;
@@ -249,8 +286,6 @@ export async function getTicker(types: CoinType[], cb: (ret: TickerResp[]) => vo
 };
 
 interface GetOrderInfoParams {
-    apiKey: string;
-    secretKey: string;
     order_id?: string;
     type?: string;
     count?: number;
@@ -273,22 +308,15 @@ interface GetOrderInfo {
     date_completed: number;
 }
 
-const URL_ORDER = () => `https://api.bithumb.com/info/orders`;
+type GetOrderInfoResp = RespCommon<GetOrderInfo>;
 
 export async function getOrderInfo() {
     const params: GetOrderInfoParams = {
-        apiKey: getConnectKey(),
-        secretKey: getSecretKey(),
     };
-    await fetchJson<RespCommon<GetOrderInfo>>(URL_ORDER(), {
-        method: 'POST',
-        body: JSON.stringify(params),
-    });
+    return privateCall<GetOrderInfoResp>('/info/orders', params);
 }
 
 interface GetUserTransactionsParams {
-    apiKey: string;
-    secretKey: string;
     offset?: number;
     count?: number;
     searchGb?: string;
@@ -308,33 +336,25 @@ interface UserTransaction {
 
 type GetUserTransactionsResp = RespCommon<UserTransaction>;
 
-const URL_USER_TRANSACTION = () =>
-    `https://api.bithumb.com/info/user_transactions`;
-
-export async function getUserTransactions() {
+export function getUserTransactions() {
     const params: GetUserTransactionsParams = {
-        apiKey: getConnectKey(),
-        secretKey: getSecretKey(),
         offset: 0,
         count: 20,
         searchGb: '0',
-        currency: 'BTC',
+        currency: 'DASH',
     };
-    await fetchJson<GetUserTransactionsResp>(URL_USER_TRANSACTION(), {
-        method: 'POST',
-        body: JSON.stringify(params),
-    });
+    return privateCall<GetUserTransactionsResp>('/info/user_transactions', params);
 }
-
 
 export async function test() {
     let xcoinAPI = new XCoinAPI(getConnectKey(), getSecretKey());
     let rgParams = {
-        order_currency: 'BTC',
-        payment_currency: 'KRW'
+        currency: 'ALL',
     };
-    const resp = await xcoinAPI.xcoinApiCall('/info/account', rgParams);
+    const resp = await xcoinAPI.xcoinApiCall('/info/balance', rgParams);
     console.log('test', resp);
 }
 
-test();
+getOrderInfo();
+getUserTransactions();
+

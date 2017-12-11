@@ -13,7 +13,8 @@
     "webpack-gh": "webpack --config out/tasks/webpack.config.gh.js",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "build_server": "tsc -p src/server",
-    "server": "npm run build_server && node out/server/app.js"
+    "server": "npm run build_server && node out/server/app.js",
+    "cors": "PORT=9000 node node_modules/cors-anywhere/server.js"
   },
   "repository": {
     "type": "git",
@@ -103,6 +104,7 @@
     "browser-sync": "^2.18.8",
     "cheerio": "^0.22.0",
     "copy-webpack-plugin": "^4.2.0",
+    "cors-anywhere": "^0.4.1",
     "css-loader": "^0.26.1",
     "eval": "^0.1.2",
     "file-loader": "^0.11.2",
