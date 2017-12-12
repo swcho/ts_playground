@@ -14,7 +14,8 @@
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "build_server": "tsc -p src/server",
     "server": "npm run build_server && node out/server/app.js",
-    "cors": "PORT=9000 node node_modules/cors-anywhere/server.js"
+    "cors": "PORT=9000 node node_modules/cors-anywhere/server.js",
+    "revenue": "npm run build_tasks && ROUTE=/revenue npm run serve -- --open http://localhost:8080/revenue"
   },
   "repository": {
     "type": "git",
@@ -125,6 +126,7 @@
     "less-loader": "^4.0.5",
     "markdown-loader": "^2.0.0",
     "node-sass": "^4.5.3",
+    "open": "^0.0.5",
     "pixi.js": "^4.4.1",
     "pleeease-filters": "^4.0.0",
     "postcss-loader": "^2.0.6",
