@@ -47,8 +47,8 @@ window.onload = function () {
             frequency: { type: 'f', value: 10 },
             time: { type: 'f', value: 0 }
         },
-        vertexShader: document.getElementById('vs').innerText,
-        fragmentShader: document.getElementById('fs').innerText,
+        vertexShader: require('./vertex.glsl'),
+        fragmentShader: require('./fragment.glsl'),
         transparent: true,
         wireframe: true
     });
