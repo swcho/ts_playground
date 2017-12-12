@@ -32,7 +32,8 @@ function privateCall<T>(endPoint: string, params) {
     const secretKey = getSecretKey();
     params['endPoint'] = endPoint;
     const urlEncodedParams = queryToStr(params);
-    const nonce = usecTime();
+    // const nonce = usecTime();
+    const nonce = Date.now();
     const str = endPoint + ';' + urlEncodedParams + ';' + nonce;
     const headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -323,9 +324,9 @@ interface GetUserTransactionsParams {
     currency?: CoinType;
 }
 
-interface UserTransaction {
+export interface UserTransaction {
     search: string;
-    transfer_date: number;
+    transfer_date: string;
     units: string;
     price: string;
     btc1krw: string;
@@ -336,14 +337,22 @@ interface UserTransaction {
 
 type GetUserTransactionsResp = RespCommon<UserTransaction>;
 
-export function getUserTransactions() {
+export async function getUserTransactions(currency: CoinType = 'BTC') {
+    const COUNT = 50;
     const params: GetUserTransactionsParams = {
         offset: 0,
-        count: 20,
+        count: COUNT,
         searchGb: '0',
-        currency: 'DASH',
+        currency,
     };
-    return privateCall<GetUserTransactionsResp>('/info/user_transactions', params);
+    let ret: UserTransaction[] = [];
+    for (let count = COUNT; count === COUNT; ) {
+        const transactions = await privateCall<GetUserTransactionsResp>('/info/user_transactions', params);
+        ret = ret.concat(transactions.data);
+        count = transactions.data.length;
+        params.offset += count;
+    }
+    return ret;
 }
 
 export async function test() {
