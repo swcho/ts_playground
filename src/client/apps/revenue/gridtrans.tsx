@@ -48,14 +48,14 @@ const COLUMNS: TransactionColum[] = [{
     // },
     // getRowMetaData: (row) => row
 },
-// {
-//     key: 'accQty',
-//     name: 'Acc. Qty',
-// }, {
-//     key: 'accExpenses',
-//     name: 'Acc. Expenses',
-//     formatter: MoneyFormatter,
-// },
+{
+    key: 'accQty',
+    name: 'Acc. Qty',
+}, {
+    key: 'accExpenses',
+    name: 'Acc. Expenses',
+    formatter: MoneyFormatter,
+},
 {
     key: 'return',
     name: 'Return',
@@ -78,6 +78,7 @@ export class GridTransaction extends React.Component<{
                 columns={COLUMNS}
                 rowGetter={(index) => transactions[index]}
                 rowsCount={transactions.length}
+                rowHeight={20}
             />
         );
     }

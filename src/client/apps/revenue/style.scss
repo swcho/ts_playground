@@ -37,11 +37,24 @@ table.type11 td {
 }
 
 .react-grid-HeaderCell {
+    padding: 0;
+    font-size: 12px;
     text-align: center;
     border-right: 1px solid #eee;
     border-bottom: 1px solid #ddd;
+    &:before {
+        content: '';
+        height: 100%;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+.widget-HeaderCell__value {
+    vertical-align: middle;
+    display: inline-block;
 }
 .react-grid-Cell{
+    font-size: 12px;
     text-align: center;
     border-right: 1px solid #eee;
     border-bottom: 1px solid #ddd;

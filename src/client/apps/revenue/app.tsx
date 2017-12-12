@@ -2,41 +2,42 @@
 import 'config-loader!./.config.ts';
 import 'htmlout-loader!./en.html';
 console.log(__filename);
-
-import './style.scss';
-
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
 import {CoinType, returnRatio} from './common';
-import {getExpense, getIncome, TransactionItem} from './transation';
-import {getTicker, TickerResp, UserTransaction} from './bithumb';
+import {getExpense, getIncome, getData} from './transation';
+import {getTicker, TickerResp, getTransactionItems} from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
+import './style.scss';
 (async function () {
+
 
     // const bithumbBTC = await getUserTransactions();
     // localStorage.setItem('bithumb_transactions', JSON.stringify(bithumbBTC));
 
-    const bithumbBTC = JSON.parse(localStorage.getItem('bithumb_transactions')) as UserTransaction[];
+    // const bithumbBTC = JSON.parse(localStorage.getItem('bithumb_transactions')) as UserTransaction[];
 
-    const transactions = bithumbBTC
-        .filter(t => t.search === '1' || t.search === '2')
-        .map(t => {
-            const ret: TransactionItem = {
-                date: parseInt(t.transfer_date),
-                order: t.search === '1' ? 'BUY' : 'SELL',
-                type: 'BTC',
-                unit: parseInt(t.btc1krw),
-                qty: Math.abs(parseFloat(t.units.slice(2))),
-                charge: 0,
-            };
-            return ret;
-        })
-        .sort((a, b) => a.date - b.date);
+    // const transactions = bithumbBTC
+    //     .filter(t => t.search === '1' || t.search === '2')
+    //     .map(t => {
+    //         const ret: TransactionItem = {
+    //             date: parseInt(t.transfer_date) / 1000,
+    //             order: t.search === '1' ? 'BUY' : 'SELL',
+    //             type: 'BTC',
+    //             unit: parseInt(t.btc1krw),
+    //             qty: Math.abs(parseFloat(t.units.slice(2))),
+    //             charge: 0,
+    //         };
+    //         return ret;
+    //     })
+    //     .sort((a, b) => b.date - a.date);
 
+    const transactions = getTransactionItems();
     // const transactions = getData();
+    console.log(transactions);
 
     const transactionRowItems: TransactionRowItem[] = [];
 

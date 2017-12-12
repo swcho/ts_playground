@@ -1,6 +1,7 @@
 
 import {CoinType, fetchJson, queryToStr} from './common';
 import CryptoJS = require('crypto-js');
+import { TransactionItem, TransactionOrder } from './transation';
 
 declare global {
     const escape;
@@ -324,18 +325,39 @@ interface GetUserTransactionsParams {
     currency?: CoinType;
 }
 
+type TransactionType = 'ALL' | 'BUY' | 'SELL' | 'WITHDRAWING' | 'DEPOSIT' | 'WITHDRAWAL' | 'DEPOSITING';
+
 export interface UserTransaction {
+    type: TransactionType;
+    coin: CoinType;
+    transfer_date: number;
+    units: number;
+    price: number;
+    fee: string;
+    krw_remain: number;
+    unit_price: number;
+    coin_remain: number;
+}
+
+type GetUserTransactionsResp = RespCommon<{
     search: string;
     transfer_date: string;
     units: string;
     price: string;
-    btc1krw: string;
     fee: string;
-    btc_remain: string;
     krw_remain: string;
-}
+    [key: string]: string;
+}>;
 
-type GetUserTransactionsResp = RespCommon<UserTransaction>;
+const MAP_TRANSACTION_TYPE: { [search: string]: TransactionType } = {
+    '0': 'ALL',
+    '1': 'BUY',
+    '2': 'SELL',
+    '3': 'WITHDRAWING',
+    '4': 'DEPOSIT',
+    '5': 'WITHDRAWAL',
+    '6': 'DEPOSITING',
+};
 
 export async function getUserTransactions(currency: CoinType = 'BTC') {
     const COUNT = 50;
@@ -348,7 +370,19 @@ export async function getUserTransactions(currency: CoinType = 'BTC') {
     let ret: UserTransaction[] = [];
     for (let count = COUNT; count === COUNT; ) {
         const transactions = await privateCall<GetUserTransactionsResp>('/info/user_transactions', params);
-        ret = ret.concat(transactions.data);
+        ret = ret.concat(transactions.data.map(t => {
+            return {
+                coin: currency,
+                type: MAP_TRANSACTION_TYPE[t.search],
+                transfer_date: Math.floor(parseInt(t.transfer_date) / 1000),
+                units: (t.units[0] === '+' ? 1 : -1) * parseFloat(t.units.slice(2)),
+                price: parseInt(t.price),
+                fee: t.fee,
+                krw_remain: parseInt(t.krw_remain),
+                unit_price: parseInt(t[`${currency.toLowerCase()}1krw`]),
+                coin_remain: parseInt(t[`${currency.toLowerCase()}_remain`]),
+            };
+        }));
         count = transactions.data.length;
         params.offset += count;
     }
@@ -364,6 +398,47 @@ export async function test() {
     console.log('test', resp);
 }
 
-getOrderInfo();
-getUserTransactions();
+const KEY_TRANSACTIONS = 'transactions';
+
+export async function saveTransactions() {
+    const coins: CoinType[] = [
+        'BTC',
+        'DASH',
+        'BCH',
+        'ETH',
+        'ETC',
+    ];
+
+    let transactions: UserTransaction[] = [];
+    for (const coin of coins) {
+        transactions = transactions.concat(await getUserTransactions(coin));
+    }
+    localStorage.setItem(KEY_TRANSACTIONS, JSON.stringify(transactions));
+}
+
+saveTransactions();
+
+export function getTransactions(): UserTransaction[]  {
+    return JSON.parse(localStorage.getItem(KEY_TRANSACTIONS));
+
+}
+
+export function getTransactionItems(): TransactionItem[] {
+    const userTransactions = getTransactions();
+    const transactions: TransactionItem[] = userTransactions
+        .filter(t => t.type === 'BUY' || t.type === 'SELL')
+        // .filter(t => t.coin === 'BTC')
+        .map(t => ({
+            date: t.transfer_date,
+            order: (t.type === 'BUY' ? 'BUY' : 'SELL') as TransactionOrder,
+            type: t.coin,
+            unit: t.unit_price,
+            qty: Math.abs(t.units),
+            charge: 0.00075,
+        }))
+        .sort((a, b) => a.date - b.date)
+        // .sort((a, b) => b.date - a.date)
+    ;
+    return transactions;
+}
 
