@@ -280,11 +280,14 @@ export interface TickerResp {
 }
 
 
-export async function getTicker(types: CoinType[], cb: (ret: TickerResp[]) => void) {
-    cb(await Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))));
-    setTimeout(async function() {
-        cb(await Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))));
-    }, 1000);
+export function getTicker(types: CoinType[], cont: boolean, cb: (ret: TickerResp[]) => void) {
+    Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))).then(cb);
+    if (cont) {
+        return setInterval(function() {
+            Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))).then(cb);
+        }, 1000);
+    }
+    return null;
 };
 
 interface GetOrderInfoParams {
@@ -416,11 +419,8 @@ export async function saveTransactions() {
     localStorage.setItem(KEY_TRANSACTIONS, JSON.stringify(transactions));
 }
 
-saveTransactions();
-
 export function getTransactions(): UserTransaction[]  {
-    return JSON.parse(localStorage.getItem(KEY_TRANSACTIONS));
-
+    return JSON.parse(localStorage.getItem(KEY_TRANSACTIONS)) || [];
 }
 
 export function getTransactionItems(): TransactionItem[] {

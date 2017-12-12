@@ -6,8 +6,8 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
 import {CoinType, returnRatio} from './common';
-import {getExpense, getIncome, getData} from './transation';
-import {getTicker, TickerResp, getTransactionItems} from './bithumb';
+import {getExpense, getIncome} from './transation';
+import {getTicker, TickerResp, saveTransactions, getTransactionItems} from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
@@ -100,19 +100,25 @@ import './style.scss';
     }
 
     class Component extends React.Component<{}, {
+        filter: string;
         tickerItems: TickerItem[];
+        tickerId: number;
     }> {
 
         constructor(props) {
             super(props);
             this.state = {
+                filter: 'ALL',
                 tickerItems: [],
+                tickerId: null,
             };
         }
 
         render() {
             const {
+                filter,
                 tickerItems,
+                tickerId,
             } = this.state;
             const revenueItems: RevenueRowItem[] = [];
             let sum_sell_price = 0;
@@ -147,29 +153,50 @@ import './style.scss';
             });
             return (
                 <div>
-                    <GridTransaction
-                        transactions={transactionRowItems}
-                    />
+                    <div className='ticker-control'>
+                        <button onClick={() => {
+                            if (tickerId) {
+                                this.stopTikcer();
+                            } else {
+                                this.getTicker(true);
+                            }
+                        }}>{tickerId ? 'Stop' : 'Auto'}</button>
+                    </div>
                     <GridRevenue
                         getter={(index) => revenueItems[index]}
                         count={tickerItems.length + 1}
                     />
+                    <GridTransaction
+                        transactions={transactionRowItems.filter(item => filter === 'ALL' || item.type === filter)}
+                    />
+                    <div className='controls'>
+                        <button onClick={() => saveTransactions()}>Update</button>
+                        <select className='right' name='' id='' value={filter} onChange={(e) => this.setState({filter: e.target.value})}>
+                            <option value='ALL'>ALL</option>
+                            {types.map(t => (
+                                <option key={t} value={t}>{t}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             );
         }
 
-        async componentDidMount() {
-            getTicker(types, (tickers) => {
-                console.log(tickers);
+        private getTicker(cont = false) {
+            const tickerId = getTicker(types, cont, (tickers) => {
                 const tickerItems = types.map((type, i) => ({type, ticker: tickers[i]}));
                 this.setState({tickerItems});
             });
+            this.setState({tickerId});
+        }
 
-            // const transactions = await getUserTransactions();
-            // console.log(transactions);
+        private stopTikcer() {
+            clearInterval(this.state.tickerId);
+            this.setState({tickerId: null});
+        }
 
-            // const orderInfo = await getOrderInfo();
-            // console.log(orderInfo);
+        async componentDidMount() {
+            this.getTicker();
         }
     }
 
