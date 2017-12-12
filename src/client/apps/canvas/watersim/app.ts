@@ -13,83 +13,99 @@ console.log(__filename);
     T H E  P O O L  T O  A D D  W A T E R
 */
 
-var width = 300;
+const WIDTH = 300;
 
-var ground = new Array(width).fill(1);
-ground[0] = ground[width - 1] = 100;
+const ground = new Array(WIDTH).fill(1);
+ground[0] = ground[WIDTH - 1] = 100;
 
 // Predictable randomize multi-sine for generating the ground
 // from @shshaw, thx!
-var twoPI = Math.PI * 4;
-var placement;
-var offset = Math.random() + 1.1;
+let twoPI = Math.PI * 4;
+let placement;
+const offset = Math.random() + 1.1;
+// const offset = 1;
 let tmp;
-for (let x = 1; x < width / 2; x++) {
-    placement = (x / (width / 2)) * twoPI;
+for (let x = 1; x < WIDTH / 2; x++) {
+    placement = (x / (WIDTH / 2)) * twoPI;
     ground[x] = tmp = 30 + 10 * ((Math.sin(placement) + Math.sin(offset * placement)) / 2);
 }
+
 /* my lame kinda random spiky ground...doh! */
-var level = tmp; // Math.random()*50;
-for (let x = width / 2; x < width - 1; x++) {
+let level = tmp; // Math.random()*50;
+for (let x = WIDTH / 2; x < WIDTH - 1; x++) {
     ground[x] = level;
     level = Math.min(100, Math.max(0, level + Math.random() * 8 - 4));
 }
 
 // empty pool with a drip of water in the middle
-var water = new Array(width).fill(0);
-water[0] = water[width - 1] = 0;
-water[Math.floor(width / 2)] = 250;
+let water = new Array(WIDTH).fill(0);
+water[0] = water[WIDTH - 1] = 0;
+water[Math.floor(WIDTH / 2)] = 250;
 
-var energy = new Array(width).fill(0);
+let energy = new Array(WIDTH).fill(0);
 
 // put that thing into the DOM
-var wrap = document.getElementById("wrap");
-var html = "<div class='ww'></div><div class='gw'></div>";
-for (let x = 0; x < width; x++) {
-    var col = document.createElement("div");
+let wrap = document.getElementById('wrap');
+let html = '<div class=\'ww\'></div><div class=\'gw\'></div>';
+for (let x = 0; x < WIDTH; x++) {
+    let col = document.createElement('div');
     col.classList.add('col');
     col.innerHTML = html;
     wrap.appendChild(col);
 }
-var cols = document.getElementById("wrap").children; // ...for the renderer
+let cols = document.getElementById('wrap').children; // ...for the renderer
 
 // add the mouse actions
-for (var i = 0; i < cols.length; i++) {
+for (let i = 0; i < cols.length; i++) {
     (function (j) {
-        cols[i].addEventListener("mousedown", function () {
-            var time = Date.now();
-            var index = j;
+        cols[i].addEventListener('mousedown', function () {
+            let time = Date.now();
+            let index = j;
             window.onmouseup = function () {
-                var diff = Date.now()  - time;
+                let diff = Date.now()  - time;
                 window.onmouseup = null;
                 water[index] = diff;
-            }
+            };
         });
     })(i);
 }
 
 // calculate the next frame
 function calc() {
-    var dwater = new Array(width).fill(0);
-    var denergy = new Array(width).fill(0);
+    let dwater = new Array(WIDTH).fill(0);
+    let denergy = new Array(WIDTH).fill(0);
 
-    for (let x = 1; x < width - 1; x++) {
-        if (ground[x] + water[x] - energy[x] > ground[x - 1] + water[x - 1] + energy[x - 1]) {
-            var flow = Math.min(water[x], ground[x] + water[x] - energy[x] - ground[x - 1] - water[x - 1] - energy[x - 1]) / 4;
-            dwater[x - 1] += flow;
-            dwater[x] += -flow;
-            denergy[x - 1] += -energy[x - 1] / 2 - flow;
+    for (let x = 1; x < WIDTH - 1; x++) {
+        const groundPrev = ground[x - 1];
+        const groundNow = ground[x];
+        const groundNext = ground[x + 1];
+        const waterPrev = water[x - 1];
+        const waterNow = water[x];
+        const waterNext = water[x + 1];
+        const energyLeft = energy[x - 1];
+        const energyNow = energy[x];
+        const energyRight = energy[x + 1];
+
+        const potentialEnergyLeft = groundPrev + waterPrev;
+        const potentialEnergy = groundNow + waterNow;
+        const potentialEnergyRight = groundNext + waterNext;
+
+        if (0 < waterNow && potentialEnergy - energyNow > potentialEnergyLeft + energyLeft) {
+            const waterToGive = Math.min(waterNow, potentialEnergy - energyNow - potentialEnergyLeft - energyLeft) / 4;
+            dwater[x - 1] += waterToGive;
+            dwater[x] += -waterToGive;
+            denergy[x - 1] += -energyLeft / 2 - waterToGive;
         }
 
-        if (ground[x] + water[x] + energy[x] > ground[x + 1] + water[x + 1] - energy[x + 1]) {
-            var flow = Math.min(water[x], ground[x] + water[x] + energy[x] - ground[x + 1] - water[x + 1] + energy[x + 1]) / 4;
-            dwater[x + 1] += flow;
-            dwater[x] += -flow;
-            denergy[x + 1] += -energy[x + 1] / 2 + flow;
+        if (0 < waterNow && potentialEnergy + energyNow > potentialEnergyRight - energyRight) {
+            const waterToGive = Math.min(waterNow, potentialEnergy + energyNow - potentialEnergyRight + energyRight) / 4;
+            dwater[x + 1] += waterToGive;
+            dwater[x] += -waterToGive;
+            denergy[x + 1] += -energyRight / 2 + waterToGive;
         }
     }
 
-    for (let x = 1; x < width - 1; x++) {
+    for (let x = 1; x < WIDTH - 1; x++) {
         water[x] = water[x] + dwater[x];
         energy[x] = energy[x] + denergy[x];
     }
@@ -97,10 +113,10 @@ function calc() {
 
 // draw the next frame
 function draw(terrain, water) {
-    for (var i = 0; i < terrain.length; i++) {
-        var col = cols[i].children;
-        (col[0] as HTMLElement).style.height = Math.min(100 - terrain[i], water[i]) + "%";
-        (col[1] as HTMLElement).style.height = terrain[i] + "%";
+    for (let i = 0; i < terrain.length; i++) {
+        let col = cols[i].children;
+        (col[0] as HTMLElement).style.height = Math.min(100 - terrain[i], water[i]) + '%';
+        (col[1] as HTMLElement).style.height = terrain[i] + '%';
     }
 }
 
