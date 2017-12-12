@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+    </style>
+</head>
+
+<body>
+<script id="vs" type="x-shader/x-vertex">
+  uniform float amplitude;
+    uniform float frequency;
+    uniform float time;
+
+    varying vec3 color;
+    void main() {
+
+        //we will transform the original position so we store it a temp variable
+        vec3 pos = position;
+
+        //compute the Z position of each vertex
+        float dist = sin( pos.x + 3.14159 / 2. ) + cos( pos.y );
+        pos.z = sin( dist * frequency + time ) * amplitude;
+
+        //passes a color to the fragment shader
+        color = normalize( pos + vec3(.5) );
+
+        //projects the coordinates to screen
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( pos, 1. );
+
+    }</script>
+
+<script id="fs" type="x-shader/x-fragment">varying vec3 color;
+    void main() {
+        gl_FragColor = vec4( color, 1. );
+    }</script>
+</body>
+
+</html>
