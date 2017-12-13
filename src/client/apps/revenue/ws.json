@@ -1,0 +1,129 @@
+{
+    "data": {
+        "BCH": {
+            "average_price": "1732789.4604",
+            "buy_price": "1773000",
+            "closing_price": "1773500",
+            "max_price": "1820000",
+            "min_price": "1630000",
+            "opening_price": "1709500",
+            "sell_price": "1773500",
+            "units_traded": "113964.96941202"
+        },
+        "BTC": {
+            "average_price": "18719770.8371",
+            "buy_price": "18740000",
+            "closing_price": "18736000",
+            "max_price": "19400000",
+            "min_price": "17630000",
+            "opening_price": "19143000",
+            "sell_price": "18744000",
+            "units_traded": "44132.35229809"
+        },
+        "BTG": {
+            "average_price": "297886.3663",
+            "buy_price": "299600",
+            "closing_price": "299700",
+            "max_price": "328500",
+            "min_price": "270000",
+            "opening_price": "289000",
+            "sell_price": "300300",
+            "units_traded": "613691.26481159"
+        },
+        "DASH": {
+            "average_price": "982360.1606",
+            "buy_price": "985000",
+            "closing_price": "988400",
+            "max_price": "1170000",
+            "min_price": "880000",
+            "opening_price": "898700",
+            "sell_price": "988300",
+            "units_traded": "112286.91227618"
+        },
+        "EOS": {
+            "average_price": "8686.7102",
+            "buy_price": "7450",
+            "closing_price": "7473",
+            "max_price": "17000",
+            "min_price": "4900",
+            "opening_price": "4901",
+            "sell_price": "7473",
+            "units_traded": "15204168.76885615"
+        },
+        "ETC": {
+            "average_price": "32842.2091",
+            "buy_price": "33250",
+            "closing_price": "33300",
+            "max_price": "36000",
+            "min_price": "29600",
+            "opening_price": "31700",
+            "sell_price": "33300",
+            "units_traded": "8005067.1751748533148663"
+        },
+        "ETH": {
+            "average_price": "703205.1099",
+            "buy_price": "770300",
+            "closing_price": "770300",
+            "max_price": "791500",
+            "min_price": "635500",
+            "opening_price": "644500",
+            "sell_price": "771100",
+            "units_traded": "792233.68460755949338135"
+        },
+        "LTC": {
+            "average_price": "342120.8434",
+            "buy_price": "352550",
+            "closing_price": "352550",
+            "max_price": "377000",
+            "min_price": "280000",
+            "opening_price": "363500",
+            "sell_price": "352600",
+            "units_traded": "1780513.02593367"
+        },
+        "QTUM": {
+            "average_price": "18226.5085",
+            "buy_price": "20220",
+            "closing_price": "20230",
+            "max_price": "23500",
+            "min_price": "15150",
+            "opening_price": "15220",
+            "sell_price": "20230",
+            "units_traded": "16670330.47155184"
+        },
+        "XMR": {
+            "average_price": "336274.7719",
+            "buy_price": "354100",
+            "closing_price": "355300",
+            "max_price": "357000",
+            "min_price": "295000",
+            "opening_price": "326600",
+            "sell_price": "355300",
+            "units_traded": "210921.22497643"
+        },
+        "XRP": {
+            "average_price": "449.7357",
+            "buy_price": "515",
+            "closing_price": "515",
+            "max_price": "599",
+            "min_price": "303",
+            "opening_price": "307",
+            "sell_price": "516",
+            "units_traded": "2466260341.351999"
+        },
+        "ZEC": {
+            "average_price": "417969.6702",
+            "buy_price": "441700",
+            "closing_price": "441700",
+            "max_price": "468800",
+            "min_price": "384000",
+            "opening_price": "393200",
+            "sell_price": "442900",
+            "units_traded": "96752.41030001"
+        }
+    },
+    "header": {
+        "service": "ticker",
+        "tickDuration": "24H"
+    },
+    "status": "0000"
+}

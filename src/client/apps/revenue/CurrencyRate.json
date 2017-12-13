@@ -1,0 +1,22 @@
+[
+    {
+        "Currency": "USD",
+        "Sign": "$",
+        "Rate": "1092.50"
+    },
+    {
+        "Currency": "JPY",
+        "Sign": "￥",
+        "Rate": "963.66"
+    },
+    {
+        "Currency": "EUR",
+        "Sign": "€",
+        "Rate": "1283.74"
+    },
+    {
+        "Currency": "CNY",
+        "Sign": "￥",
+        "Rate": "164.92"
+    }
+]

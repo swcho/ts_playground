@@ -279,7 +279,6 @@ export interface TickerResp {
     };
 }
 
-
 export function getTicker(types: CoinType[], cont: boolean, cb: (ret: TickerResp[]) => void) {
     Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))).then(cb);
     if (cont) {
@@ -439,6 +438,42 @@ export function getTransactionItems(): TransactionItem[] {
         .sort((a, b) => a.date - b.date)
         // .sort((a, b) => b.date - a.date)
     ;
+    console.log(transactions);
     return transactions;
 }
 
+export async function getTotalTicker() {
+    const resp = await fetchJson('/btweb/resources/csv/total_ticker.json');
+    console.log(resp);
+}
+
+export async function getCurrencyRate() {
+    const resp = await fetchJson('/btweb/resources/csv/CurrencyRate.json');
+    console.log(resp);
+}
+
+export interface WSTicker {
+    data: {
+        [coin in CoinType]: {
+            average_price: string;
+            buy_price: string;
+            closing_price: string;
+            max_price: string;
+            min_price: string;
+            opening_price: string;
+            sell_price: string;
+            units_traded: string;
+        }
+    };
+}
+
+export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
+    let ws = new WebSocket('ws://localhost:8080/btws/public');
+    ws.onopen = function(event) {
+        ws.send('{"currency":"BTC","tickDuration":"24H"}');
+    };
+    ws.onmessage = function(event) {
+        const ticker = JSON.parse(event.data);
+        ticker.data.BTC && cb && cb(ticker);
+    };
+}

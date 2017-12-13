@@ -1,0 +1,367 @@
+{
+    "BTC": [
+        {
+            "name": "OKCoinCOM",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "date": "1513171984",
+                "ticker": {
+                    "high": "17288.95",
+                    "vol": "697.73",
+                    "last": "16608.60",
+                    "low": "15809.70",
+                    "buy": "16609.60",
+                    "sell": "16815.45"
+                }
+            }
+        },
+        {
+            "name": "BITSTAMP",
+            "rate": "USD",
+            "idx": "0",
+            "data": {
+                "high": "17428.42",
+                "last": "17089.00",
+                "timestamp": "1513171555",
+                "bid": "17060.39",
+                "vwap": "16846.97",
+                "volume": "16892.10867638",
+                "low": "16200.00",
+                "ask": "17089.00",
+                "open": 16650.01
+            }
+        },
+        {
+            "name": "BITFINEX",
+            "rate": "USD",
+            "idx": "1",
+            "data": {
+                "mid": "17005.0",
+                "bid": "17004.0",
+                "ask": "17006.0",
+                "last_price": "17004.0",
+                "low": "15800.0",
+                "high": "17579.0",
+                "volume": "50387.61122601",
+                "timestamp": "1513172044.7886338"
+            }
+        },
+        {
+            "name": "ITBIT",
+            "rate": "USD",
+            "idx": "2",
+            "data": {
+                "pair": "XBTUSD",
+                "bid": "17272.86",
+                "bidAmt": "1.7506",
+                "ask": "17279.55",
+                "askAmt": "1.2677",
+                "lastPrice": "17288.00000000",
+                "lastAmt": "0.18000000",
+                "volume24h": "2533.92200000",
+                "volumeToday": "837.26820000",
+                "high24h": "17590.00000000",
+                "low24h": "16500.00000000",
+                "highToday": "17548.23000000",
+                "lowToday": "16500.00000000",
+                "openToday": "17325.35000000",
+                "vwapToday": "17061.79609007",
+                "vwap24h": "17226.86617773",
+                "serverTimeUTC": "2017-12-13T13:34:06.2101520Z"
+            }
+        }
+    ],
+    "ETH": [
+        {
+            "name": "Poloniex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "652.00000000",
+                "vol_cur": "125007.89477067",
+                "avg": 601.39999994
+            }
+        },
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "665.93000",
+                "vol_cur": "31380.02263433",
+                "avg": 620.27
+            }
+        },
+        {
+            "name": "livecoin",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": 674.97,
+                "vol_cur": 1159.48945354,
+                "avg": 615.75
+            }
+        }
+    ],
+    "DASH": [
+        {
+            "name": "Poloniex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "850.50000004",
+                "vol_cur": "8933.46507905",
+                "avg": 850.998098005
+            }
+        },
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "889.89",
+                "vol_cur": "48460.18349847",
+                "avg": 866.17
+            }
+        }
+    ],
+    "LTC": [
+        {
+            "name": "Poloniex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "319.00000001",
+                "vol_cur": "214958.44932394",
+                "avg": 295.499999955
+            }
+        },
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "315.03000",
+                "vol_cur": "31522.30712977",
+                "avg": 291.5
+            }
+        },
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "338.84",
+                "vol_cur": "1485695.5196778",
+                "avg": 309.175
+            }
+        }
+    ],
+    "ETC": [
+        {
+            "name": "Poloniex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "29.45269967",
+                "vol_cur": "601698.99046659",
+                "avg": 29.34002263
+            }
+        },
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "30.33200000",
+                "vol_cur": "52363.92652555",
+                "avg": 29.3755
+            }
+        },
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "30.78",
+                "vol_cur": "1713259.03207506",
+                "avg": 29.39
+            }
+        }
+    ],
+    "XRP": [
+        {
+            "name": "Poloniex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "0.43499999",
+                "vol_cur": "176429845.82086867",
+                "avg": 0.36587837
+            }
+        },
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "0.46238000",
+                "vol_cur": "23423316.90189938",
+                "avg": 0.4
+            }
+        },
+        {
+            "name": "Bitstamp",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "0.45103",
+                "vol_cur": "230832235.56531361",
+                "avg": 0.372225
+            }
+        }
+    ],
+    "BCH": [
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "1552.800000",
+                "vol_cur": "2872.61141022",
+                "avg": 1509.15
+            }
+        },
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "1589.7",
+                "vol_cur": "76233.77581544",
+                "avg": 1533.35
+            }
+        }
+    ],
+    "XMR": [
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "309.10000000",
+                "vol_cur": "6492.58224295",
+                "avg": 300
+            }
+        },
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "316.82",
+                "vol_cur": "137403.25415929",
+                "avg": 301.245
+            }
+        },
+        {
+            "name": "HitBTC",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "306.42",
+                "vol_cur": "15369.033",
+                "avg": 299.28
+            }
+        }
+    ],
+    "ZEC": [
+        {
+            "name": "Kraken",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "397.30000",
+                "vol_cur": "4269.87359896",
+                "avg": 385.495
+            }
+        },
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "397.55",
+                "vol_cur": "100444.11067776",
+                "avg": 380.5
+            }
+        },
+        {
+            "name": "HitBTC",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "385.87",
+                "vol_cur": "13289.908",
+                "avg": 370.94
+            }
+        }
+    ],
+    "QTUM": [
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "17.597",
+                "vol_cur": "484944.00768557",
+                "avg": 15.884
+            }
+        }
+    ],
+    "BTG": [
+        {
+            "name": "Bitfinex",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "273.74",
+                "vol_cur": "95026.45781292",
+                "avg": 269.07
+            }
+        },
+        {
+            "name": "HitBTC",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "267.25",
+                "vol_cur": "15567.23",
+                "avg": 259.2
+            }
+        }
+    ],
+    "EOS": [
+        {
+            "name": "HitBTC",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": "6.32351",
+                "vol_cur": "1013371.05",
+                "avg": 5.71
+            }
+        },
+        {
+            "name": "Yobit",
+            "rate": "USD",
+            "idx": "",
+            "data": {
+                "last": 6.54,
+                "vol_cur": 92279.937,
+                "avg": 6.085
+            }
+        }
+    ]
+}

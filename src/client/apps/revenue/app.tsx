@@ -7,11 +7,14 @@ import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
 import {CoinType, returnRatio} from './common';
 import {getExpense, getIncome} from './transation';
-import {getTicker, TickerResp, saveTransactions, getTransactionItems} from './bithumb';
+import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker} from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 
 import './style.scss';
+
+const QTY_PRECISION_HELPER = 100000000;
+
 (async function () {
 
 
@@ -67,14 +70,14 @@ import './style.scss';
         // const prevTotal = prevAvgUnit * (sum.expensesQty - sum.incomesQty);
         if (t.order === 'BUY') {
             price = getExpense(t);
-            sum.qty += t.qty;
+            sum.qty = Math.round(sum.qty * QTY_PRECISION_HELPER + t.qty * QTY_PRECISION_HELPER) / QTY_PRECISION_HELPER;
             sum.expenses += price;
             sum.accExpenses += price;
         } else if (t.order === 'SELL') {
             price = getIncome(t);
             const accExpense = (sum.accExpenses / sum.qty) * t.qty;
             sum.accExpenses -= accExpense;
-            sum.qty -= t.qty;
+            sum.qty = Math.round(sum.qty * QTY_PRECISION_HELPER - t.qty * QTY_PRECISION_HELPER) / QTY_PRECISION_HELPER;
             sum.incomes += price;
             ret = price - accExpense;
             retRatio = (ret) / accExpense;
@@ -94,6 +97,8 @@ import './style.scss';
 
     const types = Array.from(new Set(transactions.map(d => d.type)));
 
+    console.log('types', types);
+
     interface TickerItem {
         type: CoinType;
         ticker: TickerResp;
@@ -103,6 +108,7 @@ import './style.scss';
         filter: string;
         tickerItems: TickerItem[];
         tickerId: number;
+        wsTicker: WSTicker;
     }> {
 
         constructor(props) {
@@ -111,6 +117,7 @@ import './style.scss';
                 filter: 'ALL',
                 tickerItems: [],
                 tickerId: null,
+                wsTicker: null,
             };
         }
 
@@ -119,30 +126,60 @@ import './style.scss';
                 filter,
                 tickerItems,
                 tickerId,
+                wsTicker,
             } = this.state;
             const revenueItems: RevenueRowItem[] = [];
             let sum_sell_price = 0;
             let sum_buy_price = 0;
             let sumReturn = 0;
-            tickerItems.forEach((item) => {
-                const sum = sums[item.type];
-                const currentUnit = parseInt(item.ticker.data.closing_price);
-                const qty = sum.qty;
-                const sell_price = currentUnit * qty * (1 - 0.00075);
-                const buy_price = sum.accExpenses;
-                const ret = sell_price - buy_price;
-                sum_sell_price += sell_price;
-                sum_buy_price += buy_price;
-                sumReturn += ret;
-                revenueItems.push({
-                    type: item.type,
-                    currentUnit,
-                    avgUnit: sum.accExpenses / qty,
-                    qty: qty,
-                    return: ret,
-                    ratio: returnRatio(buy_price, sell_price),
+
+            if (wsTicker) {
+                console.log(wsTicker.data);
+                types.forEach(type => {
+                    const ticker = wsTicker.data[type];
+                    if (!ticker) {
+                        console.error(type, 'has no ticker');
+                        return;
+                    }
+                    const sum = sums[type];
+                    const currentUnit = parseInt(ticker.closing_price);
+                    const qty = sum.qty;
+                    const sell_price = currentUnit * qty * (1 - 0.00075);
+                    const buy_price = sum.accExpenses;
+                    const ret = sell_price - buy_price;
+                    sum_sell_price += sell_price;
+                    sum_buy_price += buy_price;
+                    sumReturn += ret;
+                    revenueItems.push({
+                        type: type,
+                        currentUnit,
+                        avgUnit: sum.accExpenses / qty,
+                        qty: qty,
+                        return: ret,
+                        ratio: returnRatio(buy_price, sell_price),
+                    });
                 });
-            });
+            }
+
+            // tickerItems.forEach((item) => {
+            //     const sum = sums[item.type];
+            //     const currentUnit = parseInt(item.ticker.data.closing_price);
+            //     const qty = sum.qty;
+            //     const sell_price = currentUnit * qty * (1 - 0.00075);
+            //     const buy_price = sum.accExpenses;
+            //     const ret = sell_price - buy_price;
+            //     sum_sell_price += sell_price;
+            //     sum_buy_price += buy_price;
+            //     sumReturn += ret;
+            //     revenueItems.push({
+            //         type: item.type,
+            //         currentUnit,
+            //         avgUnit: sum.accExpenses / qty,
+            //         qty: qty,
+            //         return: ret,
+            //         ratio: returnRatio(buy_price, sell_price),
+            //     });
+            // });
             revenueItems.push({
                 type: 'ALL',
                 currentUnit: 0,
@@ -151,6 +188,7 @@ import './style.scss';
                 return: sumReturn,
                 ratio: returnRatio(sum_buy_price, sum_sell_price),
             });
+            console.log(revenueItems);
             return (
                 <div>
                     <div className='ticker-control'>
@@ -164,7 +202,7 @@ import './style.scss';
                     </div>
                     <GridRevenue
                         getter={(index) => revenueItems[index]}
-                        count={tickerItems.length + 1}
+                        count={revenueItems.length}
                     />
                     <GridTransaction
                         transactions={transactionRowItems.filter(item => filter === 'ALL' || item.type === filter)}
@@ -196,7 +234,8 @@ import './style.scss';
         }
 
         async componentDidMount() {
-            this.getTicker();
+            // this.getTicker();
+            initTickerWS((wsTicker) => this.setState({wsTicker}));
         }
     }
 

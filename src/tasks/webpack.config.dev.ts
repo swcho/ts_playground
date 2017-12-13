@@ -42,7 +42,33 @@ const webpackConfig: webpack.Configuration = webpackMerge(
                     //     'X-Requested-With': undefined,
                     //     'Referer': undefined,
                     // }
-                }
+                },
+                '/btweb': {
+                    target: 'https://www.bithumb.com',
+                    pathRewrite: { '^/btweb': '' },
+                    changeOrigin: true,
+                    logLevel: 'debug',
+                    // secure: false,
+                    // headers: {
+                    //     'Host': 'api.bithumb.com',
+                    //     'Origin': undefined,
+                    //     'X-Requested-With': undefined,
+                    //     'Referer': undefined,
+                    // }
+                },
+                '/btws': {
+                    target: 'wss://wss.bithumb.com',
+                    pathRewrite: { '^/btws': '' },
+                    changeOrigin: true,
+                    logLevel: 'debug',
+                    ws: true,
+                    // wss: true,
+                    // secure: false,
+                    headers: {
+                        'Host': 'wss.bithumb.com',
+                        'Origin': 'https://www.bithumb.com',
+                    }
+                },
             }
         },
         devtool: 'inline-source-map',
