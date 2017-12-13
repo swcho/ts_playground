@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+}
+
+.logo {
+    background-color: #FFF;
+    mix-blend-mode: difference;
+    position: absolute;
+    height: 100%;
+    z-index: 1;
+}
+
+img {
+    clip-path: polygon(0 0, 100% 0, 100% 67%, 0 67%);
+    height: auto;
+    width: 100%;
+    margin-top: 50vh;
+    transform: translateY(-33%);
+}
+
+.canvas_fx {
+    position: fixed;
+    top: 0;
+    left: 0;
+}

@@ -316,9 +316,9 @@
   version "3.0.29"
   resolved "https://registry.yarnpkg.com/@types/parse-glob/-/parse-glob-3.0.29.tgz#6a40ec7ebd2418ee69ee397e48e42169268a10bf"
 
-"@types/pixi.js@^4.4.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@types/pixi.js/-/pixi.js-4.5.0.tgz#bdb44481bc42de9fd37a2277d9a4d6386819b71b"
+"@types/pixi.js@^4.6.1":
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/@types/pixi.js/-/pixi.js-4.6.1.tgz#6bfc25626d64fbb4b2ecb19fead3fbb7a7d3dc96"
 
 "@types/plotly.js@^1.28.9":
   version "1.28.9"
@@ -5214,22 +5214,22 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
-pixi-gl-core@^1.0.3:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/pixi-gl-core/-/pixi-gl-core-1.1.0.tgz#a52cb4dd3254f9c7857a0e9c2356b00e6ec0c761"
+pixi-gl-core@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/pixi-gl-core/-/pixi-gl-core-1.1.4.tgz#8b4b5c433b31e419bc379dc565ce1b835a91b372"
 
-pixi.js@^4.4.1:
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-4.5.3.tgz#16948e55b31fb9e7cd73c7c702670471713d4338"
+pixi.js@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-4.6.2.tgz#f13c87b567ca4c8ada3c1a9a0bd3639417b9ecf7"
   dependencies:
     bit-twiddle "^1.0.2"
     earcut "^2.0.7"
     eventemitter3 "^2.0.0"
     ismobilejs "^0.4.0"
     object-assign "^4.0.1"
-    pixi-gl-core "^1.0.3"
+    pixi-gl-core "^1.1.4"
     remove-array-items "^1.0.0"
-    resource-loader "^2.0.6"
+    resource-loader "^2.0.9"
 
 pkg-dir@^2.0.0:
   version "2.0.0"
@@ -6287,9 +6287,9 @@ resolve@^1.0.0, resolve@^1.1.5, resolve@^1.1.6, resolve@~1.1.0:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-resource-loader@^2.0.6:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/resource-loader/-/resource-loader-2.0.8.tgz#e84ca18aae0840652b587fef24bd7b6805b2756a"
+resource-loader@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/resource-loader/-/resource-loader-2.0.9.tgz#65d3b50a982e48260bacf835284e1a72d978806d"
   dependencies:
     mini-signals "^1.1.1"
     parse-uri "^1.0.0"
