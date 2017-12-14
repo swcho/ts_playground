@@ -1,5 +1,5 @@
 
-import {CoinType, fetchJson, queryToStr} from './common';
+import { CoinType, fetchJson, queryToStr } from './common';
 import CryptoJS = require('crypto-js');
 import { TransactionItem, TransactionOrder } from './transation';
 
@@ -8,11 +8,11 @@ declare global {
 }
 
 function microtime(get_as_float?) {
-	//  discuss at: http://phpjs.org/functions/microtime/
-	// 	original by: Paulo Freitas
-	//  example 1: timeStamp = microtime(true);
-	//  example 1: timeStamp > 1000000000 && timeStamp < 2000000000
-	//  returns 1: true
+    //  discuss at: http://phpjs.org/functions/microtime/
+    // 	original by: Paulo Freitas
+    //  example 1: timeStamp = microtime(true);
+    //  example 1: timeStamp > 1000000000 && timeStamp < 2000000000
+    //  returns 1: true
 
     const now = new Date().getTime() / 1000;
     const s = Math.floor(now);
@@ -39,9 +39,9 @@ function privateCall<T>(endPoint: string, params) {
     const headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded',
         'api-client-type': '2',
-        'Api-Key' : apiKey,
-        'Api-Sign' : btoa(CryptoJS.HmacSHA512(str, secretKey).toString()),
-        'Api-Nonce' : nonce,
+        'Api-Key': apiKey,
+        'Api-Sign': btoa(CryptoJS.HmacSHA512(str, secretKey).toString()),
+        'Api-Nonce': nonce,
         'User-Agent': 'test'
     });
     return fetchJson<T>(`/api/${endPoint}`, {
@@ -52,88 +52,88 @@ function privateCall<T>(endPoint: string, params) {
 }
 
 function http_build_query(obj) {
-	const output_string = [];
-	Object.keys(obj).forEach(function (val) {
+    const output_string = [];
+    Object.keys(obj).forEach(function (val) {
         let key = val;
-		key = encodeURIComponent(key.replace(/[!'()*]/g, escape));
+        key = encodeURIComponent(key.replace(/[!'()*]/g, escape));
 
-		if (typeof obj[val] === 'object') {
-			// var query = build_query(obj[val], null, key)
-			// output_string.push(query)
-		}
-		else {
-			let value = encodeURIComponent(obj[val].replace(/[!'()*]/g, escape));
-			output_string.push(key + '=' + value);
-		}
-	});
+        if (typeof obj[val] === 'object') {
+            // var query = build_query(obj[val], null, key)
+            // output_string.push(query)
+        }
+        else {
+            let value = encodeURIComponent(obj[val].replace(/[!'()*]/g, escape));
+            output_string.push(key + '=' + value);
+        }
+    });
 
-	return output_string.join('&');
+    return output_string.join('&');
 }
 
 function base64_encode(data) {
-	// discuss at: http://phpjs.org/functions/base64_encode/
-	// original by: Tyler Akins (http://rumkin.com)
-	// improved by: Bayron Guevara
-	// improved by: Thunder.m
-	// improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	// improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	// improved by: Rafał Kukawski (http://kukawski.pl)
-	// bugfixed by: Pellentesque Malesuada
-	// example 1: base64_encode('Kevin van Zonneveld');
-	// returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
-	// example 2: base64_encode('a');
-	// returns 2: 'YQ=='
+    // discuss at: http://phpjs.org/functions/base64_encode/
+    // original by: Tyler Akins (http://rumkin.com)
+    // improved by: Bayron Guevara
+    // improved by: Thunder.m
+    // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // improved by: Rafał Kukawski (http://kukawski.pl)
+    // bugfixed by: Pellentesque Malesuada
+    // example 1: base64_encode('Kevin van Zonneveld');
+    // returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
+    // example 2: base64_encode('a');
+    // returns 2: 'YQ=='
 
-	let b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-	let o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
-	ac = 0,
-	enc = '',
-	tmp_arr = [];
+    let b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    let o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+        ac = 0,
+        enc = '',
+        tmp_arr = [];
 
-	if (!data) {
-		return data;
-	}
+    if (!data) {
+        return data;
+    }
 
-	do { // pack three octets into four hexets
-		o1 = data.charCodeAt(i++);
-		o2 = data.charCodeAt(i++);
-		o3 = data.charCodeAt(i++);
+    do { // pack three octets into four hexets
+        o1 = data.charCodeAt(i++);
+        o2 = data.charCodeAt(i++);
+        o3 = data.charCodeAt(i++);
 
-		bits = o1 << 16 | o2 << 8 | o3;
+        bits = o1 << 16 | o2 << 8 | o3;
 
-		h1 = bits >> 18 & 0x3f;
-		h2 = bits >> 12 & 0x3f;
-		h3 = bits >> 6 & 0x3f;
-		h4 = bits & 0x3f;
+        h1 = bits >> 18 & 0x3f;
+        h2 = bits >> 12 & 0x3f;
+        h3 = bits >> 6 & 0x3f;
+        h4 = bits & 0x3f;
 
-		// use hexets to index into b64, and append result to encoded string
-		tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-	} while (i < data.length);
+        // use hexets to index into b64, and append result to encoded string
+        tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+    } while (i < data.length);
 
-	enc = tmp_arr.join('');
+    enc = tmp_arr.join('');
 
-	let r = data.length % 3;
+    let r = data.length % 3;
 
-	return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+    return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 }
 
 function chr(codePt) {
-	//  discuss at: http://phpjs.org/functions/chr/
-	// original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	// improved by: Brett Zamir (http://brett-zamir.me)
-	//   example 1: chr(75) === 'K';
-	//   example 1: chr(65536) === '\uD800\uDC00';
-	//   returns 1: true
-	//   returns 1: true
+    //  discuss at: http://phpjs.org/functions/chr/
+    // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // improved by: Brett Zamir (http://brett-zamir.me)
+    //   example 1: chr(75) === 'K';
+    //   example 1: chr(65536) === '\uD800\uDC00';
+    //   returns 1: true
+    //   returns 1: true
 
-	if (codePt > 0xFFFF) { // Create a four-byte string (length 2) since this code point is high
-		//   enough for the UTF-16 encoding (JavaScript internal use), to
-		//   require representation with two surrogates (reserved non-characters
-		//   used for building other characters; the first is "high" and the next "low")
-		codePt -= 0x10000;
-		return String.fromCharCode(0xD800 + (codePt >> 10), 0xDC00 + (codePt & 0x3FF));
-	}
-	return String.fromCharCode(codePt);
+    if (codePt > 0xFFFF) { // Create a four-byte string (length 2) since this code point is high
+        //   enough for the UTF-16 encoding (JavaScript internal use), to
+        //   require representation with two surrogates (reserved non-characters
+        //   used for building other characters; the first is "high" and the next "low")
+        codePt -= 0x10000;
+        return String.fromCharCode(0xD800 + (codePt >> 10), 0xDC00 + (codePt & 0x3FF));
+    }
+    return String.fromCharCode(codePt);
 }
 
 class XCoinAPI {
@@ -150,7 +150,7 @@ class XCoinAPI {
 
     xcoinApiCall(endPoint, params) {
         let rgParams: any = {
-            'endPoint' : endPoint
+            'endPoint': endPoint
         };
 
         if (params) {
@@ -195,10 +195,10 @@ class XCoinAPI {
         // });
 
         return fetchJson(strHost, {
-                method : strMethod,
-                headers,
-                body: http_build_query(rgParams),
-            }
+            method: strMethod,
+            headers,
+            body: http_build_query(rgParams),
+        }
         );
 
         // request({
@@ -221,16 +221,16 @@ class XCoinAPI {
 
 
     _getHttpHeaders(endPoint, rgParams, api_key, api_secret) {
-        let strData	= http_build_query(rgParams);
+        let strData = http_build_query(rgParams);
         let nNonce = this.usecTime();
         const str = endPoint + ';' + strData + ';' + nNonce;
         console.log('_getHttpHeaders', str, api_secret);
         return {
             'api-client-type': '2',
-            'Api-Key' : api_key,
+            'Api-Key': api_key,
             // 'Api-Sign' : btoa(CryptoJS.HmacSHA512(endPoint + chr(0) + strData + chr(0) + nNonce, api_secret).toString()),
-            'Api-Sign' : btoa(CryptoJS.HmacSHA512(str, api_secret).toString()),
-            'Api-Nonce' : nNonce,
+            'Api-Sign': btoa(CryptoJS.HmacSHA512(str, api_secret).toString()),
+            'Api-Nonce': nNonce,
             'User-Agent': 'test'
         };
     }
@@ -282,7 +282,7 @@ export interface TickerResp {
 export function getTicker(types: CoinType[], cont: boolean, cb: (ret: TickerResp[]) => void) {
     Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))).then(cb);
     if (cont) {
-        return setInterval(function() {
+        return setInterval(function () {
             Promise.all(types.map(t => fetchJson<TickerResp>(URL_TICKER(t)))).then(cb);
         }, 1000);
     }
@@ -418,7 +418,7 @@ export async function saveTransactions() {
     localStorage.setItem(KEY_TRANSACTIONS, JSON.stringify(transactions));
 }
 
-export function getTransactions(): UserTransaction[]  {
+export function getTransactions(): UserTransaction[] {
     return JSON.parse(localStorage.getItem(KEY_TRANSACTIONS)) || [];
 }
 
@@ -437,7 +437,7 @@ export function getTransactionItems(): TransactionItem[] {
         }))
         .sort((a, b) => a.date - b.date)
         // .sort((a, b) => b.date - a.date)
-    ;
+        ;
     return transactions;
 }
 
@@ -466,11 +466,45 @@ export interface WSTicker {
 
 export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
     let ws = new WebSocket('ws://localhost:8080/btws/public');
-    ws.onopen = function(event) {
+    ws.onopen = function (event) {
         ws.send('{"currency":"BTC","tickDuration":"24H"}');
     };
-    ws.onmessage = function(event) {
+    ws.onmessage = function (event) {
         const ticker = JSON.parse(event.data);
         ticker.data.BTC && cb && cb(ticker);
     };
+}
+
+interface OrderParams {
+    order_currency: CoinType;
+    Payment_currency: 'KRW';
+    units: number;
+    price: number;
+    type: 'bid' | 'ask';
+}
+
+export async function placeBuyOrder(coin: CoinType, unit: number, qty: number) {
+    const orderParams: OrderParams = {
+        order_currency: coin,
+        Payment_currency: 'KRW',
+        units: qty,
+        price: unit,
+        type: 'bid',
+    };
+    const resp = await privateCall('/trade/place', orderParams);
+    console.log(resp);
+    return resp;
+}
+
+export async function placeSellOrder(coin: CoinType, unit: number, qty: number) {
+    const orderParams: OrderParams = {
+        order_currency: coin,
+        Payment_currency: 'KRW',
+        units: qty,
+        price: unit,
+        type: 'ask',
+    };
+    const resp = await privateCall('/trade/place', orderParams);
+    console.log(resp);
+    return resp;
 }

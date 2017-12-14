@@ -16,6 +16,18 @@ import './style.scss';
 
 const QTY_PRECISION_HELPER = 100000000;
 
+export const disableGetDefaultPropsWarning = () => {
+    const warning = 'Warning: getDefaultProps is only used on classic React.createClass definitions. Use a static property named `defaultProps` instead.';
+    const consoleError = console.error.bind(console);
+
+    console.error = (...args) => {
+        if (args[0] === warning) return;
+        return consoleError(...args);
+    };
+};
+
+disableGetDefaultPropsWarning();
+
 (async function () {
 
 
@@ -41,7 +53,7 @@ const QTY_PRECISION_HELPER = 100000000;
 
     const transactions = getTransactionItems();
     // const transactions = getData();
-    console.log(transactions);
+    // console.log(transactions);
 
     const transactionRowItems: TransactionRowItem[] = [];
 
@@ -198,7 +210,6 @@ const QTY_PRECISION_HELPER = 100000000;
                 unit: parseInt(o.price),
                 qty: parseFloat(o.units),
             })) : [];
-            console.log(orders);
             return (
                 <div>
                     <div className='ticker-control'>
