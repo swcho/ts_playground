@@ -297,10 +297,10 @@ interface GetOrderInfoParams {
     currency?: CoinType;
 }
 
-interface GetOrderInfo {
+export interface OrderInfo {
     order_id: string;
     order_currency: string;
-    order_date: number;
+    order_date: string;
     payment_currency: string;
     type: 'bid' | 'ask';
     status: 'placed';
@@ -312,12 +312,13 @@ interface GetOrderInfo {
     date_completed: number;
 }
 
-type GetOrderInfoResp = RespCommon<GetOrderInfo>;
+type GetOrderInfoResp = RespCommon<OrderInfo>;
 
 export async function getOrderInfo() {
     const params: GetOrderInfoParams = {
     };
-    return privateCall<GetOrderInfoResp>('/info/orders', params);
+    const resp = await privateCall<GetOrderInfoResp>('/info/orders', params);
+    return resp.data;
 }
 
 interface GetUserTransactionsParams {
@@ -397,7 +398,6 @@ export async function test() {
         currency: 'ALL',
     };
     const resp = await xcoinAPI.xcoinApiCall('/info/balance', rgParams);
-    console.log('test', resp);
 }
 
 const KEY_TRANSACTIONS = 'transactions';
@@ -438,18 +438,15 @@ export function getTransactionItems(): TransactionItem[] {
         .sort((a, b) => a.date - b.date)
         // .sort((a, b) => b.date - a.date)
     ;
-    console.log(transactions);
     return transactions;
 }
 
 export async function getTotalTicker() {
     const resp = await fetchJson('/btweb/resources/csv/total_ticker.json');
-    console.log(resp);
 }
 
 export async function getCurrencyRate() {
     const resp = await fetchJson('/btweb/resources/csv/CurrencyRate.json');
-    console.log(resp);
 }
 
 export interface WSTicker {

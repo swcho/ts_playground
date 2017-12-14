@@ -7,9 +7,10 @@ import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
 import {CoinType, returnRatio} from './common';
 import {getExpense, getIncome} from './transation';
-import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker} from './bithumb';
+import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker, OrderInfo, getOrderInfo} from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
+import {GridOrder} from './gridorders';
 
 import './style.scss';
 
@@ -109,6 +110,7 @@ const QTY_PRECISION_HELPER = 100000000;
         tickerItems: TickerItem[];
         tickerId: number;
         wsTicker: WSTicker;
+        orders: OrderInfo[];
     }> {
 
         constructor(props) {
@@ -118,6 +120,7 @@ const QTY_PRECISION_HELPER = 100000000;
                 tickerItems: [],
                 tickerId: null,
                 wsTicker: null,
+                orders: null,
             };
         }
 
@@ -127,6 +130,7 @@ const QTY_PRECISION_HELPER = 100000000;
                 tickerItems,
                 tickerId,
                 wsTicker,
+                orders,
             } = this.state;
             const revenueItems: RevenueRowItem[] = [];
             let sum_sell_price = 0;
@@ -134,7 +138,6 @@ const QTY_PRECISION_HELPER = 100000000;
             let sumReturn = 0;
 
             if (wsTicker) {
-                console.log(wsTicker.data);
                 types.forEach(type => {
                     const ticker = wsTicker.data[type];
                     if (!ticker) {
@@ -188,7 +191,14 @@ const QTY_PRECISION_HELPER = 100000000;
                 return: sumReturn,
                 ratio: returnRatio(sum_buy_price, sum_sell_price),
             });
-            console.log(revenueItems);
+
+            const orderItems = orders ? orders.map(o => ({
+                date: parseInt(o.order_date) / 1000,
+                type: o.order_currency as CoinType,
+                unit: parseInt(o.price),
+                qty: parseFloat(o.units),
+            })) : [];
+            console.log(orders);
             return (
                 <div>
                     <div className='ticker-control'>
@@ -201,9 +211,15 @@ const QTY_PRECISION_HELPER = 100000000;
                         }}>{tickerId ? 'Stop' : 'Auto'}</button>
                     </div>
                     <GridRevenue
-                        getter={(index) => revenueItems[index]}
+                        getter={(i) => revenueItems[i]}
                         count={revenueItems.length}
                     />
+                    {orders &&
+                    <GridOrder
+                        getter={(i) => orderItems[i]}
+                        count={orderItems.length}
+                    />
+                    }
                     <GridTransaction
                         transactions={transactionRowItems.filter(item => filter === 'ALL' || item.type === filter)}
                     />
@@ -236,6 +252,8 @@ const QTY_PRECISION_HELPER = 100000000;
         async componentDidMount() {
             // this.getTicker();
             initTickerWS((wsTicker) => this.setState({wsTicker}));
+
+            this.setState({orders: await getOrderInfo()});
         }
     }
 
