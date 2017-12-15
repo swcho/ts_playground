@@ -24,6 +24,9 @@ export * from 'three/examples/js/renderers/CanvasRenderer';
 // for flip_pannel
 export const Detector = require('three/examples/js/Detector') as any;
 
+// for lens flare
+export * from 'three/examples/js/controls/DeviceOrientationControls';
+
 // export import BAS = require('three-bas/dist/bas');
 export import BAS = require('./bas.index');
 import { Geometry } from 'three';
@@ -148,6 +151,10 @@ declare module 'three' {
          * @memberof ParametricBufferGeometry
          */
         constructor(func, slices: number, stacks: number);
+    }
+
+    export class DeviceOrientationControls {
+        constructor(camera: THREE.Camera);
     }
 
 }
