@@ -1,0 +1,50 @@
+body {
+    width: 80%;
+    margin: 10vw auto;
+}
+
+.heading {
+    font-family: "Playfair Display", serif;
+    font-size: 10vw;
+}
+
+.subheading {
+    font-family: "Open Sans", sans-serif;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+@media screen and (min-width: 40em) {
+    body {
+        width: 50%;
+    }
+    .heading {
+        font-size: 6vw;
+    }
+    .subheading {
+        font-size: 1.75vw;
+    }
+}
+
+
+/*================================================
+Start Important Part
+==================================================*/
+
+.underline--magical {
+    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 0.2em;
+    background-position: 0 88%;
+    // transition: background-size 0.25s ease-in;
+    transition: all 0.25s ease-in;
+    &:hover {
+        background-size: 100% 100%;
+        background-position: 0 0%;
+    }
+}
+
+
+/*================================================
+End Important Part
+==================================================*/
