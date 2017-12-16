@@ -213,7 +213,7 @@ disableGetDefaultPropsWarning();
             })) : [];
             return (
                 <div>
-                    <div className='ticker-control'>
+                    {/* <div className='ticker-control'>
                         <button onClick={() => {
                             if (tickerId) {
                                 this.stopTikcer();
@@ -221,7 +221,7 @@ disableGetDefaultPropsWarning();
                                 this.getTicker(true);
                             }
                         }}>{tickerId ? 'Stop' : 'Auto'}</button>
-                    </div>
+                    </div> */}
                     <GridRevenue
                         getter={(i) => revenueItems[i]}
                         count={revenueItems.length}

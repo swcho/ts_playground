@@ -417,6 +417,7 @@ export async function saveTransactions() {
         transactions = transactions.concat(await getUserTransactions(coin));
     }
     localStorage.setItem(KEY_TRANSACTIONS, JSON.stringify(transactions));
+    location.reload();
 }
 
 export function getTransactions(): UserTransaction[] {
