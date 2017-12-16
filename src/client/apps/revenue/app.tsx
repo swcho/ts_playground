@@ -10,6 +10,7 @@ import {getExpense, getIncome} from './transation';
 import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker, OrderInfo, getOrderInfo,
     cancelOrder,
     placeBuyOrder,
+    placeSellOrder,
 } from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
@@ -127,9 +128,12 @@ disableGetDefaultPropsWarning();
         tickerId: number;
         wsTicker: WSTicker;
         orders: OrderInfo[];
-        orderType: CoinType;
-        orderUnit: string;
-        orderQty: string;
+        buyType: CoinType;
+        buyUnit: string;
+        buyQty: string;
+        sellType: CoinType;
+        sellUnit: string;
+        sellQty: string;
     }> {
 
         constructor(props) {
@@ -140,9 +144,12 @@ disableGetDefaultPropsWarning();
                 tickerId: null,
                 wsTicker: null,
                 orders: null,
-                orderType: 'BTC',
-                orderUnit: '0',
-                orderQty: '0',
+                buyType: 'BTC',
+                buyUnit: '0',
+                buyQty: '0',
+                sellType: null,
+                sellUnit: '0',
+                sellQty: '0',
             };
         }
 
@@ -153,9 +160,12 @@ disableGetDefaultPropsWarning();
                 tickerId,
                 wsTicker,
                 orders,
-                orderType,
-                orderUnit,
-                orderQty,
+                buyType,
+                buyUnit,
+                buyQty,
+                sellType,
+                sellUnit,
+                sellQty,
             } = this.state;
             const revenueItems: RevenueRowItem[] = [];
             let sum_sell_price = 0;
@@ -254,8 +264,8 @@ disableGetDefaultPropsWarning();
                     <div className='order-input'>
                         <select
                             className='right' name='order-coin'
-                            value={orderType}
-                            onChange={(e) => this.setState({orderType: e.target.value as any})}
+                            value={buyType}
+                            onChange={(e) => this.setState({buyType: e.target.value as any})}
                         >
                             {COINS.map(t => (
                                 <option key={t} value={t}>{t}</option>
@@ -263,24 +273,68 @@ disableGetDefaultPropsWarning();
                         </select>
                         <input
                             type='text'
-                            value={orderUnit}
-                            onChange={(e) => this.setState({orderUnit: e.target.value})}
+                            value={buyUnit}
+                            onChange={(e) => this.setState({buyUnit: e.target.value})}
                         />
                         <input
                             type='text'
-                            value={orderQty}
-                            onChange={(e) => this.setState({orderQty: e.target.value})}
+                            value={buyQty}
+                            onChange={(e) => this.setState({buyQty: e.target.value})}
                         />
                         <button
                             onClick={
                                 () => {
-                                    if (confirm(`${orderType} ${orderUnit} ${orderQty}`)) {
-                                        placeBuyOrder(orderType, parseInt(orderUnit), parseFloat(orderQty));
+                                    if (confirm(`${buyType} ${buyUnit} ${buyQty}`)) {
+                                        placeBuyOrder(buyType, parseInt(buyUnit), parseFloat(buyQty));
                                     }
                                 }
                             }
                         >
                             BUY
+                        </button>
+                        <div/>
+                        <select
+                            className='right' name='sell-coin'
+                            value={sellType}
+                            onChange={
+                                (e) => {
+                                    const coin = e.target.value as CoinType;
+                                    const ticker = wsTicker && wsTicker.data[coin];
+                                    const sum = sums[coin];
+                                    console.log(ticker);
+                                    this.setState({
+                                        sellUnit: ticker.closing_price,
+                                        sellQty: '' + sum.qty,
+                                        sellType: coin as any
+                                    });
+                                }
+                            }
+                        >
+                            <option value={null}>-</option>
+                            {COINS.map(t => (
+                                <option key={t} value={t}>{t}</option>
+                            ))}
+                        </select>
+                        <input
+                            type='text'
+                            value={sellUnit}
+                            onChange={(e) => this.setState({sellUnit: e.target.value})}
+                        />
+                        <input
+                            type='text'
+                            value={sellQty}
+                            onChange={(e) => this.setState({sellQty: e.target.value})}
+                        />
+                        <button
+                            onClick={
+                                () => {
+                                    if (confirm(`${sellType} ${sellUnit} ${sellQty}`)) {
+                                        placeSellOrder(sellType, parseInt(sellUnit), parseFloat(sellQty));
+                                    }
+                                }
+                            }
+                        >
+                            SELL
                         </button>
                     </div>
                     <GridTransaction
