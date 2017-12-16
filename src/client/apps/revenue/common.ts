@@ -8,6 +8,7 @@ export type CoinType =
     'ETH' |
     'ETC' |
     'DASH' |
+    'XRP' |
     'ALL';
 
 export function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {

@@ -107,6 +107,7 @@ disableGetDefaultPropsWarning();
         });
 
     });
+    console.log(sums);
 
     const types = Array.from(new Set(transactions.map(d => d.type)));
 

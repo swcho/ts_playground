@@ -409,6 +409,7 @@ export async function saveTransactions() {
         'BCH',
         'ETH',
         'ETC',
+        'XRP',
     ];
 
     let transactions: UserTransaction[] = [];
@@ -424,9 +425,16 @@ export function getTransactions(): UserTransaction[] {
 
 export function getTransactionItems(): TransactionItem[] {
     const userTransactions = getTransactions();
+    const debug  = userTransactions
+        .filter(t => t.coin === 'XRP');
+    console.log(debug);
+
+    const XRP_MIN = new Date('2017-11-27').getTime();
+
     const transactions: TransactionItem[] = userTransactions
         .filter(t => t.type === 'BUY' || t.type === 'SELL')
-        // .filter(t => t.coin === 'BTC')
+        .filter(t => t.coin !== 'XRP' || XRP_MIN < t.transfer_date)
+        // .filter(t => t.coin === 'XRP')
         .map(t => ({
             date: t.transfer_date,
             order: (t.type === 'BUY' ? 'BUY' : 'SELL') as TransactionOrder,
@@ -470,8 +478,10 @@ export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
         ws.send('{"currency":"BTC","tickDuration":"24H"}');
     };
     ws.onmessage = function (event) {
-        const ticker = JSON.parse(event.data);
-        ticker.data.BTC && cb && cb(ticker);
+        try {
+            const ticker = JSON.parse(event.data);
+            ticker.data.BTC && cb && cb(ticker);
+        } catch (e) {}
     };
 }
 
