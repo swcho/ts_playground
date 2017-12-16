@@ -254,7 +254,7 @@ export function getSecretKey() {
     return localStorage.getItem('secret_key');
 }
 
-interface RespCommon<T> {
+interface RespCommon<T = any> {
     status: string;
     data: T[];
 }
@@ -392,18 +392,24 @@ export function getTransactions(): UserTransaction[] {
     return JSON.parse(localStorage.getItem(KEY_TRANSACTIONS)) || [];
 }
 
+function dateFilter(coin: CoinType, date: string) {
+    const time = new Date(date).getTime();
+    return (t: UserTransaction) => t.coin !== coin || time < t.transfer_date;
+}
+
 export function getTransactionItems(): TransactionItem[] {
     const userTransactions = getTransactions();
-    const debug  = userTransactions
-        .filter(t => t.coin === 'XRP');
-    console.log(debug);
-
-    const XRP_MIN = new Date('2017-11-27').getTime();
+    // const debug  = userTransactions
+    //     .filter(t => t.coin === 'XRP');
+    // console.log(debug);
 
     const transactions: TransactionItem[] = userTransactions
         .filter(t => t.type === 'BUY' || t.type === 'SELL')
-        .filter(t => t.coin !== 'XRP' || XRP_MIN < t.transfer_date)
-        // .filter(t => t.coin === 'XRP')
+        .filter(dateFilter('XRP', '2017-11-27'))
+        .filter(dateFilter('BTC', '2017-12-16'))
+        .filter(dateFilter('ETC', '2017-12-17'))
+        .filter(dateFilter('BCH', '2017-12-17'))
+        .filter(dateFilter('DASH', '2017-12-17'))
         .map(t => ({
             date: t.transfer_date,
             order: (t.type === 'BUY' ? 'BUY' : 'SELL') as TransactionOrder,
@@ -506,9 +512,11 @@ export async function placeBuyOrder(coin: CoinType, unit: number, qty: number) {
         price: unit,
         type: 'bid',
     };
-    const resp = await privateCall('/trade/place', orderParams);
+    const resp = await privateCall<RespCommon>('/trade/place', orderParams);
     console.log(resp);
-    location.reload();
+    if (resp.status === '0000') {
+        location.reload();
+    }
     return resp;
 }
 
