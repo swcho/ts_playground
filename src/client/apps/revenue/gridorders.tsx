@@ -3,13 +3,16 @@ import * as React from 'react';
 import * as ReactDataGrid from 'react-data-grid';
 
 import { CoinType } from './common';
-import { DateFormatter, MoneyFormatter } from './formatters';
+import { DateFormatter, MoneyFormatter, RatioFormatter } from './formatters';
 
 export interface OrderRowItem {
     id: string;
     date: number;
     type: CoinType;
+    ratio: number;
     unit: number;
+    gap: number;
+    gapRatio: number;
     qty: number;
     btn?: boolean;
     data: any;
@@ -27,9 +30,21 @@ const COLUMNS: (onCancel: (id: OrderRowItem) => void) => OrderColum[] = (onCance
     key: 'type',
     name: 'Type',
 }, {
+    key: 'ratio',
+    name: 'Ratio',
+    formatter: RatioFormatter,
+}, {
     key: 'unit',
     name: 'Unit',
     formatter: MoneyFormatter,
+}, {
+    key: 'gap',
+    name: 'Gap',
+    formatter: MoneyFormatter,
+}, {
+    key: 'gapRatio',
+    name: 'Expected',
+    formatter: RatioFormatter,
 }, {
     key: 'qty',
     name: 'Acc. Qty',

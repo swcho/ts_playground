@@ -227,14 +227,25 @@ disableGetDefaultPropsWarning();
                 ratio: returnRatio(sum_buy_price, sum_sell_price),
             });
 
-            const orderItems = orders ? orders.map(o => ({
-                id: o.order_id,
-                date: parseInt(o.order_date) / 1000,
-                type: o.order_currency as CoinType,
-                unit: parseInt(o.price),
-                qty: parseFloat(o.units),
-                data: o,
-            })) : [];
+            const orderItems = orders ? orders.map(o => {
+                    const ticker = wsTicker && wsTicker.data[o.order_currency as CoinType];
+                    const unit = parseInt(o.price);
+                    const open = ticker ? parseInt(ticker.opening_price) : 0;
+                    const current = ticker ? parseInt(ticker.closing_price) : 0;
+                    const gap = unit - current;
+                    return {
+                        id: o.order_id,
+                        date: parseInt(o.order_date) / 1000,
+                        type: o.order_currency as CoinType,
+                        ratio: (current - open) / open,
+                        unit,
+                        gap,
+                        gapRatio: (unit - open) / open,
+                        qty: parseFloat(o.units),
+                        data: o,
+                    };
+                }
+            ) : [];
             return (
                 <div>
                     {/* <div className='ticker-control'>
