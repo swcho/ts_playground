@@ -1,5 +1,5 @@
 
-import { CoinType, fetchJson, queryToStr } from './common';
+import { CoinType, fetchJson, queryToStr, COINS} from './common';
 import CryptoJS = require('crypto-js');
 import { TransactionItem, TransactionOrder } from './transation';
 
@@ -289,38 +289,6 @@ export function getTicker(types: CoinType[], cont: boolean, cb: (ret: TickerResp
     return null;
 };
 
-interface GetOrderInfoParams {
-    order_id?: string;
-    type?: string;
-    count?: number;
-    after?: number;
-    currency?: CoinType;
-}
-
-export interface OrderInfo {
-    order_id: string;
-    order_currency: string;
-    order_date: string;
-    payment_currency: string;
-    type: 'bid' | 'ask';
-    status: 'placed';
-    units: string;
-    units_remaining: string;
-    price: string;
-    fee: string;
-    total: string;
-    date_completed: number;
-}
-
-type GetOrderInfoResp = RespCommon<OrderInfo>;
-
-export async function getOrderInfo() {
-    const params: GetOrderInfoParams = {
-    };
-    const resp = await privateCall<GetOrderInfoResp>('/info/orders', params);
-    return resp.data;
-}
-
 interface GetUserTransactionsParams {
     offset?: number;
     count?: number;
@@ -486,6 +454,42 @@ export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
     };
 }
 
+interface GetOrderInfoParams {
+    order_id?: string;
+    type?: string;
+    count?: number;
+    after?: number;
+    currency?: CoinType;
+}
+
+export interface OrderInfo {
+    order_id: string;
+    order_currency: string;
+    order_date: string;
+    payment_currency: string;
+    type: 'bid' | 'ask';
+    status: 'placed';
+    units: string;
+    units_remaining: string;
+    price: string;
+    fee: string;
+    total: string;
+    date_completed: number;
+}
+
+type GetOrderInfoResp = RespCommon<OrderInfo>;
+
+export async function getOrderInfo() {
+    let ret: OrderInfo[] = [];
+    for (const currency of COINS) {
+        const resp = await privateCall<GetOrderInfoResp>('/info/orders', {currency});
+        if (resp.data) {
+            ret = ret.concat(resp.data);
+        }
+    }
+    return ret;
+}
+
 interface OrderParams {
     order_currency: CoinType;
     Payment_currency: 'KRW';
@@ -504,6 +508,7 @@ export async function placeBuyOrder(coin: CoinType, unit: number, qty: number) {
     };
     const resp = await privateCall('/trade/place', orderParams);
     console.log(resp);
+    location.reload();
     return resp;
 }
 
@@ -518,4 +523,15 @@ export async function placeSellOrder(coin: CoinType, unit: number, qty: number) 
     const resp = await privateCall('/trade/place', orderParams);
     console.log(resp);
     return resp;
+}
+
+export async function cancelOrder(order: OrderInfo) {
+    const {
+        type,
+        order_id,
+        // order_currency,
+    } = order;
+    const resp = await privateCall('/trade/cancel', {type, order_id});
+    console.log(resp);
+    location.reload();
 }

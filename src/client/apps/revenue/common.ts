@@ -11,6 +11,16 @@ export type CoinType =
     'XRP' |
     'ALL';
 
+export const COINS: CoinType[] = [
+    'BTC',
+    'BCH',
+    'LTC',
+    'ETH',
+    'ETC',
+    'DASH',
+    'XRP',
+];
+
 export function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
     return fetch(url, options)
         // .then((response) => {

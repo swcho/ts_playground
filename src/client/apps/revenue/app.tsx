@@ -5,9 +5,12 @@ console.log(__filename);
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
-import {CoinType, returnRatio} from './common';
+import {CoinType, returnRatio, COINS} from './common';
 import {getExpense, getIncome} from './transation';
-import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker, OrderInfo, getOrderInfo} from './bithumb';
+import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker, OrderInfo, getOrderInfo,
+    cancelOrder,
+    placeBuyOrder,
+} from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 import {GridOrder} from './gridorders';
@@ -124,6 +127,9 @@ disableGetDefaultPropsWarning();
         tickerId: number;
         wsTicker: WSTicker;
         orders: OrderInfo[];
+        orderType: CoinType;
+        orderUnit: string;
+        orderQty: string;
     }> {
 
         constructor(props) {
@@ -134,6 +140,9 @@ disableGetDefaultPropsWarning();
                 tickerId: null,
                 wsTicker: null,
                 orders: null,
+                orderType: 'BTC',
+                orderUnit: '0',
+                orderQty: '0',
             };
         }
 
@@ -144,6 +153,9 @@ disableGetDefaultPropsWarning();
                 tickerId,
                 wsTicker,
                 orders,
+                orderType,
+                orderUnit,
+                orderQty,
             } = this.state;
             const revenueItems: RevenueRowItem[] = [];
             let sum_sell_price = 0;
@@ -206,10 +218,12 @@ disableGetDefaultPropsWarning();
             });
 
             const orderItems = orders ? orders.map(o => ({
+                id: o.order_id,
                 date: parseInt(o.order_date) / 1000,
                 type: o.order_currency as CoinType,
                 unit: parseInt(o.price),
                 qty: parseFloat(o.units),
+                data: o,
             })) : [];
             return (
                 <div>
@@ -230,14 +244,51 @@ disableGetDefaultPropsWarning();
                     <GridOrder
                         getter={(i) => orderItems[i]}
                         count={orderItems.length}
+                        onCancel={(item) => {
+                            if (confirm(`${item.type} ${item.unit} ${item.qty}`)) {
+                                cancelOrder(item.data);
+                            }
+                        }}
                     />
                     }
+                    <div className='order-input'>
+                        <select
+                            className='right' name='order-coin'
+                            value={orderType}
+                            onChange={(e) => this.setState({orderType: e.target.value as any})}
+                        >
+                            {COINS.map(t => (
+                                <option key={t} value={t}>{t}</option>
+                            ))}
+                        </select>
+                        <input
+                            type='text'
+                            value={orderUnit}
+                            onChange={(e) => this.setState({orderUnit: e.target.value})}
+                        />
+                        <input
+                            type='text'
+                            value={orderQty}
+                            onChange={(e) => this.setState({orderQty: e.target.value})}
+                        />
+                        <button
+                            onClick={
+                                () => {
+                                    if (confirm(`${orderType} ${orderUnit} ${orderQty}`)) {
+                                        placeBuyOrder(orderType, parseInt(orderUnit), parseFloat(orderQty));
+                                    }
+                                }
+                            }
+                        >
+                            BUY
+                        </button>
+                    </div>
                     <GridTransaction
                         transactions={transactionRowItems.filter(item => filter === 'ALL' || item.type === filter)}
                     />
                     <div className='controls'>
                         <button onClick={() => saveTransactions()}>Update</button>
-                        <select className='right' name='' id='' value={filter} onChange={(e) => this.setState({filter: e.target.value})}>
+                        <select className='right' name='filter' id='' value={filter} onChange={(e) => this.setState({filter: e.target.value})}>
                             <option value='ALL'>ALL</option>
                             {types.map(t => (
                                 <option key={t} value={t}>{t}</option>
