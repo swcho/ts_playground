@@ -7,6 +7,30 @@ console.log(__filename);
 
 import * as THREE from '../three';
 
+import Stats = require('stats.js');
+import dat = require('dat-gui');
+
+///////////
+// STATS //
+///////////
+const stats = new Stats();
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.bottom = '0px';
+stats.domElement.style.zIndex = '100';
+document.body.appendChild(stats.domElement);
+// stats.update();
+
+const CONFIG = {
+    wireframe: false,
+    callback: true,
+    rotation: true,
+};
+
+let gui = new dat.GUI();
+gui.add(CONFIG, 'wireframe');
+gui.add(CONFIG, 'callback');
+gui.add(CONFIG, 'rotation');
+
 /**
  * @file
  * The main scene.
@@ -20,7 +44,7 @@ const TEXTURE_PATH = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/123879/';
 /**
  * Set our global variables.
  */
-var camera,
+let camera,
     scene,
     renderer,
     effect,
@@ -29,9 +53,9 @@ var camera,
     container,
     rotationPoint;
 
-var textureFlare0;
-var textureFlare2;
-var textureFlare3;
+let textureFlare0;
+let textureFlare2;
+let textureFlare3;
 
 document.addEventListener('mousemove', onDocumentMouseMove, false);
 
@@ -91,11 +115,11 @@ function init() {
     window.addEventListener('deviceorientation', setOrientationControls, true);
 
     // Ambient lights
-    var ambient = new THREE.AmbientLight(0x222222);
+    const ambient = new THREE.AmbientLight(0x222222);
     scene.add(ambient);
 
     // The sun.
-    var light = new THREE.PointLight(0xffffff, 1, 10000, 0);
+    const light = new THREE.PointLight(0xffffff, 1, 10000, 0);
     light.position.set(-8000, 0, 0);
     scene.add(light);
 
@@ -198,13 +222,14 @@ function onWindowResize() {
  */
 function createSun(x, y, z) {
     // Add the Sun sphere model.
-    var sunGeometry = new THREE.SphereGeometry(100, 16, 16);
+    let sunGeometry = new THREE.SphereGeometry(100, 16, 16);
 
     // Create the Sun materials.
-    var sunMaterial = new THREE.MeshLambertMaterial({
+    let sunMaterial = new THREE.MeshLambertMaterial({
         color: '#ffff55',
         emissive: '#ffff55',
     });
+    sunMaterial.wireframe;
 
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
     sun.castShadow = false;
@@ -222,7 +247,9 @@ function createSun(x, y, z) {
 function update() {
     camera.updateProjectionMatrix();
 
-    rotationPoint.rotation.y -= 0.0015;
+    if (CONFIG.rotation) {
+        rotationPoint.rotation.y -= 0.0015;
+    }
 }
 
 /**
@@ -239,14 +266,15 @@ function animate() {
     requestAnimationFrame(animate);
     update();
     render();
+    stats.update();
 }
 
 /**
  * Add the skybox, the stars wrapper.
  */
 function addSkybox() {
-    var urlPrefix = TEXTURE_PATH;
-    var urls = [
+    let urlPrefix = TEXTURE_PATH;
+    let urls = [
         urlPrefix + 'test.jpg',
         urlPrefix + 'test.jpg',
         urlPrefix + 'test.jpg',
@@ -255,14 +283,14 @@ function addSkybox() {
         urlPrefix + 'test.jpg',
     ];
 
-    var loader = new THREE.CubeTextureLoader();
+    let loader = new THREE.CubeTextureLoader();
     loader.setCrossOrigin('https://s.codepen.io');
 
-    var textureCube = loader.load(urls);
+    let textureCube = loader.load(urls);
     textureCube.format = THREE.RGBFormat;
 
-    var shader = THREE.ShaderLib["cube"];
-    shader.uniforms["tCube"].value = textureCube;
+    let shader = THREE.ShaderLib['cube'];
+    shader.uniforms['tCube'].value = textureCube;
 
     let material = new THREE.ShaderMaterial({
         fragmentShader: shader.fragmentShader,
@@ -271,10 +299,11 @@ function addSkybox() {
         depthWrite: false,
         side: THREE.BackSide
     });
+    // material.wireframe = true;
 
     let geometry = new THREE.BoxGeometry(20000, 20000, 20000);
 
-    var skybox = new THREE.Mesh(geometry, material);
+    let skybox = new THREE.Mesh(geometry, material);
     // skybox.position.x = -30;
 
     scene.add(skybox);
@@ -286,11 +315,11 @@ function addSkybox() {
  * Code from https://threejs.org/examples/webgl_lensflares.html
  */
 function createLensflare(x, y, z) {
-    var textureLoader = new THREE.TextureLoader();
+    let textureLoader = new THREE.TextureLoader();
     textureLoader.setCrossOrigin('https://s.codepen.io');
-    textureFlare0 = textureLoader.load(TEXTURE_PATH + "sun.png");
-    textureFlare2 = textureLoader.load(TEXTURE_PATH + "lensflare2.png");
-    textureFlare3 = textureLoader.load(TEXTURE_PATH + "lensflare3.png");
+    textureFlare0 = textureLoader.load(TEXTURE_PATH + 'sun.png');
+    textureFlare2 = textureLoader.load(TEXTURE_PATH + 'lensflare2.png');
+    textureFlare3 = textureLoader.load(TEXTURE_PATH + 'lensflare3.png');
 
     addLight(0.55, 0.9, 0.5, x, y, z);
 }
@@ -300,11 +329,11 @@ function createLensflare(x, y, z) {
  *
  * Code from https://threejs.org/examples/webgl_lensflares.html
  */
-function addLight(h, s, l, x, y, z) {
-    var flareColor = new THREE.Color(0xffffff);
+function addLight(h: number, s: number, l: number, x: number, y: number, z: number) {
+    let flareColor = new THREE.Color(0xffffff);
     flareColor.setHSL(h, s, l + 0.5);
 
-    var lensFlare = new THREE.LensFlare(textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor);
+    let lensFlare = new THREE.LensFlare(textureFlare0, 700, 0.0, THREE.AdditiveBlending, flareColor);
 
     lensFlare.add(textureFlare3, 60, 0.6, THREE.AdditiveBlending);
     lensFlare.add(textureFlare3, 70, 0.7, THREE.AdditiveBlending);
@@ -323,10 +352,11 @@ function addLight(h, s, l, x, y, z) {
  * Code from https://threejs.org/examples/webgl_lensflares.html
  */
 function lensFlareUpdateCallback(object) {
-    var f, fl = object.lensFlares.length;
-    var flare;
-    var vecX = -object.positionScreen.x * 2;
-    var vecY = -object.positionScreen.y * 2;
+    if (!CONFIG.callback) return;
+    let f, fl = object.lensFlares.length;
+    let flare;
+    let vecX = -object.positionScreen.x * 2;
+    let vecY = -object.positionScreen.y * 2;
 
     for (f = 0; f < fl; f++) {
         flare = object.lensFlares[f];
