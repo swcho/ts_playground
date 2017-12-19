@@ -9,6 +9,7 @@ export type CoinType =
     'ETC' |
     'DASH' |
     'XRP' |
+    'QTUM' |
     'ALL';
 
 export const COINS: CoinType[] = [
@@ -19,6 +20,7 @@ export const COINS: CoinType[] = [
     'ETC',
     'DASH',
     'XRP',
+    'QTUM',
 ];
 
 export function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {

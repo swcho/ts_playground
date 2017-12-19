@@ -371,17 +371,8 @@ export async function test() {
 const KEY_TRANSACTIONS = 'transactions';
 
 export async function saveTransactions() {
-    const coins: CoinType[] = [
-        'BTC',
-        'DASH',
-        'BCH',
-        'ETH',
-        'ETC',
-        'XRP',
-    ];
-
     let transactions: UserTransaction[] = [];
-    for (const coin of coins) {
+    for (const coin of COINS) {
         transactions = transactions.concat(await getUserTransactions(coin));
     }
     localStorage.setItem(KEY_TRANSACTIONS, JSON.stringify(transactions));
@@ -410,6 +401,7 @@ export function getTransactionItems(): TransactionItem[] {
         .filter(dateFilter('ETC', '2017-12-17'))
         .filter(dateFilter('BCH', '2017-12-17'))
         .filter(dateFilter('DASH', '2017-12-17'))
+        .filter(dateFilter('QTUM', '2017-12-17'))
         .map(t => ({
             date: t.transfer_date,
             order: (t.type === 'BUY' ? 'BUY' : 'SELL') as TransactionOrder,
@@ -528,8 +520,11 @@ export async function placeSellOrder(coin: CoinType, unit: number, qty: number) 
         price: unit,
         type: 'ask',
     };
-    const resp = await privateCall('/trade/place', orderParams);
+    const resp = await privateCall<RespCommon>('/trade/place', orderParams);
     console.log(resp);
+    if (resp.status === '0000') {
+        location.reload();
+    }
     return resp;
 }
 
@@ -539,7 +534,9 @@ export async function cancelOrder(order: OrderInfo) {
         order_id,
         // order_currency,
     } = order;
-    const resp = await privateCall('/trade/cancel', {type, order_id});
+    const resp = await privateCall<RespCommon>('/trade/cancel', {type, order_id});
     console.log(resp);
-    location.reload();
+    if (resp.status === '0000') {
+        location.reload();
+    }
 }
