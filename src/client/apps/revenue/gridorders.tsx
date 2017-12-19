@@ -14,6 +14,7 @@ export interface OrderRowItem {
     gap: number;
     gapRatio: number;
     qty: number;
+    price: number;
     btn?: boolean;
     data: any;
 }
@@ -47,7 +48,11 @@ const COLUMNS: (onCancel: (id: OrderRowItem) => void) => OrderColum[] = (onCance
     formatter: RatioFormatter,
 }, {
     key: 'qty',
-    name: 'Acc. Qty',
+    name: 'Qty',
+}, {
+    key: 'price',
+    name: 'Price',
+    formatter: MoneyFormatter,
 }, {
     key: 'btn',
     name: 'Cancel',

@@ -10,6 +10,7 @@ export interface RevenueRowItem {
     currentUnit: number;
     avgUnit: number;
     qty: number;
+    expenses: number;
     return: number;
     ratio?: number;
 }
@@ -32,6 +33,10 @@ const COLUMNS: RevenueColum[] = [{
 }, {
     key: 'qty',
     name: 'Acc. Qty',
+}, {
+    key: 'expenses',
+    name: 'Acc. Exp',
+    formatter: MoneySignFormatter,
 }, {
     key: 'return',
     name: 'Return',

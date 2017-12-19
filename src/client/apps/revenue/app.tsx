@@ -193,6 +193,7 @@ disableGetDefaultPropsWarning();
                         currentUnit,
                         avgUnit: sum.accExpenses / qty,
                         qty: qty,
+                        expenses: sum.accExpenses,
                         return: ret,
                         ratio: returnRatio(buy_price, sell_price),
                     });
@@ -223,6 +224,7 @@ disableGetDefaultPropsWarning();
                 currentUnit: 0,
                 avgUnit: 0,
                 qty: 0,
+                expenses: sum_buy_price,
                 return: sumReturn,
                 ratio: returnRatio(sum_buy_price, sum_sell_price),
             });
@@ -242,6 +244,7 @@ disableGetDefaultPropsWarning();
                         gap,
                         gapRatio: (unit - open) / open,
                         qty: parseFloat(o.units),
+                        price: parseInt(o.price),
                         data: o,
                     };
                 }
