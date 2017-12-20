@@ -442,7 +442,9 @@ export interface WSTicker {
 export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
     let ws = new WebSocket('ws://localhost:8080/btws/public');
     ws.onopen = function (event) {
-        ws.send('{"currency":"BTC","tickDuration":"24H"}');
+        // ws.send('{"currency":"BTC","tickDuration":"24H"}');
+        ws.send('{"currency":"BTC","tickDuration":"1H"}');
+        // ws.send('{"currency":"BTC","tickDuration":"1MIN"}');
     };
     ws.onmessage = function (event) {
         try {
@@ -479,10 +481,10 @@ type GetOrderInfoResp = RespCommon<OrderInfo>;
 
 export async function getOrderInfo() {
     let ret: OrderInfo[] = [];
-    for (const currency of COINS) {
-        const resp = await privateCall<GetOrderInfoResp>('/info/orders', {currency});
-        if (resp.data) {
-            ret = ret.concat(resp.data);
+    const resp = await Promise.all(COINS.map(currency => privateCall<GetOrderInfoResp>('/info/orders', {currency})));
+    for (const respOrderInfo of resp) {
+        if (respOrderInfo.data) {
+            ret = ret.concat(respOrderInfo.data);
         }
     }
     return ret;

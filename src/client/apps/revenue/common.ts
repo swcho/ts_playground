@@ -10,6 +10,7 @@ export type CoinType =
     'DASH' |
     'XRP' |
     'QTUM' |
+    'EOS' |
     'ALL';
 
 export const COINS: CoinType[] = [
@@ -20,6 +21,7 @@ export const COINS: CoinType[] = [
     'ETC',
     'DASH',
     'XRP',
+    'EOS',
     'QTUM',
 ];
 
