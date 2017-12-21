@@ -22,8 +22,8 @@ export const COINS: CoinType[] = [
     'ETC',
     'DASH',
     'XRP',
-    'EOS',
     'QTUM',
+    'EOS',
     'ZEC',
 ];
 
