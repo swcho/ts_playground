@@ -8,7 +8,7 @@ import { DateFormatter, MoneyFormatter, RatioFormatter } from './formatters';
 export interface OrderRowItem {
     id: string;
     date: number;
-    type: CoinType;
+    coin: CoinType;
     order: OrderType;
     ratio: number;
     unit: number;
@@ -29,15 +29,11 @@ const COLUMNS: (onCancel: (id: OrderRowItem) => void) => OrderColum[] = (onCance
     name: 'Date',
     formatter: DateFormatter,
 }, {
-    key: 'type',
-    name: 'Type',
+    key: 'coin',
+    name: 'Coin',
 }, {
     key: 'order',
     name: 'Order',
-}, {
-    key: 'ratio',
-    name: 'Ratio',
-    formatter: RatioFormatter,
 }, {
     key: 'unit',
     name: 'Unit',
@@ -47,8 +43,12 @@ const COLUMNS: (onCancel: (id: OrderRowItem) => void) => OrderColum[] = (onCance
     name: 'Gap',
     formatter: MoneyFormatter,
 }, {
+    key: 'ratio',
+    name: 'Ratio',
+    formatter: RatioFormatter,
+}, {
     key: 'gapRatio',
-    name: 'Expected',
+    name: 'Ratio Gap',
     formatter: RatioFormatter,
 }, {
     key: 'qty',

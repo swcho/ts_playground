@@ -29,6 +29,8 @@ export const COINS: CoinType[] = [
 
 export type OrderType = 'BUY' | 'SELL';
 
+export type CurrencyType = 'KRW' | 'USD';
+
 export function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
     return fetch(url, options)
         // .then((response) => {
@@ -68,15 +70,11 @@ export function queryToStr(query) {
     return ret.join('&');
 }
 
-export type TransactionOrder = 'BUY' | 'SELL';
-
-export type Won = number;
-
 export interface TransactionItem {
     date: number;
-    order: TransactionOrder;
-    type: CoinType;
-    unit: Won;
+    order: OrderType;
+    coin: CoinType;
+    unit: number;
     qty: number;
     charge: number;
 }
@@ -87,4 +85,17 @@ export function getExpense(item: TransactionItem) {
 
 export function getIncome(item: TransactionItem) {
     return item.unit * item.qty * (1 - item.charge);
+}
+
+export interface OrderItem {
+    id: OrderItem.ID;
+    date: number;
+    order: OrderType;
+    coin: CoinType;
+    unit: number;
+    qty: number;
+}
+
+export namespace OrderItem {
+    export type ID = string;
 }

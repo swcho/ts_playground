@@ -1,11 +1,12 @@
 
 import {
     CoinType,
+    OrderType,
     fetchJson,
     queryToStr,
     COINS,
     TransactionItem,
-    TransactionOrder
+    OrderItem,
 } from './common';
 import CryptoJS = require('crypto-js');
 
@@ -410,8 +411,8 @@ export function getTransactionItems(): TransactionItem[] {
         .filter(dateFilter('QTUM', '2017-12-17'))
         .map(t => ({
             date: t.transfer_date,
-            order: (t.type === 'BUY' ? 'BUY' : 'SELL') as TransactionOrder,
-            type: t.coin,
+            order: (t.type === 'BUY' ? 'BUY' : 'SELL') as OrderType,
+            coin: t.coin,
             unit: t.unit_price,
             qty: Math.abs(t.units),
             charge: 0.00075,
@@ -468,7 +469,7 @@ interface GetOrderInfoParams {
     currency?: CoinType;
 }
 
-export interface OrderInfo {
+interface OrderInfo {
     order_id: string;
     order_currency: string;
     order_date: string;
@@ -486,11 +487,18 @@ export interface OrderInfo {
 type GetOrderInfoResp = RespCommon<OrderInfo>;
 
 export async function getOrderInfo() {
-    let ret: OrderInfo[] = [];
+    let ret: OrderItem[] = [];
     const resp = await Promise.all(COINS.map(currency => privateCall<GetOrderInfoResp>('/info/orders', {currency})));
     for (const respOrderInfo of resp) {
         if (respOrderInfo.data) {
-            ret = ret.concat(respOrderInfo.data);
+            ret = ret.concat(respOrderInfo.data.map(o => ({
+                id: o.order_id,
+                date: parseInt(o.order_date) / 1000,
+                order: (o.type === 'bid' ? 'BUY' : 'SELL') as OrderType,
+                coin: o.order_currency as CoinType,
+                unit: parseInt(o.price),
+                qty: parseFloat(o.units),
+            })));
         }
     }
     return ret;

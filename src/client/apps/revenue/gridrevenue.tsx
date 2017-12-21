@@ -6,7 +6,7 @@ import {CoinType} from './common';
 import {MoneyFormatter, MoneySignFormatter, RatioSignFormatter} from './formatters';
 
 export interface RevenueRowItem {
-    type: CoinType;
+    coin: CoinType;
     currentUnit: number;
     avgUnit: number;
     qty: number;
@@ -20,8 +20,8 @@ interface RevenueColum extends ReactDataGrid.Column {
 }
 
 const COLUMNS: RevenueColum[] = [{
-    key: 'type',
-    name: 'Type',
+    key: 'coin',
+    name: 'Coin',
 }, {
     key: 'currentUnit',
     name: 'Unit',

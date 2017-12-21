@@ -5,8 +5,18 @@ console.log(__filename);
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
-import {CoinType, OrderType, returnRatio, COINS, getExpense, getIncome} from './common';
-import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker, OrderInfo, getOrderInfo,
+import {
+    CoinType,
+    returnRatio,
+    COINS,
+    getExpense,
+    getIncome,
+    OrderItem,
+} from './common';
+import {getTicker, TickerResp, saveTransactions, getTransactionItems,
+    initTickerWS,
+    WSTicker,
+    getOrderInfo,
     cancelOrder,
     placeBuyOrder,
     placeSellOrder,
@@ -74,15 +84,15 @@ disableGetDefaultPropsWarning();
         let ret = 0;
         let retRatio = 0;
 
-        if (!sums[t.type]) {
-            sums[t.type] = {
+        if (!sums[t.coin]) {
+            sums[t.coin] = {
                 qty: 0,
                 expenses: 0,
                 accExpenses: 0,
                 incomes: 0,
             };
         }
-        const sum = sums[t.type];
+        const sum = sums[t.coin];
         // const prevTotal = prevAvgUnit * (sum.expensesQty - sum.incomesQty);
         if (t.order === 'BUY') {
             price = getExpense(t);
@@ -112,9 +122,9 @@ disableGetDefaultPropsWarning();
     });
     console.log(sums);
 
-    const types = Array.from(new Set(transactions.map(d => d.type))).sort();
+    const coins = Array.from(new Set(transactions.map(d => d.coin))).sort();
 
-    console.log('types', types);
+    console.log('coins', coins);
 
     interface TickerItem {
         type: CoinType;
@@ -126,7 +136,7 @@ disableGetDefaultPropsWarning();
         tickerItems: TickerItem[];
         tickerId: number;
         wsTicker: WSTicker;
-        orders: OrderInfo[];
+        orders: OrderItem[];
         buyType: CoinType;
         buyUnit: string;
         buyQty: string;
@@ -146,7 +156,7 @@ disableGetDefaultPropsWarning();
                 buyType: 'BTC',
                 buyUnit: '0',
                 buyQty: '0',
-                sellType: null,
+                sellType: 'ALL',
                 sellUnit: '0',
                 sellQty: '0',
             };
@@ -172,13 +182,13 @@ disableGetDefaultPropsWarning();
             let sumReturn = 0;
 
             if (wsTicker) {
-                types.forEach(type => {
-                    const ticker = wsTicker.data[type];
+                coins.forEach(coin => {
+                    const ticker = wsTicker.data[coin];
                     if (!ticker) {
-                        console.error(type, 'has no ticker');
+                        console.error(coin, 'has no ticker');
                         return;
                     }
-                    const sum = sums[type];
+                    const sum = sums[coin];
                     const currentUnit = parseInt(ticker.closing_price);
                     const qty = sum.qty;
                     const sell_price = currentUnit * qty * (1 - 0.00075);
@@ -188,7 +198,7 @@ disableGetDefaultPropsWarning();
                     sum_buy_price += buy_price;
                     sumReturn += ret;
                     revenueItems.push({
-                        type: type,
+                        coin,
                         currentUnit,
                         avgUnit: sum.accExpenses / qty,
                         qty: qty,
@@ -219,7 +229,7 @@ disableGetDefaultPropsWarning();
             //     });
             // });
             revenueItems.push({
-                type: 'ALL',
+                coin: 'ALL',
                 currentUnit: 0,
                 avgUnit: 0,
                 qty: 0,
@@ -228,28 +238,47 @@ disableGetDefaultPropsWarning();
                 ratio: returnRatio(sum_buy_price, sum_sell_price),
             });
 
+            let buyTotal = 0;
             const orderItems = orders ? orders.map(o => {
-                    const ticker = wsTicker && wsTicker.data[o.order_currency as CoinType];
-                    const unit = parseInt(o.price);
+                    const ticker = wsTicker && wsTicker.data[o.coin];
                     const open = ticker ? parseInt(ticker.opening_price) : 0;
                     const current = ticker ? parseInt(ticker.closing_price) : 0;
-                    const gap = unit - current;
-                    const qty = parseFloat(o.units);
+                    const ratio = (current - open) / open;
+                    const ratioExpected = (o.unit - open) / open;
+                    const price = o.unit * o.qty;
+                    if (o.order === 'BUY') {
+                        buyTotal += price;
+                    }
                     return {
-                        id: o.order_id,
-                        date: parseInt(o.order_date) / 1000,
-                        type: o.order_currency as CoinType,
-                        order: (o.type === 'bid' ? 'BUY' : 'SELL') as OrderType,
-                        ratio: (current - open) / open,
-                        unit,
-                        gap,
-                        gapRatio: (unit - open) / open,
-                        qty,
-                        price: unit * qty,
+                        id: o.id,
+                        date: o.date,
+                        coin: o.coin,
+                        order: o.order,
+                        unit: o.unit,
+                        gap: current - o.unit,
+                        ratio: ratioExpected,
+                        gapRatio: ratio - ratioExpected,
+                        qty: o.qty,
+                        price,
                         data: o,
                     };
                 }
             ) : [];
+
+            orderItems.push({
+                id: null,
+                date: null,
+                coin: 'ALL',
+                order: 'BUY',
+                unit: 0,
+                gap: 0,
+                ratio: 0,
+                gapRatio: 0,
+                qty: 0,
+                price: buyTotal,
+                data: null,
+            });
+
             return (
                 <div>
                     {/* <div className='ticker-control'>
@@ -270,7 +299,7 @@ disableGetDefaultPropsWarning();
                         getter={(i) => orderItems[i]}
                         count={orderItems.length}
                         onCancel={(item) => {
-                            if (confirm(`${item.type} ${item.unit} ${item.qty}`)) {
+                            if (confirm(`${item.coin} ${item.unit} ${item.qty}`)) {
                                 cancelOrder(item.data);
                             }
                         }}
@@ -353,13 +382,13 @@ disableGetDefaultPropsWarning();
                         </button>
                     </div>
                     <GridTransaction
-                        transactions={transactionRowItems.filter(item => filter === 'ALL' || item.type === filter)}
+                        transactions={transactionRowItems.filter(item => filter === 'ALL' || item.coin === filter)}
                     />
                     <div className='controls'>
                         <button onClick={() => saveTransactions()}>Update</button>
                         <select className='right' name='filter' id='' value={filter} onChange={(e) => this.setState({filter: e.target.value})}>
                             <option value='ALL'>ALL</option>
-                            {types.map(t => (
+                            {coins.map(t => (
                                 <option key={t} value={t}>{t}</option>
                             ))}
                         </select>
@@ -369,8 +398,8 @@ disableGetDefaultPropsWarning();
         }
 
         private getTicker(cont = false) {
-            const tickerId = getTicker(types, cont, (tickers) => {
-                const tickerItems = types.map((type, i) => ({type, ticker: tickers[i]}));
+            const tickerId = getTicker(coins, cont, (tickers) => {
+                const tickerItems = coins.map((type, i) => ({type, ticker: tickers[i]}));
                 this.setState({tickerItems});
             });
             this.setState({tickerId});

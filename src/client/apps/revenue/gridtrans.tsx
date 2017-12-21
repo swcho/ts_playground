@@ -24,8 +24,8 @@ const COLUMNS: TransactionColum[] = [{
     key: 'order',
     name: 'Order',
 }, {
-    key: 'type',
-    name: 'Type',
+    key: 'coin',
+    name: 'Coin',
 }, {
     key: 'unit',
     name: 'Unit',
