@@ -11,6 +11,7 @@ export type CoinType =
     'XRP' |
     'QTUM' |
     'EOS' |
+    'ZEC' |
     'ALL';
 
 export const COINS: CoinType[] = [
@@ -23,7 +24,10 @@ export const COINS: CoinType[] = [
     'XRP',
     'EOS',
     'QTUM',
+    'ZEC',
 ];
+
+export type OrderType = 'BUY' | 'SELL';
 
 export function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
     return fetch(url, options)
@@ -62,4 +66,25 @@ export function queryToStr(query) {
         }
     }
     return ret.join('&');
+}
+
+export type TransactionOrder = 'BUY' | 'SELL';
+
+export type Won = number;
+
+export interface TransactionItem {
+    date: number;
+    order: TransactionOrder;
+    type: CoinType;
+    unit: Won;
+    qty: number;
+    charge: number;
+}
+
+export function getExpense(item: TransactionItem) {
+    return item.unit * item.qty * (1 + item.charge);
+}
+
+export function getIncome(item: TransactionItem) {
+    return item.unit * item.qty * (1 - item.charge);
 }

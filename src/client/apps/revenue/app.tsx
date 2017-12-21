@@ -5,8 +5,7 @@ console.log(__filename);
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 // import {HashRouter} from 'react-router-dom';
-import {CoinType, returnRatio, COINS} from './common';
-import {getExpense, getIncome} from './transation';
+import {CoinType, OrderType, returnRatio, COINS, getExpense, getIncome} from './common';
 import {getTicker, TickerResp, saveTransactions, getTransactionItems, initTickerWS, WSTicker, OrderInfo, getOrderInfo,
     cancelOrder,
     placeBuyOrder,
@@ -235,16 +234,18 @@ disableGetDefaultPropsWarning();
                     const open = ticker ? parseInt(ticker.opening_price) : 0;
                     const current = ticker ? parseInt(ticker.closing_price) : 0;
                     const gap = unit - current;
+                    const qty = parseFloat(o.units);
                     return {
                         id: o.order_id,
                         date: parseInt(o.order_date) / 1000,
                         type: o.order_currency as CoinType,
+                        order: (o.type === 'bid' ? 'BUY' : 'SELL') as OrderType,
                         ratio: (current - open) / open,
                         unit,
                         gap,
                         gapRatio: (unit - open) / open,
-                        qty: parseFloat(o.units),
-                        price: parseInt(o.price),
+                        qty,
+                        price: unit * qty,
                         data: o,
                     };
                 }

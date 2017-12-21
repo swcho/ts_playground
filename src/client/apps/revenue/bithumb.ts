@@ -1,7 +1,13 @@
 
-import { CoinType, fetchJson, queryToStr, COINS} from './common';
+import {
+    CoinType,
+    fetchJson,
+    queryToStr,
+    COINS,
+    TransactionItem,
+    TransactionOrder
+} from './common';
 import CryptoJS = require('crypto-js');
-import { TransactionItem, TransactionOrder } from './transation';
 
 declare global {
     const escape;
@@ -41,7 +47,7 @@ function privateCall<T>(endPoint: string, params) {
         'api-client-type': '2',
         'Api-Key': apiKey,
         'Api-Sign': btoa(CryptoJS.HmacSHA512(str, secretKey).toString()),
-        'Api-Nonce': nonce,
+        'Api-Nonce': '' + nonce,
         'User-Agent': 'test'
     });
     return fetchJson<T>(`/api/${endPoint}`, {

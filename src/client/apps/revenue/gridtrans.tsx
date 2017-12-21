@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as ReactDataGrid from 'react-data-grid';
 import {DateFormatter, MoneyFormatter, RatioFormatter} from './formatters';
-import {TransactionItem} from './transation';
+import {TransactionItem} from './common';
 
 export interface TransactionRowItem extends TransactionItem {
     price: number;
