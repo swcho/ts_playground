@@ -8,6 +8,7 @@ import * as ReactDom from 'react-dom';
 import {
     CoinType,
     returnRatio,
+    ratio,
     COINS,
     getExpense,
     getIncome,
@@ -189,6 +190,7 @@ disableGetDefaultPropsWarning();
                         return;
                     }
                     const sum = sums[coin];
+                    const open_price = parseInt(ticker.opening_price);
                     const currentUnit = parseInt(ticker.closing_price);
                     const qty = sum.qty;
                     const sell_price = currentUnit * qty * (1 - 0.00075);
@@ -199,12 +201,13 @@ disableGetDefaultPropsWarning();
                     sumReturn += ret;
                     revenueItems.push({
                         coin,
+                        ratio: ratio(open_price, currentUnit),
                         currentUnit,
                         avgUnit: sum.accExpenses / qty,
                         qty: qty,
                         expenses: sum.accExpenses,
                         return: ret,
-                        ratio: returnRatio(buy_price, sell_price),
+                        returnRatio: returnRatio(buy_price, sell_price),
                     });
                 });
             }
@@ -230,12 +233,13 @@ disableGetDefaultPropsWarning();
             // });
             revenueItems.push({
                 coin: 'ALL',
+                ratio: 0,
                 currentUnit: 0,
                 avgUnit: 0,
                 qty: 0,
                 expenses: sum_buy_price,
                 return: sumReturn,
-                ratio: returnRatio(sum_buy_price, sum_sell_price),
+                returnRatio: returnRatio(sum_buy_price, sum_sell_price),
             });
 
             let buyTotal = 0;

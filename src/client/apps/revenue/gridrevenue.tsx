@@ -7,12 +7,13 @@ import {MoneyFormatter, MoneySignFormatter, RatioSignFormatter} from './formatte
 
 export interface RevenueRowItem {
     coin: CoinType;
+    ratio: number;
     currentUnit: number;
     avgUnit: number;
     qty: number;
     expenses: number;
     return: number;
-    ratio?: number;
+    returnRatio: number;
 }
 
 interface RevenueColum extends ReactDataGrid.Column {
@@ -22,6 +23,10 @@ interface RevenueColum extends ReactDataGrid.Column {
 const COLUMNS: RevenueColum[] = [{
     key: 'coin',
     name: 'Coin',
+}, {
+    key: 'ratio',
+    name: 'Ratio',
+    formatter: RatioSignFormatter,
 }, {
     key: 'currentUnit',
     name: 'Unit',
@@ -42,8 +47,8 @@ const COLUMNS: RevenueColum[] = [{
     name: 'Return',
     formatter: MoneySignFormatter,
 }, {
-    key: 'ratio',
-    name: 'Ratio',
+    key: 'returnRatio',
+    name: 'Return %',
     formatter: RatioSignFormatter,
 }];
 

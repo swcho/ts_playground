@@ -544,13 +544,13 @@ export async function placeSellOrder(coin: CoinType, unit: number, qty: number) 
     return resp;
 }
 
-export async function cancelOrder(order: OrderInfo) {
+export async function cancelOrder(order: OrderItem) {
     const {
-        type,
-        order_id,
+        coin,
+        id,
         // order_currency,
     } = order;
-    const resp = await privateCall<RespCommon>('/trade/cancel', {type, order_id});
+    const resp = await privateCall<RespCommon>('/trade/cancel', {type: coin, order_id: id});
     console.log(resp);
     if (resp.status === '0000') {
         location.reload();

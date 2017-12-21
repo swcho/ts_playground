@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as ReactDataGrid from 'react-data-grid';
 
-import { CoinType, OrderType } from './common';
+import { CoinType, OrderType, OrderItem } from './common';
 import { DateFormatter, MoneyFormatter, RatioFormatter } from './formatters';
 
 export interface OrderRowItem {
@@ -17,7 +17,7 @@ export interface OrderRowItem {
     qty: number;
     price: number;
     btn?: boolean;
-    data: any;
+    data: OrderItem;
 }
 
 interface OrderColum extends ReactDataGrid.Column {

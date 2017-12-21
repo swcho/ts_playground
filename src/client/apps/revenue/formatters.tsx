@@ -12,7 +12,7 @@ export class DateFormatter extends React.Component<{
         } = this.props;
         return (
             <span>
-                {moment(value).format('YY-MM-DD')}
+                {value ? moment(value).format('YY-MM-DD') : '-'}
             </span>
         );
     }

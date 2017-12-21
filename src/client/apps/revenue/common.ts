@@ -56,6 +56,10 @@ export function returnRatio(buy: number, sell: number) {
     return (sell - buy) / buy;
 }
 
+export function ratio(from: number, to: number) {
+    return (from - to) / from;
+}
+
 export function queryToStr(query) {
     let ret = [];
     for (const key in query) {
