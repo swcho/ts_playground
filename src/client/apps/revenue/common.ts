@@ -52,6 +52,10 @@ export function formatMoney(n, c?, d?, t?) {
     return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - parseInt(i)).toFixed(c).slice(2) : '');
 }
 
+export function parseMoney(str: string) {
+    return parseInt(str.replace(',', ''));
+}
+
 export function returnRatio(buy: number, sell: number) {
     return (sell - buy) / buy;
 }
@@ -73,6 +77,18 @@ export function queryToStr(query) {
     }
     return ret.join('&');
 }
+
+export interface TickerItem {
+    open: number;
+    close: number;
+    low: number;
+    hight: number;
+    qty: number;
+}
+
+export type TickerItemMap = {
+    [coin in CoinType]: TickerItem;
+};
 
 export interface TransactionItem {
     date: number;

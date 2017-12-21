@@ -5,6 +5,7 @@ import {
     fetchJson,
     queryToStr,
     COINS,
+    TickerItemMap,
     TransactionItem,
     OrderItem,
 } from './common';
@@ -431,7 +432,7 @@ export async function getCurrencyRate() {
     const resp = await fetchJson('/btweb/resources/csv/CurrencyRate.json');
 }
 
-export interface WSTicker {
+interface WSTicker {
     data: {
         [coin in CoinType]: {
             average_price: string;
@@ -446,7 +447,7 @@ export interface WSTicker {
     };
 }
 
-export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
+export async function initTickerWS(cb: (tickerItemMap: TickerItemMap) => void) {
     let ws = new WebSocket('ws://localhost:8080/btws/public');
     ws.onopen = function (event) {
         // ws.send('{"currency":"BTC","tickDuration":"24H"}');
@@ -456,7 +457,21 @@ export async function initTickerWS(cb?: (wsTicker: WSTicker) => void) {
     ws.onmessage = function (event) {
         try {
             const ticker = JSON.parse(event.data);
-            ticker.data.BTC && cb && cb(ticker);
+            if (ticker.data.BTC && cb) {
+                const wsTicker: WSTicker = ticker.data;
+                const tickerItemMap: TickerItemMap = {} as any;
+                Object.keys(wsTicker.data).forEach(function(coin: CoinType) {
+                    const ticker = wsTicker.data[coin];
+                    tickerItemMap[coin] = {
+                        open: parseInt(ticker.opening_price),
+                        close: parseInt(ticker.closing_price),
+                        low: parseInt(ticker.min_price),
+                        hight: parseInt(ticker.max_price),
+                        qty: parseInt(ticker.units_traded),
+                    };
+                });
+                cb(ticker);
+            }
         } catch (e) {}
     };
 }

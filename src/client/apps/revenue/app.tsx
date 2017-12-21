@@ -12,11 +12,13 @@ import {
     COINS,
     getExpense,
     getIncome,
+    TickerItemMap,
     OrderItem,
+    formatMoney,
+    parseMoney,
 } from './common';
 import {getTicker, TickerResp, saveTransactions, getTransactionItems,
     initTickerWS,
-    WSTicker,
     getOrderInfo,
     cancelOrder,
     placeBuyOrder,
@@ -136,13 +138,13 @@ disableGetDefaultPropsWarning();
         filter: string;
         tickerItems: TickerItem[];
         tickerId: number;
-        wsTicker: WSTicker;
+        tickerItemMap: TickerItemMap;
         orders: OrderItem[];
         buyType: CoinType;
         buyUnit: string;
         buyQty: string;
         sellType: CoinType;
-        sellUnit: string;
+        sellUnit: number;
         sellQty: string;
     }> {
 
@@ -152,13 +154,13 @@ disableGetDefaultPropsWarning();
                 filter: 'ALL',
                 tickerItems: [],
                 tickerId: null,
-                wsTicker: null,
+                tickerItemMap: null,
                 orders: null,
                 buyType: 'BTC',
                 buyUnit: '0',
                 buyQty: '0',
                 sellType: 'ALL',
-                sellUnit: '0',
+                sellUnit: 0,
                 sellQty: '0',
             };
         }
@@ -168,7 +170,7 @@ disableGetDefaultPropsWarning();
                 filter,
                 tickerItems,
                 tickerId,
-                wsTicker,
+                tickerItemMap,
                 orders,
                 buyType,
                 buyUnit,
@@ -182,16 +184,15 @@ disableGetDefaultPropsWarning();
             let sum_buy_price = 0;
             let sumReturn = 0;
 
-            if (wsTicker) {
+            if (tickerItemMap) {
                 coins.forEach(coin => {
-                    const ticker = wsTicker.data[coin];
+                    const ticker = tickerItemMap[coin];
                     if (!ticker) {
                         console.error(coin, 'has no ticker');
                         return;
                     }
                     const sum = sums[coin];
-                    const open_price = parseInt(ticker.opening_price);
-                    const currentUnit = parseInt(ticker.closing_price);
+                    const currentUnit = ticker.close;
                     const qty = sum.qty;
                     const sell_price = currentUnit * qty * (1 - 0.00075);
                     const buy_price = sum.accExpenses;
@@ -201,7 +202,7 @@ disableGetDefaultPropsWarning();
                     sumReturn += ret;
                     revenueItems.push({
                         coin,
-                        ratio: ratio(open_price, currentUnit),
+                        ratio: ratio(ticker.open, currentUnit),
                         currentUnit,
                         avgUnit: sum.accExpenses / qty,
                         qty: qty,
@@ -244,9 +245,9 @@ disableGetDefaultPropsWarning();
 
             let buyTotal = 0;
             const orderItems = orders ? orders.map(o => {
-                    const ticker = wsTicker && wsTicker.data[o.coin];
-                    const open = ticker ? parseInt(ticker.opening_price) : 0;
-                    const current = ticker ? parseInt(ticker.closing_price) : 0;
+                    const ticker = tickerItemMap && tickerItemMap[o.coin];
+                    const open = ticker ? ticker.open : 0;
+                    const current = ticker ? ticker.close : 0;
                     const ratio = (current - open) / open;
                     const ratioExpected = (o.unit - open) / open;
                     const price = o.unit * o.qty;
@@ -309,6 +310,7 @@ disableGetDefaultPropsWarning();
                         }}
                     />
                     }
+                    <button>Update Orders</button>
                     <div className='order-input'>
                         <select
                             className='right' name='order-coin'
@@ -347,11 +349,11 @@ disableGetDefaultPropsWarning();
                             onChange={
                                 (e) => {
                                     const coin = e.target.value as CoinType;
-                                    const ticker = wsTicker && wsTicker.data[coin];
+                                    const ticker = tickerItemMap && tickerItemMap[coin];
                                     const sum = sums[coin];
                                     console.log(ticker);
                                     this.setState({
-                                        sellUnit: ticker.closing_price,
+                                        sellUnit: ticker.close,
                                         sellQty: '' + sum.qty,
                                         sellType: coin as any
                                     });
@@ -365,8 +367,8 @@ disableGetDefaultPropsWarning();
                         </select>
                         <input
                             type='text'
-                            value={sellUnit}
-                            onChange={(e) => this.setState({sellUnit: e.target.value})}
+                            value={formatMoney(sellUnit)}
+                            onChange={(e) => this.setState({sellUnit: parseMoney(e.target.value)})}
                         />
                         <input
                             type='text'
@@ -377,7 +379,7 @@ disableGetDefaultPropsWarning();
                             onClick={
                                 () => {
                                     if (confirm(`${sellType} ${sellUnit} ${sellQty}`)) {
-                                        placeSellOrder(sellType, parseInt(sellUnit), parseFloat(sellQty));
+                                        placeSellOrder(sellType, sellUnit, parseFloat(sellQty));
                                     }
                                 }
                             }
@@ -416,7 +418,7 @@ disableGetDefaultPropsWarning();
 
         async componentDidMount() {
             // this.getTicker();
-            initTickerWS((wsTicker) => this.setState({wsTicker}));
+            initTickerWS((tickerItemMap) => this.setState({tickerItemMap}));
 
             this.setState({orders: await getOrderInfo()});
         }
