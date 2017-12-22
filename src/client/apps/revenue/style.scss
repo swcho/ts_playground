@@ -72,5 +72,10 @@ table.type11 td {
     .right {
         float: right;
     }
+}
 
+.order-input {
+    input[type="text"] {
+        // text-align: right;
+    }
 }

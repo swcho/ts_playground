@@ -384,7 +384,6 @@ export async function saveTransactions() {
         transactions = transactions.concat(await getUserTransactions(coin));
     }
     localStorage.setItem(KEY_TRANSACTIONS, JSON.stringify(transactions));
-    location.reload();
 }
 
 export function getTransactions(): UserTransaction[] {
@@ -450,15 +449,15 @@ interface WSTicker {
 export async function initTickerWS(cb: (tickerItemMap: TickerItemMap) => void) {
     let ws = new WebSocket('ws://localhost:8080/btws/public');
     ws.onopen = function (event) {
-        // ws.send('{"currency":"BTC","tickDuration":"24H"}');
-        ws.send('{"currency":"BTC","tickDuration":"1H"}');
+        ws.send('{"currency":"BTC","tickDuration":"24H"}');
+        // ws.send('{"currency":"BTC","tickDuration":"1H"}');
         // ws.send('{"currency":"BTC","tickDuration":"1MIN"}');
     };
     ws.onmessage = function (event) {
         try {
             const ticker = JSON.parse(event.data);
             if (ticker.data.BTC && cb) {
-                const wsTicker: WSTicker = ticker.data;
+                const wsTicker: WSTicker = ticker;
                 const tickerItemMap: TickerItemMap = {} as any;
                 Object.keys(wsTicker.data).forEach(function(coin: CoinType) {
                     const ticker = wsTicker.data[coin];
@@ -470,7 +469,7 @@ export async function initTickerWS(cb: (tickerItemMap: TickerItemMap) => void) {
                         qty: parseInt(ticker.units_traded),
                     };
                 });
-                cb(ticker);
+                cb(tickerItemMap);
             }
         } catch (e) {}
     };
@@ -501,7 +500,8 @@ interface OrderInfo {
 
 type GetOrderInfoResp = RespCommon<OrderInfo>;
 
-export async function getOrderInfo() {
+const KEY_ORDERS = 'bithumb-orders';
+export async function saveOrders() {
     let ret: OrderItem[] = [];
     const resp = await Promise.all(COINS.map(currency => privateCall<GetOrderInfoResp>('/info/orders', {currency})));
     for (const respOrderInfo of resp) {
@@ -516,7 +516,12 @@ export async function getOrderInfo() {
             })));
         }
     }
+    localStorage.setItem(KEY_ORDERS, JSON.stringify(ret));
     return ret;
+}
+
+export function getOrderInfo(): OrderItem[] {
+    return JSON.parse(localStorage.getItem(KEY_ORDERS)) || [];
 }
 
 interface OrderParams {

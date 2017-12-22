@@ -53,7 +53,9 @@ export function formatMoney(n, c?, d?, t?) {
 }
 
 export function parseMoney(str: string) {
-    return parseInt(str.replace(',', ''));
+    const ret = parseInt(str.replace(/\D/g, ''));
+    // console.log('parseMoney', str, ret);
+    return ret;
 }
 
 export function returnRatio(buy: number, sell: number) {

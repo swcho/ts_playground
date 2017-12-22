@@ -23,6 +23,7 @@ import {getTicker, TickerResp, saveTransactions, getTransactionItems,
     cancelOrder,
     placeBuyOrder,
     placeSellOrder,
+    saveOrders,
 } from './bithumb';
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
@@ -141,7 +142,7 @@ disableGetDefaultPropsWarning();
         tickerItemMap: TickerItemMap;
         orders: OrderItem[];
         buyType: CoinType;
-        buyUnit: string;
+        buyUnit: number;
         buyQty: string;
         sellType: CoinType;
         sellUnit: number;
@@ -156,8 +157,8 @@ disableGetDefaultPropsWarning();
                 tickerId: null,
                 tickerItemMap: null,
                 orders: null,
-                buyType: 'BTC',
-                buyUnit: '0',
+                buyType: 'ALL',
+                buyUnit: 0,
                 buyQty: '0',
                 sellType: 'ALL',
                 sellUnit: 0,
@@ -210,6 +211,10 @@ disableGetDefaultPropsWarning();
                         return: ret,
                         returnRatio: returnRatio(buy_price, sell_price),
                     });
+
+                    // if (buyType === coin) {
+                    //     setTimeout(() => this.setState({buyUnit: currentUnit}), 500);
+                    // }
                 });
             }
 
@@ -251,8 +256,15 @@ disableGetDefaultPropsWarning();
                     const ratio = (current - open) / open;
                     const ratioExpected = (o.unit - open) / open;
                     const price = o.unit * o.qty;
+                    const gapRatio = ratio - ratioExpected;
                     if (o.order === 'BUY') {
                         buyTotal += price;
+                        if (gapRatio <=  0) {
+                            (async function() {
+                                // await saveTransactions();
+                                // await saveOrders();
+                            })();
+                        }
                     }
                     return {
                         id: o.id,
@@ -262,7 +274,7 @@ disableGetDefaultPropsWarning();
                         unit: o.unit,
                         gap: current - o.unit,
                         ratio: ratioExpected,
-                        gapRatio: ratio - ratioExpected,
+                        gapRatio,
                         qty: o.qty,
                         price,
                         data: o,
@@ -310,32 +322,51 @@ disableGetDefaultPropsWarning();
                         }}
                     />
                     }
-                    <button>Update Orders</button>
+                    <button onClick={async function() {
+                        await saveOrders();
+                        location.reload();
+                    }}>Update Orders</button>
                     <div className='order-input'>
                         <select
                             className='right' name='order-coin'
                             value={buyType}
-                            onChange={(e) => this.setState({buyType: e.target.value as any})}
+                            onChange={
+                                (e) => {
+                                    // this.setState({buyType: e.target.value as any});
+                                    const coin = e.target.value as CoinType;
+                                    const ticker = tickerItemMap[coin];
+                                    this.setState({
+                                        buyType: coin,
+                                        buyUnit: ticker.close,
+                                        buyQty: '0',
+                                    });
+                                }
+                            }
                         >
+                            <option value={null}>-</option>
                             {COINS.map(t => (
                                 <option key={t} value={t}>{t}</option>
                             ))}
                         </select>
+                        <label htmlFor='buy-unit'>Unit: </label>
                         <input
+                            id='buy-unit'
                             type='text'
-                            value={buyUnit}
-                            onChange={(e) => this.setState({buyUnit: e.target.value})}
+                            value={formatMoney(buyUnit, 0)}
+                            onChange={(e) => this.setState({buyUnit: parseMoney(e.target.value)})}
                         />
+                        <label htmlFor='buy-qty'>QTY: </label>
                         <input
                             type='text'
                             value={buyQty}
                             onChange={(e) => this.setState({buyQty: e.target.value})}
                         />
+                        Total: {formatMoney(buyUnit * parseFloat(buyQty), 0)}
                         <button
                             onClick={
                                 () => {
                                     if (confirm(`${buyType} ${buyUnit} ${buyQty}`)) {
-                                        placeBuyOrder(buyType, parseInt(buyUnit), parseFloat(buyQty));
+                                        placeBuyOrder(buyType, buyUnit, parseFloat(buyQty));
                                     }
                                 }
                             }
@@ -351,11 +382,10 @@ disableGetDefaultPropsWarning();
                                     const coin = e.target.value as CoinType;
                                     const ticker = tickerItemMap && tickerItemMap[coin];
                                     const sum = sums[coin];
-                                    console.log(ticker);
                                     this.setState({
+                                        sellType: coin,
                                         sellUnit: ticker.close,
                                         sellQty: '' + sum.qty,
-                                        sellType: coin as any
                                     });
                                 }
                             }
@@ -367,7 +397,7 @@ disableGetDefaultPropsWarning();
                         </select>
                         <input
                             type='text'
-                            value={formatMoney(sellUnit)}
+                            value={formatMoney(sellUnit, 0)}
                             onChange={(e) => this.setState({sellUnit: parseMoney(e.target.value)})}
                         />
                         <input
@@ -391,7 +421,12 @@ disableGetDefaultPropsWarning();
                         transactions={transactionRowItems.filter(item => filter === 'ALL' || item.coin === filter)}
                     />
                     <div className='controls'>
-                        <button onClick={() => saveTransactions()}>Update</button>
+                        <button onClick={
+                            async () => {
+                                await saveTransactions();
+                                location.reload();
+                            }
+                        }>Update</button>
                         <select className='right' name='filter' id='' value={filter} onChange={(e) => this.setState({filter: e.target.value})}>
                             <option value='ALL'>ALL</option>
                             {coins.map(t => (
@@ -419,8 +454,7 @@ disableGetDefaultPropsWarning();
         async componentDidMount() {
             // this.getTicker();
             initTickerWS((tickerItemMap) => this.setState({tickerItemMap}));
-
-            this.setState({orders: await getOrderInfo()});
+            this.setState({orders: getOrderInfo()});
         }
     }
 
