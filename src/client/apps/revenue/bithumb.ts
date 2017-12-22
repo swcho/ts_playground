@@ -405,10 +405,13 @@ export function getTransactionItems(): TransactionItem[] {
         .filter(t => t.type === 'BUY' || t.type === 'SELL')
         .filter(dateFilter('XRP', '2017-11-27'))
         .filter(dateFilter('BTC', '2017-12-16'))
-        .filter(dateFilter('ETC', '2017-12-17'))
+        .filter(dateFilter('ETC', '2017-12-22'))
+        .filter(dateFilter('ETH', '2017-12-23'))
         .filter(dateFilter('BCH', '2017-12-17'))
-        .filter(dateFilter('DASH', '2017-12-17'))
-        .filter(dateFilter('QTUM', '2017-12-17'))
+        .filter(dateFilter('DASH', '2017-12-23'))
+        .filter(dateFilter('LTC', '2017-12-23'))
+        .filter(dateFilter('QTUM', '2017-12-22'))
+        .filter(dateFilter('ZEC', '2017-12-22'))
         .map(t => ({
             date: t.transfer_date,
             order: (t.type === 'BUY' ? 'BUY' : 'SELL') as OrderType,

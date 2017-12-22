@@ -12,6 +12,7 @@ export type CoinType =
     'QTUM' |
     'EOS' |
     'ZEC' |
+    'XMR' |
     'ALL';
 
 export const COINS: CoinType[] = [
@@ -25,6 +26,7 @@ export const COINS: CoinType[] = [
     'QTUM',
     'EOS',
     'ZEC',
+    'XMR',
 ];
 
 export type OrderType = 'BUY' | 'SELL';
