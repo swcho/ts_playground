@@ -50,6 +50,7 @@
     "gyronorm": "^2.0.6",
     "hammerjs": "^2.0.8",
     "isomorphic-fetch": "^2.2.1",
+    "just-animate": "^2.5.0",
     "lodash-es": "^4.17.4",
     "lodash.range": "^3.2.0",
     "matter-js": "^0.13.0",

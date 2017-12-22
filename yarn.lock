@@ -4110,6 +4110,16 @@ jstree@^3.3.3:
   dependencies:
     jquery ">=1.9.1"
 
+just-animate@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/just-animate/-/just-animate-2.5.0.tgz#ea33259b7e76eaba28f4c8ef09716873f56e140f"
+  dependencies:
+    just-curves "^0.2.0"
+
+just-curves@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/just-curves/-/just-curves-0.2.0.tgz#a12ca60b3b99d4f07810d8e7c1a589e8fdd6a675"
+
 keymaster@^1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/keymaster/-/keymaster-1.6.2.tgz#e1ae54d0ea9488f9f60b66b668f02e9a1946c6eb"
