@@ -28,6 +28,7 @@ import {getTicker, TickerResp, saveTransactions, getTransactionItems,
 import {GridTransaction, TransactionRowItem} from './gridtrans';
 import {GridRevenue, RevenueRowItem} from './gridrevenue';
 import {GridOrder} from './gridorders';
+import {draw} from './chart';
 
 import './style.scss';
 
@@ -134,6 +135,8 @@ disableGetDefaultPropsWarning();
         type: CoinType;
         ticker: TickerResp;
     }
+
+    draw(document.querySelector('#chart'));
 
     class Component extends React.Component<{}, {
         filter: string;

@@ -4,10 +4,13 @@ import 'htmlout-loader!./en.html';
 console.log(__filename);
 
 import './style.scss';
-import { animate, tools } from 'just-animate'
+import { animate }  from 'just-animate'
 
-var t1 = just.animate({
-    targets: "#target",
+declare var just
+declare var flubber
+
+let t1 = just.animate({
+    targets: '#target',
     duration: 4000,
     props: {
         d: {
@@ -29,7 +32,7 @@ var t1 = just.animate({
             interpolate: just.mix.colors
         }
     }
-})
+});
 
 t1.play({ repeat: Infinity, alternate: true });
 

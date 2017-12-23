@@ -83,6 +83,7 @@ export function queryToStr(query) {
 }
 
 export interface TickerItem {
+    date?: number;
     open: number;
     close: number;
     low: number;
