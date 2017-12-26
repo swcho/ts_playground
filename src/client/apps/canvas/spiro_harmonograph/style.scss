@@ -1,0 +1,434 @@
+html {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 80%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    background-color: #000;
+}
+
+.center {
+    position: absolute;
+    top: 46%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+canvas {
+    /* background must be HEX color, otherwise FileSaver.js will render it with
+   a white background */
+    background: #000;
+    position: absolute;
+    /* top: 75% looks good on a larger screen, when browser is at 100% zoom */
+    /*    top: 75%;*/
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.controls {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    z-index: 1;
+}
+
+button,
+#spf {
+    opacity: 0.5;
+    display: inline-block;
+    border-radius: 3px;
+    border: 2px solid;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8em;
+    background: rgba(0, 0, 0, 0);
+    /*  border-bottom: 1px solid #498b50;*/
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    margin: 0 0.25rem;
+    text-align: center;
+    transition: 0.5s;
+}
+
+button:hover {
+    opacity: 0.75;
+    background: rgba(224, 232, 255, 0.78);
+    color: #000;
+    border-color: white;
+    cursor: pointer;
+}
+
+button:active {
+    opacity: 1;
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1) inset;
+}
+
+.fadeaway {
+    opacity: 0;
+}
+
+#ratio_col {
+    opacity: 0.1;
+    transition-duration: 1s;
+}
+
+input[type='radio'] {
+    border: 0px;
+    width: auto;
+    height: 1.2em;
+    margin-top: 7px;
+}
+
+input {
+    height: 3.0em;
+    width: 3.0em;
+    font-size: 1.0em;
+    padding: 0;
+    text-align: center;
+    /*    display: block;*/
+    border: none;
+    border-radius: 50%;
+    opacity: .65;
+    color: #3e3e3e;
+}
+
+form {
+    /*    opacity: 0.65;*/
+    color: rgba(255, 255, 255, 0.85);
+    min-width: 650px;
+    margin: 0 auto;
+    border-radius: 4em;
+    padding: 0.0em;
+    padding-bottom: 1em;
+    background-color: rgba(87, 87, 87, 0.65);
+    line-height: 1.1em;
+    transition: 1s;
+}
+
+legend {
+    text-align: center;
+}
+
+fieldset input {
+    margin: 1em auto 0.2em auto;
+}
+
+legend+input {
+    margin: 0.1em auto 0.75em auto;
+}
+
+input+p {
+    margin-top: 2px;
+}
+
+label {
+    padding: 0;
+    text-align: center;
+    display: block;
+    margin: 1em auto 0 auto;
+}
+
+fieldset {
+    display: -webkit-flex;
+    display: flex;
+    border: none;
+    /*    text-align: center;*/
+    /*    width: 100%;*/
+}
+
+.flex_container {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 .1em;
+    /*    width: 100%;*/
+}
+
+.flex_row {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+    flex-direction: row;
+    width: auto;
+}
+
+.flex_col {
+    flex-direction: column;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    margin: 0 10px;
+}
+
+#pattern_color,
+#pattern_amount {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+#epi,
+#hypo,
+#mod_yes,
+#mod_no,
+#ellip_Big_ratio,
+#ellip_sml_ratio {
+    margin: 0 0.5em;
+}
+
+.flex_box {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    flex-direction: row;
+    /*    width: 30%;*/
+    /*    background-color: lightgrey;*/
+}
+
+#firstrow,
+#secondrow,
+#thirdrow,
+#fourthrow {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    width: 100%;
+    /*    background-color: lightgrey;*/
+}
+
+#fourthrow,
+#fifthrow {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 2.6em;
+}
+
+.row1 {
+    /*    float: left;*/
+    margin: 0 0.6em;
+    width: 22.7%;
+}
+
+.row2,
+.row3,
+.row4 {
+    text-align: center;
+    margin: 0 0.6em;
+    width: 22%;
+}
+
+.row4,
+.row5 {
+    display: flex;
+    flex-wrap: nowrap;
+    text-align: left;
+    margin-top: 0.5em;
+    width: 100%;
+    align-content: flex-end;
+}
+
+#row5_first {
+    margin-top: 3em;
+}
+
+#fourthrow_first_col,
+#fifthrow_first_col {
+    display: flex;
+    flex-direction: column;
+    margin-right: 2em;
+}
+
+fourthrow_second_col,
+#fifthrow_second_col {
+    display: -webkit-flex;
+    display: flex;
+    // -webkit-flex-direction: column/* works with row or column */
+    flex-direction: column;
+    -webkit-align-items: center;
+    align-items: flex-start;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+
+/*
+* [type="color"] {
+    border-radius: 0;
+        border: none;
+    background-color: none;
+}
+*/
+
+#colorpicker {
+    /*
+    width: 2em;
+    height: 2em;
+*/
+    margin-top: 0.5em;
+    border-radius: 0;
+    border: none;
+    background: none;
+}
+
+#formleft {
+    width: 40%;
+    padding-left: 3em;
+    float: left;
+}
+
+#formright {
+    display: none;
+    width: 50%;
+    float: right;
+}
+
+#formlast {
+    /*    overflow: auto;*/
+    /*    display: block;*/
+    /*    width: 60%;*/
+    margin: 2em auto;
+}
+
+.submit_button {
+    float: none;
+    height: 5.25em;
+    width: 5.25em;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #313131;
+    padding: 0;
+    text-align: center;
+    border: none;
+    border-radius: 50%;
+}
+
+[type='range'] {
+    height: 1em;
+    width: 280px;
+    margin: 4px 10px 0 0;
+    padding: 0;
+    align-content: center;
+}
+
+#green_value,
+#blue_value,
+#opacity_value {
+    margin-top: 16px;
+}
+
+#outputRed {
+    margin-top: 5px;
+}
+
+#outputBlue,
+#outputGreen,
+#outputOpacity {
+    margin-top: 17px;
+}
+
+#outputRed,
+#outputGreen,
+#outputBlue,
+#outputHorzScale,
+#outputVertScale,
+#outputOpacity {
+    display: inline-table;
+    width: 105px;
+    color: white;
+    opacity: 0.75;
+    padding: 0 1em;
+    border-radius: 10px;
+    font: bold 15px/20px;
+}
+
+
+/*
+output:after { 
+  content: "";
+  position: absolute; 
+  width: 0;
+  height: 0;
+  border-top: 10px solid #999999;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  margin-top: -1px;
+}
+*/
+
+#colorSwatch {
+    margin-top: 0.8em;
+    height: 112px;
+    width: 138px;
+    border-color: aliceblue;
+    background-color: rgba(255, 107, 0, 0.40);
+    transition: 0.5s;
+}
+
+input.error {
+    background-color: #671008;
+}
+
+#music_cheatsheet {
+    display: block;
+    position: absolute;
+    top: 10%;
+    left: 3%;
+    color: hsl(0, 0%, 25%);
+}
+
+.flex-container-col,
+.flex-container-row {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: column wrap;
+    justify-content: space-around;
+}
+
+.flex-container-row {
+    -webkit-flex-flow: row wrap;
+}
+
+.flex-item {
+    background: tomato;
+    padding: 5px;
+    width: 200px;
+    /*		  height: 150px;*/
+    margin-top: 10px;
+    color: greenyellow;
+    font-weight: bold;
+    font-size: 1em;
+    text-align: center;
+}
+
+.color-selector {
+    width: 40%;
+}
+
+.flex-container-row .flex-item {
+    width: 46px;
+    background-color: purple;
+}

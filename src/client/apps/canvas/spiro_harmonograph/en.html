@@ -1,0 +1,256 @@
+<html>
+
+<head>
+    <title>Canvas: Spiro-Harmonograph</title>
+    <style>
+    </style>
+</head>
+
+<body>
+
+    <head>
+        <link rel='stylesheet' href="harmonograph-style.css">
+
+    </head>
+
+
+    <html>
+
+    <body id='main' onload="init()">
+
+
+        <canvas id='canvas' class='' height="1080" width="1080"></canvas>
+
+
+        <div class="controls">
+            <button type="button" id="pauseBtn" onmouseup="this.blur();">Pause</button>
+            <button type="button" id='resetBtn' onmouseup="this.blur();">Reset</button>
+            <button id='spdBtn' onmouseup="this.blur();">speed</button>
+            <div id="spf">256x</div>
+        </div>
+
+        <form class='center' name='anim_input' id='animInput'>
+
+            <div class='flex_container'>
+                <div class='flex_col'>
+                    <h3>Pendulum 1 Settings:</h3>
+                    <div class='flex_row'>
+                        <div class='flex_col'>
+                            <input type="text" name='amp_x1' id='amp_x1' value=100 tabindex="1"></input>
+                            <label for='amp_x1' id='amp_x1_lbl'>
+                                <p>Amplitude X</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='amp_y1' id='amp_y1' value=100 tabindex="2"></input>
+                            <label for='amp_y1' id='amp_y1_lbl'>
+                                <p>Amplitude Y</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='phase_x1' id='phase_x1' value=90></input>
+                            <label for='phase_x1' id='phase_x1_lbl'>
+                                <p>Phase X</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='phase_y1' id='phase_y1' value=0></input>
+                            <label for='phase_y1' id='phase_y1_lbl'>
+                                <p>Phase Y</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='damp1' id='damp1' value=0></input>
+                            <label for='phase_x1' id='phase_x1_lbl'>
+                                <p>Dampening</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='freq1' id='freq1' value=3 tabindex="7"></input>
+                            <label for='freq1' id='freq1_lbl'>
+                                <p>Frequency</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='microtn1' id='microtn1' value=0.01 tabindex="10"></input>
+                            <label for='microtn1' id='microtn1_lbl'>
+                                <p>Micro Tuning 1</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='flex_container'>
+                <div class='flex_col'>
+                    <h3>Pendulum 2 Settings:</h3>
+                    <div class='flex_row'>
+                        <div class='flex_col'>
+                            <input type="text" name='amp_x2' id='amp_x2' value=100 tabindex="3"></input>
+                            <label for='amp_x2' id='amp_x2_lbl'>
+                                <p>Amplitude X</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='amp_y2' id='amp_y2' value=100 tabindex="4"></input>
+                            <label for='amp_y2' id='amp_y2_lbl'>
+                                <p>Amplitude Y</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='phase_x2' id='phase_x2' value=0></input>
+                            <label for='phase_x2' id='phase_x2_lbl'>
+                                <p>Phase X</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='phase_y2' id='phase_y2' value=90></input>
+                            <label for='phase_y2' id='phase_y2_lbl'>
+                                <p>Phase Y</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='damp2' id='damp2' value=0></input>
+                            <label for='damp2' id='damp2_lbl'>
+                                <p>Dampening</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='freq2' id='freq2' value=2 tabindex="8"></input>
+                            <label for='freq2' id='freq2_lbl'>
+                                <p>Frequency</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='microtn2' id='microtn2' value=0.02 tabindex="11"></input>
+                            <label for='microtn2' id='microtn2_lbl'>
+                                <p>Micro Tuning 2</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='flex_container'>
+                <div class='flex_col'>
+                    <h3>Pendulum 3 Settings:</h3>
+                    <div class='flex_row'>
+                        <div class='flex_col'>
+                            <input type="text" name='amp_x3' id='amp_x3' value=50 tabindex="5"></input>
+                            <label for='amp_x3' id='amp_x3_lbl'>
+                                <p>Amplitude X</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='amp_y3' id='amp_y3' value=-50 tabindex="6"></input>
+                            <label for='amp_y3' id='amp_y3_lbl'>
+                                <p>Amplitude Y</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='phase_x3' id='phase_x3' value=-90></input>
+                            <label for='phase_x3' id='phase_x3_lbl'>
+                                <p>Phase X</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='phase_y3' id='phase_y3' value=0></input>
+                            <label for='phase_y3' id='phase_y3_lbl'>
+                                <p>Phase Y</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='damp3' id='damp3' value=0></input>
+                            <label for='damp3' id='damp3_lbl'>
+                                <p>Dampening</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='freq3' id='freq3' value=3 tabindex="9"></input>
+                            <label for='freq3' id='freq3_lbl'>
+                                <p>Frequency</p>
+                            </label>
+                        </div>
+                        <div class='flex_col'>
+                            <input type="text" name='microtn3' id='microtn3' value=-0.01 tabindex="12"></input>
+                            <label for='microtn3' id='microtn3_lbl'>
+                                <p>Micro Tuning 3</p>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='flex_container'>
+                <div class='flex_col'>
+                    <fieldset id='pattern_clr'>
+                        <label id='pattern_color' for='pattern_color'>Color?</label>
+                        <div class='flex_row'>
+                            <div class='flex_col'>
+                                <input type='radio' name='pattern_color' id='red' value='red' />
+                                <p>Red</p>
+                            </div>
+                            <div class='flex_col'>
+                                <input type='radio' name='pattern_color' id='blue' value='blue' />
+                                <p>Blue</p>
+                            </div>
+                            <div class='flex_col'>
+                                <input type='radio' name='pattern_color' id='green' value='green' />
+                                <p>Green</p>
+                            </div>
+                            <div class='flex_col'>
+                                <input type='radio' name='pattern_color' id='orange' value='orange' />
+                                <p>Orange</p>
+                            </div>
+                            <div class='flex_col'>
+                                <input type='radio' name='pattern_color' id='purple' value='purple' />
+                                <p>Purple</p>
+                            </div>
+                    </fieldset>
+                    </div>
+
+
+
+                    <div class='flex_col'>
+                        <fieldset id='pattern'>
+                            <label id='pattern_amount' for='pattern_amount'>How Much Pattern?</label>
+                            <div class='flex_row'>
+                                <div class='flex_col'>
+                                    <input type='radio' name='pattern_amount' id='full' value='full' />
+                                    <p>Full</p>
+                                </div>
+
+                                <div class='flex_col'>
+                                    <input type='radio' name='pattern_amount' id='half' value='half' />
+                                    <p>Half</p>
+                                </div>
+                                <div class='flex_col'>
+                                    <input type='radio' name='pattern_amount' id='third' value='third' />
+                                    <p>Third</p>
+                                </div>
+                        </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class='flex_row'>
+                    <input class='submit_button' type="button" name='sbmtBtn' value="GO!" onclick="btnGetFormClick()">
+                    <!-- <input class='submit_button' type="button" name='sbmtBtn' value="GO!"> -->
+                </div>
+
+            </div>
+
+        </form>
+        <!--        <script src='harmonograph-script.js'></script>-->
+        <div id='music_cheatsheet'>
+            <h2>
+                Some Musical Ratios
+            </h2>
+            <h3>
+                Fifth is 3:2
+                <br> Fourth is 4:3
+                <br> Major sixth is 5:3
+                <br> Major third is 5:4
+                <br> Perfect eleventh is 8:3
+                <br> Seventh-limit jazz tuning is 7:3
+            </h3>
+        </div>
+    </body>
+
+    </html>
