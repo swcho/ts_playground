@@ -1817,15 +1817,7 @@ d3-drag@1, d3-drag@1.2.1:
     d3-dispatch "1"
     d3-selection "1"
 
-d3-dsv@1:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-1.0.7.tgz#137076663f398428fc3d031ae65370522492b78f"
-  dependencies:
-    commander "2"
-    iconv-lite "0.4"
-    rw "1"
-
-d3-dsv@1.0.8:
+d3-dsv@1, d3-dsv@1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-1.0.8.tgz#907e240d57b386618dc56468bacfe76bf19764ae"
   dependencies:
@@ -1860,13 +1852,7 @@ d3-hierarchy@1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/d3-hierarchy/-/d3-hierarchy-1.1.5.tgz#a1c845c42f84a206bcf1c01c01098ea4ddaa7a26"
 
-d3-interpolate@1:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.1.5.tgz#69e099ff39214716e563c9aec3ea9d1ea4b8a79f"
-  dependencies:
-    d3-color "1"
-
-d3-interpolate@1.1.6:
+d3-interpolate@1, d3-interpolate@1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.1.6.tgz#2cf395ae2381804df08aa1bf766b7f97b5f68fb6"
   dependencies:
@@ -1913,11 +1899,7 @@ d3-scale@1.0.7:
     d3-time "1"
     d3-time-format "2"
 
-d3-selection@1, d3-selection@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-1.1.0.tgz#1998684896488f839ca0372123da34f1d318809c"
-
-d3-selection@1.2.0:
+d3-selection@1, d3-selection@1.2.0, d3-selection@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-1.2.0.tgz#1b8ec1c7cedadfb691f2ba20a4a3cfbeb71bbc88"
 
@@ -1933,11 +1915,7 @@ d3-time-format@2, d3-time-format@2.1.1:
   dependencies:
     d3-time "1"
 
-d3-time@1:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.7.tgz#94caf6edbb7879bb809d0d1f7572bc48482f7270"
-
-d3-time@1.0.8:
+d3-time@1, d3-time@1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.8.tgz#dbd2d6007bf416fe67a76d17947b784bffea1e84"
 
@@ -1945,18 +1923,7 @@ d3-timer@1, d3-timer@1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.7.tgz#df9650ca587f6c96607ff4e60cc38229e8dd8531"
 
-d3-transition@1:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/d3-transition/-/d3-transition-1.1.0.tgz#cfc85c74e5239324290546623572990560c3966f"
-  dependencies:
-    d3-color "1"
-    d3-dispatch "1"
-    d3-ease "1"
-    d3-interpolate "1"
-    d3-selection "^1.1.0"
-    d3-timer "1"
-
-d3-transition@1.1.1:
+d3-transition@1, d3-transition@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/d3-transition/-/d3-transition-1.1.1.tgz#d8ef89c3b848735b060e54a39b32aaebaa421039"
   dependencies:
@@ -4142,16 +4109,6 @@ jstree@^3.3.3:
   resolved "https://registry.yarnpkg.com/jstree/-/jstree-3.3.4.tgz#3d089bb9623bd6f3f25f64c4e4ce547b30d40264"
   dependencies:
     jquery ">=1.9.1"
-
-just-animate@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/just-animate/-/just-animate-2.5.0.tgz#ea33259b7e76eaba28f4c8ef09716873f56e140f"
-  dependencies:
-    just-curves "^0.2.0"
-
-just-curves@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/just-curves/-/just-curves-0.2.0.tgz#a12ca60b3b99d4f07810d8e7c1a589e8fdd6a675"
 
 keymaster@^1.6.2:
   version "1.6.2"

@@ -4,10 +4,9 @@ import 'htmlout-loader!./en.html';
 console.log(__filename);
 
 import './style.scss';
-import { animate }  from 'just-animate'
 
-declare var just
-declare var flubber
+declare var just;
+declare var flubber;
 
 let t1 = just.animate({
     targets: '#target',
@@ -21,10 +20,11 @@ let t1 = just.animate({
                 'M4 0l16 12.279-6.951 1.17 4.325 8.817-3.596 1.734-4.35-8.879-5.428 4.702z',
             ],
             interpolate(left, right) {
+                console.log('interpolate', left, right);
                 return flubber.interpolate(
                     left,
                     right, { maxSegmentLength: 0.3 }
-                )
+                );
             }
         },
         fill: {

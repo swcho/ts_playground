@@ -434,6 +434,46 @@ export async function getCurrencyRate() {
     const resp = await fetchJson('/btweb/resources/csv/CurrencyRate.json');
 }
 
+interface Order {
+    price: string;
+    quantity: string;
+}
+
+interface OrderBook {
+    asks: Order[];
+    bids: Order[];
+}
+
+interface Transaction {
+    transaction_date: string;
+    type: 'ask' | 'bid';
+    price: string;
+    units_traded: string;
+    total: string;
+}
+
+type Ticker = {
+    [coin in CoinType]: {
+        average_price: string;
+        buy_price: string;
+        closing_price: string;
+        max_price: string;
+        min_price: string;
+        opening_price: string;
+        sell_price: string;
+        units_traded: string;
+    }
+};
+
+interface Message {
+    status: '0000';
+    header: {
+        currency: CoinType;
+        service: 'orderbook' | 'transaction' | 'ticker';
+    };
+    data: OrderBook | Transaction[] | Ticker;
+}
+
 interface WSTicker {
     data: {
         [coin in CoinType]: {
@@ -458,18 +498,18 @@ export async function initTickerWS(cb: (tickerItemMap: TickerItemMap) => void) {
     };
     ws.onmessage = function (event) {
         try {
-            const ticker = JSON.parse(event.data);
-            if (ticker.data.BTC && cb) {
-                const wsTicker: WSTicker = ticker;
+            const message: Message = JSON.parse(event.data);
+            if (message.header.service === 'ticker') {
+                const ticker = message.data as Ticker;
                 const tickerItemMap: TickerItemMap = {} as any;
-                Object.keys(wsTicker.data).forEach(function(coin: CoinType) {
-                    const ticker = wsTicker.data[coin];
+                Object.keys(ticker).forEach(function(coin: CoinType) {
+                    const t = ticker[coin];
                     tickerItemMap[coin] = {
-                        open: parseInt(ticker.opening_price),
-                        close: parseInt(ticker.closing_price),
-                        low: parseInt(ticker.min_price),
-                        hight: parseInt(ticker.max_price),
-                        qty: parseInt(ticker.units_traded),
+                        open: parseInt(t.opening_price),
+                        close: parseInt(t.closing_price),
+                        low: parseInt(t.min_price),
+                        hight: parseInt(t.max_price),
+                        qty: parseInt(t.units_traded),
                     };
                 });
                 cb(tickerItemMap);
