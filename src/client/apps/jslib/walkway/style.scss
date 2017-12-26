@@ -1,0 +1,452 @@
+$stomach: #a3c518;
+$liver: #f8be16;
+$spleen: #f19503;
+$small-intestine: #c67d3e;
+$adrenals: #cf7847;
+$diaphragm: #b8f6ff;
+$elbow: #6e88bf;
+$knee: #516e95;
+$lung-chest: #4ac0f0;
+$shoulder: #a3b9e2;
+$solar-plexus: #fceeb9;
+$trapezius: #e1730a;
+$ear: #717bc3;
+$ascending-colon: #9b6132;
+$eye: #a68dbe;
+$esophagus: #44b38f;
+$thyroid-bronchia: #22a5dd;
+$nose: #b35228;
+$trapezius: #dd7411;
+$neck: #eea147;
+$throat: #e08f2c;
+$teeth-sinuses:#d080b1;
+$head-brain:#e7afcc;
+$pituitary:#f5cbdf;
+$arm:#5680b2;
+$armpit:#3d6596;
+$lower-back-glutal-area:#f0ad9e;
+$sciatic-nerve:#ec9486;
+$appendix:#71471b;
+$bladder:#f6f245;
+$pancreas:#8ba832;
+$duodenum:#739a24;
+$lumbar-spine:#576996;
+$ureter:#f6f245;
+$kidney:#f9ec41;
+$heart:#ed7876;
+$gall-bladder:#c5ca15;
+$leg-knee:#516e95;
+body {
+    background: #f5f5f5;
+    -webkit-user-select: none;
+}
+
+.content-container {
+    text-align: center;
+    margin-top: 80px; // height:70vh;
+    // border:1px solid;
+}
+
+.source {
+    text-align: left !important;
+    color: gray;
+    position: fixed;
+    margin: 0 auto;
+}
+
+.feet {
+    width: 70%;
+}
+
+.left-foot {
+    margin-right: 5%;
+    height: auto !important;
+    cursor: pointer;
+}
+
+.right-foot {
+    display: inline-block;
+    height: auto !important;
+    cursor: pointer;
+}
+
+.info {
+    display: inline-block;
+    border: 1px solid;
+    height: 400px;
+    width: 400px;
+    margin-right: 5%;
+    margin-bottom: 2%;
+    background: #fff;
+    box-shadow: inset 0 0 10px #000000;
+}
+
+.source {
+    font-size: 9px;
+    bottom: 0;
+    position: absolute;
+}
+
+.liver {
+    fill: $liver;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($liver, 10%);
+    }
+}
+
+.spleen {
+    fill: $spleen;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($spleen, 10%);
+    }
+}
+
+.small-intestine {
+    fill: $small-intestine;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($small-intestine, 10%);
+    }
+}
+
+.stomach {
+    fill: $stomach;
+    cursor: pointer;
+    border: 3px solid;
+    &:hover {
+        fill: lighten($stomach, 10%);
+    }
+}
+
+.adrenals {
+    fill: $adrenals;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($adrenals, 10%);
+    }
+}
+
+.diaphragm {
+    fill: $diaphragm;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($diaphragm, 10%);
+    }
+}
+
+.elbow {
+    fill: $elbow;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($elbow, 10%);
+    }
+}
+
+.knee {
+    fill: $knee;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($knee, 10%);
+    }
+}
+
+.lung-chest {
+    fill: $lung-chest;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($lung-chest, 10%);
+    }
+}
+
+.shoulder {
+    fill: $shoulder;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($shoulder, 10%);
+    }
+}
+
+.solar-plexus {
+    fill: $solar-plexus;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($solar-plexus, 10%);
+    }
+}
+
+.trapezius {
+    fill: $trapezius;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($trapezius, 10%);
+    }
+}
+
+.ear {
+    fill: $ear;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($ear, 10%);
+    }
+}
+
+.ascending-colon {
+    fill: $ascending-colon;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($ascending-colon, 10%);
+    }
+}
+
+.descending-colon {
+    fill: $ascending-colon;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($ascending-colon, 10%);
+    }
+}
+
+.eye {
+    fill: $eye;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($eye, 10%);
+    }
+}
+
+.esophagus {
+    fill: $esophagus;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($esophagus, 10%);
+    }
+}
+
+.thyroid {
+    fill: $thyroid-bronchia;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($thyroid-bronchia, 10%);
+    }
+}
+
+.nose {
+    fill: $nose;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($nose, 10%);
+    }
+}
+
+.trapezius {
+    fill: $trapezius;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($trapezius, 10%);
+    }
+}
+
+.neck {
+    fill: $neck;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($neck, 10%);
+    }
+}
+
+.throat {
+    fill: $throat;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($throat, 10%);
+    }
+}
+
+.teeth-sinuses {
+    fill: $teeth-sinuses;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($teeth-sinuses, 10%);
+    }
+}
+
+.head-brain {
+    fill: $head-brain;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($head-brain, 10%);
+    }
+}
+
+.pituitary {
+    fill: $pituitary;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($pituitary, 10%);
+    }
+}
+
+.arm {
+    fill: $arm;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($arm, 10%);
+    }
+}
+
+.armpit {
+    fill: $armpit;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($armpit, 10%);
+    }
+}
+
+.lower-back {
+    fill: $lower-back-glutal-area;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($lower-back-glutal-area, 10%);
+    }
+}
+
+.sciatic-nerve {
+    fill: $sciatic-nerve;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($sciatic-nerve, 10%);
+    }
+}
+
+.appendix {
+    fill: $appendix;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($appendix, 10%);
+    }
+}
+
+.rectum {
+    fill: $appendix;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($appendix, 10%);
+    }
+}
+
+.bladder {
+    fill: $bladder;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($bladder, 10%);
+    }
+}
+
+.pancreas {
+    fill: $pancreas;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($pancreas, 10%);
+    }
+}
+
+.duodenum {
+    fill: $duodenum;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($duodenum, 10%);
+    }
+}
+
+.cervical-spine {
+    fill: $lumbar-spine;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($lumbar-spine, 10%);
+    }
+}
+
+.ureter {
+    fill: $ureter;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($ureter, 10%);
+    }
+}
+
+.kidney {
+    fill: $kidney;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($kidney, 10%);
+    }
+}
+
+.heart {
+    fill: $heart;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($heart, 10%);
+    }
+}
+
+.gall-bladder {
+    fill: $gall-bladder;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($gall-bladder, 10%);
+    }
+}
+
+.leg {
+    fill: $leg-knee;
+    cursor: pointer;
+    &:hover {
+        fill: lighten($leg-knee, 10%);
+    }
+}
+
+.cls-3,
+.cls-40,
+.cls-44 {
+    fill: none;
+    stroke-miterlimit: 10;
+}
+
+.red {
+    stroke: #ff0025;
+}
+
+.cls-40 {
+    stroke: #333;
+}
+
+.cls-43 {
+    font-size: 12px;
+    font-family: Gotham-Black, Gotham;
+    cursor: default;
+}
+
+.cls-43 {
+    stroke: none !important;
+}
+
+// .cls-43:hover{
+//   fill: #000 
+// }
+// .stroke-toggle {
+//   stroke: #333 !important;
+// }
+g.text-group {
+    fill: #ccc; // stroke: none;
+}
+
+path {
+    stroke: #333;
+}
+
+.text-fill {
+    fill: #333;
+}
