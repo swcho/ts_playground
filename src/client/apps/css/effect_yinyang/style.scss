@@ -1,0 +1,96 @@
+$rotation-speed: 12s;
+$dot-speed: 1.4s;
+body {
+    background: #333337;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.parent {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    animation: rotateAnim $rotation-speed linear infinite;
+}
+
+.circle {
+    width: 80px;
+    height: 40px;
+    background: #eee;
+    border-color: #111;
+    border-style: solid;
+    border-width: 0 0 40px 0;
+    border-radius: 100%;
+    position: relative;
+}
+
+.dark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    background: #111;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+}
+
+.light {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #eee;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    mix-blend-mode: exclusion;
+    border-radius: 50%;
+    top: calc(50% - 6px);
+    left: calc(50% - 6px);
+    z-index: 1;
+    animation: dotAnim $dot-speed ease infinite;
+}
+
+@keyframes dotAnim {
+    0% {
+        transform: translateX(-19px);
+    }
+    50% {
+        transform: translateX(19px);
+    }
+    100% {
+        transform: translateX(-19px);
+    }
+}
+
+@keyframes rotateAnim {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+// #yin-yang:before {
+// 	content: "";
+// }
+// #yin-yang:after {
+// 	content: "";
+// 	position: absolute;
+// 	top: 50%;
+// 	left: 50%;
+// 	background: #111;
+// 	border: 18px solid #eee;
+// 	border-radius:100%;
+// 	width: 12px;
+// 	height: 12px;
+// }
