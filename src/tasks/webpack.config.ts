@@ -147,6 +147,8 @@ const webpackConfig: webpack.Configuration = {
                             includePaths: [
                                 ...require('bourbon').includePaths,
                                 ...require('bourbon-neat').includePaths,
+                                // http://browniefed.com/blog/webpack-and-compass/
+                                path.resolve(__dirname, './node_modules/compass-mixins/lib'),
                             ]
                         }
                     },

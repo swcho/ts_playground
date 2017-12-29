@@ -11,10 +11,10 @@ import {TweenMax, Expo} from 'gsap';
 
 declare module 'gsap' {
     export interface TweenConfig {
-        rotationY: number;
-        rotationX: number;
-        transformPerspective: number;
-        transformOrigin: string;
+        rotationY?: number;
+        rotationX?: number;
+        transformPerspective?: number;
+        transformOrigin?: string;
     }
 }
 

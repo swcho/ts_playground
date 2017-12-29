@@ -1,0 +1,99 @@
+// @import "compass";
+
+// https://github.com/leafo/scssphp-compass/blob/master/stylesheets/compass/css3/transition.scss
+
+@mixin transition-property($property-1: $default-transition-property, $property-2: false, $property-3: false, $property-4: false, $property-5: false, $property-6: false, $property-7: false, $property-8: false, $property-9: false, $property-10: false) {
+    @if type-of($property-1)==string {
+        $property-1: unquote($property-1);
+    }
+    $properties: compact($property-1, $property-2, $property-3, $property-4, $property-5, $property-6, $property-7, $property-8, $property-9, $property-10);
+    // @if $experimental-support-for-webkit {
+    //     -webkit-transition-property: prefixed-for-transition(-webkit, $properties);
+    // }
+    // @if $experimental-support-for-mozilla {
+    //     -moz-transition-property: prefixed-for-transition(-moz, $properties);
+    // }
+    // @if $experimental-support-for-opera {
+    //     -o-transition-property: prefixed-for-transition(-o, $properties);
+    // }
+    transition-property: $properties;
+}
+
+@mixin transition-duration($duration-1: $default-transition-duration, $duration-2: false, $duration-3: false, $duration-4: false, $duration-5: false, $duration-6: false, $duration-7: false, $duration-8: false, $duration-9: false, $duration-10: false) {
+    @if type-of($duration-1)==string {
+        $duration-1: unquote($duration-1);
+    }
+    $durations: compact($duration-1, $duration-2, $duration-3, $duration-4, $duration-5, $duration-6, $duration-7, $duration-8, $duration-9, $duration-10);
+    // @include experimental(transition-duration, $durations, -moz, -webkit, -o, not -ms, not -khtml, official);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#toggleButton {
+    margin: 5%;
+}
+
+#sun {}
+
+.day-toggle {
+    position: absolute;
+    right: 0%;
+    top: 0%;
+}
+
+.container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    @include transition-property(background-color);
+    @include transition-duration(1s);
+}
+
+.switch {
+    width: 100px;
+    height: 40px;
+    display: inline-block;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    background-color: white;
+    width: inherit;
+    height: inherit;
+    border-radius: 34px;
+    cursor: pointer;
+}
+
+.slider:before {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    content: "";
+    height: 30px;
+    width: 30px;
+    border-radius: 50px;
+    background-color: #469CCE;
+    transition: .4s, background-color 1s linear;
+    -webkit-transition: .4s, background-color 1s linear;
+    -moz-transition: .4s, background-color 1s linear;
+    -o-transition: .4s, background-color 1s linear;
+}
+
+input:checked+.slider:before {
+    background-color: #2c3e50;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(60px);
+    -ms-transform: translateX(60px);
+    transform: translateX(60px);
+}

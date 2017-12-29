@@ -10,17 +10,26 @@ import './style.scss';
 
 import dat = require('dat-gui');
 const CONFIG = {
-    division: 25,
-    add: 0.1,
-    usePrev: false,
-    noFade: false,
+    // interval: 0.1,
+    interval: 0.01,
+    ad: 2,
+    xa_1: 100,
+    ya_1: 100,
+    xa_2: 100,
+    ya_2: 100,
+    xa_3: 50,
+    ya_3: 50,
 };
 
 let gui = new dat.GUI();
-gui.add(CONFIG, 'division', 0.01, 50).step(0.01);
-gui.add(CONFIG, 'add', -1, 1).step(0.1);
-gui.add(CONFIG, 'usePrev');
-gui.add(CONFIG, 'noFade');
+gui.add(CONFIG, 'interval', 0.1, 5).step(0.1);
+gui.add(CONFIG, 'ad', 1, 50).step(1);
+gui.add(CONFIG, 'xa_1', 0, 200).step(10);
+gui.add(CONFIG, 'ya_1', 0, 200).step(10);
+gui.add(CONFIG, 'xa_2', 0, 200).step(10);
+gui.add(CONFIG, 'ya_2', 0, 200).step(10);
+gui.add(CONFIG, 'xa_3', 0, 200).step(10);
+gui.add(CONFIG, 'ya_3', 0, 200).step(10);
 
 
 //  Some variables, and the step() function, based on Andy Giger's virtual harmonograph:
@@ -112,23 +121,10 @@ let willbe_d3;
 let willbe_d5;
 let pattern_amount;
 
+document.getElementById('animInput').setAttribute('class', 'center fadeaway');
+
 function btnGetFormClick(e?) {
-
-    revolutions = 0;
-
-    console.log('from inside btnGetFormClick function = ');
-
-    document.getElementById('animInput').setAttribute('class', 'center fadeaway');
-    document.getElementById('main').removeEventListener('keyup', checkSubmit);
-    document.getElementById('pauseBtn').addEventListener('click', pause);
-    setPatternAmount();
-    setColor();
-    console.log('from inside btnGetFormClick function, pattern amount = ' + pattern_amount);
-
-    init();
 }
-
-window['btnGetFormClick'] = btnGetFormClick;
 
 function init() {
     window.clearInterval(intId);
@@ -153,8 +149,6 @@ function init() {
     // userInputForm = document.anim_input;
     userInputForm = document.getElementById('animInput');
     document.getElementsByName('sbmtBtn')[0].addEventListener('click', () => btnGetFormClick());
-
-
 
     fd = 0.001;
 
@@ -194,7 +188,7 @@ function init() {
     rot_increment = 6;  //  I DON'T THINK I EVEN USE THIS
     revo_increment_multiplier = 1.0; //  OR THIS EITHER
 
-    intId = window.setInterval(step, 1000 * dt);
+    intId = window.setInterval(step, 1000 * CONFIG.interval);
 }
 
 function step() {
@@ -215,8 +209,16 @@ function step() {
         d6 = d5;
 
         let x = a1 * Math.sin((t * f1) + p1) * Math.exp(-d1 * t) + a3 * Math.sin((t * f3) + p3) * Math.exp(-d3 * t) + a5 * Math.sin((t * f5) + p5) * Math.exp(-d5 * t);
+        // let x = (CONFIG.xa_1 * CONFIG.ad) * Math.sin((t * f1) + p1) * Math.exp(-d1 * t)
+        //     + (CONFIG.xa_2 * CONFIG.ad) * Math.sin((t * f3) + p3) * Math.exp(-d3 * t)
+        //     + (CONFIG.xa_3 * CONFIG.ad) * Math.sin((t * f5) + p5) * Math.exp(-d5 * t);
 
-        let y = a2 * Math.sin((t * f2) + p2) * Math.exp(-d2 * t) + a4 * Math.sin((t * f4) + p4) * Math.exp(-d4 * t) + a6 * Math.sin((t * f6) + p6) * Math.exp(-d6 * t);
+        // let y = (CONFIG.ya_1 * CONFIG.ad) * Math.sin((t * f2) + p2) * Math.exp(-d2 * t)
+        //     + (CONFIG.ya_2 * CONFIG.ad) * Math.sin((t * f4) + p4) * Math.exp(-d4 * t)
+        //     + (CONFIG.ya_3 * CONFIG.ad) * Math.sin((t * f6) + p6) * Math.exp(-d6 * t);
+        let y = (a2 * CONFIG.ad) * Math.sin((t * f2) + p2) * Math.exp(-d2 * t)
+            + (a4 * CONFIG.ad) * Math.sin((t * f4) + p4) * Math.exp(-d4 * t)
+            + (a6 * CONFIG.ad) * Math.sin((t * f6) + p6) * Math.exp(-d6 * t);
 
         ctx.beginPath();
         ctx.rect(x, y, 2, 2);
@@ -226,28 +228,30 @@ function step() {
         if (revolutions === pattern_amount) {
             window.clearInterval(intId);
             intId = null;
+            erase();
+            init();
         }
         //   END OF DRAWFRAME FUNCTION
     }
 };
 
-window.onload = function () {
-    document.getElementById('spdBtn').addEventListener('click', function (e) {
-        s = s * 2;
-        if (s > 1024) {
-            s = 256;
-        };
-        document.getElementById('spf').innerHTML = s + 'x';
-        console.log('from inside the spdBtn function');
+// window.onload = function () {
+//     document.getElementById('spdBtn').addEventListener('click', function (e) {
+//         s = s * 2;
+//         if (s > 1024) {
+//             s = 256;
+//         };
+//         document.getElementById('spf').innerHTML = s + 'x';
+//         console.log('from inside the spdBtn function');
 
-    });
-    document.getElementById('resetBtn').addEventListener('click', formReset);
-    document.getElementById('resetBtn').addEventListener('click', erase);
-    document.getElementById('main').addEventListener('keyup', checkSubmit);
+//     });
+//     document.getElementById('resetBtn').addEventListener('click', formReset);
+//     document.getElementById('resetBtn').addEventListener('click', erase);
+//     document.getElementById('main').addEventListener('keyup', checkSubmit);
 
-    revolutions = 0;
+//     revolutions = 0;
 
-};
+// };
 
 let x;
 
@@ -374,7 +378,9 @@ function erase() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     document.getElementById('spf').innerHTML = s + 'x';
-
-    document.getElementById('animInput').setAttribute('class', 'center');
-    document.getElementById('main').addEventListener('keyup', checkSubmit);
 }
+
+
+setPatternAmount();
+setColor();
+init();
