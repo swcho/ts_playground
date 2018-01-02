@@ -34,7 +34,7 @@ let svg: SVGSVGElement = document.getElementById('svg') as any,
     winW = window.innerWidth,
     winH = window.innerHeight,
     Colors = [],
-    Paths = [],
+    Paths: Path[] = [],
     Mouse = {
         x: winW / 2,
         y: winH / 2
@@ -90,10 +90,10 @@ class Path {
             }
 
             this.root.push({ x: x, y: y });
-        };
+        }
 
         this.root.push({ x: winW + overflow, y: rootY });
-    };
+    }
 
     createCircles() {
         const fill = '#fff';
@@ -105,7 +105,7 @@ class Path {
             circle.setAttribute('fill', 'rgba(255, 255, 255, .3)');
             svg.appendChild(circle);
         })
-    };
+    }
 
     createPath() {
         const root = this.root;
@@ -151,7 +151,7 @@ class Path {
         d += ` Z`;
 
         path.setAttribute('d', d);
-    };
+    }
 
     createLines() {
         const root = this.root;
@@ -180,8 +180,8 @@ class Path {
         d += ` Z`;
 
         path.setAttribute('d', d);
-    };
-};
+    }
+}
 
 
 declare const chroma;
@@ -201,7 +201,7 @@ function init() {
     // Reset
     Paths = [];
     document.body.removeChild(svg);
-    svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('id', 'svg');
     document.body.appendChild(svg);
 
@@ -221,8 +221,10 @@ function init() {
     }
     Paths.forEach(function (path) {
         path.createPath();
+        // path.createCircles();
+        // path.createLines();
     });
-};
+}
 init();
 
 
@@ -268,7 +270,7 @@ function datgui() {
     guiEndColor.open();
 
     // Randomize
-    let guiRandomize = { randomize: function () { randomize() } };
+    let guiRandomize = { randomize: function () { randomize(); } };
     gui.add(guiRandomize, 'randomize');
 
     return gui;
@@ -294,7 +296,7 @@ function randomize() {
         offsetX: Math.floor(-20 + Math.random() * 40),
         fill: Math.random() * 1 > 0.3 ? true : false,
         crazyness: Math.random() * 1 > 0.9 ? true : false
-    }
+    };
     init();
     gui.destroy();
     datgui();
