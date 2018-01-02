@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Stochastic Drum Machine</title>
+    <script src="https://redom.js.org/redom.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="controls">
+            <div class="left">
+                <button id="generate-pattern" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Generate New Pattern
+                </button>
+            </div>
+            <label class="control">
+                Pattern length
+                <input id="pattern-length-control" class="mdl-slider mdl-js-slider" type="range" min="1" max="32" value="8" tabindex="0">
+            </label>
+            <label class="control">
+                Pattern Density
+                <input id="pattern-density-control" class="mdl-slider mdl-js-slider" type="range" min="0" max="1" value="0.5" step="0.1"
+                    tabindex="1">
+            </label>
+        </div>
+
+        <div id="sequencer"></div>
+        <div id="loading">
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        </div>
+
+        <div class="controls">
+            <div class="left"></div>
+            <label class="control">
+                <input id="deviations-control" class="mdl-slider mdl-js-slider" type="range" min="0" max="1" value="0.1" step="0.05" tabindex="2"> Deviations
+            </label>
+            <label class="control">
+                <input id="bpm-control" class="mdl-slider mdl-js-slider" type="range" min="10" max="300" value="160" step="1" tabindex="3"> Tempo
+            </label>
+        </div>
+    </div>
+</body>
+
+</html>
