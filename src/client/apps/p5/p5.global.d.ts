@@ -1338,7 +1338,7 @@ declare function text(str: string, x: number, y: number, x2?: number, y2?: numbe
 /**
  * Sets the current font that will be drawn with the text() function.
  */
-declare function textFont(f: any|string): any;
+declare function textFont(f: any|string, size?: number): any;
 
 // src/utilities/array_functions.js
 
