@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+    </style>
+</head>
+
+<body>
+<body>
+<canvas id="scene" width="520" height="520">
+    Your browser does not support canvas!
+</canvas>
+<script id="canvas_vsh" type="x-shader/x-vertex">
+    attribute vec2 a_pos;
+    attribute vec2 a_texcoord;
+    varying vec2 v_texcoord;
+    void main() {
+        gl_Position = vec4(a_pos, 0.0, 1.0);
+        v_texcoord = a_texcoord;
+    }
+
+</script>
+<script id="canvas_fsh" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+    uniform sampler2D u_fontmap;
+    uniform sampler2D u_tex;
+    varying vec2 v_texcoord;
+    void main() {
+        vec4 pixel = texture2D(u_tex, v_texcoord);
+        float brightness = float(pixel.r) * 0.2 + float(pixel.g) * 0.7 + float(pixel.b) * 0.1;
+        float index = (1.0 - brightness) * 63.0;
+        // float index = 9.0;
+        int col = int(mod(index, 9.0));
+        int row = int(index/9.0);
+        float x = float(col) * 14.0 + mod(gl_FragCoord.x, 14.0);
+        float y = 2.0 + float(6 - row) * 18.0 + mod(gl_FragCoord.y, 18.0);
+        vec4 pif = texture2D(u_fontmap, vec2(x, y) / 128.0);
+        if (pif.r > 0.5)
+            discard;
+
+        gl_FragColor = pixel;
+        // gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+</script>
+<script id="cube_vsh" type="x-shader/x-vertex">
+    attribute vec3 a_pos;
+    attribute vec3 a_color;
+    uniform mat4 u_M;
+    uniform mat4 u_V;
+    uniform mat4 u_P;
+    varying vec3 v_color;
+    void main() {
+        gl_Position = u_P * u_V * u_M * vec4(a_pos, 1.0);
+        v_color = a_color;
+    }
+
+</script>
+<script id="cube_fsh" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    precision mediump float;
+    #endif
+    varying vec3 v_color;
+    void main() {
+        gl_FragColor = vec4(v_color, 1.0);
+    }
+</script>
+</body>
+</body>
+
+</html>
