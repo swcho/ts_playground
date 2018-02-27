@@ -8,8 +8,9 @@ console.log(__filename);
 import './style.scss';
 
 declare const GlslEditor;
-console.log(require('./shader.glsl'));
-const glslEditor = new GlslEditor('#glsl_editor', {
+const elEditor = document.createElement('div');
+document.body.appendChild(elEditor);
+const glslEditor = new GlslEditor(elEditor, {
     canvas_size: 500,
     canvas_draggable: true,
     theme: 'monokai',
@@ -18,3 +19,5 @@ const glslEditor = new GlslEditor('#glsl_editor', {
     fileDrops: true,
     menu: true,
 });
+
+glslEditor.setContent(require('./shader.glsl'));
