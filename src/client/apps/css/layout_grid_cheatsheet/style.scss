@@ -1,0 +1,146 @@
+@supports ( display: grid) {
+    .support {
+        display: none;
+    }
+}
+
+body {
+    padding: 40px;
+    font-family: 'Open Sans', sans-serif;
+    color: #607D8B;
+    background-color: #FAFAFA;
+    h1 {
+        width: 960px;
+        margin: 0 auto 10px;
+        font-weight: 700;
+        font-size: 1.2em;
+    }
+    p {
+        margin-bottom: 10px;
+    }
+}
+
+.content {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 2px;
+        top: 0;
+        left: -20px;
+        background-color: #607D8B;
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: -20px;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 15px solid #607D8B;
+        transform: translateX(-50%);
+    }
+}
+
+.grid-lines {
+    position: relative;
+    color: #607D8B;
+}
+
+.grid-item {
+    border: 2px solid #607D8B;
+    padding: 10px;
+    transition: 0.25s ease-in-out;
+}
+
+// grid
+@mixin grid($column, $row, $colspan, $rowspan) {
+    @if ($colspan) {
+        grid-column: #{$column} / #{$colspan};
+    }
+    @else {
+        grid-column: $column;
+    }
+    @if ($rowspan) {
+        grid-row: #{$row} / #{$rowspan};
+    }
+    @else {
+        grid-row: $row;
+    }
+}
+
+.main-wrapper {
+    display: grid;
+    width: 960px;
+    grid-template-columns: 25%;
+    grid-template-rows: 100px 100px 120px 80px 120px;
+    grid-gap: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+    .grid-item:nth-child(1) {
+        @include grid(4, 1, null, 7);
+        z-index: 3;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #CE93D8;
+            cursor: pointer;
+        }
+    }
+    .grid-item:nth-child(2) {
+        @include grid(3, 2, null, null);
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #90CAF9;
+            cursor: pointer;
+        }
+    }
+    .grid-item:nth-child(3) {
+        @include grid(1, 2, 3, null);
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #B39DDB;
+            cursor: pointer;
+        }
+    }
+    .grid-item:nth-child(4) {
+        @include grid(1, 3, 5, null);
+        padding-right: 300px;
+        z-index: 1;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #CE93D8;
+            cursor: pointer;
+            +.grid-item:nth-child(5)+.grid-item:nth-child(6) {
+                background-color: #E1BEE7;
+            }
+        }
+    }
+    .grid-item:nth-child(5) {
+        @include grid(1, 5, 3, null);
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: #F48FB1;
+            cursor: pointer;
+        }
+    }
+    .grid-item:nth-child(6) {
+        @include grid(4, 3, null, null);
+        z-index: 2;
+        &:hover,
+        &:focus,
+        &:active {
+            cursor: pointer;
+            background-color: #BA68C8;
+        }
+    }
+}
