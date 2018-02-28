@@ -1,0 +1,206 @@
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$tr-duration: 550ms;
+$tr-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+@function tr($property) {
+    @return #{$property} #{$tr-duration} #{$tr-easing};
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Dosis', sans-serif;
+    font-weight: 500;
+    background-color: #4a24a2;
+    background-image: radial-gradient(circle at 50% 40%, rgba(#fff, 0.225), transparent 400px);
+}
+
+.device {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transition: tr(all);
+    transform: translate(-50%, -50%) rotate(-90deg);
+    @media (min-width: $bp-sm) {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    @media (min-width: $bp-lg) {
+        padding: 0 40px 5px;
+    }
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        transition: tr(all);
+    }
+    &::before {
+        top: 10px;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        border-radius: 100%;
+        background-color: rgba(#fff, 0.25);
+        transform: scale(0) translateX(-50%);
+        z-index: 1;
+        @media (min-width: $bp-lg) {
+            transform: scale(1) translateX(-50%);
+        }
+    }
+    &::after {
+        bottom: 0;
+        left: 30px;
+        right: 30px;
+        height: 0;
+        z-index: 1;
+        border-radius: 4px 4px 20px 20px;
+        background-color: #757575;
+        background-repeat: no-repeat;
+        background-size: 100px 6px, auto auto;
+        background-position: top center, top center;
+        background-image: linear-gradient(to bottom, rgba(#000, 0.2) 50%, rgba(#000, 0.05) 100%), linear-gradient(to bottom, rgba(#000, 0.2) 10%, transparent 15%, rgba(#000, 0.1) 68%, rgba(#000, 0.275) 73%);
+        box-shadow: 0px 3px 5px 3px transparent;
+        @media (min-width: $bp-lg) {
+            height: 17px;
+            left: 0;
+            right: 0;
+            opacity: 1;
+            box-shadow: 0px 10px 10px -5px rgba(black, 0.3);
+        }
+    }
+}
+
+.display {
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    width: 255px;
+    height: 128px;
+    border: 2px solid #383838;
+    border-radius: 18px;
+    box-shadow: -3px 0px 5px 3px rgba(black, 0.2);
+    transition: tr(all);
+    @media (min-width: $bp-sm) {
+        box-shadow: 0px 3px 5px 3px rgba(black, 0.2);
+    }
+    @media (min-width: $bp-md) {
+        width: 440px;
+        height: 340px;
+    }
+    @media (min-width: $bp-lg) {
+        width: 520px;
+        height: 370px;
+    }
+}
+
+.glass {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: stretch;
+    background-color: #000;
+    padding: 7px 20px 7px 25px;
+    transition: tr(padding);
+    @media (min-width: $bp-md) {
+        padding: 15px 25px 15px 30px;
+    }
+    @media (min-width: $bp-lg) {
+        padding: 20px 10px;
+    }
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        z-index: 1;
+    }
+    &::before {
+        top: -125%;
+        right: 0;
+        bottom: -125%;
+        left: -30%;
+        transform-origin: 100% 50%;
+        background-image: linear-gradient(to left, transparent 10%, rgba(white, 0.3) 10%, rgba(white, 0.4) 15%, transparent 15%, transparent 20%, rgba(white, 0.3) 20%, rgba(white, 0.4) 25%, transparent 25%), linear-gradient(to left, rgba(black, 0.0) 0%, rgba(black, 0.6) 100%);
+        transform: translate(0%, #{(100% / 6)}) rotate(45deg);
+        transition: tr(transform);
+        @media (min-width: $bp-sm) {
+            transform: translate(0%, #{(-100% / 6)}) rotate(-45deg);
+        }
+    }
+    &::after {
+        top: 40px;
+        bottom: 40px;
+        left: 5px;
+        right: 7px;
+        border-radius: 3px;
+        background-image: linear-gradient(to left, #333 0%, #000 3px, transparent 3px), radial-gradient(circle at 8px, transparent 6px, #333 6px, #333 8px, transparent 8px);
+        transition: tr(all);
+        @media (min-width: $bp-md) {
+            top: 100px;
+            bottom: 100px;
+            right: 10px;
+            left: 7px;
+        }
+        @media (min-width: $bp-lg) {
+            right: -5px;
+            left: -20px;
+        }
+    }
+}
+
+.viewport {
+    position: relative;
+    z-index: 0;
+    flex: 1 1 auto;
+    background-color: #fff;
+    overflow: hidden;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 200%;
+        transform-origin: top right;
+        transform: rotate(90deg) translateX(110px);
+        transition: background-size 0ms #{$tr-duration / 2},
+        transform 0ms #{$tr-duration / 2};
+        background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat-y, repeat-y;
+        background-image: linear-gradient(to bottom, transparent, white), radial-gradient(circle at center, yellow 10px, transparent 10px), linear-gradient(to bottom left, #a3e2f5 45%, transparent 45%), linear-gradient(to bottom right, #a3e2f5 35%, #64b46b 35%), linear-gradient(to bottom, white, white), linear-gradient(to bottom, #ddd 5px, transparent 5px, transparent 10px, #ddd 10px, #ddd 15px, transparent 15px, transparent 20px, #ddd 20px, #ddd 25px, transparent 25px), linear-gradient(to bottom, transparent 30px, #ddd 30px, #ddd 35px, transparent 35px);
+        background-size: 100% 30px, 20px 20px, 90px 90px, 90px 90px, 100px 100px, calc(90px) 50px, calc(50px) 50px;
+        background-position: bottom left, right 22px top 23px, right 10px top 10px, right 10px top 10px, right 10px top 10px, right 10px top 10px, right 50px top 10px;
+        @media (min-width: $bp-sm) {
+            background-size: 100% 30px, 20px 20px, 90px 90px, 90px 90px, 100px 100px, calc(100% - 20px) 50px, calc(100% - 60px) 50px;
+            transform: rotate(0deg) translateX(0px);
+        }
+    }
+}
+
+.instructions {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 290px;
+    z-index: -1;
+    font-size: 1.5rem;
+    text-align: center;
+    color: rgba(white, 0.3);
+    transform: translate(-50%, 150px);
+    transition: tr(transform), tr(opacity);
+    @media (min-width: $bp-sm) {
+        transform: translate(-50%, 80px);
+    }
+    @media (min-width: $bp-md) {
+        transform: translate(-50%, 180px);
+    }
+    @media (min-width: $bp-lg) {
+        transform: translate(-50%, 200px);
+    }
+}
