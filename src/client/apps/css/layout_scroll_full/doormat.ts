@@ -121,10 +121,12 @@ export class Doormat {
     */
     bind = () => {
         const onViewportChange = () => this.requestUpdate(this.calibrate);
-        if ('onorientationchange' in window)
+        if (window['onorientationchange']) {
             window.onorientationchange = onViewportChange;
-        else window.onresize = onViewportChange;
-        window.onscroll = this.onScroll;
+        } else {
+            window.onresize = onViewportChange;
+            window.onscroll = this.onScroll;
+        }
     }
     /**
       * on scroll update the scroll position reference and request to update

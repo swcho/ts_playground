@@ -11,10 +11,6 @@ import {
 } from './common';
 import CryptoJS = require('crypto-js');
 
-declare global {
-    const escape;
-}
-
 function microtime(get_as_float?) {
     //  discuss at: http://phpjs.org/functions/microtime/
     // 	original by: Paulo Freitas
