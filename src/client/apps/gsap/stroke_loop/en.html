@@ -1,0 +1,107 @@
+<html>
+
+<head>
+    <title>Seemless chasing line loops with DrawSVG</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/utils/Draggable.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/DrawSVGPlugin.min.js"></script>
+</head>
+
+<body>
+    <svg id="demo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 1000">
+        <defs>
+            <lineargradient id="linear-gradient" x1="798.27" y1="694.08" x2="798.27" y2="500" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#6e6e6e" />
+                <stop offset="0.02" stop-color="#636262" />
+                <stop offset="0.05" stop-color="#4e4c4d" />
+                <stop offset="0.1" stop-color="#3e3b3c" />
+                <stop offset="0.15" stop-color="#333031" />
+                <stop offset="0.22" stop-color="#2d292a" />
+                <stop offset="0.43" stop-color="#2b2728" />
+                <stop offset="0.6" stop-color="#232021" />
+                <stop offset="0.86" stop-color="#0f0d0e" />
+                <stop offset="1" />
+            </lineargradient>
+        </defs>
+        <title>Seamless looping with DrawSVG</title>
+
+        <path id="mainLetter" d="M454.17,396.74c57.48,0,76.64,28.32,76.64,70.8V685.79c-49.15,17.49-125.78,35-214.08,35C146,720.78,72.66,596.66,72.66,428.39c0-206.58,127.45-299.88,254.06-299.88,76.63,0,149.11,24.16,202.42,60-3.33,33.32-28.32,66.64-51.65,81.63C436.67,241,384.2,222.65,332.55,222.65c-85,0-144.94,58.31-144.94,206.58,0,137.44,52.48,201.58,149.11,201.58a385,385,0,0,0,88.3-10V546.68c0-18.33,0-36.65,1.67-55H370c-36.65,0-53.31-13.33-53.31-47.48a144.53,144.53,0,0,1,8.33-46.65Z"
+            fill="#88ce02" />
+        <g id="theStrokes" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="10" stroke-linecap="round">
+            <path id="helper" d="M523.39,407.18c13.74,14.22,20.42,34,20.42,60.37V695L535.16,698c-28.18,10-60.83,18.54-94.41,24.6a700.08,700.08,0,0,1-124,11.14c-43.36,0-82.27-7.81-115.63-23.22a212.87,212.87,0,0,1-80.78-65c-20.4-26.77-35.91-59.44-46.08-97.11-9.67-35.78-14.57-76.17-14.57-120.06,0-51,7.64-97.63,22.69-138.5,14-38.06,34.39-71,60.53-98a247.83,247.83,0,0,1,85.88-57.67,261.14,261.14,0,0,1,98-18.75,388.44,388.44,0,0,1,113.76,17.13c34.65,10.61,67.82,26.19,95.91,45.06l6.46,4.34-.77,7.74c-3.81,38.08-31.84,74.74-57.55,91.27l-7.41,4.77-7.17-5.12c-40.09-28.64-90.17-45.06-137.39-45.06-40.52,0-72.16,14.35-94,42.64-25.14,32.5-37.89,83.28-37.89,150.94,0,126.9,44.52,188.58,136.11,188.58a372.56,372.56,0,0,0,75.3-7.46V546.68c0-13.73,0-27.82.73-42H370c-22.3,0-37.84-4.49-48.93-14.12-11.7-10.17-17.38-25.33-17.38-46.36,0-16.27,3.59-36.38,9.16-51.21l3.14-8.38,8.95-.06,129.11-.83h.08c15.39,0,29,1.94,40.36,5.77C506.1,393.4,515.81,399.34,523.39,407.18Z"
+            />
+            <path id="master" d="M523.39,407.18c13.74,14.22,20.42,34,20.42,60.37V695L535.16,698c-28.18,10-60.83,18.54-94.41,24.6a700.08,700.08,0,0,1-124,11.14c-43.36,0-82.27-7.81-115.63-23.22a212.87,212.87,0,0,1-80.78-65c-20.4-26.77-35.91-59.44-46.08-97.11-9.67-35.78-14.57-76.17-14.57-120.06,0-51,7.64-97.63,22.69-138.5,14-38.06,34.39-71,60.53-98a247.83,247.83,0,0,1,85.88-57.67,261.14,261.14,0,0,1,98-18.75,388.44,388.44,0,0,1,113.76,17.13c34.65,10.61,67.82,26.19,95.91,45.06l6.46,4.34-.77,7.74c-3.81,38.08-31.84,74.74-57.55,91.27l-7.41,4.77-7.17-5.12c-40.09-28.64-90.17-45.06-137.39-45.06-40.52,0-72.16,14.35-94,42.64-25.14,32.5-37.89,83.28-37.89,150.94,0,126.9,44.52,188.58,136.11,188.58a372.56,372.56,0,0,0,75.3-7.46V546.68c0-13.73,0-27.82.73-42H370c-22.3,0-37.84-4.49-48.93-14.12-11.7-10.17-17.38-25.33-17.38-46.36,0-16.27,3.59-36.38,9.16-51.21l3.14-8.38,8.95-.06,129.11-.83h.08c15.39,0,29,1.94,40.36,5.77C506.1,393.4,515.81,399.34,523.39,407.18Z"
+            />
+        </g>
+
+        <g id="swatches">
+            <rect x="707.51" y="229" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="775.39" y="229" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="843.27" y="229" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="707.51" y="300.99" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="775.39" y="300.99" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="843.27" y="300.99" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="707.51" y="376.64" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="775.39" y="376.64" width="44.23" height="44.23" rx="4" ry="4" />
+            <rect x="843.27" y="376.64" width="44.23" height="44.23" rx="4" ry="4" />
+        </g>
+
+        <path id="durationBase" d="M63.56,900.11a9,9,0,0,1,8.73-9.19h383a9,9,0,0,1,8.73,9.19v24.56a9,9,0,0,1-8.73,9.19h-383a9,9,0,0,1-8.73-9.19Z"
+            fill="#333" stroke="#444" stroke-miterlimit="10" stroke-width="2" />
+        <path id="percentageBase" d="M529.56,900.11a9,9,0,0,1,8.73-9.19h383a9,9,0,0,1,8.73,9.19v24.56a9,9,0,0,1-8.73,9.19h-383a9,9,0,0,1-8.73-9.19Z"
+            fill="#333" stroke="#444" stroke-miterlimit="10" stroke-width="2" />
+        <g id="timelineDragger" class="dragger">
+            <rect x="67.48" y="895.34" width="68.07" height="34.04" rx="4.46" ry="4.46" stroke="#4d4d4d" stroke-miterlimit="10" />
+            <line x1="93.5" y1="903" x2="93.5" y2="921" fill="none" stroke="#4d4d4d" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3"
+            />
+            <line x1="99.5" y1="903" x2="99.5" y2="921" fill="none" stroke="#4d4d4d" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3"
+            />
+            <line x1="105.5" y1="903" x2="105.5" y2="921" fill="none" stroke="#4d4d4d" stroke-linecap="round" stroke-miterlimit="10"
+                stroke-width="3" />
+        </g>
+        <g id="percentageDragger" class="dragger">
+            <rect x="533.48" y="895.34" width="68.07" height="34.04" rx="4.46" ry="4.46" stroke="#4d4d4d" stroke-miterlimit="10" />
+            <line x1="559.5" y1="903" x2="559.5" y2="921" fill="none" stroke="#4d4d4d" stroke-linecap="round" stroke-miterlimit="10"
+                stroke-width="3" />
+            <line x1="565.5" y1="903" x2="565.5" y2="921" fill="none" stroke="#4d4d4d" stroke-linecap="round" stroke-miterlimit="10"
+                stroke-width="3" />
+            <line x1="571.5" y1="903" x2="571.5" y2="921" fill="none" stroke="#4d4d4d" stroke-linecap="round" stroke-miterlimit="10"
+                stroke-width="3" />
+        </g>
+        <circle id="knobDepth" cx="798.27" cy="597.04" r="97.04" fill="url(#linear-gradient)" />
+        <path id="notches" d="M799,483v11.85h-2.8V483H799Zm58.49,16.5-5.89,10.26-2.41-1.39,5.89-10.26,2.42,1.4ZM900,543.19l-10.21,5.93-1.4-2.43,10.21-5.92,1.4,2.42Zm15,59.17H903.21v-2.79H915v2.79Zm-16.42,58.8-10.21-5.93,1.38-2.42L900,658.74l-1.39,2.43ZM695.3,658.74l10.21-5.92,1.4,2.42-10.21,5.93-1.4-2.43Zm-15-59.17h11.79v2.79H680.27v-2.79Zm16.42-58.79,10.21,5.92-1.39,2.43-10.21-5.93,1.39-2.42Zm43.47-42.67,5.89,10.26-2.41,1.4-5.89-10.26.49-.28h0l.6-.35,1.33-.78Zm173.68,119-5.84-.78.22-1.66,5.84.77-.22,1.67Zm-232.63-1.67,5.84-.77.21,1.67-5.84.77-.22-1.66Zm2.86,15.17,5.69-1.53.43,1.63-5.69,1.53-.43-1.63Zm21-102.17,4.67,3.6-1,1.34L704,529.81l1-1.33ZM905.7,646.82l-5.44-2.27.64-1.55,5.44,2.27-.64,1.55Zm-137.63-160,1.53,5.72L768,493l-1.52-5.72,1.62-.44Zm75.24,5.5-2.26,5.47-1.55-.65,2.26-5.47,1.55.65Zm-60.16-8.4.77,5.87-1.66.21-.77-5.87,1.66-.22Zm45.66,3.34L827.28,493l-1.62-.44,1.53-5.72,1.62.44ZM684.51,569.6l5.69,1.53-.43,1.63-5.69-1.53.43-1.63ZM704.06,672l4.67-3.6,1,1.33-4.67,3.61-1-1.34ZM869.73,507.88l-3.59,4.7-1.33-1,3.59-4.7,1.33,1ZM689.55,555,695,557.3l-.64,1.56-5.44-2.27.64-1.56Zm124.22-70.91L813,490l-1.66-.21.77-5.87,1.65.22Zm97.4,87.1-5.69,1.53-.43-1.63,5.69-1.53.43,1.63Zm-.43,61-5.69-1.54.43-1.62,5.69,1.53-.43,1.63ZM880,684.94l-4.16-4.19,1.19-1.19,4.17,4.18L880,684.94Zm34-98.57-5.84.77-.22-1.66,5.84-.77.22,1.67Zm-232.63-1.67,5.84.78-.21,1.66-5.84-.77.22-1.67Zm208.79,88.71-4.67-3.61,1-1.34,4.67,3.61-1,1.33ZM726.86,506.87l3.59,4.7-1.33,1-3.59-4.7,1.33-1Zm26.64-15.21,2.26,5.47-1.55.64L752,492.3l1.55-.64ZM688.91,645.3l5.44-2.27.64,1.56-5.44,2.27-.63-1.56ZM891.22,529.81l-4.68,3.6-1-1.34,4.67-3.6,1,1.34Zm15.12,26.77-5.44,2.27-.63-1.55,5.44-2.27.63,1.55ZM715.25,517l4.17,4.19-1.19,1.18-4.17-4.19,1.19-1.18Zm166,1.18L877,522.33l-1.19-1.19L880,517l1.19,1.19ZM714.09,683.71l4.17-4.18,1.18,1.19-4.17,4.19Z"
+            fill="#999" />
+        <g id="strokeControl">
+            <circle id="knobBase" cx="797.64" cy="597.1" r="91.84" fill="#333" />
+            <circle id="knobRing" cx="797.64" cy="597.1" r="93.15" fill="none" stroke="#1a1a1a" stroke-miterlimit="10" stroke-width="2"
+            />
+            <circle id="knobRingHighlight" cx="797.64" cy="597.1" r="90.52" fill="none" stroke="#88ce02" stroke-miterlimit="10" stroke-width="2"
+            />
+            <path id="indicator" d="M797.64,526.94a7,7,0,1,0-7-7A7.06,7.06,0,0,0,797.64,526.94Z" fill="#fff" fill-rule="evenodd" />
+            <text transform="translate(745.64 575.24)" font-size="25.42" fill="#fff">OUTLINE
+                <tspan x="3.72" y="30.51">STROKE</tspan>
+                <tspan x="12.48" y="61.01">WIDTH</tspan>
+            </text>
+        </g>
+        <text transform="translate(87.06 67.53)" font-size="60" fill="#fff">Seamless loops with
+            <tspan x="572.11" y="0" fill="#88ce02">Draw</tspan>
+            <tspan x="708.16" y="0">SVG</tspan>
+        </text>
+        <text transform="translate(663 107)" font-size="34" fill="#fff">from Green
+            <tspan x="173.39" y="0" fill="#88ce02">Sock</tspan>
+        </text>
+        <text transform="translate(67 804)" font-size="30" fill="#ccc">Duration and line percentage draggers will restart the timeline.</text>
+        <text transform="translate(693 201)" font-size="38" fill="#fff">Stroke Color</text>
+        <text transform="translate(164 965)" font-size="24" fill="#fff">Timeline duration</text>
+        <text transform="translate(565 965)" font-size="24" fill="#fff">Percentage of outline to show</text>
+        <rect id="durationWhite" x="225" y="829" width="100" height="50" rx="4" ry="4" fill="#fff" stroke="#444" stroke-width="4"
+        />
+        <rect id="percentageWhite" x="693" y="829" width="100" height="50" rx="4" ry="4" fill="#fff" stroke="#444" stroke-width="4"
+        />
+        <text id="durationText" transform="translate(275 865)" font-size="30" text-anchor="middle">2.5</text>
+        <text id="percentageText" transform="translate(755 864)" font-size="30" text-anchor="end">20</text>
+        <text transform="translate(756 864)" font-size="30" text-anchor="start">%</text>
+    </svg>
+</body>
+
+</html>
