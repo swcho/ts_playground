@@ -1,0 +1,81 @@
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after, {
+    box-sizing: inherit;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #ccc;
+}
+
+.sharpener {
+    position: relative;
+    width: 10em;
+    height: 16em;
+    background-color: lemonchiffon;
+    border: 0.25em solid;
+    box-shadow: inset 1em -5em #f0f0f0;
+}
+
+.sharpener::before,
+.sharpener::after {
+    content: '';
+    position: absolute;
+    top: -0.625em;
+    right: 99%;
+    display: block;
+    width: 18%;
+    height: 108%;
+    background-color: inherit;
+    border: inherit;
+    border-radius: 2em 0.5em 0.5em 2em;
+    box-shadow: 
+        inset -0.25em 0 0 #fff,
+        inset 0 -17em 0 -10em #f0f0f0;
+}
+
+.sharpener::after {
+    // right: auto;
+    left: 99%;
+    border-radius: 0.375em;
+}
+
+.stand {
+    position: absolute;
+    z-index: 1;
+    top: -0.25em;
+    left: calc(117% - 4px);
+    width: 5em;
+    height: 20em;
+    background-color: inherit;
+    border: inherit;
+    border-radius: 0 5em 5em 0 / 0 5em 15em 0;
+    box-shadow:
+        inset -0.5em 0 0 #fff,
+        inset 11em -19em 0 -10em #f0f0f0;
+}
+
+.stand::before {
+    content: '';
+    position: absolute;
+    top: 18.5625em;
+    right: 70%;
+    display: block;
+    width: 9em;
+    height: 1.5em;
+    background-color: #f0f0f0;
+    border: inherit;
+    border-radius: 1.5em 1.5em 0 0;
+}
