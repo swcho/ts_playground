@@ -5,6 +5,7 @@
 
 declare const HSB: Constant;
 declare const CENTER: Constant;
+declare const CLOSE: Constant;
 
 // Properties from p5
 
@@ -595,7 +596,7 @@ declare function beginContour(): any;
 //
 //   param "kind" has invalid type: Number/Constant
 //
-// declare function beginShape(kind: Number/Constant): any;
+declare function beginShape(kind?: Number | Constant): any;
 
 /**
  * Specifies vertex coordinates for Bezier curves.
@@ -617,7 +618,7 @@ declare function endContour(): any;
 //
 //   param "mode" has invalid type: Number/Constant
 //
-// declare function endShape(mode: Number/Constant): any;
+declare function endShape(mode?: Number | Constant): any;
 
 /**
  * Specifies vertex coordinates for quadratic Bezier curves.
@@ -1236,7 +1237,7 @@ declare function randomSeed(seed: number): void;
 /**
  * Return a random number.
  */
-declare function random(min: number, max: number): number;
+declare function random(min: number, max?: number): number;
 
 /**
  * Returns a random number fitting a Gaussian, or
