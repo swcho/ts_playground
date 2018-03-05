@@ -5,5 +5,6 @@ import * as $ from 'jquery';
 console.log(__filename);
 
 import './style.scss';
+// https://codepen.io/ericthayer/pen/BZroBq
 const html = require<string>('./markup.pug');
 $('body').html(html);
