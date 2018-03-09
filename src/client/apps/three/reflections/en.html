@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Three: Reflections</title>
+    <style>
+        body {
+            background-color: #000;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        #text-wrapper {
+            position: fixed;
+            width: 100%;
+        }
+
+        #text {
+            border: 1px solid #555;
+            background-color: rgba(150, 150, 150, 0.2);
+            border-radius: 10px;
+            color: #ddd;
+            display: block;
+            font-size: 20px;
+            margin: 4px auto 0;
+            min-width: 320px;
+            padding: 10px;
+            position: relative;
+            text-align: center;
+            width: 50%;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="text-wrapper">
+        <div id="text">Click and drag to rotate the camera. Scroll to zoom in/out</div>
+    </div>
+    <div id="container"></div>
+
+</body>
+
+</html>
