@@ -1,0 +1,73 @@
+// Foundation styles for sticky footer
+.site-wrapper {
+    &.byFlex {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        main {
+            // flex: 1;
+            flex-grow: 1;
+        }
+    }
+    &.byTable {
+        display: table;
+        height: 100%;
+        min-height: 100%;
+        .header_main {
+            display: table-row;
+            height: 100%;
+        }
+    }
+}
+
+
+// Other styles
+@import url('https://fonts.googleapis.com/css?family=Sumana:400,700');
+body {
+    font-family: 'Sumana', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+header,
+footer,
+main {
+    padding: 18px;
+}
+
+main {
+    margin: 24px auto;
+}
+
+h1,
+p {
+    margin-bottom: 24px;
+}
+
+p {
+    line-height: 1.4;
+}
+
+label {
+    font-weight: 700;
+}
+
+header {
+    color: white;
+    background-color: mediumaquamarine;
+}
+
+footer {
+    color: white;
+    background-color: lightseagreen;
+}
+
+.main-content {
+    display: none;
+}
+
+input:checked~.main-content {
+    display: block;
+}
