@@ -1,0 +1,41 @@
+body {
+    font-family: 'Noto Sans', sans-serif;
+    color: white;
+    background: black;
+    margin: 0;
+}
+
+.container {
+    position: relative;
+    margin: 74px 300px;
+    font-family: monospace;
+}
+
+.renderGrid {
+    position: absolute;
+    left: 0;
+    font-family: monospace;
+    font-size: 17px;
+    letter-spacing: 0.4em;
+    line-height: 1em;
+    display: inline-block;
+    /* color: #66ff00; */
+    pointer-events: none;
+}
+
+/* For recording 640x640 instagram vid */
+
+.measure {
+    width: 640px;
+    height: 640px;
+    position: absolute;
+    border: 1px solid white;
+    top: 10px;
+    left: 230px;
+    margin: 0 auto;
+}
+
+.cell {
+    width: 1em;
+    text-align: center;
+}
