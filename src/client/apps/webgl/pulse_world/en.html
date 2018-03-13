@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="display" width="800" height="600"></canvas>
+
+<script type="text/x-vertex-shader" id="vert">
+    attribute vec3 a_position;
+    attribute vec3 a_normal;
+
+    attribute vec3 a_offset;
+    attribute vec3 a_color;
+
+    uniform mat4 u_modelview;
+    uniform mat4 u_projection;
+    uniform float u_tval;
+    
+    uniform samplerCube u_cubemap;
+
+    varying vec4 v_normal;
+    varying vec4 v_color;
+
+    void main() {
+        // float scale = min(sin(u_tval + a_toffset * 3.14159 * 2.0) + 1.0, 1.0);
+        float dist = sqrt(dot(a_offset, a_offset)) / 6.0;
+        float scale = min(sin(u_tval + dist) * 0.5 + 0.5, 1.0);
+        float distscale = 1.15 + sin(u_tval) * 0.15;
+        gl_Position = u_projection * u_modelview * vec4(a_position * scale + a_offset * distscale, 1);
+        if (a_color.b > 0.5) {
+          // extents get cubemap colors
+          v_color = textureCube(u_cubemap, a_offset);
+        } else {
+          v_color = vec4(a_color, 1.0);
+        }
+        v_normal = vec4(a_normal, 0.0);
+    }
+</script>
+
+<script type="text/x-fragment-shader" id="frag">
+    precision mediump float;
+
+    varying vec4 v_normal;
+    varying vec4 v_color;
+
+    uniform vec3 u_reverseLightDirection;
+
+    void main() {
+        vec4 normal = normalize(v_normal);
+        float light = dot(normal, vec4(u_reverseLightDirection, 0));
+        gl_FragColor = v_color * max(light, 0.5);
+    }
+</script>
+
+</body>
+
+</html>
