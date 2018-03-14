@@ -1,0 +1,151 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #BBDEFB;
+}
+
+#visualizations {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+button {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0;
+    border: 0;
+    font-size: 40px;
+    outline: none;
+    cursor: pointer;
+    background-color: #BBDEFB;
+}
+
+button:hover {
+    background-color: #E3F2FD;
+}
+
+.mute-button,
+.unmute-button {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+.mute-button {
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/mute.svg');
+}
+
+.unmute-button {
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/unmute.svg');
+}
+
+button:last-of-type {
+    margin-right: 50px;
+}
+
+#visualizations {
+    display: flex;
+    flex-direction: column;
+}
+
+.vis {
+    flex: 2;
+    padding: 0 100px;
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+.margin {
+    flex: 2;
+}
+
+.space {
+    flex: 0.5;
+}
+
+.vis button {
+    align-self: center;
+}
+
+.notes {
+    display: flex;
+    align-items: stretch;
+}
+
+.note {
+    position: relative;
+}
+
+.note .main {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.note .symbol {
+    flex: 1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+}
+
+.note .progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0;
+    background-color: #EC407A;
+}
+
+.note.d-4n {
+    width: 120px;
+}
+
+.note.d-8n {
+    width: 60px;
+}
+
+.note.d-4n .symbol {
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/4n.svg');
+}
+
+.note.d-8n .symbol {
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/8n.svg');
+}
+
+.note.r.d-4n .symbol {
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/4r.svg');
+}
+
+.note.r.d-8n .symbol {
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/969699/8r.svg');
+}
+
+.note.l .symbol {
+    height: 80px;
+}
+
+.note.m .symbol {
+    height: 100px;
+}
+
+.note.h .symbol {
+    height: 120px;
+}
+
+.note.r .symbol {
+    height: 60px;
+}
