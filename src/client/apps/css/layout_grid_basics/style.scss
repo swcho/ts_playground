@@ -1,0 +1,105 @@
+
+@import "utils.scss";
+
+$item-color: #fff;
+$body-bg: #262626;
+$grid-border: #8d8d8d;
+body {
+    background-color: $body-bg;
+    line-height: 1.15;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+pre {
+    margin: 0;
+}
+
+.grid {
+    &-example {
+        border: 10px solid $grid-border;
+        +.grid-example {
+            margin-top: 1.6rem;
+        }
+        &-header {
+            background-color: $grid-border;
+            color: $body-bg;
+            font-family: monospace, monospace;
+            h2 {
+                font-weight: 400;
+                margin: 0;
+                padding: 0.83rem 0;
+            }
+        }
+    }
+    &-container {
+        counter-reset: grid-items;
+        &.grid {
+            display: grid;
+        }
+        &.rows-example,
+        &.columns-example,
+        &.layout-example {
+            .grid-item:before {
+                content: counter(grid-items) ' \2013 ';
+                margin-right: 0.3rem;
+            }
+        }
+        &.rows-example {
+            grid-template-rows: 100px 250px;
+        }
+        &.columns-example {
+            grid-template-columns: 1fr 2fr 2fr 1fr;
+            &:nth-child(4) {
+                grid-template-columns: 4fr 1fr 1fr 1fr;
+            }
+        }
+        &.layout-example {
+            grid-template-columns: auto;
+            grid-template-rows: 100px 500px 250px 100px;
+            grid-template-areas: "header header header header" "main main main main" "sidebar sidebar sidebar sidebar" "footer footer footer footer";
+            @include respond-to(ten) {
+                grid-template-rows: 100px 500px 100px;
+                grid-template-areas: "header header header header" "main main main sidebar" "footer footer footer footer";
+            }
+            .header {
+                grid-area: header;
+            }
+            .main {
+                grid-area: main;
+            }
+            .sidebar {
+                grid-area: sidebar;
+            }
+            .footer {
+                grid-area: footer;
+            }
+        }
+        &.inline {
+            display: inline-grid;
+            width: 100%;
+            @include respond-to(seven) {
+                width: 49.8132%;
+            }
+            @include respond-to(twelve) {
+                width: 33.0826%;
+            }
+        }
+    }
+    &-item {
+        align-items: center;
+        background-color: transparent;
+        border: 1px solid $item-color;
+        color: $item-color;
+        display: flex;
+        justify-content: center;
+        padding: 0.85rem;
+        &:before {
+            counter-increment: grid-items;
+            content: counter(grid-items);
+        }
+    }
+}

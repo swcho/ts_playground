@@ -1,0 +1,94 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div class="container">
+            <section class="grid-example">
+                <div class="grid-example-header">
+                    <h2>display: grid;</h2>
+                </div>
+                <div class="grid-container grid">
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                </div>
+            </section>
+            <section class="grid-example">
+                <div class="grid-example-header">
+                    <h2>display: inline-grid;</h2>
+                </div>
+                <div class="grid-container inline">
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                </div>
+                <div class="grid-container inline">
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                </div>
+                <div class="grid-container inline">
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                </div>
+                <div class="grid-container inline">
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                    <div class="grid-item"></div>
+                </div>
+            </section>
+            <section class="grid-example">
+                <div class="grid-example-header">
+                    <h2>display: grid;
+                        <br>grid-template-rows: 100px 250px;</h2>
+                </div>
+                <div class="grid-container grid rows-example">
+                    <div class="grid-item">100px row height</div>
+                    <div class="grid-item">250px row height</div>
+                    <div class="grid-item">no value set</div>
+                    <div class="grid-item">no value set</div>
+                </div>
+            </section>
+            <section class="grid-example">
+                <div class="grid-example-header">
+                    <h2>display: grid;
+                        <br>grid-template-columns: 1fr 2fr 2fr 1fr;</h2>
+                </div>
+                <div class="grid-container grid columns-example">
+                    <div class="grid-item">1fr</div>
+                    <div class="grid-item">2fr</div>
+                    <div class="grid-item">2fr</div>
+                    <div class="grid-item">1fr</div>
+                </div>
+                <div class="grid-example-header">
+                    <h2>display: grid;
+                        <br>grid-template-columns: 4fr 1fr 1fr 1fr;</h2>
+                </div>
+                <div class="grid-container grid columns-example">
+                    <div class="grid-item">4fr</div>
+                    <div class="grid-item">1fr</div>
+                    <div class="grid-item">1fr</div>
+                    <div class="grid-item">1fr</div>
+                </div>
+            </section>
+            <section class="grid-example">
+                <pre class="grid-example-header">
+                    <h2>grid-template-columns: auto;<br>grid-template-rows: 100px 500px 100px;<br>grid-template-areas:<br>  "header header header header"<br>  "main main main sidebar"<br>  "footer footer footer footer";</h2>
+                </pre>
+                <div class="grid-container grid layout-example">
+                    <div class="grid-item header">header</div>
+                    <div class="grid-item main">main</div>
+                    <div class="grid-item sidebar">sidebar</div>
+                    <div class="grid-item footer">footer</div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>
