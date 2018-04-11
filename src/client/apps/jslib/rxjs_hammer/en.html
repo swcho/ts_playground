@@ -1,0 +1,31 @@
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css">
+    <style>
+        .move {
+            cursor: move;
+        }
+
+        .ew-resize {
+            cursor: ew-resize;
+        }
+    </style>
+
+</head>
+
+<body>
+    <main class="overflow-hidden vh-100 flex items-stretch">
+        <svg class="w-100 h-100" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice">
+            <g stroke-width="4">
+                <rect width="100%" height="100%" fill="#0259BF" />
+                <circle class="move" id="js-move" cx="10" cy="10" r="12" fill="#fff" stroke="#6a9ed0" />
+            </g>
+
+        </svg>
+    </main>
+
+</body>
+
+</html>
