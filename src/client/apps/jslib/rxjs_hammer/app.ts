@@ -75,7 +75,7 @@ function handleDrag(element: HTMLElement) {
     return animationFrame$
         .withLatestFrom(drag$, (_, p) => p)
         .scan(lerp(0.05))
-        .map(p => [p.x, p.y]);
+        .map(p => [p.x, p.y] as [number, number]);
 }
 
 /**
