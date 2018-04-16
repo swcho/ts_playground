@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
-            "url": "http://0.0.0.0:9000/jslib/rxjs_hammer/",
+            "url": "http://0.0.0.0:9000/p5/particle_text_clock/",
             // "webRoot": "${workspaceRoot}/out/client",
             "webRoot": "${workspaceRoot}/src/client/apps",
             // Note: These are the mappings that are included by default out of the box, with examples of how they could be resolved in different scenarios. These are not mappings that would make sense together in one project.

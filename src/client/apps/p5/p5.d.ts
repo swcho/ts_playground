@@ -2256,6 +2256,7 @@ declare namespace p5 {
          * adds two independent vectors together.
          */
         add(x:number|p5.Vector|any[], y?:number, z?:number):p5.Vector
+        add(...args: p5.Vector|any[]):p5.Vector
 
         /**
          * Subtracts x, y, and z components from a vector, subtracts one vector from
@@ -2369,6 +2370,44 @@ declare namespace p5 {
         static angleBetween(v1:p5.Vector, v2:p5.Vector):number
     }
 
+    type Bound = {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+        advance: number;
+    }
+
+    type TextToPointsOption = {
+        /**
+         * the ratio of path-length to number of samples (default=.25);
+         * higher values yield more points and are therefore more precise
+         *
+         * @type {number}
+         */
+        sampleFactor?: number;
+
+        /**
+         * if set to a non-zero value, collinear points will be be removed from the polygon;
+         * the value represents the threshold angle to use when determining whether two edges are collinear
+         *
+         * @type {number}
+         */
+        simplifyThreshold?: number;
+    }
+
+    type TextToPointsResp = {
+        x: number;
+        y: number;
+
+        /**
+         * The path angle
+         *
+         * @type {number}
+         */
+        alpha: number;
+    }[]
+
     // src/typography/p5.Font.js
 
     class Font {
@@ -2386,7 +2425,13 @@ declare namespace p5 {
          * Returns a tight bounding box for the given text string using this
          * font (currently only supports single lines)
          */
-        textBounds(line:string, x:number, y:number, fontSize:number, options:any):any
+        textBounds(line:string, x:number, y:number, fontSize:number, options?:any): Bound;
+
+        /**
+         * https://p5js.org/reference/#/p5.Font/textToPoints
+         */
+        textToPoints(txt: string, x: number, y: number, fontSize: number, options?: TextToPointsOption): TextToPointsResp;
+
     }
 
     // lib/addons/p5.dom.js
