@@ -30,10 +30,13 @@ console.clear();
 // classes
 // end classes
 
-let canvas, ctx, w, h, vmin, vr, gui, stats; // template variables
+let canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, w, h, vmin, vr, gui, stats; // template variables
 const opts: {
     grid?: number;
-} = {};
+    size?: number;
+} = {
+    size: 4,
+};
 let loop: () => void;
 
 function opt(name, value, min?, max?) {
@@ -62,35 +65,51 @@ function initCanvas() {
     ctx = canvas.getContext('2d');
 }
 
+let frame, cam, n: number, c: number;
+function start() { // objects generation and initialization
+    cam = { pos: [0, 0], };
+    frame = 0;
+    n = 1;
+    c = 0;
+}
+
+let prevFrameForColor = 0;
+
 loop = () => {
     stats.begin();
     // ctx.fillStyle = `rgba(0,0,0, ${Math.pow(opts.clear, 2)})`;
     // ctx.fillRect(0,0, w,h);
     ctx.save();
 
-    /*
-    drawGrid();
-    ctx.translate((w/2|0) - cam.pos[0], (h/2|0) - cam.pos[1]);
+    // drawGrid();
+    // ctx.translate((w / 2 | 0) - cam.pos[0], (h / 2 | 0) - cam.pos[1]);
 
-    ctx.beginPath();
-    ctx.strokeStyle = '#fff';
-    ctx.moveTo(0,0);
-    ctx.arc(0,0, vr, 0,Math.PI*2, 0);
-    ctx.stroke();
-    */
+    // ctx.beginPath();
+    // ctx.strokeStyle = '#fff';
+    // ctx.moveTo(0, 0);
+    // ctx.arc(0, 0, vr, 0, Math.PI * 2, false);
+    // ctx.stroke();
 
     for (let i = 0; i < 512; ++i) {
-        if (n === 1)
+        if (n === 1) {
             c += 130;
+            console.log('color changed', prevFrameForColor, frame, frame - prevFrameForColor);
+            prevFrameForColor = frame;
+        }
         ctx.fillStyle = `hsl(${c}, 50%, 50%)`;
         ctx.fillRect(
-            4 * ((n & (0x7f)) - 1),
-            4 * ((n >> 7) & 0x7f),
-            4, 4
+            opts.size * ((n & (0x7f)) - 1),
+            opts.size * ((n >> 7) & 0x7f),
+            // opts.size * ((n & (0xff))),
+            // opts.size * ((n >> 8) & 0xff),
+            opts.size, opts.size
         );
+        // let l = (n & 1) ^ ((n >> 3) & 1);
         let l = (n & 1) ^ ((n >> 3) & 1);
+        // console.log(l);
         n = n >> 1;
         n = n ^ (l << 15);
+        // n = n | (l << 15);
     }
 
     ++frame;
@@ -99,6 +118,14 @@ loop = () => {
     requestAnimationFrame(loop);
     stats.end();
 };
+
+/* i love full screen */
+function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    vmin = Math.min(w, h);
+    vr = vmin / 2;
+}
 
 function init() { // controls and template initialization
     initGui();
@@ -113,6 +140,7 @@ function init() { // controls and template initialization
 
     opt('halt!', () => loop = () => { });
     opt('reset', start);
+    opt('size', 4, 1, 10).step(1);
     // opt('test', 5, 0, 10).step(2).listen().onChange(console.log);
 
     start(); // init/reset pen content
@@ -120,15 +148,6 @@ function init() { // controls and template initialization
 }
 
 init(); // i make it for you...
-
-let frame, cam, n, c;
-function start() { // objects generation and initialization
-    cam = { pos: [0, 0], };
-    frame = 0;
-    n = 1;
-    c = 0;
-}
-
 
 function drawGrid() {
     if (!opts.grid)
@@ -145,12 +164,4 @@ function drawGrid() {
     }
     ctx.strokeStyle = 'rgba(0,255,0,0.25)';
     ctx.stroke();
-}
-
-/* i love full screen */
-function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-    vmin = Math.min(w, h);
-    vr = vmin / 2;
 }
