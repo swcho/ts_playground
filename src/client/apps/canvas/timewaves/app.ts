@@ -21,18 +21,19 @@ gui.add(CONFIG, 'usePrev');
 gui.add(CONFIG, 'noFade');
 
 const NS = 'http://www.w3.org/2000/svg';
-const CW = 800;
-const CH = 400;
-const CW_H = CW * .5;
-const CH_H = CH * .5;
-const WW = 4;
-const WH = 8;
-const ROWS = Math.ceil(CH / WH);
-const COLS = Math.ceil(CW / WW);
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 400;
+const CW_H = CANVAS_WIDTH * .5;
+const CH_H = CANVAS_HEIGHT * .5;
+const WAVE_WIDTH = 4;
+const WAVE_HEIGHT = 8;
+const ROWS = Math.ceil(CANVAS_HEIGHT / WAVE_HEIGHT);
+const COLS = Math.ceil(CANVAS_WIDTH / WAVE_WIDTH);
+console.log(ROWS, COLS);
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-canvas.width = CW;
-canvas.height = CH;
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
 
 const ctx = canvas.getContext('2d');
 ctx.font = '150px monospace';
@@ -40,8 +41,12 @@ ctx.textAlign = 'center';
 ctx.textBaseline = 'middle';
 
 const waves = document.getElementById('waves');
-waves.setAttribute('viewPort', `0 0 ${CW} ${CH}`);
-const paths = [];
+waves.setAttribute('viewPort', `0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}`);
+const paths: {
+    el: SVGPathElement;
+    yPos: number;
+    pts: number[];
+}[] = [];
 
 for (let i = 0; i < ROWS; i++) {
     paths.push({
@@ -60,24 +65,22 @@ function updateTime() {
     const m = padZero(now.getMinutes());
     const s = padZero(now.getSeconds());
     ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, CW, CH);
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     ctx.fillStyle = '#000';
     ctx.fillText(`${h}:${m}:${s}`, CW_H, CH_H);
 
-    const imgData = [];
     for (let i = 0; i < ROWS; i++) {
-        const waveData = [];
+        const waveData: number[] = [];
         for (let j = 0; j < COLS; j++) {
-            const pxData = ctx.getImageData(j * WW, i * WH, WW, WH).data;
-            const amp = (1 - getAverage(pxData) / 255) * WH;
+            const pxData = ctx.getImageData(j * WAVE_WIDTH, i * WAVE_HEIGHT, WAVE_WIDTH, WAVE_HEIGHT).data;
+            const amp = (1 - getAverage(pxData) / 255) * WAVE_HEIGHT;
             waveData.push(amp);
         }
-
         tweenWave(waveData, i);
     }
 }
 
-function getAverage(data) {
+function getAverage(data: Uint8ClampedArray) {
     let res = 0;
     let c = 0;
     for (let i = 0; i < data.length; i += 4) {
@@ -91,10 +94,16 @@ function padZero(str) {
     return `0${str}`.slice(-2);
 }
 
-function tweenWave(data, id) {
+function tweenWave(data: number[], id) {
     const tl = new TimelineLite({
         onUpdate: () => {
-            const d = `M0 ${paths[id].yPos * WH + WH * .5}${paths[id].pts.map((amp, i) => `q${WW * .5} ${amp * (1 - 2 * (i % 2))}, ${WW} 0`).join('')}`;
+            const d = `M0 ${
+                paths[id].yPos * WAVE_HEIGHT + WAVE_HEIGHT * .5
+            }${
+                paths[id].pts
+                    .map((amp, i) => `q${WAVE_WIDTH * .5} ${amp * (1 - 2 * (i % 2))}, ${WAVE_WIDTH} 0`)
+                    .join('')
+            }`;
 
             paths[id].el.setAttribute('d', d);
         }
