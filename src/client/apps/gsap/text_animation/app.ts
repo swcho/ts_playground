@@ -11,7 +11,10 @@ const g1 = document.querySelectorAll('#g1');
 const g1Paths = document.querySelectorAll('#g1 path');
 const g2 = document.querySelectorAll('#g2');
 const g2Paths = document.querySelectorAll('#g2 path');
+const filter = document.querySelector('#faFeGaussianBlur');
 const shift = 25;
+
+console.log(g1Paths.length * -shift / 2);
 
 new TimelineMax({
     repeat: -1
@@ -21,7 +24,7 @@ new TimelineMax({
         x: g1Paths.length * -shift / 2,
         ease: Power4.easeOut
     }, 0)
-    .to('#faFeGaussianBlur', 5, {
+    .to(filter, 5, {
         attr: { stdDeviation: 0 },
         ease: Power4.easeOut
     }, 0)
@@ -37,7 +40,7 @@ new TimelineMax({
         x: g1Paths.length * -shift / 2,
         ease: Power4.easeInOut
     })
-    .to('#faFeGaussianBlur', 1, {
+    .to(filter, 1, {
         attr: { stdDeviation: 8 },
         ease: Power4.easeInOut
     }, '-=1')
@@ -81,4 +84,5 @@ new TimelineMax({
         opacity: 0,
         x: i => ++i * shift,
         ease: Power4.easeInOut
-    }, '-=1');
+    }, '-=1')
+    ;
