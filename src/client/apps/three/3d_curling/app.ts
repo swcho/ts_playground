@@ -52,18 +52,19 @@ class HairyBall {
         const material = new THREE.MeshBasicMaterial({ color: 0xFFFF00, wireframe: true });
         geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.size, 0));
         const count = geometry.attributes['position'].count;
-        console.log(count);
+        console.log(geometry.attributes);
 
-        let hairGeometry = new THREE.InstancedBufferGeometry();
+        const hairGeometry = new THREE.InstancedBufferGeometry();
         hairGeometry.maxInstancedCount = count;
 
-        let hairPositions = new Float32Array(count * 3);
-        let hairRotations = new Float32Array(count * 3);
+        const hairPositions = new Float32Array(count * 3);
+        const hairRotations = new Float32Array(count * 3);
 
-        let hairVertices = new Float32Array([
+        const hairVertices = new Float32Array([
             0.0, 0.0, 0.0,
-            1.0, 0.0, 0.0,
-            20.0, 0.5, 0.0
+            5.0, 0.1, 0.0,
+            20.0, 5.0, 0.0,
+            // 10.0, 0.0, 10.0,
         ]);
 
         for (let i = 0; i < count * 3; i += 3) {
@@ -89,6 +90,8 @@ class HairyBall {
 void main () {
 vec3 new_position = position;
 new_position += cross( rotation, cross( rotation, position ) + position);
+new_position += cross( rotation, cross( rotation, position ));
+new_position += cross( rotation, position );
 new_position += position_offset;
 gl_Position = projectionMatrix * modelViewMatrix * vec4(new_position, 1.0);
 }
@@ -105,7 +108,7 @@ gl_Position = projectionMatrix * modelViewMatrix * vec4(new_position, 1.0);
 
         this.mesh = new THREE.Mesh(geometry, material);
 
-        // parentNode.add(this.mesh)
+        parentNode.add(this.mesh);
         return this;
     }
 }
