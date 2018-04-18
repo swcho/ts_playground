@@ -1,0 +1,13 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #111;
+}
+
+svg {
+    width: 100%;
+    fill: #fff;
+    filter: url(#faBlur);
+}
