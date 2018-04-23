@@ -1,0 +1,426 @@
+body {
+    font-family: 'Source Serif Pro', serif;
+    font-size: 14px;
+}
+
+.s4-box {
+    font-size: 9px;
+}
+
+.alfa {
+    font-family: 'Alfa Slab One', serif;
+}
+
+.merriweather {
+    font-family: 'Merriweather', serif;
+}
+
+.container {
+    padding: 30px;
+}
+
+.folio {}
+
+.stat {
+    font-size: 44px;
+    font-family: 'ultra', serif;
+    letter-spacing: -2px;
+    padding: 15px 0;
+}
+
+.page-title {
+    padding: 30px 0;
+}
+
+.title-headline {
+    font-size: 40px;
+    margin: 0;
+    padding: 0 0 15px 0;
+}
+
+.title-deck {
+    font-size: 18px;
+    margin: 0;
+    padding: 0 0 20px 0;
+}
+
+.section-1 {}
+
+.section-1-headline {
+    font-size: 58px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+.section-1-deck {
+    font-size: 22px;
+    padding-bottom: 30px;
+}
+
+.hero-image {
+    padding: 30px 0;
+}
+
+.section-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #000;
+}
+
+.section-2-label {
+    top: -8px;
+}
+
+.section-2-headline {
+    grid-column: span 2;
+    font-size: 30px;
+    padding: 30px 0 15px 0;
+}
+
+.section-2-subhead {
+    grid-column: span 2;
+}
+
+.section-2-subsection-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    margin: 30px 0;
+    padding-right: 30px;
+}
+
+.section-2-subsection-2 {
+    padding-left: 30px;
+    margin: 30px 0;
+}
+
+.section-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #000;
+}
+
+.section-3-label {
+    top: -8px;
+}
+
+.section-3-headline {
+    grid-column: span 2;
+    font-size: 30px;
+    padding: 30px 0 15px 0;
+}
+
+.section-3-subhead {
+    grid-column: span 2;
+}
+
+.section-3-subsection-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    margin: 30px 0;
+    padding-right: 30px;
+}
+
+.section-3-subsection-2 {
+    padding-left: 30px;
+    margin: 30px 0;
+}
+
+.section-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #000;
+}
+
+.section-4-label {
+    top: -8px;
+}
+
+.section-4-headline {
+    grid-column: span 2;
+    font-size: 30px;
+    padding: 30px 0 15px 0;
+}
+
+.section-4-subhead {
+    grid-column: span 2;
+}
+
+.section-4-subsection-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    margin: 30px 0;
+    padding-right: 30px;
+}
+
+.section-4-subsection-2 {
+    padding-left: 30px;
+    margin: 30px 0;
+}
+
+.section-4-subsection-3 {
+    grid-column: span 2;
+    border: 1px solid #000;
+    margin: 15px 0 30px 0;
+}
+
+.s4-ss3-s3 {
+    padding-bottom: 15px;
+}
+
+.s4-ss3-s4 {
+    padding-bottom: 15px;
+}
+
+.section-5 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.section-5-label {
+    top: -8px;
+}
+
+.section-5-headline {
+    grid-column: span 2;
+    font-size: 30px;
+    padding: 30px 0 15px 0;
+}
+
+.section-5-subhead {
+    grid-column: span 2;
+}
+
+.section-5-subsection-1 {
+    grid-column: span 2;
+}
+
+.section-5-subsection-2 {
+    margin: 30px 0;
+    padding-right: 30px;
+    border-right: 1px solid #000;
+}
+
+.section-5-subsection-3 {
+    padding-left: 30px;
+    margin: 30px 0;
+}
+
+@media (min-width: 600px) {
+    .page-title {
+        padding: 60px 0;
+    }
+    .title-headline {
+        font-size: 65px;
+    }
+    .title-deck {
+        font-size: 24px;
+    }
+    .section-1-deck {
+        font-size: 18px;
+        max-width: 300px;
+    }
+    .section-4-subsection-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .s4-ss3-s1 {
+        grid-column: span 3;
+    }
+    .s4-ss3-s2 {
+        grid-column: span 3;
+        padding-bottom: 25px;
+    }
+    .s4-ss3-s3 {
+        padding-right: 15px;
+    }
+    .s4-ss3-s4 {
+        border-right: 1px solid #000;
+        border-left: 1px solid #000;
+        padding: 0 15px;
+    }
+    .s4-ss3-s5 {
+        padding-left: 15px;
+    }
+    .s4-ss3-s6 {
+        grid-column: span 3;
+        padding-top: 25px;
+    }
+    .section-5-subsection-2 {
+        border-right: 1px solid #000;
+    }
+}
+
+@media (min-width: 800px) {
+    .container {
+        padding: 50px;
+    }
+    body {
+        font-size: 13px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    .folio {
+        grid-column: span 4;
+    }
+    .page-title {
+        grid-column: span 4;
+        padding: 90px 0;
+    }
+    .section-1 {
+        grid-column: span 2;
+        border-bottom: 1px solid #000;
+        border-right: 1px solid #000;
+        padding-right: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .hero-image {
+        grid-column: span 2;
+        padding-left: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .section-2 {
+        grid-column: span 3;
+        padding-right: 15px;
+    }
+    .section-3 {
+        grid-column: span 1;
+        display: block;
+        border-left: 1px solid #000;
+        padding-left: 15px;
+    }
+    .section-3-label {
+        left: 2px;
+        right: 2px;
+    }
+    .section-3-subsection-1 {
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+    .section-3-subsection-2 {
+        padding: 0;
+        margin: 0;
+    }
+    .section-4 {
+        grid-column: span 2;
+        padding-right: 15px;
+        border-bottom: none;
+    }
+    .section-5 {
+        grid-column: span 2;
+        display: block;
+        border-left: 1px solid #000;
+        padding-left: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+    .section-5-subsection-2 {
+        padding: 0;
+        margin: auto;
+        border: none;
+    }
+    .section-5-subsection-3 {
+        padding: 0;
+        margin: auto;
+    }
+}
+
+@media (min-width: 1100px) {
+    .container {
+        max-width: 1040px;
+        margin: auto;
+    }
+    .section-2-headline,
+    .section-3-headline,
+    .section-4-headline,
+    .section-5-headline {
+        font-size: 20px;
+        padding: 10px 0 20 0;
+    }
+    .grid {
+        grid-template-columns: repeat(7, 14.2857%);
+        grid-template-rows: repeat(35, 40px);
+    }
+    .folio {
+        grid-column: span 7;
+        grid-row-start: 1;
+    }
+    .page-title {
+        padding: 100px 0;
+        grid-area: 2 / 1 / 11 / 8;
+    }
+    .title-headline {
+        font-size: 90px;
+    }
+    .section-1 {
+        border-top: none;
+        grid-area: 11 / 1 / 19/ 3;
+        border-right: none;
+    }
+    .section-1-deck {
+        font-size: 15px;
+    }
+    .hero-image {
+        border-top: none;
+        padding: 30px;
+        grid-area: 11 / 3 / 21 / 7;
+        border-left: 1px solid #000;
+    }
+    .section-2 {
+        grid-area: 19 / 1 / 36 / 3;
+        padding-right: 15px;
+        border-bottom: none;
+    }
+    .section-2-subsection-1 {
+        padding-right: 15px;
+    }
+    .section-2-subsection-2 {
+        padding-left: 15px;
+    }
+    .section-3 {
+        grid-area: 21 / 3 / 36 / 4;
+        padding: 0 15px;
+        border-bottom: none;
+        border-right: 1px solid #000;
+    }
+    .section-4 {
+        grid-area: 21 / 4 / 36 / 7;
+        padding-left: 15px;
+    }
+    .section-4-subsection-1 {
+        padding-right: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .section-4-subsection-2 {
+        padding-left: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .section-4-subsection-3 {
+        padding: 10px;
+    }
+    .s4-ss3-s3 {
+        padding-right: 5px;
+    }
+    .s4-ss3-s4 {
+        padding: 0 5px;
+    }
+    .s4-ss3-s5 {
+        padding-left: 5px;
+    }
+    .section-5 {
+        grid-area: 11 / 7 / 36 / 8;
+    }
+    .section-5-label {
+        right: 2px;
+        left: 2px;
+        top: 0;
+    }
+}
