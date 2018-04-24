@@ -5,11 +5,11 @@ console.log(__filename);
 
 import './style.scss';
 
-const B_SHOW_FLUID = false
+const B_SHOW_FLUID = false;
 const DENS_SCALE = 0.03;
 const representation = [
-    " ", "💀", "😱", "😀", "😍", '😇'
-]
+    ' ', '💀', '😱', '😀', '😍', '😇'
+];
 // const representation = [
 //   " ", "👦🏿", "👦🏾", "👦🏽", "👦🏼", "👦🏻",
 // ]
@@ -240,10 +240,10 @@ let FluidDynamicsSolver = function (n) {
         let i;
 
         for (i = 1; i <= N_; i++) {
-            x[IX(0, i)] = (b == 1) ? -x[IX(1, i)] : x[IX(1, i)];
-            x[IX(N_ + 1, i)] = (b == 1) ? -x[IX(N_, i)] : x[IX(N_, i)];
-            x[IX(i, 0)] = (b == 2) ? -x[IX(i, 1)] : x[IX(i, 1)];
-            x[IX(i, N_ + 1)] = (b == 2) ? -x[IX(i, N_)] : x[IX(i, N_)];
+            x[IX(0, i)] = (b === 1) ? -x[IX(1, i)] : x[IX(1, i)];
+            x[IX(N_ + 1, i)] = (b === 1) ? -x[IX(N_, i)] : x[IX(N_, i)];
+            x[IX(i, 0)] = (b === 2) ? -x[IX(i, 1)] : x[IX(i, 1)];
+            x[IX(i, N_ + 1)] = (b === 2) ? -x[IX(i, N_)] : x[IX(i, N_)];
         }
 
         x[IX(0, 0)] = 0.5 * (x[IX(1, 0)] + x[IX(0, 1)]);
