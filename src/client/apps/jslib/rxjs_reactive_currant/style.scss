@@ -1,0 +1,114 @@
+/***************************
+ *	Variables
+ **************************/
+ $font-family: "Open Sans", sans-serif;
+ $font-size: calc(1em + 1vw);
+ $color-body: #e2e2e2;
+ $color-snowflake: #ffffff;
+ $color-shadow: #000000;
+ $variable-cardWidth: 90;
+ $variable-cardHeight: 50;
+ 
+ /***************************
+  *	Functions
+  **************************/
+ @mixin setRandomBoxShadow( $countOfShadows: 70 ) {
+   $_shadows: ();
+   
+   @for $_i from 1 through $countOfShadows {
+     
+     $_shadows: append(
+             $_shadows,
+             random($variable-cardWidth) * 1vmin random($variable-cardHeight) * 1vmin 0 $color-snowflake,
+             comma
+     );
+   }
+   
+   box-shadow: $_shadows;
+ }
+ 
+ /***************************
+  *	Project Main Styles
+  **************************/
+ *,
+ *:before,
+ *:after {
+   position: relative;
+ 
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+ 
+   border: 0;
+ }
+ 
+ body {
+   background-color: $color-body;
+ 
+   font-family: $font-family;
+   font-size: $font-size;
+ }
+ 
+ /***************************
+  *	Application Main Styles
+  **************************/
+ html,
+ body {
+   width: 100vw;
+   height: 100vh;
+ }
+ 
+ body {
+   display: flex;
+   flex-direction: row;
+ 
+   justify-content: center;
+   align-items: center;
+   transform-style: preserve-3d;
+   perspective: 100vmax;
+ }
+ 
+ .card {
+   width: $variable-cardWidth + vmin;
+   height: $variable-cardHeight + vmin;
+ 
+   border-radius: 50%;
+   background-image: url("https://s-media-cache-ak0.pinimg.com/originals/94/5c/36/945c36e1425308557db0a5a6aecfac50.jpg");
+   background-size: cover;
+   box-shadow: 0 1rem 3rem rgba(lighten($color-shadow, 10), .2);
+ 
+   transform-style: preserve-3d;
+ 
+   &:before,
+   &:after {
+     position: absolute;
+ 
+     display: block;
+ 
+     content: "";
+ 
+     border-radius: 50%;
+     background-color: rgba($color-snowflake, .2);
+ 
+     filter: blur(1px);
+   }
+ 
+   &:before {
+     @include setRandomBoxShadow();
+ 
+     width: 2px;
+     height: 2px;
+ 
+     transform: translateZ(1rem);
+   }
+ 
+   &:after {
+     @include setRandomBoxShadow();
+ 
+     width: 3px;
+     height: 3px;
+ 
+     transform: translateZ(2rem);
+   }
+ }
+ 
