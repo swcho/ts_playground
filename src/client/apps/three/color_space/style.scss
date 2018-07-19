@@ -1,0 +1,114 @@
+$c-black: #212121;
+$c-white: #dddddd;
+$bg: $c-white;
+
+:root {
+  --dark: $c-black;
+  --light: $c-white;
+  --background: var($c-black);
+  --foreground: var($c-white);
+}
+
+// <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+// @import 'https://fonts.googleapis.com/css?family=Inconsolata';
+$t-code: 'Inconsolata', ipm, Menlo, 'Courier New', monospace;
+//@import 'https://fonts.googleapis.com/css?family=Space+Mono';
+//$t-code: 'Space Mono', ipm, Menlo, 'Courier New', monospace;
+
+body {
+  overflow: hidden;
+  background: $c-black;
+  background: var(--background);
+  font-family: $t-code;
+  color: #fff;
+  color: var(--foreground, #{$c-white});
+}
+.github-corner {
+  position: absolute;
+  top: 0; right: 0;
+  transform: translate3d(0,0,0);
+  transition: 333ms transform cubic-bezier(.7,.3,.25,1.15) 1200ms;
+  will-change: transform;
+  svg {
+    width: 4rem; height: 4rem;
+  }
+  path {
+    will-chrange: fill;
+  }
+  .octo-arm,
+  .octo-body {
+    fill: $c-black;
+    fill: var(--background, #{$c-black});
+  }
+  .triange {
+    fill: $c-white;
+    fill: var(--foreground, #{$c-white});
+  }
+}
+.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
+
+button,
+select {
+  position: absolute;
+  font-family: $t-code;
+  box-sizing: border-box;
+  
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  
+  color: $c-white;
+  color: var(--foreground, #{$c-white});
+  background-color: transparent;
+  
+  cursor: pointer;
+}
+button {
+  bottom: 1rem; left: 1rem;
+  padding: 0;
+  outline: none;
+  padding: 0 0 0.5em 0.3em;
+  span {
+    display: none;
+  }
+  stonrg {
+    display: block;
+  }
+  svg {
+    display: block;
+    width: 2rem; height: 2rem;
+  }
+  path {
+    fill: currentColor;
+  }
+  .line {
+    display: none;
+  }
+}
+.isDark {
+  button {
+    .line {
+      display: block;
+    }
+  }
+}
+select {
+  bottom: 1rem; right: 1rem;
+  font-size: 2rem;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  padding: 0.25em 1.25em 0.25em 0.3em;
+  background-color: rgba(#212121,.5);
+  background-size: auto 40%;
+  background-repeat: no-repeat;
+  background-position: 85% 50%;
+  background-image: url('data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%20%3C%21--%20Generator%3A%20IcoMoon.io%20--%3E%20%3C%21DOCTYPE%20svg%20PUBLIC%20%22-//W3C//DTD%20SVG%201.1//EN%22%20%22http%3A//www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd%22%3E%20%3Csvg%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20fill%3D%22%23ffffff%22%3E%3Cpath%20d%3D%22M%2096.00%2C96.00l-96.00%2C96.00l%20256.00%2C256.00l%20256.00-256.00l-96.00-96.00L%20256.00%2C256.00L%2096.00%2C96.00z%22%20%3E%3C/path%3E%3C/svg%3E');
+transition: 150ms background-color;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background-color: rgba(#212121,.8);
+  }
+}
