@@ -2337,7 +2337,7 @@ declare namespace p5 {
         //
         //   required param "amt" follows an optional param
         //
-        // lerp(x: p5.Vector, y?: p5.Vector, z?: p5.Vector, amt: number): p5.Vector
+        lerp(x: p5.Vector, y?: p5.Vector, z?: p5.Vector, amt: number): p5.Vector
 
         /**
          * Return a representation of this vector as a float array.
@@ -2368,6 +2368,8 @@ declare namespace p5 {
          * Calculates and returns the angle (in radians) between two vectors.
          */
         static angleBetween(v1:p5.Vector, v2:p5.Vector):number
+
+        static lerp(start:Vector, stop:Vector, amt:number):Vector
     }
 
     type Bound = {
