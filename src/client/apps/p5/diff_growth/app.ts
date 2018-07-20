@@ -54,7 +54,7 @@ const draw = () => {
     pop();
 
     rejectAll();
-    // edgeSplit();
+    edgeSplit();
     attractNeighbors();
 };
 
