@@ -1,0 +1,193 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        html,
+        body {
+            width: 100%;
+        }
+
+        .unselectable {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        canvas {
+            cursor: default;
+        }
+
+        .grabbable {
+            cursor: move;
+            /* fallback if grab cursor is unsupported */
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+
+        /* Apply a "closed-hand" cursor during drag operation. */
+
+        .grabbing {
+            cursor: grabbing !important;
+            cursor: -moz-grabbing !important;
+            cursor: -webkit-grabbing !important;
+        }
+
+
+        a {
+            outline: 0;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .author {
+            color: #fff;
+            filter: blur(1px);
+            font-size: 1.2em;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            z-index: 1;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 0.4em;
+            background-color: rgba(0, 0, 0, 0.43);
+            -webkit-transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+            -moz-transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+            transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+            -ms-transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+        }
+
+        .author:hover {
+            background-color: #000;
+            filter: blur(0em);
+        }
+
+        .author p span {
+            font-weight: normal;
+        }
+
+        .author p {
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+            -webkit-transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+            -moz-transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+            transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+            -ms-transition: all .56s cubic-bezier(0.93, 0.1, 1, 1);
+        }
+
+        .author:hover p {
+            height: 1.2em;
+            margin: .22em 0 0 .2em;
+        }
+
+        .fancy-underline a {
+            text-decoration: none;
+            -webkit-transition: all .13s linear;
+            -moz-transition: all .13s linear;
+            transition: all .13s linear;
+            -ms-transition: all .13s linear;
+            text-shadow: -1px 0 0 #000,
+            1px 0 0 #000,
+            -2px 0 0 #000,
+            2px 0 0 #000;
+        }
+
+        .fancy-underline a:hover {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.0) 50%, #fff 50%) repeat-x 0 .96em;
+            background-size: .2em .2em;
+        }
+    </style>
+    <script src="https://codepen.io/ray7551/pen/KvOKow.js"></script>
+</head>
+
+<body>
+    <!-- now support touch device!
+// Drag card - left mouse clicking the card and move / touch: one finger touching the card and move
+// Orbit - left mouse / touch: one finger move
+// Zoom - middle mouse, or mousewheel / touch: two finger spread or squish
+// Pan - right mouse, or arrow keys / touch: three finger swipe
+-->
+    <script type="text/vert" id="vert">
+    uniform vec3 uGrabCenter;
+    uniform vec3 uTarget;
+    uniform float uTime;
+    uniform float uGrabStart;
+    uniform float uReleaseStart;
+    varying vec3 vNorm;
+    varying vec2 vUv;
+    
+    #define PI 3.14159
+    #define initRadius 10.0
+    #define maxZ 29.0
+    #define decayExp 2.7
+    #define upDuration 0.1
+    #define downDuration 0.8
+    // the render freq is about 50, so if you want more realistic effect, bounce freq should not like 25.0 / 50.0
+    #define bounceFreq 12.0
+    
+    #define dragDistance distance(uTarget, uGrabCenter);
+    
+    float decay(float f, float n) {
+      return exp(-3.0 * pow(abs(f), n));
+    }
+    float grabForce(vec2 p) {
+      float radius = initRadius + 0.1 * dragDistance;
+      return decay(clamp(distance(p.xy, uGrabCenter.xy) / radius, 0.0, 1.0), decayExp);
+    }
+    float shrinkForce(vec2 p) {
+      float radius = initRadius + 0.1 * dragDistance;
+      // return 1.0 - decay(distance(p.xy, uGrabCenter.xy) / radius, decayExp);
+      return decay(distance(p.xy, uGrabCenter.xy) / radius, decayExp) / 1.4;
+    }
+    
+    void main() {
+      vUv = uv;
+      float force = grabForce(position.xy);
+      // don't know why (uTarget - position.xyz) here will cause a spike shape
+      // vec3 initOffset = (uTarget - position.xyz) * 1.0 * force;
+      vec3 initOffset = (uTarget - uGrabCenter.xyz) * 0.75 * force;
+      // add translate toward grabCenter for all vertices
+      initOffset += (uGrabCenter - position.xyz) * 1.0 * shrinkForce(position.xy);
+      vec3 offset;
+      if(uReleaseStart > 0.0) {
+        float releaseTime = min(uReleaseStart, uTime - uReleaseStart);
+        offset = initOffset
+          * decay(releaseTime / downDuration, decayExp) * sin(
+            clamp(releaseTime / downDuration, 0.0, 1.0) * bounceFreq * (2.0*PI)
+          ); // grab release animation
+      } else {
+        offset = initOffset;
+        //* clamp((uTime - uGrabStart) / upDuration, 0.0, 1.0) // grab up animation
+      }
+      vec3 p = position.xyz + offset;
+    
+      vNorm = position.xyz;
+      gl_Position = projectionMatrix *
+        modelViewMatrix * vec4(p, 1.0);
+    }
+    </script>
+    <script type="text/frag" id="frag">
+    varying vec2 vUv;
+    uniform sampler2D iChannel0;
+    
+    void main() {
+      gl_FragColor = texture2D(iChannel0, vUv);
+    }
+    </script>
+
+    <!-- <div class="glitchButton" data-project="monsters-university-id" style="position:fixed;top:20px;right:20px"></div>
+    <script src="https://glitch-button.glitch.me/button.js"></script> -->
+
+    <footer class="fancy-underline author">
+        <span>Monster ID</span>
+        <p>
+            <span>by </span>
+            <a href="https://twitter.com/ray7551" target="_blank">ray7551</a>
+        </p>
+    </footer>
+</body>
+
+</html>
