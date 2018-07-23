@@ -1,0 +1,61 @@
+// @import url('https://fonts.googleapis.com/css?family=Righteous|Montserrat')
+
+// Text Styles
+.header-text
+	color: #fff
+	text-align: center
+	font-family: 'Righteous', cursive
+	font-size: 4em
+	letter-spacing: 0.5rem
+.content-text
+	color: #444
+	text-align: center
+	font-family: 'Montserrat', sans-serif
+	font-size: 1.3em
+
+// Layouts
+*, ::before, ::after
+	box-sizing: border-box
+body
+	margin: 0
+	padding: 0
+	width: 100%
+	// overflow-x: hidden
+.container
+	width: 100%
+	& div 
+		min-height: 100vh
+.header
+	position: relative
+	display: block
+	width: 100%
+	overflow-x: hidden
+.box
+	display: flex
+	flex: 1
+	justify-content: center
+	align-items: center
+	height: 100%
+.colorful
+	position: relative
+	// yellow > red > purple > blue
+	background: linear-gradient(to right, #fddd10, #ff6c2c, #e5e, #2fabe1)
+	background-size: 2000%
+	// animation: gradientBackground 10s ease-in-out
+	animation: gradientBackground 10s alternate ease-in-out
+	animation-iteration-count: infinite
+.content
+	position: relative
+	display: block
+	padding: 0 15%
+	& p
+		text-align: left
+		line-height: 1.3em
+	& p::first-letter
+		font-size: 230%
+	
+@keyframes gradientBackground
+	0%
+		background-position: left
+	100%
+		background-position: right
