@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400|Work+Sans:300,500');
+
+// More rhythm = less tips
+// Depth = tips height
+@mixin ripped-effect($rhythm, $depth) {
+  $tip: calc(100% - #{$depth});
+  $ripped: '100% 0, 100% #{$tip}, ';
+  $end: 100 - $rhythm;
+  $isPrevTip: true;
+
+  @for $i from $end through 1 {
+    @if $i % $rhythm == 0 {
+      @if $isPrevTip {
+        $ripped: #{$ripped + $i + '% 100%, '};
+        $isPrevTip: false;
+      } @else {
+        $ripped: #{$ripped + $i + '% #{$tip}, '};
+        $isPrevTip: true;
+      }
+    }
+  }
+
+  $ripped: #{$ripped + '0 #{$tip}, 0 0'};
+
+  clip-path: polygon($ripped);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #525252;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.25;
+  background: linear-gradient(to bottom, #00b09b, #96c93d);
+}
+
+a {
+  color: #5c7b25;
+  text-decoration-skip: ink;
+}
+
+.receipt {
+  position: relative;
+  flex: none;
+  padding: 30px 0;
+  background: #fff;
+  @include ripped-effect(2, 6px);
+  
+  &__title {
+    margin-bottom: 15px;
+    padding: 0 30px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    color: #00b09b;
+  }
+  
+  &__subtitle {
+    padding: 0 30px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+  }
+  
+  &__lines {
+    margin-top: 50px;
+    padding: 30px;
+    border-top: 1px dashed #dce2d6;
+  }
+  
+  &__line {
+    display: flex;
+    margin: 20px 0;
+    justify-content: space-between;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 18px;
+    
+    &__item {
+      font-weight: 300;
+    }
+    
+    &__price {
+      font-weight: 400;
+    }
+  }
+  
+  &__total {
+    display: flex;
+    margin: 20px 0;
+    padding: 30px;
+    justify-content: space-between;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 24px;
+    background-color: #eff7e8;
+    
+    &__item,
+    &__price {
+      font-weight: 400;
+    }
+  }
+  
+  &__back {
+    text-align: center;
+  }
+}
