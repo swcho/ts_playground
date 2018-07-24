@@ -1,0 +1,42 @@
+
+body {
+    margin: 0;
+}
+
+.shape {
+    display: block;
+    fill: #2095F2;
+    margin: 0 auto;
+}
+
+.shape1 {
+    animation: rotate 1500ms infinite;
+    margin-top: 50px;
+}
+
+.shape2 {
+    animation: rotateScale 1500ms infinite;
+    fill: #ccc;
+    filter: blur(4px);
+    margin-top: 10px;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateScale {
+    0% {
+        transform: rotate(0deg);
+        // transform: scaleY(0.2) rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+        // transform: scaleY(0.2) rotate(360deg);
+    }
+}
