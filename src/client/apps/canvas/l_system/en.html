@@ -1,0 +1,236 @@
+<html>
+
+<head>
+    <title>Canvas: </title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .wrapper {
+            height: 95vh;
+            display: flex;
+            flex-direction: row;
+            position: relative;
+        }
+
+        .canvasWrapper {
+            display: flex;
+            flex-direction: column;
+            margin-left: auto;
+        }
+
+        #canvas {
+            cursor: grab;
+        }
+
+        .imageList {
+            height: 96vh;
+            align-self: center;
+            justify-content: center;
+            min-width: 175px;
+            overflow-y: auto;
+            margin-right: 10px;
+            flex-direction: column;
+        }
+
+        .controls {
+            display: none;
+            background-color: beige;
+            font-family: 'Open Sans', sans-serif;
+            text-align: left;
+            padding: 10px;
+            position: absolute;
+            margin-left: auto;
+            margin-right: 10px;
+            min-width: 100px;
+            height: auto;
+            left: 1%;
+            top: 5%;
+            box-shadow: 8px 5px 14px -3px rgba(0, 0, 0, 0.75);
+            animation: toBottom .2s cubic-bezier(0.65, 0.05, 0.36, 1);
+        }
+
+        @keyframes toBottom {
+            from {
+                margin-top: 100%;
+                height: 300%;
+            }
+            to {
+                margin-top: 0%;
+                height: 100%;
+            }
+        }
+
+        #openControls {
+            color: inherit;
+            align-self: baseline;
+            margin-left: 1%;
+            font-size: inherit;
+            padding: 5px 15px 5px 30px;
+            border-radius: 2px;
+            background-color: transparent;
+            border: 1px solid black;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #openControls::after {
+            content: '\2699';
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            top: 2px;
+            left: 0;
+        }
+
+        .showControls {
+            display: block;
+        }
+
+        .controlsWrapper {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+        }
+
+        .polish {
+            padding-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        .columnP {
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .columnP:nth-child(2n) {
+            margin-left: 10px;
+        }
+
+        .contentStyle {
+            padding: 15px 0;
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #name {
+            margin: 0 0 20px 0;
+            max-width: 300px;
+        }
+
+        #toDeg {
+            font-size: 12px;
+        }
+
+        #warning {
+            font-size: 14px;
+            color: red;
+        }
+
+        .shapePreview {
+            display: flex;
+            margin: auto;
+            margin-top: 5px;
+            padding: 1px;
+        }
+
+        .active {
+            box-shadow: inset 0px 0px 1px 1px rgba(171, 48, 171, 0.5);
+        }
+
+        .select {
+            max-width: 100px;
+            position: absolute;
+            right: 150px;
+            top: 10px;
+        }
+
+        input {
+            margin-bottom: 15px;
+
+        }
+
+        .colorizeInput {
+            margin-right: auto;
+        }
+
+        @media screen and (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+            }
+            .imageList {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                height: 150px;
+            }
+            #openControls {
+                align-self: center;
+            }
+            .controls {
+                background: aliceblue;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <button id="openControls">Controls</button>
+        <div class="controls">
+            <h1 id="name"></h1>
+            <div class="controlsWrapper">
+                <div class="polish">
+                    <div class="columnP">
+                        <span>Axiom: </span>
+                        <input id="axiom" type="text">
+                    </div>
+                    <div class="columnP">
+                        <span>Angle (rad):</span>
+                        <input id="angle" type="text">
+                        <span id="toDeg"></span>
+                    </div>
+                </div>
+                <span>Rules: </span>
+                <textarea rows="6" id="rules"></textarea>
+                <div class="polish">
+                    <div class="columnP">
+                        X:
+                        <input type="text" id="X"> Iterations:
+                        <input type="text" id="iterations" maxlength="10"> Step Length:
+                        <input type="text" id="stepLength">
+                    </div>
+                    <div class="columnP">
+                        Y:
+                        <input type="text" id="Y"> Initial Angle (rad):
+                        <input type="text" id="initialAngle">
+                    </div>
+                </div>
+                <span id="warning"></span>
+                <div class="contentStyle">
+                    <span>Canvas color: </span>
+                    <input type="color" name="" id="canvasColor" value="#ffffff">
+                    <span>Colorize shape?</span>
+                    <input type="checkbox" class="colorizeInput" id="colorizeShape">
+                </div>
+            </div>
+        </div>
+        <div class="canvasWrapper">
+            <canvas id="canvas" width="900px"></canvas>
+            <span id="stats"></span>
+            <a id="download" href="#" download="image.png">Download Shape</a>
+        </div>
+        <div class="imageList"></div>
+    </div>
+
+</body>
+
+</html>
