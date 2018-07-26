@@ -1,0 +1,476 @@
+$color: violet;
+$color-invert: #fff;
+$color1: #ddd;
+$color2: #abc;
+$color3: #cba;
+
+* {
+  user-select: none;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #f6f6f6;
+  text-align: center;
+  width: 90%;
+  margin: 0 auto;
+  max-width: 36rem;
+  padding-bottom: 1rem;
+}
+
+label {
+  cursor: pointer;
+  user-select: none;
+}
+:root {
+  font-family: sans-serif;
+}
+
+
+input[type="checkbox"] {
+  display: block;
+  pointer-events: none;
+  position: absolute;
+  opacity: 0;
+
+  & + label {
+    margin-bottom:1rem;
+    color: $color;
+    text-decoration: underline;
+    svg {
+      transform: scale(.5) translate(0, .75rem);
+      transition: all .25s cubic-bezier(.4, .1, .1, 1.5);
+      display: block;
+      width: 5rem;
+      height: 5rem;
+      left: 1.5rem;
+      position: absolute;
+      top: .5rem;
+      path {
+        fill: $color;
+        stroke: transparent;
+        stroke-width: 1px;
+        stroke-dasharray: 30px, 30px;
+        stroke-dashoffset: -30px;
+        transition: all .5s cubic-bezier(.7, .1, .1, .3);
+      }
+    }
+
+    display: inline-block;
+    transition: all .5s ease;
+    line-height: 3rem;
+    white-space: nowrap;
+    position: relative;
+    padding-top: 4rem;
+    vertical-align: middle;
+    border-radius: 50%;
+
+    width: 8rem;
+    text-align: center;
+    height: 8rem;
+  }
+
+  &:focus + label {
+    
+    color:darken($color, 40); 
+    path{fill: darken($color, 30);}
+  }
+
+  &:checked + label {
+    text-decoration: none;
+    color: $color;
+    line-height: 4.5rem;
+    background-color: lighten($color, 1);
+
+    background-image: linear-gradient(
+      45deg,
+      lighten($color, 1),
+      darken($color, 21)
+    );
+
+    color: $color-invert;
+    svg {
+      transform: scale(1);
+      path {
+        fill: lighten($color, 5);
+        stroke: darken($color, 33);
+        stroke-width: .4px;
+        stroke-dasharray: 30px, 30px;
+        stroke-dashoffset: 0px;
+      }
+    }
+  }
+
+  &:checked:focus + label {
+    box-shadow:none;
+    path {
+    stroke: white; fill:transparent; stroke-width: .4px;
+    }}
+}
+
+.logo {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 398 109'%3E %3Cpath d='M342.8 28.6a8 8 0 1 1-16 0 8 8 0 0 1 16 0zm12.2 51c0 4.6 2 10.4 6.5 10.5 13.3 0 16.7-25 17-35 0-5 4-11.5 14-11-4 18.4-9.5 44.2.6 56.3-14.7-1.6-18-7.8-17.6-18.2-3 11-12 17.2-20.4 17.3-4.4 0-7.8-1.6-10.4-4.8-6-9.4-4.3-21.5-.8-31 4.2-10 13-19.6 23.6-19.8 3 0 6 .7 9 2.2-15.8 5.2-21.2 20-21.4 33.7zm-30.2 2.6c.2-15.4 5-26.5 2.6-40.6 7-1 14 .7 14 8.2 0 1-.8 6-2.4 15.3-1.6 9.4-2.4 17-2.4 23s.3 10 1 11.6c-5-1.3-8.4-3.2-10-6-2-2.5-2.8-6.4-2.8-11.4zm-19-34.5c-4 .3-7 3.3-7 7 .4 5 4.2 8.8 8 11.3 6.8 4.8 14.7 9.2 15.4 17.5.7 11.6-12 16.5-21 16.6-7.7 0-19-3.3-19.2-11.8 0-6 4.6-10.3 10-10.4 1.5 0 3 .3 4.2.8-5.3 5.4-3.3 15 4.4 15.2 7 0 10.5-6.3 6.7-11.6-2.7-3.4-6.5-5.5-9.6-7.8-6.2-4.3-11-9.8-11.2-17.2.8-11 11-15.7 20-15.8 7.4 0 16.2 3.2 16.3 11-2 9-7.2 12.2-14.7 9.8 8.3-4.5 5.7-14.2-2-14.5zm-60.5 32c0 4.5 1.8 10.3 6.5 10.4 9-1.5 13.2-11.8 15.3-19 1.8-5.6 2.6-11 2.6-16s-.2-9-.6-12c7.2-1 14 .8 14 8 0 1.4-.6 6.4-2.2 15.2-1.5 8.8-2.3 15.8-2.3 21 0 5.4 1 10 3 14.2-5-1-8.4-2.7-10.7-5.4-2.3-2.8-3.4-6.8-3.4-12 0-1 0-2.6.4-5.2C264.3 89 256 99 245.2 99.3c-4.3 0-7.7-1.6-10.4-4.8-2.6-3.2-4-7.8-4-13.7a48 48 0 0 1 3.2-17.2c4.3-10.2 13-19.7 23.6-20 3 0 6 .8 9.2 2.3-13.5 6-21.4 20-21.5 33.8zM220.6 42c8 0 10.7 7 10.7 13.2 0 11.8-3.7 21-3.8 33-.2 5 1.6 9 5.6 11.3-4.8 0-11.2.4-15.2-2.4-2.3-1.6-3.4-4.6-3.4-8.8.4-10.5 3.8-18.8 4-29.7 0-7.6-4.8-7.7-9-3.8-8.4 9.4-11.6 21.6-11.7 33 0 4.7.2 8.2.6 10.4-17.3-1.6-13-15.4-12.5-23 1.4-8.7 2-15.6 2-20.8 0-5.2-.5-10-1.6-14.3 13.3 2 14 12.2 12 26 2.2-7 5-11.4 9.7-16.4 4.5-5 8.8-7.6 12.6-7.6zm-43.3-21.4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm-28.6-.5c0 6.4.3 17.4-.6 23.8-3.6 0-8 1.2-10.2 4-3.2-5.2-10.5-6.4-15-6.4-10 .2-20 6.2-20 15.8 0 8 5.5 13 11.2 17.2 4.6 3.4 11 6.8 11.2 13-.5 4.4-4.6 6.3-8.3 6.4-5 0-7.7-4-7.7-8.2 0-2.5 1-4.8 3-7-3.8-1.4-8.6-.5-11.2 2-2 2-2.8 4.5-2.8 7.6 1.2 9.4 12 11.8 19.2 12 10.2-.3 20.8-6.6 21-16.7 0-8.8-9.2-13.5-15.4-17.5-4-2.8-7.8-6.7-8-11.4.4-4 3.4-6.8 7-7 6.3.5 8 5.7 5.6 10.4-.8 1.6-2 3-3.3 4.2 6.3 2 12.8-.5 14.4-6.7 3-1.2 5.7-2 8.3-2.4-1.4 11.6-4.6 21.3-4.6 33.3 0 5 1 8.7 2.8 11.4 2 2.7 5.3 4.7 10.3 6-1-2-1.4-5.4-1.4-10 0-14.6 3.5-27 5.5-41.3 4 .2 8-.2 11.5-1.4 0 11.2-4 19.7-4 31.2-.4 12.2 6 15.3 13.8 17.4-.8-1.7-1.2-5.6-1-11.6-.7-14.2 4.3-24.2 4.7-38.2-.3-15.3-16.2-6-24-6C162 32 160 21.3 148.7 20zM79 74.3c-3 0-6-.4-9-1-.3 5 0 11.2 2.8 15 2 2.8 4.4 4.2 7.2 4.2 6.5-.3 11.5-4.7 14.6-9.5 1.7 11.7-11 16.5-18.6 16.6-5.4 0-10.2-2-14.3-6.3-4-4.2-6-10-6-17.4 0-17.3 13.3-34 28.8-34 9.8 0 16.4 5 16.5 14 0 6.2-2 10.7-6.3 13.7s-9.5 4.5-15.6 4.5zM83 48c-9.4 1.8-11.8 13.6-12.7 21 12.8.4 17.8-4.2 18-15 0-3-2-6-5.2-6zM19.5 78.5c0 7.7 2.4 11.6 7 11.6 7.4-1 11-9 13-14.6 3.2-10.2 5.2-20.7 6-30.6.6-13.4 2.8-26.7.7-39.8 20 5.7 11.4 35.7 9.5 48-2.2 14-3.3 24-3.3 30.6 0 6.4.3 11.8 1 16.3-4.7-1.3-8-3.6-9.6-6.8C42 90 41 86 41 81.2c-3.7 9.3-11.6 18-21.5 18C8.5 98.7 5 88.2 5 80c1.2-24.7 16.3-40 38-35.4-15 4.2-23.4 19.7-23.6 34z' style='fill:#a4a'/%3E %3C/svg%3E");
+  transition: all .3s cubic-bezier(.4, .1, .1, 2);
+
+  display: inline-block;
+
+  margin: 1rem 0;
+  height: 4rem;
+  max-width: 25rem;
+  width: 100%;
+  background-size: contain;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  color: transparent;
+  text-decoration: none;
+  outline: 0;
+}
+
+
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+input[type="text"]{
+  box-shadow: inset 0 -.1rem #eee; 
+  background-color: transparent;
+
+ &:valid{
+   box-shadow:none; }
+}
+
+/*text inputs*/
+.counter input,
+input[type="text"] {
+  
+  background-color:transparent;
+  color: currentcolor;
+  
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  height: 3rem;
+  margin: 0;
+  line-height: 3rem;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  padding-top: .75rem;
+  text-align: center;
+
+  & + label {
+    
+
+    transform-origin: 50% 0%;
+
+    transition: transform .2s ease;
+    font-size: 1rem;
+    white-space: nowrap;
+    
+    display: block;
+
+    height: 3rem;
+    line-height: 3rem;
+    margin-top: -3rem;
+    
+
+    & + span {
+      pointer-events: none;
+      height: .15rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      width: 0%;
+      margin: 0 auto;
+
+      transition: all .5s cubic-bezier(.7, 0, 0, .9);
+      display: block;
+      margin-top: -.15rem;
+      position: relative;
+      z-index: 9;
+    }
+  }
+   &:valid + label + span,
+  &:focus + label + span{width: 100%;}
+  &:focus, &:valid {
+    
+    & + label {
+      width: 100%;
+      transition: transform .15s ease;
+      color: $color;
+      
+      transform: scale(.75) translate(0, -.5em);
+      
+      & + span {
+        
+      }
+    }
+  }
+
+  &:focus + label + span {
+    background-color: $color;
+  }
+  &:focus + label, &:focus + label + span {
+    opacity: 1; 
+  }
+}
+
+input[type="submit"] {
+  appearance: none;
+  border: 0;cursor:pointer;
+  font-size: 1rem;
+  background-color: $color;
+  display:block;
+  padding: 1rem 2rem;
+  color: $color-invert;
+
+  margin:.5rem auto;
+  
+  &:focus{background-color: white; color:$color; box-shadow: 0 0 0 .1rem}
+}
+
+
+
+.notify{
+  font-size:1rem;
+  z-index:-1;
+  pointer-events:none;
+  position:relative;
+  transition: all .5s cubic-bezier(.5,.1,.1,.9); opacity:0; transform: translate(0,-7rem); margin:0; letter-spacing:.03rem;
+ border-radius: 1rem 1rem 0 0; 
+  font-weight: 400; 
+ 
+ 
+  
+  color: darken($color2, 10);  padding: .5rem; padding-bottom:0; max-width: 18rem;  margin: 0 auto;
+margin-bottom:-2rem;}
+input:not(:checked) ~ input:not(:checked) ~ input:not(:checked) ~ .notify{opacity:1;  transform: translate(0,-9rem);
+}
+
+
+.gup,
+.gdown
+{ top:.75rem;
+  user-select:none;
+  display: block;  
+  width: 2em; 
+  height:2em;
+  text-align:center; 
+  line-height:2em;  
+  color: $color2;  font-weight: 600; transform:scale(.9);
+  transition: all .3s ease;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 .1rem ; 
+  font-weight: bold;
+  cursor:pointer;
+  position:absolute;
+  &:hover, &:focus{
+    transform:scale(1.1);
+    background-color:violet; color:white; box-shadow: inset 0 0 0 .1rem $color;}
+}
+
+
+
+
+
+.counter {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 .5rem;
+  width: 9rem;
+min-height:4rem;
+  position: relative;
+  
+  input{
+    &:focus ~ label{color:$color;}
+    
+    &:focus ~ .gup,
+    &:focus ~ .gdown{background-color:transparent; color: $color; transform:scale(1);box-shadow: none}
+  }
+  
+  
+
+
+ label {transform-origin: 50% 0; width: 100%;
+   transform: scale(.75);
+  text-align: center;
+  display: block;
+  position:absolute; top:2rem; 
+  transition: all .5s;
+}
+ button {
+  position:absolute;
+  appearance: none;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  outline: 0;
+  border-radius: 50%;
+  line-height: 1.8rem;
+  padding: 0;
+  text-align: center;
+  cursor: pointer;
+   background-color:transparent;
+  }
+}
+
+input[type="date"]{font-family:sans-serif;}
+
+
+.counter input ~ span{width:0;height: .15rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      width: 0%;
+      margin: 0 auto;
+
+      transition: all .5s cubic-bezier(.7, 0, 0, .9);
+      display: block;
+      margin-top: -.15rem;
+      position: relative;
+      z-index: 9;}
+.counter input:focus ~ span{width: 2.5rem; background-color:$color;}
+
+.counter{
+.gup{left:auto; right:1.5rem;}
+.gdown{right:auto; left:1.5rem;}
+  }
+
+
+input[type="text"]{user-select:text;}
+
+
+
+
+
+
+
+::-webkit-datetime-edit {
+  padding: 0em; 
+}
+
+::-webkit-datetime-edit-fields-wrapper {
+  background: transparent;
+}
+
+::-webkit-datetime-edit-text {
+  color: transparent;
+  padding: 0 0.3em;
+}
+
+:valid::-webkit-datetime-edit-text{color:$color2;;}
+
+::-webkit-datetime-edit-month-field {
+  color: currentcolor;}
+
+:valid::-webkit-datetime-edit-month-field {color:currentcolor;}
+::-webkit-datetime-edit-month-field:focus {
+  background-color: white; color: $color;
+}
+
+::-webkit-datetime-edit-day-field { color: currentcolor;}
+
+
+:valid::-webkit-datetime-edit-day-field {color:currentcolor;}
+::-webkit-datetime-edit-day-field:focus {
+  background-color: white; color: $color;;
+}
+
+::-webkit-datetime-edit-year-field {  color: currentcolor;}
+:valid::-webkit-datetime-edit-year-field {  color: currentcolor;}
+
+::-webkit-datetime-edit-year-field:focus {
+  background-color: white; color: $color;;
+}
+
+::-webkit-datetime-edit:focus {
+  background-color: white;
+}
+
+::-webkit-inner-spin-button {
+  display: none;
+}
+
+::-webkit-calendar-picker-indicator {
+  background: $color;
+  cursor:pointer;
+  color: $color-invert;
+}
+
+input[type="date"]{cursor:pointer}
+
+
+
+.counter input:valid ~ label{color:currentcolor}
+
+.counter input:focus ~ label{color:$color;}
+
+.counter select{
+  text-indent: 1px;
+    text-overflow: '';
+  
+  display:inline-block;
+  text-align-last:center;
+  option{ width: 100%; text-align:center;}text-align:center;
+  background-color:transparent; 
+  appearance:none; 
+  border-radius:.25rem; 
+  width: 100%;
+  line-height:1rem; text-indent:0;
+  border:none; 
+  box-shadow:0 0 0 .1rem $color; 
+   padding:  0 1rem; padding-top: 1rem;height: 3rem; line-height:2rem; font-size: 1rem;
+color: #000 ;
+  cursor:pointer;
+
+  +label{top: .25rem; color:$color;}
+
+&:focus{background-color:$color; color:$color-invert;box-shadow: 0 0 0 .1rem darken($color, 20); &+label{color:darken($color, 30)}
+}
+
+}
+
+
+@media (max-width: 700px){
+  .counter{width: 7rem; margin:0 .1rem;
+  
+    .gup{right:.5rem} .gdown{left:.5rem}}
+  
+  .counter.date{width: 10rem;display:block; margin: 0 auto; margin-bottom:1rem;}
+  .notify{font-size: .8rem; height: 1.5rem; line-height: 1.5rem; padding: 0; margin:0 auto;}
+  input:not(:checked) ~ input:not(:checked) ~ input:not(:checked) ~ .notify{opacity:1;  transform: translate(0,-6.25rem);
+}
+  
+  input[type="checkbox"] + label{margin: 0 ;width: 5.5rem; height:5.5rem; padding-top:1.5rem;;
+    svg{left:1.25rem; top:-.75rem; width: 3rem; transform: scale(.6) translate(0,-.75rem)}}
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 300px){ 
+  
+  :root{font-size:5.2vw}
+  
+  input[type="checkbox"] + label{margin:0 -.1rem}
+}
+
+
+
+.counter.select{max-width: 14rem; margin:0 .25rem}
+
+
+.counter input + label{line-height:4rem}
+
+
+
+@media (max-width:800px){
+  .counter.select{max-width: 30vw; margin:0 .5rem}
+}
