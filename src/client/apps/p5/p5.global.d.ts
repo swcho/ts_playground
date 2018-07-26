@@ -147,7 +147,7 @@ declare function hue(color: any): void;
 //   param "c2" has invalid type: Array/Number
 //   return has invalid type: Array/Number
 //
-// declare function lerpColor(c1: Array/Number, c2: Array/Number, amt: number): Array/Number;
+declare function lerpColor(c1: Array | Number, c2: Array | Number, amt: number): Array | Number;
 
 /**
  * Extracts the HSL lightness value from a color or pixel array.
@@ -1237,7 +1237,7 @@ declare function randomSeed(seed: number): void;
 /**
  * Return a random number.
  */
-declare function random(min: number, max?: number): number;
+declare function random(min?: number, max?: number): number;
 
 /**
  * Returns a random number fitting a Gaussian, or

@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <title>Main App</title>
+    <!-- https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.6/p5.min.js -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.js"></script> -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #controls {
+            margin: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: white;
+        }
+
+        /* The Modal (background) */
+
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="controls">
+        enter a rule below:
+        <br>
+        <input type="text" id="ruleText" value="LRRRRRLLR" />
+        <br>
+        <button id="run">run</button>
+        <button id="reset">reset</button>
+        <button id="random">random</button>
+        <br>
+        <button id="modalBtn">guide</button>
+        <br> speed:
+        <input id="speedSlider" type="range" min="1" max="300" value="50" />
+        <text id="speedText">50</text>
+        <br> cell size:
+        <input id="gridSlider" type="range" min="1" max="20" value="5" />
+        <text id="gridText">5</text>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>
+                Rules for Langtons Ant should be composed of "L" and "R" characters (non case sensitive). Any other characters will be ignored.
+                An example rule would be "LLRR" which grows symmetrically from the origin. (hint: try LLLLRRRRRLLLRRRRRR
+                or RRRLLLRRLLLRRRRLLLLLLL :)</p>
+            <br>
+            <p>
+                Any given rule sometimes results in a "highway" that repeats a particular pattern and continues in one direction. For instance,
+                the default rule "LR" results in a highway in ~10000 steps </p>
+            <br>
+            <p>
+                For more on how rules work, check out
+                <a href="https://en.wikipedia.org/wiki/Langton%27s_ant#Extension_to_multiple_colors">https://en.wikipedia.org/wiki/Langton%27s_ant#Extension_to_multiple_colors</a>
+            </p>
+            <br>
+            <p>
+                Colors are picked randomly when a new rule is started. The number of colors directly correspond to the number of characters
+                in the rule. The base case is always black. Reseting the ant will pick a new color palette.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
