@@ -1131,7 +1131,8 @@ declare function constrain(n: number, low: number, high: number): number;
 //   required param "x2" follows an optional param
 //   required param "y2" follows an optional param
 //
-// declare function dist(x1: number, y1: number, z1?: number, x2: number, y2: number, z2?: number): number;
+declare function dist(x1: number, y1: number, x2: number, y2: number): number;
+declare function dist(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number): number;
 
 /**
  * Returns Euler's number e (2.71828...) raised to the power of the n
