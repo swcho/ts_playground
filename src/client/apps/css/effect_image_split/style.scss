@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+  }
+  .img-container {
+    position: relative;
+    width: 950px;
+    height: 650px;
+    margin: 30px auto;
+    overflow: hidden;
+    perspective: 500px;
+  }
+  .img-item {
+    position: absolute;
+  }
+  .active .img-item {
+    transform-origin: center bottom;
+    transform: rotateX(70deg) scale(.7);
+    opacity: 0;
+  }
