@@ -6,6 +6,10 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/animejs/-/animejs-2.0.0.tgz#9163f06aba47595b99951d5560c10e78223f0e20"
 
+"@types/bezier-js@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@types/bezier-js/-/bezier-js-0.0.7.tgz#5c0e570d8494cae3ed1cde5764a1145c1e9a31b7"
+
 "@types/browser-sync@0.0.34":
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@types/browser-sync/-/browser-sync-0.0.34.tgz#1bf665b2d81eb35543cabedbd31605acee4f6271"
@@ -283,6 +287,12 @@
 "@types/lodash@*", "@types/lodash@^4.14.74":
   version "4.14.74"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.74.tgz#ac3bd8db988e7f7038e5d22bd76a7ba13f876168"
+
+"@types/mapbox-gl@^0.47.0":
+  version "0.47.0"
+  resolved "https://registry.yarnpkg.com/@types/mapbox-gl/-/mapbox-gl-0.47.0.tgz#31c89561320a9199abc3ed75fe97f513b96efad8"
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/matter-js@^0.9.33":
   version "0.9.33"
@@ -1615,6 +1625,10 @@ create-react-class@^15.5.1, create-react-class@^15.6.0:
     fbjs "^0.8.9"
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
+
+crocks@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/crocks/-/crocks-0.10.1.tgz#be545fe089aeba301cc75868aac82efc9c2b3245"
 
 cross-spawn@^3.0.0:
   version "3.0.1"

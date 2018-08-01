@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .controls {
+            position: absolute;
+            z-index: 100;
+            margin: 10px;
+        }
+
+        .controls span {
+            color: white;
+            padding: 0 10px 0 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="controls">
+        <span>Position:</span>
+        <a class="btn btn-default" href="javascript:prev();">Prev</a>
+        <a class="btn btn-default" href="javascript:next();">Next</a>
+        <span>Water Height</span>
+        <a class="btn btn-default" href="javascript:setWaterLevel(100);">High</a>
+        <a class="btn btn-default" href="javascript:setWaterLevel(50);">Medium</a>
+        <a class="btn btn-default" href="javascript:setWaterLevel(1);">Low</a>
+        <a class="btn btn-default" href="javascript:randomHeight();">Random</a>
+    </div>
+
+</body>
+
+</html>
