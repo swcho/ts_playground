@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <div class="info">
+        <div class="svg">
+            <strong>SVG</strong>
+            <span id="width"></span>
+            <span id="height"></span>
+            <span id="viewBox"></span>
+        </div>
+        <div class="mouse">
+            <div>
+                <strong>evt.client X/Y:&#160;&#160;</strong>
+                (
+                <code class="clientX">0</code>,
+                <code class="clientY">0</code>)
+            </div>
+            <label>
+                <input type="checkbox" class="ctm">
+                <span>CTM transform</span>
+            </label>
+            <div>
+
+                (
+                <code class="svgX">0</code>,
+                <code class="svgY">0</code>)
+            </div>
+        </div>
+        <pre style="align-self: center;">point = point.matrixTransform(svg.getScreenCTM().inverse())</pre>
+    </div>
+    <svg width="100%" height="90%" viewBox="0 0 1055 581" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <path d="M 117 252 L 483 461 697 368" fill="none" stroke-width="4px" stroke="hsla(0,100%,40%,1)" style="stroke-dasharray: 50, 20, 30, 40;"></path>
+        <g>
+            <circle id="0" class="handle" cx="117" cy="252" r="15"></circle>
+            <text x="117" y="222">(117,252)</text>
+        </g>
+        <g>
+            <circle id="2" class="handle" cx="483" cy="461" r="15"></circle>
+            <text x="483" y="501">(483,461)</text>
+        </g>
+        <path class="handleline" d="M 117 252 L  483 461"></path>
+        <g>
+            <circle id="4" class="handle" cx="697" cy="368" r="15"></circle>
+            <text x="697" y="338">(697,368)</text>
+        </g>
+        <path class="handleline" d="M 483 461 L  697 368"></path>
+        <circle fill="hsla(120,50%,85%,.5)" r="30" id="svgClientX" stroke="hsla(120,50%,45%,.75)" />
+    </svg>
+</body>
+
+</html>
