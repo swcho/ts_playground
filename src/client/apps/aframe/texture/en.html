@@ -1,0 +1,34 @@
+<html>
+
+<head>
+    <title></title>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+
+    <!-- <script src="https://cdn.rawgit.com/ngokevin/kframe/master/components/template/dist/aframe-template-component.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jade/1.11.0/jade.min.js"></script>
+
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.11.0/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+
+    <a-scene>
+        <a-entity class="model" id="model-0" gltf-model-next="https://andrescuervo.github.io/assets/dog_with_bomb_style_transfer/original/scene.gltf"
+            position="-2 0 -3" scale="0.02 0.02 0.02" rotation="0 180 0"></a-entity>
+        <a-text position="-2.5 1.6 -2.8" value="original" color="black"></a-text>
+        <a-entity class="model" id="model-1" gltf-model-next="https://andrescuervo.github.io/assets/dog_with_bomb_style_transfer/transfer_boxy/scene.gltf"
+            position="-0.5 0 -3" scale="0.02 0.02 0.02" rotation="0 180 0"></a-entity>
+        <a-text position="-1 1.6 -2.8" value="transfer_boxy" color="black"></a-text>
+        <a-entity class="model" id="model-2" gltf-model-next="https://andrescuervo.github.io/assets/dog_with_bomb_style_transfer/transfer_swirly/scene.gltf"
+            position="1 0 -3" scale="0.02 0.02 0.02" rotation="0 180 0"></a-entity>
+        <a-text position="0.5 1.6 -2.8" value="transfer_swirly" color="black"></a-text>
+        <a-entity class="model" id="model-3" gltf-model-next="https://andrescuervo.github.io/assets/dog_with_bomb_style_transfer/transfer_van_gogh/scene.gltf"
+            position="2.5 0 -3" scale="0.02 0.02 0.02" rotation="0 180 0"></a-entity>
+        <a-text position="2 1.6 -2.8" value="transfer_van_gogh" color="black"></a-text>
+        <a-plane scale="20 20 20" color="#DAD" rotation="-90 0 0"></a-plane>
+        <a-sky color="#2EAFAC"></a-sky>
+    </a-scene>
+</body>
+
+</html>
