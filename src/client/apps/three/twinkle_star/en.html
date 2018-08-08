@@ -1,0 +1,74 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script id="vertexShader" type="x-shader/x-vertex">
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            }
+        </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+			uniform float time;
+			uniform vec2 mouse;
+			uniform vec2 resolution;
+			const float PI = 3.141592;
+
+			float xRand[20];
+			float yRand[20];
+			float angleRand[20];
+
+			void initArray(){
+    			xRand[0] = 0.793 ;  xRand[1] = 0.184 ;  xRand[2] = 0.744 ;  xRand[3] = 0.001 ;
+    			xRand[4] = 0.976 ;  xRand[5] = 0.745 ;  xRand[6] = 0.146 ;  xRand[7] = 0.639 ;
+    			xRand[8] = 0.384 ;  xRand[9] = 0.833 ;  xRand[10] = 0.579 ; xRand[11] = 0.427 ;
+    			xRand[12] = 0.869 ; xRand[13] = 0.608 ; xRand[14] = 0.045 ; xRand[15] = 0.886 ;
+    			xRand[16] = 0.745 ; xRand[17] = 0.263 ; xRand[18] = 0.051 ; xRand[19] = 0.691 ;
+    			yRand[0] = 0.592 ;  yRand[1] = 0.063 ;  yRand[2] = 0.044 ;  yRand[3] = 0.586 ;
+    			yRand[4] = 0.804 ;  yRand[5] = 0.262 ;  yRand[6] = 0.118 ;  yRand[7] = 0.637 ;
+    			yRand[8] = 0.343 ;  yRand[9] = 0.605 ;  yRand[10] = 0.070 ; yRand[11] = 0.275 ;
+    			yRand[12] = 0.145 ; yRand[13] = 0.074 ; yRand[14] = 0.410 ; yRand[15] = 0.247 ;
+    			yRand[16] = 0.867 ; yRand[17] = 0.511 ; yRand[18] = 0.404 ; yRand[19] = 0.519 ;
+    			angleRand[0] = 197.0 ;  angleRand[1] = 242.0 ;  angleRand[2] = 299.0 ;  angleRand[3] = 132.0 ;
+    			angleRand[4] = 213.0 ;  angleRand[5] = 152.0 ;  angleRand[6] = 50.0 ;   angleRand[7] = 246.0 ;
+    			angleRand[8] = 323.0 ;  angleRand[9] = 263.0 ;  angleRand[10] = 358.0 ; angleRand[11] = 205.0 ;
+    			angleRand[12] = 351.0 ; angleRand[13] = 119.0 ; angleRand[14] = 275.0 ; angleRand[15] = 42.0 ;
+    			angleRand[16] = 138.0 ; angleRand[17] = 168.0 ; angleRand[18] = 34.0 ;  angleRand[19] = 265.0 ;
+			}
+
+
+			void main( void ) {
+    			float size = 30.0;
+    			float color = 0.0;
+
+    			//  color
+    			//  vec3 mColor = vec3( 1.0, ( gl_FragCoord.xy / resolution.xy ) );
+    			vec3 mColor = vec3( (sin(time * 5.0)+1.0)*0.5, ( gl_FragCoord.xy / resolution.xy ) );
+
+    			float r = 100.0;
+    			float speed = 2.0;
+
+    			vec2 p = gl_FragCoord.xy;
+    			initArray();
+    			for(int i=0;i<20;i++){
+        			color += size * 0.1 / distance( gl_FragCoord.xy, mouse.xy*resolution.xy +
+        			vec2( cos((angleRand[i])/180.0*PI-time*speed) * xRand[i] * 200.0, sin((angleRand[i])/180.0*PI-time*speed) * yRand[i] * 200.0 ) );
+    			}
+    			gl_FragColor = vec4( vec3( color ) * mColor, 1.0 );
+			}
+        </script>
+</body>
+
+
+</html>
