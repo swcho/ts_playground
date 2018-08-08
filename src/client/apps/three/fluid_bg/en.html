@@ -1,0 +1,180 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Abel|Roboto:300,400,700');
+
+        :root {
+            --link-color: #b8bcef;
+            --text-color: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            margin: 0;
+            color: var(--text-color);
+            font-family: Roboto;
+            font-weight: 300;
+            font-size: 120%;
+            line-height: 1.5;
+            background-color: #b32f3d;
+
+            box-sizing: border-box;
+        }
+
+        body * {
+            box-sizing: inherit;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        main {
+            max-width: 640px;
+            padding: 5em 1em;
+            margin: 0 auto;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: Abel;
+        }
+
+        h1 {
+            font-size: 5rem;
+        }
+
+        h2 {
+            margin-top: 2em;
+        }
+
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        tt {
+            font-size: 1.2em;
+        }
+
+        @-webkit-keyframes appear {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .section-toggle__text {
+            color: var(--link-color);
+        }
+
+        .section-toggle__text:hover {
+            text-decoration: underline;
+        }
+
+        .section-toggle__checkbox {
+            display: none;
+        }
+
+        .section-toggle__checkbox+.section-toggle__section {
+            display: none;
+        }
+
+        .section-toggle__checkbox:checked+.section-toggle__section {
+            display: block;
+            -webkit-animation: appear 0.3s 1 both;
+            animation: appear 0.3s 1 both;
+        }
+    </style>
+</head>
+
+<body>
+    <input class="section-toggle__checkbox" type="checkbox" checked id="cb-main">
+    <main class="section-toggle__section">
+        <h1>hi there!</h1>
+
+        <p>This pen is the result of reverse-engineering the amazing site-background used on
+            <a href="http://zerostartingideas.com/en/">zerostartingideas.com</a> – made on request from
+            <a href="https://stackoverflow.com/questions/46248854/three-js-how-to-achieve-this-effect">this stackoverflow-question</a>.
+        </p>
+
+        <p>
+            <strong>I DO NOT CLAIM ANY CREDIT FOR THIS CODE. IT IS REPRODUCED HERE FOR EDUCATIONAL PURPOSE ONLY AND I URGE EVERYONE
+                TO RESPECT THE COPYRIGHT OF THOSE WHO OWN IT.</strong>
+        </p>
+
+        <p>
+            Meanwhile I found out
+            <a target=_blank href="https://twitter.com/adoratorio_std/status/909812034283249664">who originally wrote it</a> and they are ok with having this here. So thanks to
+            <a target=_blank href="https://twitter.com/Samsyyyy">@Samsyyyy</a> and
+            <a target=_blank href="https://twitter.com/adoratorio_std">Adoratorio</a>!
+        </p>
+
+        <p>
+            That being said,
+            <label class="section-toggle__text" for="cb-detail">let me explain how I did it</label> or
+            <label class="section-toggle__text" for="cb-main" checked>make this text go away</label> to see the actual effect (you will need to reload to get the text back).
+        </p>
+
+        <input class="section-toggle__checkbox" type="checkbox" id="cb-detail">
+        <section class="section-toggle__section">
+            <h2>How to analyse a three.js demo with minified code?</h2>
+
+            <p>First of all, the tools used are the Chrome developer-tools and the
+                <a href="http://spector.babylonjs.com/">Spector.js</a> WebGL debugger. The first thing I always do is grabbing a frame with Spector and have a look
+                at the drawcalls being run. This will also tell me (via the stacktraces in Spector) which rendering-library
+                was used (three.js for instance can be spotted easily just by looking at the function-names).</p>
+
+            <p>Now that I know it was done in three.js I will use the devtools to find the JS-file containg three.js. Useful
+                here are searches for strings we will find in three.js, like "MeshStandardMaterial" (present as string-value
+                in
+                <tt>MeshStandardMaterial.type</tt> so the chances are high that uglify etc. will not have touched it). Once found,
+                we can auto-format the likely minified file to start digging.</p>
+
+            <p>The next step is to locate the render-function. Depending on the minifier used that can be tricky, but most minifiers
+                will not mangle the names of public properties and methods. A good choice here is to search for ".isCamera",
+                which appears exactly twice in the current version of three.js: once in the definition of the canera baseclass
+                and once as the very first statement of the
+                <tt>renderer.render()</tt>-function.</p>
+            <p>We found the render-function and can now just drop a breakpoint in its first line. Assuming the three.js animation
+                is running, the debugger will stop almost immediately. Knowing that the first parameter of the render-call
+                is the scene, we can now start exploring by looking at
+                <tt>scene.children</tt>, using
+                <tt>scene.traverse</tt> and so on, all just by issuing commands via the console with the debugger paused. To
+                further analyse what exactly is happening, you can do anything: change material colors, enable wireframe-rendering,
+                export geometries using
+                <tt>.toJSON()</tt> or inspect custom shaders used by looking at
+                <tt>obj.material.vertexShader</tt> and
+                <tt>obj.material.fragmentShader</tt>.</p>
+
+            <p>From all of this, I was able to piece together the code you will find in the JS-Tab of this pen, which exactly
+                reproduces the effect used in the background of the analysed page. Success!</p>
+        </section>
+    </main>
+</body>
+
+</html>
