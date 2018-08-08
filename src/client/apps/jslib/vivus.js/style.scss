@@ -1,0 +1,290 @@
+body {
+    width: 1728px;
+    height: 972px;
+    margin: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    font-family: arial, sans-serif;
+}
+
+#container {
+    display: block;
+    width: 1728px;
+    height: 972px;
+    overflow: hidden;
+    position: relative;
+}
+
+.c_bg_1 {
+    background-color: #EC4F4C;
+}
+
+.c_bg_2 {
+    background-color: #0A87E3;
+}
+
+.c_bg_3 {
+    background-color: #1CCA87;
+}
+
+.c_bg_4 {
+    background-color: #BD00A6;
+}
+
+.c_bg_5 {
+    background-color: #DCC12C;
+}
+
+.c_bg_6 {
+    background-color: #F5839B;
+}
+
+svg {
+    position: absolute;
+    left: -96px;
+    top: -54px;
+}
+
+svg * {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 9px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10;
+}
+
+/* osomatsu */
+
+svg #motif_o_1 {
+    fill: #E12031;
+    stroke: none;
+}
+
+svg #motif_o_2 {
+    fill: #A3131E;
+    stroke: none;
+}
+
+svg #motif_o_3 {
+    fill: #EE303E;
+    stroke: none;
+}
+
+svg #motif_o_4 {
+    fill: none;
+    stroke: #F08581;
+    stroke-width: 5;
+    stroke-miterlimit: 10;
+}
+
+/* karamatsu */
+
+svg #motif_k_1 {
+    stroke: none;
+    fill: #000000;
+    opacity: 0.8;
+}
+
+svg #motif_k_2 {
+    stroke: none;
+    fill: #F2F2F2;
+    opacity: 0.2;
+}
+
+svg #motif_k_3 {
+    stroke: none;
+    fill: #CCCCCC;
+    opacity: 0.8;
+}
+
+/* choromatsu*/
+
+svg #motif_c_1 {
+    stroke: none;
+    fill: #E3E3E0;
+}
+
+svg #motif_c_2 {
+    stroke: none;
+    fill: #DFFFE9;
+}
+
+svg #motif_c_3 {
+    stroke: none;
+    fill: #EDFF76;
+}
+
+/* ichimatsu */
+
+svg #motif_i_1 {
+    fill: none;
+    stroke: #000000;
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+}
+
+svg #motif_i_2 {
+    fill: #221E23;
+    stroke: none;
+}
+
+svg #motif_i_3 {
+    fill: #0F0D10;
+    stroke: none;
+}
+
+svg #motif_i_4 {
+    fill: #C19EA9;
+    stroke: none;
+}
+
+svg #motif_i_5 {
+    fill: #55323F;
+    stroke: none;
+}
+
+/* jyushimatsu */
+
+svg #motif_j_1 {
+    fill: #EBDEC5;
+    stroke: none;
+}
+
+svg #motif_j_2 {
+    fill: #6B544C;
+    stroke: none;
+}
+
+svg #motif_j_3 {
+    fill: #E9D7BE;
+    stroke: none;
+}
+
+svg #motif_j_4 {
+    fill: #9AD6A1;
+    stroke: none;
+}
+
+svg #motif_j_5 {
+    fill: none;
+    stroke: #1B814A;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10;
+}
+
+svg #motif_j_6 {
+    stroke: none;
+    fill: #CBB189;
+}
+
+svg #motif_j_7 {
+    stroke: none;
+    fill: #F4ECDF;
+}
+
+/* todomatsu */
+
+svg #motif_t_1 {
+    stroke: none;
+    fill: #743928;
+}
+
+svg #motif_t_2 {
+    stroke: none;
+    fill: #B38568;
+}
+
+svg #motif_t_3 {
+    stroke: none;
+    fill: #E3BA8B;
+}
+
+svg #motif_t_4 {
+    stroke: none;
+    fill: #432F37;
+}
+
+/* 塗り */
+
+svg #fill_1 {
+    stroke-width: 60px;
+}
+
+svg #fill_2 {
+    stroke-width: 32px;
+}
+
+svg #fill_3 {
+    stroke-width: 40px;
+}
+
+.button {
+    width: 300px;
+    height: 600px;
+    position: absolute;
+    top: 120px;
+    right: 20px;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.bt {
+    position: absolute;
+    width: 300px;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    line-height: 80px;
+    font-size: 30px;
+    border-radius: 20px;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.om {
+    top: 0px;
+    border: solid 6px #EC4F4C;
+    text-shadow: #EC4F4C 3px 3px 0px, #EC4F4C -3px 3px 0px, #EC4F4C 3px -3px 0px, #EC4F4C -3px -3px 0px;
+}
+
+.ok {
+    top: 130px;
+    border: solid 6px #0A87E3;
+    text-shadow: #0A87E3 3px 3px 0px, #0A87E3 -3px 3px 0px, #0A87E3 3px -3px 0px, #0A87E3 -3px -3px 0px;
+}
+
+.oc {
+    top: 260px;
+    border: solid 6px #1CCA87;
+    text-shadow: #1CCA87 3px 3px 0px, #1CCA87 -3px 3px 0px, #1CCA87 3px -3px 0px, #1CCA87 -3px -3px 0px;
+}
+
+.oi {
+    top: 390px;
+    border: solid 6px #BD00A6;
+    text-shadow: #BD00A6 3px 3px 0px, #BD00A6 -3px 3px 0px, #BD00A6 3px -3px 0px, #BD00A6 -3px -3px 0px;
+}
+
+.oj {
+    top: 510px;
+    border: solid 6px #DCC12C;
+    text-shadow: #DCC12C 3px 3px 0px, #DCC12C -3px 3px 0px, #DCC12C 3px -3px 0px, #DCC12C -3px -3px 0px;
+}
+
+.ot {
+    top: 640px;
+    border: solid 6px #F5839B;
+    text-shadow: #F5839B 3px 3px 0px, #F5839B -3px 3px 0px, #F5839B 3px -3px 0px, #F5839B -3px -3px 0px;
+}
+
+.bt:hover {
+    opacity: 0.6;
+}
