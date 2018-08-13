@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <div class='phone'>
+        <div class='display'></div>
+        <div class='notch'>
+            <div class='menu'></div>
+            <div class='wrap'>
+                <p>Now Playing</p>
+                <img src="https://puu.sh/xFsIi/e3cbc7787a.jpg">
+                <i aria-hidden='true' class='fa fa-fast-backward'></i>
+                <i aria-hidden='true' class='fa fa-pause'></i>
+                <i aria-hidden='true' class='fa fa-fast-forward'></i>
+            </div>
+        </div>
+    </div>
+    <svg version='1.1' xmlns='http://www.w3.org/2000/svg'>
+        <defs>
+            <filter id='goo'>
+                <fegaussianblur in='SourceGraphic' result='blur' stddeviation='12'></fegaussianblur>
+                <fecolormatrix in='blur' mode='matrix' result='goo' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9'></fecolormatrix>
+                <fecomposite in2='goo' in='SourceGraphic' operator='atop'></fecomposite>
+            </filter>
+        </defs>
+    </svg>
+    <svg class='svg' viewbox='0 0 400 400'>
+        <defs>
+            <filter id='duotone-filter-post-one'>
+                <fecolormatrix type='matrix' values='0.14453125 0 0 0 0.33203125 0.71875 0 0 0 0.27734375 -0.34765625 0 0 0 0.73046875 0 0 0 1 0'></fecolormatrix>
+            </filter>
+        </defs>
+    </svg>
+</body>
+
+</html>
