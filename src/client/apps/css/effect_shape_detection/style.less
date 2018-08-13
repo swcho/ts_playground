@@ -1,0 +1,56 @@
+.shape {
+    display: block;
+    background: red;
+    width: 1em;
+    height: 1em;
+  }
+    
+  
+  .triangle {
+    -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+  
+  .circle { border-radius: 50%; }
+  
+  .list { display: flex; justify-content: center; align-items: flex-end; }
+  .list, .item { margin: 0; padding: 0; list-style-type: none; }
+  
+  .item { 
+    font-size: 15vw;
+    margin: 0 -0.2em;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    
+    visibility: hidden;
+    .shape { visibility: visible; }
+    
+    .nth-gradient(8);
+    
+    .shape { 
+      transform-origin: center bottom; 
+      transition: transform 0.1s ease-in-out;
+    }
+    
+    &:hover {
+      visibility: visible;
+      z-index: 20;
+      .shape { transform: scale(2) translateY(-15%); }
+    }
+    
+    // Potential fix for touch devices & hover events. By having a hidden element ( display: none ) that's then revealed on :hover, Safari & other browser should trigger the hover state better. Technique might be outdated, but this is the way we did it "back in the day"
+    &:after { content: ''; position: absolute; top: 0; display: none; width: 1px; height: 1px; }
+    &:hover:after { display: block; }
+    
+  }
+  
+  .nth-gradient(@total, @i: 1) when (@i < @total){
+    &:nth-child(@{i}) .shape {
+      background: ~"hsl(" ((@i - 1)/(@total - 1))*360 , 80%, 70% ~")";
+    }
+    .nth-gradient(@total, @i + 1);
+  }
+  
+  html { height: 100%; display: flex; }
+  body { margin: auto; width: 100%; }
