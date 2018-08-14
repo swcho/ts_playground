@@ -45,6 +45,10 @@ export declare class DistanceAnimationMaterial extends BaseAnimationMaterial {
     constructor(params: BaseAnimationMaterialParameters);
 }
 
+export declare class StandardAnimationMaterial extends BaseAnimationMaterial {
+    constructor(params: BaseAnimationMaterialParameters);
+}
+
 export interface ModelBufferGeometryOptions {
     computeCentroids?: boolean;
     localizeFaces?: boolean;
