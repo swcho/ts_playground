@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script id="vertexShader" type="x-shader/x-vertex">
+varying vec2 vUv;
+void main()
+{
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+</script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float time;
+uniform sampler2D texture;
+varying vec2 vUv;
+
+void main( void ) {
+  gl_FragColor = vec4(
+    texture2D(texture, vec2(vUv.x, 0.5 + vUv.y/2.)).rgb,
+    texture2D(texture, vec2(vUv.x, vUv.y/2.)).r
+  );
+}
+</script>
+    <video id="video" autoplay loop webkit-playsinline crossorigin="anonymous">
+        <source src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/39255/spaceships.mp4?t=1" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+    <div id="demo-wrapper">
+        <div id="container"></div>
+        <p class="editable-text text-front" contenteditable="true">this video is an MP4, but it's transparent thanks to WebGL</p>
+        <p class="editable-text text-behind" contenteditable="true">you can edit this text and it still works at a smooth 60fps</p>
+    </div>
+    <div id="info">Transparent Video GLSL shader - with
+        <a href="https://threejs.org" target="_blank">three.js</a>
+    </div>
+    <div id="controls">
+        <label for="resolution">resolution: </label>
+        <select id="resolution" value="2">
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1x</option>
+            <option value="2">2x</option>
+            <option value="4">4x</option>
+            <option value="8">8x</option>
+        </select>
+        <label for="play-button">video controls: </label>
+        <button id="play-button">Play</button>
+        <button id="stop-button">Stop</button>
+    </div>
+</body>
+
+</html>
