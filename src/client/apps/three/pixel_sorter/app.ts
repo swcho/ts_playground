@@ -14,7 +14,7 @@ const readFile = (file) => {
     const reader = new FileReader();
 
     return new Promise<string>((resolve, reject) => {
-        reader.addEventListener('load', () => resolve(reader.result));
+        reader.addEventListener('load', () => resolve(reader.result as any));
         reader.readAsDataURL(file);
     });
 };

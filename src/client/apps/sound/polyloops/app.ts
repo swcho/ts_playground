@@ -223,7 +223,7 @@ function renderPlay(noteToPlay, { noteElements }: Vis) {
             bounce(el.querySelector('.symbol'));
             el
                 .querySelector('.progress')
-                .animate([{ width: 0, opacity: 0 }, { width: '100%', opacity: 1 }], {
+                .animate([{ width: 0, opacity: 0 }, { width: '100%', opacity: 1 }] as any, {
                     duration: 300,
                     fill: 'forwards'
                 });
@@ -236,7 +236,7 @@ function renderPlay(noteToPlay, { noteElements }: Vis) {
     if (lastPlayed) {
         // for (const [note, el] of noteElements) {
         noteElements.forEach((el, note) => {
-            el.querySelector('.progress').animate([{ opacity: 1 }, { opacity: 0 }], {
+            el.querySelector('.progress').animate([{ opacity: 1 }, { opacity: 0 }] as any, {
                 delay: 200,
                 duration: 100,
                 fill: 'forwards'

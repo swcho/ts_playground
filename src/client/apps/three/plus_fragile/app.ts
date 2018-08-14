@@ -39,100 +39,101 @@ gui.add(CONFIG, 'wireframe');
 // CODE //
 //////////
 
-function Animation(params) {
-    const prefabRadius = 0.05;
-    const plusPositions = params.positions;
-    const prefab = new THREE.SphereGeometry(prefabRadius, 4, 3);
-    const geometry = new THREE.BAS.PrefabBufferGeometry(prefab, plusPositions.length);
+class Animation extends THREE.Mesh<THREE.BAS.StandardAnimationMaterial> {
+    private customDepthMaterial;
 
-    geometry.computeVertexNormals();
+    constructor(params) {
+        const prefabRadius = 0.05;
+        const plusPositions = params.positions;
+        const prefab = new THREE.SphereGeometry(prefabRadius, 4, 3);
+        const geometry = new THREE.BAS.PrefabBufferGeometry(prefab, plusPositions.length);
 
-    const maxDuration = 2.0;
-    geometry.createAttribute('anim', 2, (data, i) => {
-        const start = plusPositions[i];
+        geometry.computeVertexNormals();
 
-        data[0] = 0.0;
-        data[1] = THREE.Math.mapLinear(start.y, 0, 14, 0, maxDuration) * THREE.Math.randFloat(0.5, 1.0);
-    });
+        const maxDuration = 2.0;
+        geometry.createAttribute('anim', 2, (data, i) => {
+            const start = plusPositions[i];
 
-    geometry.createAttribute('startPosition', 3, (data, i) => {
-        plusPositions[i].toArray(data);
-    });
+            data[0] = 0;
+            data[1] = THREE.Math.mapLinear(start.y, 0, 14, 0, maxDuration) * THREE.Math.randFloat(0.5, 1.0);
+            // data[1] = THREE.Math.mapLinear(start.y, 0, 14, 0, maxDuration);
+        });
 
-    const spread = 2;
-    geometry.createAttribute('endPosition', 3, (data, i) => {
-        const start = plusPositions[i];
-        let targetY;
+        geometry.createAttribute('startPosition', 3, (data, i) => {
+            plusPositions[i].toArray(data);
+        });
 
-        const length = Math.sqrt(start.x * start.x + start.z * start.z);
+        const spread = 2;
+        geometry.createAttribute('endPosition', 3, (data, i) => {
+            const start = plusPositions[i];
+            let targetY;
 
-        if (length <= 1) {
-            targetY = prefabRadius * (0.5 + (1 - length) * 4.0);
-        }
-        else {
-            targetY = prefabRadius * 0.5;
-        }
+            const length = Math.sqrt(start.x * start.x + start.z * start.z);
 
-        data[0] = start.x + THREE.Math.randFloatSpread(spread);
-        data[1] = targetY;
-        data[2] = start.z + THREE.Math.randFloatSpread(spread);
-    });
+            if (length <= 1) {
+                targetY = prefabRadius * (0.5 + (1 - length) * 4.0);
+            }
+            else {
+                targetY = prefabRadius * 0.5;
+            }
 
-    const material = new THREE.BAS.StandardAnimationMaterial({
-        flatShading: true,
-        uniformValues: {
-            // diffuse: new THREE.Color(colors.turquoise),
-            metalness: 0.5,
-            roughness: 0.5
-        },
-        uniforms: {
-            time: { value: 0 }
-        },
-        vertexParameters: [`
-        uniform float time;
+            data[0] = start.x + THREE.Math.randFloatSpread(spread);
+            data[1] = targetY;
+            data[2] = start.z + THREE.Math.randFloatSpread(spread);
+        });
 
-        attribute vec2 anim;
-        attribute vec3 startPosition;
-        attribute vec3 endPosition;
-      `],
-        vertexFunctions: [
-            THREE.BAS.ShaderChunk.ease_bounce_out,
-            THREE.BAS.ShaderChunk.ease_quad_in
-        ],
-        vertexPosition: [`
-        float progress = clamp(time - anim.x, 0.0, anim.y) / anim.y;
-        float xzProgress = easeQuadIn(progress);
-        float yProgress = easeBounceOut(progress);
+        const material = new THREE.BAS.StandardAnimationMaterial({
+            flatShading: true,
+            uniformValues: {
+                // diffuse: new THREE.Color(colors.turquoise),
+                metalness: 0.5,
+                roughness: 0.5
+            },
+            uniforms: {
+                time: { value: 0 }
+            },
+            vertexParameters: [`
+                uniform float time;
 
-        transformed.xz += mix(startPosition.xz, endPosition.xz, xzProgress);
-        transformed.y += mix(startPosition.y, endPosition.y, yProgress);
-      `]
-    });
+                attribute vec2 anim;
+                attribute vec3 startPosition;
+                attribute vec3 endPosition;
+            `],
+            vertexFunctions: [
+                THREE.BAS.ShaderChunk.ease_bounce_out,
+                THREE.BAS.ShaderChunk.ease_quad_in
+            ],
+            vertexPosition: [`
+                float progress = clamp(time - anim.x, 0.0, anim.y) / anim.y;
+                float xzProgress = easeQuadIn(progress);
+                float yProgress = easeBounceOut(progress);
 
-    THREE.Mesh.call(this, geometry, material);
+                transformed.xz += mix(startPosition.xz, endPosition.xz, xzProgress);
+                transformed.y += mix(startPosition.y, endPosition.y, yProgress);
+            `]
+        });
 
-    this.customDepthMaterial = THREE.BAS.Utils.createDepthAnimationMaterial(material);
-}
+        super(geometry, material);
 
-Animation.prototype = Object.create(THREE.Mesh.prototype);
-Animation.prototype.constructor = Animation;
+        this.customDepthMaterial = THREE.BAS.Utils.createDepthAnimationMaterial(material);
+    }
 
-Animation.prototype.animate = function (duration) {
-    return TweenMax.to(this, duration, { time: 2, ease: Linear.easeNone } as any);
-};
-Object.defineProperty(Animation.prototype, 'time', {
-    get() {
+    animate(duration) {
+        return TweenMax.to(this, duration, { time: 2, ease: Linear.easeNone } as any);
+    }
+
+    get time() {
         return this.material.uniforms.time.value;
-    },
-    set(v) {
+    }
+    set time(v) {
         this.material.uniforms.time.value = v;
         this.customDepthMaterial.uniforms.time.value = v;
     }
-});
 
-Animation.prototype.setColor = function (v) {
-    this.material.uniforms.diffuse.value.set(v);
-};
+    setColor(v) {
+        this.material.uniforms.diffuse.value.set(v);
+    };
+}
 
 const colors = {
     turquoise: 0x47debd,

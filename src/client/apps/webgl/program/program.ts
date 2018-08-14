@@ -113,7 +113,7 @@ export abstract class GLProgram<A, U> {
     private uniformLocations: UniformLocations<U>;
     setUniformValue<K extends keyof U>(name: K, value: U[K], integer: boolean = false) {
         const gl = this.gl;
-        const loc = gl.getUniformLocation(this.program, name);
+        const loc = gl.getUniformLocation(this.program, name as string);
         let len = value['length'];
         if (!loc) {
             console.error(`uniform ${name} not found`);
