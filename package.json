@@ -64,6 +64,7 @@
     "react-data-grid": "^2.0.78",
     "react-motion": "^0.5.0",
     "react-router-dom": "^4.2.2",
+    "regl-camera": "^2.1.1",
     "rxjs": "^5.5.2",
     "simplemde": "^1.11.2",
     "stats.js": "^0.17.0",
