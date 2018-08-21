@@ -1,0 +1,100 @@
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 24px;
+}
+
+figure {
+    margin: 0;
+    position: relative;
+}
+
+img {
+    width: 200px;
+    height: 300px;
+    border: 1px solid #757575;
+    border-radius: 10px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(360deg);
+    }
+}
+
+.viewbox {
+    border: 1px dashed red;
+    position: relative;
+    padding: 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    margin: 24px auto;
+}
+
+.cards {
+    transform-style: preserve-3d;
+    transform-origin: 50% 50%;
+    display: inline-block;
+}
+
+.rotate:checked~.viewbox .cards {
+    animation: spin 4s ease-in-out infinite;
+}
+
+.card {
+    transition: .5s ease;
+}
+
+.step1:checked~.viewbox,
+.step2:checked~.viewbox,
+.step3:checked~.viewbox,
+.step4:checked~.viewbox {
+    perspective: 500px;
+}
+
+.step2:checked~.viewbox .cards,
+.step3:checked~.viewbox .cards,
+.step4:checked~.viewbox .cards {
+    width: 200px;
+    height: 300px;
+}
+
+.step2:checked~.viewbox .front {
+    position: absolute;
+    transform: rotateY(0deg) translatez(20px);
+}
+
+.step2:checked~.viewbox .back {
+    position: absolute;
+    transform: rotateY(180deg) translatez(20px);
+}
+
+.step3:checked~.viewbox .front,
+.step4:checked~.viewbox .front {
+    position: absolute;
+    transform: rotateY(0deg) translatez(0);
+}
+
+.step3:checked~.viewbox .back,
+.step4:checked~.viewbox .back {
+    position: absolute;
+    transform: rotateY(180deg) translatez(0);
+}
+
+.step4:checked~.viewbox .card {
+    backface-visibility: hidden;
+}
