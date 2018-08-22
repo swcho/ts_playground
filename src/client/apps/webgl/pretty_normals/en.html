@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <title>Three: </title>
+    <style>
+        body,
+        canvas,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="display" width="800" height="600"></canvas>
+    <script type="text/x-vertex-shader" id="vert">
+            attribute vec3 a_position;
+            attribute vec3 a_normal;
+        
+            uniform mat4 u_modelview;
+            uniform mat4 u_projection;
+            uniform float u_tval;
+        
+            uniform vec3 u_waveorigins[3];
+        
+            varying vec4 v_normal;
+        
+            vec3 waveLocation(vec3 loc) {
+                loc.y = 0.0;
+                float yoff = 9.0 * (
+                    sin(0.1 * (length(u_waveorigins[0] - loc) + u_tval))
+                    + sin(0.4 * (length(u_waveorigins[1] - loc) + u_tval))
+                    + sin(0.075 * (length(u_waveorigins[2] - loc) + u_tval * 2.0))
+                );
+                loc.y = yoff;
+                return loc;
+            }
+        
+            void main() {
+                vec3 newLocation = waveLocation(a_position);
+                gl_Position = u_projection * u_modelview * vec4(waveLocation(a_position), 1.0);
+                //gl_Position = u_projection * u_modelview * vec4(a_position, 1.0);
+                v_normal = normalize(u_modelview * vec4(cross(
+                    (waveLocation(a_position - vec3(0, 0, 0.01)) - newLocation),
+                    (waveLocation(a_position - vec3(0.01, 0, 0)) - newLocation)
+                ), 0.0));
+            }
+        </script>
+    <script type="text/x-fragment-shader" id="frag">
+            precision mediump float;
+        
+            uniform vec3 u_reverseLightDirection;
+        
+            varying vec4 v_normal;
+        
+            void main() {
+                float light = dot(v_normal, vec4(normalize(u_reverseLightDirection), 0));
+                //gl_FragColor = light * vec4(1, 1, 0, 1);
+                gl_FragColor = vec4(v_normal.xyz, 1.0);
+            }
+        </script>
+</body>
+
+</html>
