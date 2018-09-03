@@ -1,0 +1,217 @@
+$anim-speed-fast: 0.15s;
+$anim-speed-med: 0.25s;
+$easing-bounce: cubic-bezier(0.800, -0.295, 0.000, 1.650);
+$btn-icon-width: 10px;
+$btn-colors: #17A162 #F68C1E #EB91C2 #4FBDD6;
+$font-stack: Helvetica,
+Arial,
+sans-serif;
+* {
+    box-sizing: border-box;
+    &::before,
+    &::after {
+        box-sizing: border-box;
+    }
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: $font-stack;
+    -webkit-font-smoothing: antialiased;
+}
+
+svg {
+    fill: currentColor;
+}
+
+.app {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 0;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    font-family: $font-stack;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+    padding: 12px 30px;
+    transform: translateZ(0);
+    &::before {
+        content: '';
+        background-color: inherit;
+        border-radius: 2px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+    }
+    @for $i from 1 through length($btn-colors) {
+        &:nth-of-type(#{$i}) {
+            &:before {
+                background-color: nth($btn-colors, $i);
+            }
+        }
+    }
+    &:focus,
+    &:active {
+        outline: none;
+    }
+    &:hover {
+        &::before {
+            animation: bulge 0.75s $easing-bounce;
+        }
+        &::after {
+            transform: translateY(0);
+        }
+    }
+    &:active {
+        transform: scale(0.97);
+    }
+    &__wrapper {
+        display: flex;
+    }
+    &__wave-container {
+        overflow: hidden;
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+    }
+    &__text {
+        transform: translateX($btn-icon-width);
+        transition: transform $anim-speed-med ease-out;
+        .btn:hover & {
+            transform: translateX(0);
+        }
+    }
+    &__icon {
+        margin-left: $btn-icon-width;
+        opacity: 0;
+        transform: translateX(-100%);
+        transition: {
+            property: opacity, transform;
+            duration: $anim-speed-med;
+            timing-function: ease-out;
+        }
+        width: $btn-icon-width;
+        .btn:hover & {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    &__wave {
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: 0.15;
+        position: absolute;
+        transition: transform $anim-speed-med ease-out;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        &::after {
+            content: '';
+            position: absolute;
+            transition: transform $anim-speed-med ease-out;
+        }
+        &:hover {
+            z-index: 1;
+        }
+        &--top {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="306" height="216" viewBox="0 0 306 216"><path fill="#ffffff" d="M306 205.8V0H0v205.8S18.7 216 34.5 216c18.2 0 43.3-33.3 67.1-33.3s41 33.3 69.4 33.3 62.9-25.8 82.4-25.8 52.6 15.6 52.6 15.6z"/></svg>');
+            background-position: bottom center;
+            transform: translateY(-100%);
+            &::after {
+                height: 50%;
+                width: 100%;
+                top: 100%;
+                left: 0;
+                clip-path: polygon(0 0, 50% 100%, 100% 0);
+            }
+            &:hover {
+                transform: translateY(10px);
+            }
+        }
+        &--right {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="216" height="306" viewBox="0 0 216 306"><path fill="#ffffff" d="M10.2 306H216V0H10.2S0 18.7 0 34.5c0 18.2 33.3 43.3 33.3 67.1S0 142.6 0 171s25.8 62.9 25.8 82.4S10.2 306 10.2 306z"/></svg>');
+            background-position: center right;
+            transform: translateX(100%);
+            &::after {
+                height: 100%;
+                width: 50%;
+                right: 100%;
+                top: 0;
+                clip-path: polygon(100% 100%, 0 50%, 100% 0);
+            }
+            &:hover {
+                transform: translateX(-10px);
+            }
+        }
+        &--bottom {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="306" height="216" viewBox="0 0 306 216"><path fill="#ffffff" d="M0 10.2V216h306V10.2S287.3 0 271.5 0c-18.2 0-43.3 33.3-67.1 33.3S163.4 0 135 0 72.1 25.8 52.6 25.8 0 10.2 0 10.2z"/></svg>');
+            background-position: top center;
+            transform: translateY(100%);
+            &::after {
+                bottom: 100%;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                clip-path: polygon(0 100%, 50% 50%, 100% 100%);
+            }
+            &:hover {
+                transform: translateY(-10px);
+            }
+        }
+        &--left {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="216" height="306" viewBox="0 0 216 306"><path fill="#ffffff" d="M205.8 0H0v306h205.8s10.2-18.7 10.2-34.5c0-18.2-33.3-43.3-33.3-67.1s33.3-41 33.3-69.4-25.8-62.9-25.8-82.4S205.8 0 205.8 0z"/></svg>');
+            background-position: center right;
+            transform: translateX(-100%);
+            &::after {
+                bottom: 0;
+                left: 100%;
+                height: 100%;
+                width: 50%;
+                clip-path: polygon(0 100%, 0 0, 100% 50%);
+            }
+            &:hover {
+                transform: translateX(10px);
+            }
+        }
+    }
+}
+
+@keyframes bulge {
+    0% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(1.15);
+    }
+    80% {
+        transform: scaleY(1.15);
+    }
+    92% {
+        transform: scaleY(.95);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}
