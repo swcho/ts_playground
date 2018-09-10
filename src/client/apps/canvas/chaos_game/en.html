@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>Canvas: </title>
+    <style>
+        body {
+            margin: 4px;
+            background: #260626;
+        }
+
+
+        .cell {
+            border-radius: 5px;
+            overflow: hidden;
+            width: 200px;
+            height: 200px;
+            display: inline-block;
+            margin: 2px 4px;
+            /*   background: #eee; */
+            position: relative;
+            vertical-align: top;
+        }
+
+        .rule {
+            position: absolute;
+            color: white;
+            font-size: 8px;
+            font-family: sans-serif;
+            top: 4px;
+            left: 4px;
+            z-index: 10;
+        }
+
+        canvas {
+            position: absolute;
+            z-index: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='root'>
+    </div>
+</body>
+
+</html>
